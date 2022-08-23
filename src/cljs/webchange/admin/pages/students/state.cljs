@@ -87,11 +87,26 @@
       {:dispatch [::routes/redirect :student-add :school-id school-id]})))
 
 (re-frame/reg-event-fx
+  ::open-student-profile
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id]})))
+
+(re-frame/reg-event-fx
   ::edit-student
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :student-edit :school-id school-id :student-id student-id]})))
+      {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id
+                  :storage-params {:action           "edit"
+                                   :on-edit-finished [::edit-student-finished school-id]}]})))
+
+(re-frame/reg-event-fx
+  ::edit-student-finished
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::routes/redirect :students :school-id school-id]}))
 
 (re-frame/reg-event-fx
   ::open-school-profile

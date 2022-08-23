@@ -31,13 +31,14 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id params] :as props}]]
+  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id params]}]]
     (let [{:keys [action]} params]
       {:db         (-> db
                        (assoc :class-id class-id)
                        (assoc :school-id school-id)
                        (assoc :student-id student-id)
-                       (assoc :loading-student true))
+                       (assoc :loading-student true)
+                       (assoc :callbacks (select-keys params [:on-edit-finished])))
        :dispatch-n (cond-> [[::load-student-progress]]
                            (= action "edit") (conj [::set-student-form-editable true]))})))
 
@@ -194,3 +195,20 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar db :complete-class)}))
+
+(re-frame/reg-event-fx
+  ::handle-edit-finished
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ student-id]]
+    (let [{:keys [on-edit-finished]} (:callbacks db)]
+      {:dispatch-n (cond-> [[::set-student-form-editable false]
+                            [::update-student-data student-id]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
+(re-frame/reg-event-fx
+  ::handle-edit-canceled
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-edit-finished]} (:callbacks db)]
+      {:dispatch-n (cond-> [[::set-student-form-editable false]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))

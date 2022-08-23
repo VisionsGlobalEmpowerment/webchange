@@ -1,7 +1,6 @@
 (ns webchange.admin.pages.student-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.admin.pages.student-profile.state :as state]
     [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.views :as page]
@@ -111,10 +110,9 @@
   [{:keys [school-id student-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/student-form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-student-form-editable true])
-        handle-cancel-click #(re-frame/dispatch [::state/set-student-form-editable false])
+        handle-cancel-click #(re-frame/dispatch [::state/handle-edit-canceled])
         handle-remove-from-class #(re-frame/dispatch [::state/open-class-profile-page])
-        handle-save-click #(do (re-frame/dispatch [::state/set-student-form-editable false])
-                               (re-frame/dispatch [::state/update-student-data student-id]))]
+        handle-save-click #(re-frame/dispatch [::state/handle-edit-finished student-id])]
     [page/side-bar {:title    "Student Account"
                     :icon     "teachers"
                     :focused? form-editable?

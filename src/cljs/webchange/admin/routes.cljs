@@ -14,12 +14,11 @@
                                                                "/classes"  {""                           :classes
                                                                             "/add"                       :class-add
                                                                             ["/" [#"[\w-%]+" :class-id]] {""          :class-profile
-                                                                                                          "/students" {""                             :class-students
-                                                                                                                       "/add"                         :class-students-add
-                                                                                                                       ["/" [#"[\w-%]+" :student-id]] :student-profile}}}
+                                                                                                          "/students" {""     :class-students
+                                                                                                                       "/add" :class-students-add}}}
                                                                "/students" {""                             :students
                                                                             "/add"                         :student-add
-                                                                            ["/" [#"[\w-%]+" :student-id]] :student-edit}
+                                                                            ["/" [#"[\w-%]+" :student-id]] :student-profile}
                                                                "/teachers" {""                             :teachers
                                                                             "/add"                         :teacher-add
                                                                             ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
@@ -45,9 +44,10 @@
 
 (def sitemap
   {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true
-                                                                :class-profile {:class-students     {:student-profile true}
+                                                                :class-profile {:class-students     true
                                                                                 :class-students-add true}}
-                                               :students       {:student-add true}
+                                               :students       {:student-add     true
+                                                                :student-profile true}
                                                :teachers       {:teacher-add     true
                                                                 :teacher-profile true}
                                                :school-courses true}
