@@ -17,6 +17,10 @@
 
 (def student-progress-key :student-progress)
 
+(defn- get-student-progress
+  [db]
+  (get db student-progress-key))
+
 (defn- set-student-progress
   [db value]
   (assoc db student-progress-key value))
@@ -24,17 +28,16 @@
 (re-frame/reg-sub
   ::student-progress
   :<- [path-to-db]
-  #(get % student-progress-key))
+  #(get-student-progress %))
 
 ;;
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [school-id class-id student-id params]}]]
+  (fn [{:keys [db]} [_ {:keys [school-id student-id params]}]]
     (let [{:keys [action]} params]
       {:db         (-> db
-                       (assoc :class-id class-id)
                        (assoc :school-id school-id)
                        (assoc :student-id student-id)
                        (assoc :loading-student true)
@@ -92,8 +95,10 @@
   ::open-class-profile-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [school-id class-id]} db]
-      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+    (let [{:keys [school-id]} db
+          class-id (-> (get-student-progress db)
+                       (get-in [:class :id]))]
+      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id]})))
 
 ;; progress data
 

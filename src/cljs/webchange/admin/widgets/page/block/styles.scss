@@ -18,6 +18,14 @@
 
         .title-text {
             @include bbs--noto-16-b;
+
+            &.title-text--clickable {
+                cursor: pointer;
+
+                &:hover {
+                    color: bbs--color(blue-1);
+                }
+            }
         }
 
         .subtitle-text {

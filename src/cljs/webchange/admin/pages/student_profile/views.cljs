@@ -81,18 +81,20 @@
 (defn- content
   []
   (let [{class-name :name} @(re-frame/subscribe [::state/class-data])
-        {course-name :name} @(re-frame/subscribe [::state/course-data])]
-    [page/content {:title    class-name
-                   :subtitle "Started one day"
-                   :icon     "classes"
-                   :header   [:div.course-name
-                              [ui/navigation-icon {:icon "courses"}]
-                              [:span.prefix "Course: "]
-                              [:span (or course-name "Not Assigned")]]
-                   :tabs     [{:title     "Course View"
-                               :component [progress-table]}
-                              {:title     "Student History"
-                               :component [:div "Student History"]}]}]))
+        {course-name :name} @(re-frame/subscribe [::state/course-data])
+        handle-header-click #(re-frame/dispatch [::state/open-class-profile-page])]
+    [page/content {:title          class-name
+                   :subtitle       "Started one day"
+                   :icon           "classes"
+                   :on-title-click handle-header-click
+                   :header         [:div.course-name
+                                    [ui/navigation-icon {:icon "courses"}]
+                                    [:span.prefix "Course: "]
+                                    [:span (or course-name "Not Assigned")]]
+                   :tabs           [{:title     "Course View"
+                                     :component [progress-table]}
+                                    {:title     "Student History"
+                                     :component [:div "Student History"]}]}]))
 
 (defn- side-bar-complete-class
   [{:keys [student-id]}]
@@ -101,7 +103,9 @@
                          (re-frame/dispatch [::state/open-student-profile]))]
     [page/side-bar {:title    "Complete Class"
                     :icon     "teachers"
-                    :focused? true}
+                    :focused? true
+                    :actions  [{:icon     "close"
+                                :on-click handle-cancel}]}
      [student-progress-complete {:student-id student-id
                                  :on-save    handle-save
                                  :on-cancel  handle-cancel}]]))
@@ -117,8 +121,9 @@
                     :icon     "teachers"
                     :focused? form-editable?
                     :actions  (cond-> []
+                                      form-editable? (conj {:icon     "close"
+                                                            :on-click handle-cancel-click})
                                       (not form-editable?) (conj {:icon     "edit"
-                                                                  :variant  "light"
                                                                   :on-click handle-edit-click}))}
      [edit-student-form {:student-id           student-id
                          :school-id            school-id
