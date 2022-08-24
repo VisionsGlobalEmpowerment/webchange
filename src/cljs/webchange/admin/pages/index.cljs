@@ -28,6 +28,7 @@
     [webchange.admin.pages.schools-archived.views :as schools-archived]
     [webchange.admin.pages.student-add.views :as student-add]
     [webchange.admin.pages.student-profile.views :as student-profile]
+    [webchange.admin.pages.student-view.views :as student-view]
     [webchange.admin.pages.students.views :as students]
     [webchange.admin.pages.school-add.views :as school-add]
     [webchange.admin.pages.teachers.views :as teachers]
@@ -66,6 +67,7 @@
             :schools-archived   schools-archived/page
             :student-add        student-add/page
             :student-profile    student-profile/page
+            :student-view       student-view/page
             :students           students/page
             :teacher-add        teacher-add/page
             :teacher-profile    teacher-profile/page

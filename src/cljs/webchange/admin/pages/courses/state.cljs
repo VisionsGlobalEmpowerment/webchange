@@ -33,7 +33,7 @@
   ::selected-type
   :<- [path-to-db]
   (fn [db]
-    (get db :selected-type :visible)))
+    (get db :selected-type :published)))
 
 (re-frame/reg-sub
   ::courses
@@ -47,8 +47,8 @@
       (if show-my-global
         courses
         (remove #(and
-                  (= (:status %) "published")
-                  (= (:owner-id %) (get-in db [:current-user :id])))
+                   (= (:status %) "published")
+                   (= (:owner-id %) (get-in db [:current-user :id])))
                 courses)))))
 
 (re-frame/reg-sub
@@ -63,9 +63,9 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (-> db
-                   (assoc :published-courses-loading true)
-                   (assoc :my-courses-loading true))
+    {:db         (-> db
+                     (assoc :published-courses-loading true)
+                     (assoc :my-courses-loading true))
      :dispatch-n [[::warehouse/load-available-courses
                    {:on-success [::load-courses-success]}]
                   [::warehouse/load-my-courses
@@ -97,20 +97,40 @@
              (assoc :my-courses data))}))
 
 (re-frame/reg-event-fx
-  ::edit-course
-  [(i/path path-to-db)]
+  ::open-course
   (fn [{:keys [_]} [_ course-slug]]
     {:dispatch [::routes/redirect :course-edit :course-slug course-slug]}))
 
 (re-frame/reg-event-fx
-  ::view-course
+  ::edit-course
+  (fn [{:keys [_]} [_ course-slug]]
+    {:dispatch [::routes/redirect :course-edit :course-slug course-slug
+                :storage-params {:action           "edit"
+                                 :on-edit-finished [::edit-course-finished]}]}))
+
+(re-frame/reg-event-fx
+  ::edit-course-finished
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :courses]}))
+
+(re-frame/reg-event-fx
+  ::duplicate-course
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ slug]]
-    {:dispatch [::routes/redirect :course-profile :course-slug slug]}))
+  (fn [{:keys [_]} [_ course-id]]
+    {:dispatch [::warehouse/duplicate-course {:course-id course-id} {:on-success [::duplicate-course-success]}]}))
+
+(re-frame/reg-event-fx
+  ::duplicate-course-success
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch-n [[::warehouse/load-available-courses
+                   {:on-success [::load-courses-success]}]
+                  [::warehouse/load-my-courses
+                   {:on-success [::load-my-courses-success]}]]}))
 
 (re-frame/reg-event-fx
   ::add-course
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :course-add]}))
 
 (re-frame/reg-event-fx

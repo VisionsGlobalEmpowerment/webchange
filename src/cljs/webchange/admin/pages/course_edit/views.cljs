@@ -79,7 +79,7 @@
         locked? @(re-frame/subscribe [::state/locked?])]
     (if locked?
       [ui/list-item {:name       name
-                     :pre        [ui/image {:src preview
+                     :pre        [ui/image {:src        preview
                                             :class-name "item-image"}]
                      :class-name "activities-list-item"}]
       [draggable {:data          {:type     "activity"
@@ -89,7 +89,7 @@
                   :drop-allowed? drop-allowed?
                   :on-drop       handle-drop}
        [ui/list-item {:name       name
-                      :pre        [ui/image {:src preview
+                      :pre        [ui/image {:src        preview
                                              :class-name "item-image"}]
                       :class-name "activities-list-item"
                       :actions    [{:icon     "trash"
@@ -126,7 +126,7 @@
                                                         "selected"  @expanded?})
                         :on-click   handle-item-click
                         :pre        [:div.lesson-dnd
-                                     [ui/icon {:icon       "change-position"}]]
+                                     [ui/icon {:icon "change-position"}]]
                         :controls   [:div.list-item-stats
                                      activities-number
                                      [ui/icon {:icon       "games"
@@ -134,7 +134,7 @@
                         }]
          (when @expanded?
            [activities-list {:level-idx  level-idx
-                             :lesson-idx idx}])]  
+                             :lesson-idx idx}])]
         [:<>
          [draggable {:data          {:type   "lesson"
                                      :level  level-idx
@@ -146,7 +146,7 @@
                                                          "selected"  @expanded?})
                          :on-click   handle-item-click
                          :pre        [:div.lesson-dnd
-                                      [ui/icon {:icon       "change-position"}]]
+                                      [ui/icon {:icon "change-position"}]]
                          :controls   [:div.list-item-stats
                                       activities-number
                                       [ui/icon {:icon       "games"
@@ -184,10 +184,10 @@
                         :class-name (ui/get-class-name {"list-item" true
                                                         "selected"  @expanded?})
                         :on-click   handle-item-click
-                        :controls [:div.list-item-stats
-                                   lessons-number
-                                   [ui/icon {:icon        "games"
-                                             ::class-name "lesson"}]]}]
+                        :controls   [:div.list-item-stats
+                                     lessons-number
+                                     [ui/icon {:icon        "games"
+                                               ::class-name "lesson"}]]}]
          (when @expanded?
            [lessons-list {:level-idx idx}])]
         [:<>
@@ -199,10 +199,10 @@
                          :class-name (ui/get-class-name {"list-item" true
                                                          "selected"  @expanded?})
                          :on-click   handle-item-click
-                         :controls [:div.list-item-stats
-                                    lessons-number
-                                    [ui/icon {:icon        "games"
-                                              ::class-name "lesson"}]]
+                         :controls   [:div.list-item-stats
+                                      lessons-number
+                                      [ui/icon {:icon        "games"
+                                                ::class-name "lesson"}]]
                          :actions    [{:icon     "trash"
                                        :title    "Remove"
                                        :on-click handle-remove-click}]}]]
@@ -234,9 +234,9 @@
         handle-filter-change #(re-frame/dispatch [::state/set-available-activities-filter %])
         handle-back-click #(re-frame/dispatch [::state/open-course-info])
         available-activities @(re-frame/subscribe [::state/available-activities])]
-    [page/side-bar {:title        "Add Activity"
-                    :icon         "arrow-left"
-                    :icon-color   "blue-1"
+    [page/side-bar {:title         "Add Activity"
+                    :icon          "arrow-left"
+                    :icon-color    "blue-1"
                     :on-icon-click handle-back-click}
      [:div.available-activities
       [ui/input {:value       filter
@@ -283,24 +283,28 @@
 
 (defn- main-form
   [{:keys [course-slug]}]
-  (r/with-let [form-editable? (r/atom false)
-               handle-edit-click #(swap! form-editable? not)
-               handle-form-saved #(do (reset! form-editable? false)
-                                      (re-frame/dispatch [::state/set-course-info %]))]
-    (let [locked? @(re-frame/subscribe [::state/locked?])
-          can-lock? @(re-frame/subscribe [::state/can-lock?])]
-      [page/side-bar {:title   "Course Details"
-                      :icon    "info"
-                      :focused? @form-editable?
-                      :actions [(when (or (not locked?) can-lock?)
-                                  {:icon     (if @form-editable? "close" "edit")
-                                   :on-click handle-edit-click})]}
-       [course-info-form {:course-slug course-slug
-                          :editable?   @form-editable?
-                          :can-lock    can-lock?
-                          :on-save     handle-form-saved}]
-       (when-not (or @form-editable? locked?)
-         [actions-list])])))
+  (let [form-editable? @(re-frame/subscribe [::state/course-form-editable?])
+        locked? @(re-frame/subscribe [::state/locked?])
+        can-lock? @(re-frame/subscribe [::state/can-lock?])
+
+        handle-edit-click #(re-frame/dispatch [::state/set-course-form-editable true])
+        handle-cancel-click #(re-frame/dispatch [::state/handle-course-form-canceled])
+        handle-form-saved #(re-frame/dispatch [::state/handle-course-form-saved %])]
+    [page/side-bar {:title    "Course Details"
+                    :icon     "info"
+                    :focused? form-editable?
+                    :actions  [(when (or (not locked?) can-lock?)
+                                 (if form-editable?
+                                   {:icon     "close"
+                                    :on-click handle-cancel-click}
+                                   {:icon     "edit"
+                                    :on-click handle-edit-click}))]}
+     [course-info-form {:course-slug course-slug
+                        :editable?   form-editable?
+                        :can-lock    can-lock?
+                        :on-save     handle-form-saved}]
+     (when-not (or form-editable? locked?)
+       [actions-list])]))
 
 (defn- side-bar
   [props]
@@ -316,18 +320,18 @@
                   :icon       "courses"
                   :icon-color "blue-2"
                   :class-name "page--edit-course--header"
-                  :stats [{:icon "levels"
-                           :icon-color "blue-2"
-                           :counter levels
-                           :label "Levels"}
-                          {:icon "lesson"
-                           :icon-color "blue-2"
-                           :counter lessons
-                           :label "Lessons"}
-                          {:icon "games"
-                           :icon-color "blue-2"
-                           :counter activities
-                           :label "Activities"}]}]))
+                  :stats      [{:icon       "levels"
+                                :icon-color "blue-2"
+                                :counter    levels
+                                :label      "Levels"}
+                               {:icon       "lesson"
+                                :icon-color "blue-2"
+                                :counter    lessons
+                                :label      "Lessons"}
+                               {:icon       "games"
+                                :icon-color "blue-2"
+                                :counter    activities
+                                :label      "Activities"}]}]))
 
 (defn page
   [props]
@@ -337,7 +341,7 @@
       [page/page {:class-name "page--edit-course with-header"}
        [header]
        [page/content {:title "Course Table"
-                      :icon "edit"}
+                      :icon  "edit"}
         [levels-list]
         (when course-fetching?
           [ui/loading-overlay])]

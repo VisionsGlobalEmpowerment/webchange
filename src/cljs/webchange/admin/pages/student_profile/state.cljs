@@ -36,39 +36,72 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id student-id params]}]]
+    (print "profile params" params)
     (let [{:keys [action]} params]
       {:db         (-> db
                        (assoc :school-id school-id)
                        (assoc :student-id student-id)
-                       (assoc :loading-student true)
-                       (assoc :callbacks (select-keys params [:on-edit-finished])))
+                       (assoc :params params))
        :dispatch-n (cond-> [[::load-student-progress]]
                            (= action "edit") (conj [::set-student-form-editable true]))})))
+
+;; load progress
+
+(def progress-loading-key :progress-loading?)
+
+(defn- set-progress-loading
+  [db value]
+  (assoc db progress-loading-key value))
+
+(re-frame/reg-sub
+  ::progress-loading?
+  :<- [path-to-db]
+  #(get % progress-loading-key true))
 
 (re-frame/reg-event-fx
   ::load-student-progress
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [{:keys [student-id]} db]
-      {:dispatch [::warehouse/load-class-student-progress
+      {:db       (-> db (set-progress-loading true))
+       :dispatch [::warehouse/load-class-student-progress
                   {:student-id student-id}
-                  {:on-success [::load-student-success]}]})))
+                  {:on-success [::load-student-success]
+                   :on-failure [::load-student-failure]}]})))
 
 (re-frame/reg-event-fx
   ::load-student-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
-    {:db (set-student-progress db data)}))
+  (fn [{:keys [db]} [_ {:keys [class] :as data}]]
+    (if (some? class)
+      {:db (-> db
+               (set-progress-loading false)
+               (set-student-progress data))}
+      {:dispatch [::redirect-to-student-view]})))
+
+(re-frame/reg-event-fx
+  ::load-student-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::redirect-to-student-view]}))
+
+(re-frame/reg-event-fx
+  ::redirect-to-student-view
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [school-id student-id params]} db]
+      {:dispatch [::routes/redirect :student-view :school-id school-id :student-id student-id
+                  :storage-params params]})))
 
 (re-frame/reg-sub
   ::course-statistics
   :<- [::student-progress]
   (fn [{:keys [course-stats]}]
     (let [{:keys [activity-progress cumulative-time started-at last-login]} (:data course-stats)]
-      {:started-at        (date-str->locale-date started-at)
-       :last-login        (date-str->locale-date last-login)
-       :activity-progress activity-progress
-       :cumulative-time   (ms->duration cumulative-time)})))
+      {:started-at        (date-str->locale-date started-at "no data")
+       :last-login        (date-str->locale-date last-login "no data")
+       :activity-progress (or activity-progress "no data")
+       :cumulative-time   (or (ms->duration cumulative-time) "no data")})))
 
 (re-frame/reg-sub
   ::student-data
@@ -205,7 +238,7 @@
   ::handle-edit-finished
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ student-id]]
-    (let [{:keys [on-edit-finished]} (:callbacks db)]
+    (let [{:keys [on-edit-finished]} (:params db)]
       {:dispatch-n (cond-> [[::set-student-form-editable false]
                             [::update-student-data student-id]]
                            (some? on-edit-finished) (conj on-edit-finished))})))
@@ -214,6 +247,6 @@
   ::handle-edit-canceled
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [on-edit-finished]} (:callbacks db)]
+    (let [{:keys [on-edit-finished]} (:params db)]
       {:dispatch-n (cond-> [[::set-student-form-editable false]]
                            (some? on-edit-finished) (conj on-edit-finished))})))

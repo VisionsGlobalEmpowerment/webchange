@@ -4,7 +4,8 @@
     [webchange.validation.predicates :as p]))
 
 (s/def ::id number?)
-(s/def ::class-id number?)
+(s/def ::class-id (s/or :empty nil?
+                        :valid number?))
 (s/def ::first-name (s/and string? p/not-empty?))
 (s/def ::last-name (s/or :empty p/not-defined?
                          :valid string?))
@@ -14,10 +15,10 @@
                              :valid (s/and string? p/date-string?)))
 (s/def ::access-code (s/and string? p/not-empty?))
 
-(s/def ::student (s/keys :req-un [::class-id
-                                  ::first-name
+(s/def ::student (s/keys :req-un [::first-name
                                   ::access-code]
-                         :opt-un [::last-name
+                         :opt-un [::class-id
+                                  ::last-name
                                   ::gender
                                   ::date-of-birth]))
 

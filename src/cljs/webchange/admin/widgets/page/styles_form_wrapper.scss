@@ -1,0 +1,9 @@
+.widget--form-wrapper {
+    position: relative;
+
+    .widget--form-wrapper--actions {
+        position: absolute;
+        top: 0;
+        right: -32px;
+    }
+}
