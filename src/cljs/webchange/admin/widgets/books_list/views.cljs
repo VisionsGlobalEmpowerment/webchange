@@ -3,7 +3,7 @@
     [webchange.ui.index :as ui]))
 
 (defn- books-list-item
-  [{:keys [id name preview on-click on-edit-click]}]
+  [{:keys [id name preview on-click on-edit-click library-type]}]
   (let [handle-card-click #(on-click id)
         handle-edit-click #(do (.stopPropagation %)
                                (on-edit-click id))]
@@ -16,6 +16,12 @@
                   :class-name "preview"
                   :lazy?      true}]
        [:img {:src "/images/admin/book/pages_small.png"}]]]
+     (when library-type
+       [ui/icon {:class-name "global-icon"
+                 :icon "global"
+                 :color (if (= "global" library-type)
+                          "blue-1"
+                          "yellow-1")}])
      [:div.data
       name
       [ui/button {:icon     "edit"

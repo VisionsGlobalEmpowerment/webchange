@@ -3,7 +3,7 @@
     [webchange.ui.index :as ui]))
 
 (defn- activities-list-item
-  [{:keys [id name preview on-click on-edit-click]}]
+  [{:keys [id name preview on-click on-edit-click library-type]}]
   (let [handle-card-click #(on-click id)
         handle-edit-click #(do (.stopPropagation %)
                                (on-edit-click id))]
@@ -12,6 +12,12 @@
      [ui/image {:src        preview
                 :class-name "preview"
                 :lazy?      true}]
+     (when library-type
+       [ui/icon {:class-name "global-icon"
+                 :icon "global"
+                 :color (if (= "global" library-type)
+                          "blue-1"
+                          "yellow-1")}])
      [:div.data
       name
       [ui/button {:icon     "edit"

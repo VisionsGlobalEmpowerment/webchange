@@ -34,21 +34,30 @@
   (fn [db]
     (get db :selected-type :visible)))
 
+(defn- with-library-type
+  [{:keys [status owner-id] :as activity} user-id]
+  (let [is-global? (= "visible" status)
+        is-owner? (= owner-id user-id)]
+    (cond
+      (and is-global? is-owner?) (assoc activity :library-type "my")
+      is-global? (assoc activity :library-type "global")
+      :else activity)))
+
 (re-frame/reg-sub
   ::activities
   :<- [path-to-db]
   :<- [::selected-type]
   :<- [::show-my-global?]
   (fn [[db selected-type show-my-global]]
-    (let [activities (if (= selected-type :visible)
+    (let [current-user-id (get-in db [:current-user :id])
+          activities (if (= selected-type :visible)
                        (:visible-activities db)
                        (:my-activities db))]
-      (if show-my-global
-        activities
-        (remove #(and
-                   (= (:status %) "visible")
-                   (= (:owner-id %) (get-in db [:current-user :id])))
-                activities)))))
+      (cond->> activities
+               :always (map #(with-library-type % current-user-id))
+               (not show-my-global) (remove #(and
+                                              (= (:status %) "visible")
+                                              (= (:owner-id %) current-user-id)))))))
 
 (re-frame/reg-sub
   ::activities-counter

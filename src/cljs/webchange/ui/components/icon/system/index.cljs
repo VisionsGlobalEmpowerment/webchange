@@ -34,6 +34,7 @@
     [webchange.ui.components.icon.system.icon-effects :as effects]
     [webchange.ui.components.icon.system.icon-emotion :as emotion]
     [webchange.ui.components.icon.system.icon-flip :as flip]
+    [webchange.ui.components.icon.system.icon-global :as global]
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-images :as images]
     [webchange.ui.components.icon.system.icon-info :as info]
@@ -96,6 +97,7 @@
                         "effects"         effects/data
                         "emotion"         emotion/data
                         "flip"            flip/data
+                        "global"          global/data
                         "image-broken"    image-broken/data
                         "images"          images/data
                         "info"            info/data
