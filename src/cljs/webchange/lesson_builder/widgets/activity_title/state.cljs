@@ -34,15 +34,14 @@
   identity)
 
 (defn- create-link
-  [{:keys [course-slug activity-slug]}]
-  (str js/location.protocol "//" js/location.host "/s/" course-slug "/" activity-slug))
+  [{:keys [activity-id]}]
+  (str js/location.protocol "//" js/location.host "/s/" activity-id))
 
 (re-frame/reg-event-fx
   ::preview
   (fn [{:keys [db]} [_]]
-    (let [{:keys [slug course-slug]} (state/get-activity-info db state/path-to-db)
-          link (create-link {:course-slug   course-slug
-                             :activity-slug slug})]
+    (let [{:keys [id]} (state/get-activity-info db state/path-to-db)
+          link (create-link {:activity-id id})]
       {:open-link link})))
 
 (re-frame/reg-fx

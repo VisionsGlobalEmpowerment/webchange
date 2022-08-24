@@ -245,7 +245,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [id]}]]
     {:db (assoc db :saving true)
-     :dispatch [::routes/redirect :activity-edit :activity-id id]}))
+     :dispatch [::routes/redirect :lesson-builder :activity-id id]}))
 
 (re-frame/reg-event-fx
   ::build-failure

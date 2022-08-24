@@ -126,18 +126,17 @@
   ::load-versions
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [course-slug slug]} (get-activity-info db)]
+    (let [{:keys [id]} (get-activity-info db)]
       {:db       (-> db (set-activity-versions-loading true))
-       :dispatch [::warehouse/load-versions
-                  {:course-slug course-slug
-                   :scene-slug  slug}
+       :dispatch [::warehouse/load-activity-versions
+                  {:activity-id id}
                   {:on-success [::load-versions-success]
                    :on-failure [::load-versions-failure]}]})))
 
 (re-frame/reg-event-fx
   ::load-versions-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [versions]}]]
+  (fn [{:keys [db]} [_ versions]]
     {:db (-> db
              (set-activity-versions versions)
              (set-activity-versions-loading false))}))
@@ -227,13 +226,12 @@
   ::save-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [slug course-slug]} (get-activity-info db)
+    (let [{:keys [id]} (get-activity-info db)
           data (get-activity-data db)]
       {:db       (-> db (set-activity-saving true))
-       :dispatch [::warehouse/save-scene
-                  {:course-slug course-slug
-                   :scene-slug  slug
-                   :scene-data  data}
+       :dispatch [::warehouse/save-activity-version
+                  {:activity-id id
+                   :activity-data  data}
                   {:on-success [::save-activity-success]
                    :on-failure [::save-activity-failure]}]})))
 

@@ -879,6 +879,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-activity-versions
+  (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
+    (create-request {:key    :load-activity-versions
+                     :method :get
+                     :uri    (str "/api/activities/" activity-id "/versions")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::restore-version
   (fn [{:keys [_]} [_ {:keys [scene-version-id]} handlers]]
     (create-request {:key    :restore-version

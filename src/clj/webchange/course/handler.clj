@@ -585,6 +585,11 @@
        :path-params [activity-id :- ::activity-spec/id]
        (-> (core/get-activity-current-version activity-id)
            response))
+  (GET "/api/activities/:activity-id/versions" request
+       :coercion :spec
+       :path-params [activity-id :- ::activity-spec/id]
+       (-> (core/get-activity-versions activity-id)
+           response))
   (GET "/api/activities/:activity-id" request
        :coercion :spec
        :path-params [activity-id :- ::activity-spec/id]

@@ -48,7 +48,7 @@
           action-data]
    :uid  (get-uid)})
 
-(defn- dialog-sequence-action?
+(defn dialog-sequence-action?
   [{:keys [type data]}]
   (or (= type "parallel")
       (and (= type "sequence-data")

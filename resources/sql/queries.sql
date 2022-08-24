@@ -253,7 +253,7 @@ WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 1;
 -- :name get-scene-versions :? :*
 -- :doc retrieve all versions of given scene
 SELECT * from scene_versions
-WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 30;
+WHERE scene_id = :scene_id ORDER BY created_at DESC LIMIT 50;
 
 -- :name delete-scene-skills! :! :n
 -- :doc deletes all scene skills
