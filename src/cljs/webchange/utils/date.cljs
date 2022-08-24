@@ -8,13 +8,15 @@
   [date]
   (.toLocaleDateString date))
 
-
-
 (defn date-str->locale-date
-  [date-str]
-  " '2022-05-18T11:33:36.316428' -> '18/05/2022' "
-  (-> (new-date date-str)
-      (->locale-date-string)))
+  ([date-str]
+   (date-str->locale-date date-str nil))
+  ([date-str default-value]
+   " '2022-05-18T11:33:36.316428' -> '18/05/2022' "
+   (if (some? date-str)
+     (-> (new-date date-str)
+         (->locale-date-string))
+     default-value)))
 
 (defn get-seconds
   [date]
@@ -43,11 +45,12 @@
 
 (defn ms->duration
   [ms]
-  (let [date (new-date ms)
-        m (get-minutes date)
-        s (get-seconds date)
-        h (get-hours date)]
-    (cond->> ""
-             (> s 0) (str s "s")
-             (> m 0) (str m "m ")
-             (> h 0) (str h "h "))))
+  (when (some? ms)
+    (let [date (new-date ms)
+          m (get-minutes date)
+          s (get-seconds date)
+          h (get-hours date)]
+      (cond->> ""
+               (> s 0) (str s "s")
+               (> m 0) (str m "m ")
+               (> h 0) (str h "h ")))))

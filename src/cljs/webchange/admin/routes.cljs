@@ -18,7 +18,8 @@
                                                                                                                        "/add" :class-students-add}}}
                                                                "/students" {""                             :students
                                                                             "/add"                         :student-add
-                                                                            ["/" [#"[\w-%]+" :student-id]] :student-profile}
+                                                                            ["/" [#"[\w-%]+" :student-id]] {""         :student-view
+                                                                                                            "/profile" :student-profile}}
                                                                "/teachers" {""                             :teachers
                                                                             "/add"                         :teacher-add
                                                                             ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}

@@ -146,7 +146,12 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    [page/page {:class-name "page--student-profile"}
-     [header]
-     [content]
-     [side-bar props]]))
+    (let [loading? @(re-frame/subscribe [::state/progress-loading?])]
+      ^{:key loading?}
+      [page/page {:class-name "page--student-profile"}
+       (if-not loading?
+         [:<>
+          [header]
+          [content]
+          [side-bar props]]
+         [ui/loading-overlay])])))

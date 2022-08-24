@@ -70,7 +70,6 @@
           handle-add-click #(re-frame/dispatch [::state/show-assign-course-list])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])
           handle-close-click #(re-frame/dispatch [::state/close-assign-course-list])]
-      (print "show-assign-list?" show-assign-list?)
       [page/single-page (cond-> {:class-name "page--classes"
                                  :header     (cond-> {:title    school-name
                                                       :icon     "school"

@@ -15,6 +15,15 @@
 (def header header-views/header)
 (def footer footer-views/footer)
 
+(defn form-wrapper
+  [{:keys [actions]}]
+  (->> (r/current-component)
+       (r/children)
+       (into [:div {:class-name "widget--form-wrapper"}
+              (when (some? actions)
+                [:div {:class-name "widget--form-wrapper--actions"}
+                 actions])])))
+
 (defn single-page
   [{:keys [align-center? background-image? class-name class-name-content footer form-container? header]}]
   [:div {:class-name (get-class-name {"widget--single-page"                        true
@@ -51,8 +60,8 @@
                                    (reset! children-class-names))))]
     (->> (r/current-component)
          (r/children)
-         (into [:div {:class-name (get-class-name (merge {"bbs--page" true
+         (into [:div {:class-name (get-class-name (merge {"bbs--page"                                      true
                                                           (str "bbs--page--align-content--" align-content) (some? align-content)
-                                                          class-name  (some? class-name)}
+                                                          class-name                                       (some? class-name)}
                                                          @children-class-names))
                       :ref        handle-ref}]))))
