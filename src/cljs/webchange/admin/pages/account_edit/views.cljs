@@ -42,22 +42,25 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [{:keys [account-id]}]
-    (let [account @(re-frame/subscribe [::state/account-info])
+    (let [editable? @(re-frame/subscribe [::state/form-editable?])
+          account @(re-frame/subscribe [::state/account-info])
           open-accounts-list #(re-frame/dispatch [::state/open-accounts-list])]
       [page/single-page {:class-name         "page--account-edit"
                          :class-name-content "page--account-edit--content"
-                         :header             {:title      (:name account)
+                         :header             {:title      (get account :name "")
                                               :icon       "accounts"
                                               :icon-color "green-2"
                                               :on-close   open-accounts-list
                                               :info       [{:key   "Account Created"
-                                                            :value (:account-created account)}
+                                                            :value (get account :account-created "")}
                                                            {:key   "Last Login"
-                                                            :value (:last-login account)}]}
+                                                            :value (get account :last-login "")}]}
                          :form-container?    true}
        [:div.left-side-panel
         [edit-account-form {:account-id account-id
                             :class-name "edit-account-form"
+                            :disabled?  (not editable?)
                             :on-save    open-accounts-list
                             :on-remove  open-accounts-list}]]
-       [children-list]])))
+       (when editable?
+         [children-list])])))

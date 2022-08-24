@@ -56,17 +56,20 @@
   ::account-info
   :<- [::account-data]
   (fn [{:keys [first-name last-name created-at last-login]}]
-    {:name (str first-name " " last-name)
-     :account-created (date-str->locale-date created-at)
-     :last-login (date-str->locale-date last-login)}))
+    {:name            (str first-name " " last-name)
+     :account-created (date-str->locale-date created-at "")
+     :last-login      (date-str->locale-date last-login "")}))
 
 (re-frame/reg-event-fx
-::init
-[(i/path path-to-db)]
-(fn [{:keys [db]} [_ {:keys [account-id]}]]
-  {:db       (set-account-loading db true)
-   :dispatch [::warehouse/load-account {:id account-id}
-              {:on-success [::load-account-success]}]}))
+  ::init
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [account-id params]}]]
+    (let [{:keys [action]} params]
+      {:db       (-> db
+                     (set-account-loading true)
+                     (assoc :form-editable? (= action "edit")))
+       :dispatch [::warehouse/load-account {:id account-id}
+                  {:on-success [::load-account-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-account-success
@@ -75,6 +78,12 @@
     {:db (-> db
              (set-account-loading false)
              (set-account-data data))}))
+
+(re-frame/reg-sub
+  ::form-editable?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :form-editable? false)))
 
 (defn- prepare-child
   [{:keys [id first-name last-name created-at course data]}]

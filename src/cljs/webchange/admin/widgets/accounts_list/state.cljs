@@ -159,4 +159,11 @@
   ::edit-account
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ account-id]]
+    {:dispatch [::routes/redirect :account-edit :account-id account-id
+                :storage-params {:action "edit"}]}))
+
+(re-frame/reg-event-fx
+  ::view-account
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ account-id]]
     {:dispatch [::routes/redirect :account-edit :account-id account-id]}))

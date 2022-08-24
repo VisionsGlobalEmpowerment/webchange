@@ -9,15 +9,17 @@
 (defn- list-item
   [{:keys [active? email id last-login name loading?] :as props}]
   (let [account-type @(re-frame/subscribe [::state/account-type])
+        handle-click #(re-frame/dispatch [::state/view-account id])
         handle-edit-click #(re-frame/dispatch [::state/edit-account id])
         handle-active-click #(re-frame/dispatch [::state/toggle-active id (not active?)])
         determinate? (boolean? active?)]
-    [ui/list-item {:avatar      nil
-                   :name        name
+    [ui/list-item {:avatar   nil
+                   :name     name
                    :info     [{:key   "Email"
                                :value email}
                               {:key   "Last Login"
                                :value last-login}]
+                   :on-click handle-click
                    :controls (when (= "admin" account-type)
                                [ui/switch {:label          (cond
                                                              loading? "Saving.."
@@ -53,9 +55,11 @@
     (let [data @(re-frame/subscribe [::state/accounts])
           loading? @(re-frame/subscribe [::state/loading?])]
       [:div.widget--accounts-list
-       [:<>
-        [ui/list {:class-name "accounts-list"}
-         (for [{:keys [id] :as account} data]
-           ^{:key id}
-           [list-item account])]
-        [pagination]]])))
+       (if-not loading?
+         [:<>
+          [ui/list {:class-name "accounts-list"}
+           (for [{:keys [id] :as account} data]
+             ^{:key id}
+             [list-item account])]
+          [pagination]]
+         [ui/loading-overlay])])))
