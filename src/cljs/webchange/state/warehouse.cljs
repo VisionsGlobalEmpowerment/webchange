@@ -426,7 +426,8 @@
     (create-request {:key    :load-visible-activities
                      :method :get
                      :uri    (str "/api/visible-activities")
-                     :params {:lang lang}}
+                     :params (when lang
+                               {:lang lang})}
                     handlers)))
 
 (re-frame/reg-event-fx

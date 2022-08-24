@@ -196,6 +196,7 @@
                   [::warehouse/load-course-info course-slug
                    {:on-success [::load-course-info-success]}]
                   [::warehouse/load-visible-activities
+                   {}
                    {:on-success [::load-available-activities-success]}]]}))
 
 (re-frame/reg-sub
