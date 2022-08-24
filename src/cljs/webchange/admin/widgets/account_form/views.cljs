@@ -8,10 +8,16 @@
     [webchange.ui.index :as ui]
     [webchange.validation.specs.account :as account-spec]))
 
+(def type-names
+  {"admin" "Super Admin"
+   "bbs-admin" "BBS Admin"
+   "live" "Live User"
+   "teacher" "Teacher Admin"})
+
 (def type-options (->> account-spec/type?
                        (map #(hash-map :value %
-                                       :text (str/capitalize %)))
-                       (sort-by :text)
+                                       :text (get type-names %)))
+                       (sort-by :value)
                        (concat [{:text  "Select Account Type"
                                  :value ""}])))
 
