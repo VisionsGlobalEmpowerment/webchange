@@ -768,6 +768,15 @@
                      :params data} handlers)))
 
 (re-frame/reg-event-fx
+  ::duplicate-course
+  (fn [_ [_ {:keys [course-id]} handlers]]
+    (create-fake-request {:key    :duplicate-course
+                          :method :post
+                          :uri    (str "/api/courses/" course-id "/duplicate")}
+                         handlers)))
+
+
+(re-frame/reg-event-fx
   ::duplicate-course-activity
   (fn [_ [_ {:keys [course-id data]} handlers]]
     (create-request {:key    :duplicate-activity

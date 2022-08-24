@@ -157,6 +157,38 @@
   :<- [path-to-db]
   #(get % side-bar-content-key :course-info))
 
+;; edit course form
+
+(def course-form-editable-key :course-form-editable?)
+
+(re-frame/reg-sub
+  ::course-form-editable?
+  :<- [path-to-db]
+  #(get % course-form-editable-key false))
+
+(re-frame/reg-event-fx
+  ::set-course-form-editable
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db course-form-editable-key value)}))
+
+(re-frame/reg-event-fx
+  ::handle-course-form-saved
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ course-info]]
+    (let [{:keys [on-edit-finished]} (:params db)]
+      {:dispatch-n (cond-> [[::set-course-form-editable false]
+                            [::set-course-info course-info]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
+(re-frame/reg-event-fx
+  ::handle-course-form-canceled
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [on-edit-finished]} (:params db)]
+      {:dispatch-n (cond-> [[::set-course-form-editable false]]
+                           (some? on-edit-finished) (conj on-edit-finished))})))
+
 ;; Course Slug
 
 (def course-slug-key :course-slug)
@@ -186,18 +218,21 @@
   ::init
   [(re-frame/inject-cofx :current-user)
    (i/path path-to-db)]
-  (fn [{:keys [db current-user]} [_ {:keys [course-slug]}]]
-    {:db         (-> db
-                     (set-course-slug course-slug)
-                     (set-course-fetching true)
-                     (assoc :is-admin? (= "admin" (:type current-user))))
-     :dispatch-n [[::warehouse/load-course course-slug
-                   {:on-success [::load-course-success]}]
-                  [::warehouse/load-course-info course-slug
-                   {:on-success [::load-course-info-success]}]
-                  [::warehouse/load-visible-activities
-                   {}
-                   {:on-success [::load-available-activities-success]}]]}))
+  (fn [{:keys [db current-user]} [_ {:keys [course-slug params]}]]
+    (let [{:keys [action]} params]
+      {:db         (-> db
+                       (set-course-slug course-slug)
+                       (set-course-fetching true)
+                       (assoc :is-admin? (= "admin" (:type current-user)))
+                       (assoc :params params))
+       :dispatch-n (cond-> [[::warehouse/load-course course-slug
+                             {:on-success [::load-course-success]}]
+                            [::warehouse/load-course-info course-slug
+                             {:on-success [::load-course-info-success]}]
+                            [::warehouse/load-visible-activities
+                             {}
+                             {:on-success [::load-available-activities-success]}]]
+                           (= action "edit") (conj [::set-course-form-editable true]))})))
 
 (re-frame/reg-sub
   ::can-lock?
