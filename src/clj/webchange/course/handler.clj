@@ -223,6 +223,7 @@
 
 (s/defschema Course {:id                          s/Int :name s/Str :slug s/Str :image-src (s/maybe s/Str)
                      :url                         s/Str :lang (s/maybe s/Str)
+                     :owner-id                    (s/maybe s/Int)
                      (s/optional-key :metadata)   (s/maybe s/Any)
                      (s/optional-key :updated-at) s/Str
                      (s/optional-key :level)      s/Str
@@ -484,6 +485,15 @@
   (GET "/api/available-courses" request
        (-> (core/get-available-courses) response))
 
+  (GET "/api/my-courses" request
+    :coercion :spec
+    (let [user-id (current-user request)
+          result (if (is-admin? user-id)
+                   (core/my-courses-admin user-id)
+                   (core/my-courses user-id))]
+      (-> result
+          response)))
+    
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]

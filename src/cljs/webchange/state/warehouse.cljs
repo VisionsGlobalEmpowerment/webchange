@@ -413,6 +413,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-my-courses
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :load-available-courses
+                     :method :get
+                     :uri    (str "/api/my-courses")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-visible-activities
   (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
     (create-request {:key    :load-visible-activities
@@ -546,6 +554,14 @@
                      :method :get
                      :uri    (->> (or language "all")
                                   (str "/api/book-library/"))}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-my-books
+  (fn [{:keys [_]} [_ {:keys [lang]} handlers]]
+    (create-request {:key    :load-my-books
+                     :method :get
+                     :uri    (str "/api/my-books")}
                     handlers)))
 
 (re-frame/reg-event-fx

@@ -30,6 +30,8 @@
           saving? @(re-frame/subscribe [::state/data-saving?])
           data @(re-frame/subscribe [::state/form-data])
           visible? (= "visible" (:status data))
+          can-lock? @(re-frame/subscribe [::state/can-lock?])
+          locked? (:locked data)
           model {:group-left {:type :group
                               :class-name "group-left"
                               :fields {:about             {:label "About"
@@ -37,7 +39,7 @@
                                        :short-description {:label "Short Description"
                                                            :type  :text}
                                        :remove    {:label    "Delete Book"
-                                                   :type     :action
+                                                   :type     (if locked? :empty :action)
                                                    :icon     "trash"
                                                    :on-click #(re-frame/dispatch [::state/open-remove-window])}}}
                  :group-filler {:type :group
@@ -49,10 +51,13 @@
                                         :lang {:label "Language"
                                                :type :select
                                                :options language-options}
-                                        :visible {:label (if visible? "Visible" "Not Visible")
+                                        :visible {:label (if visible? "Global" "Not published")
                                                   :icon (if visible? "visibility-on" "visibility-off")
-                                                  :type :action
-                                                  :on-click #(re-frame/dispatch [::state/toggle-visibility])}}}}
+                                                  :type (if locked? :label :action)
+                                                  :on-click #(re-frame/dispatch [::state/toggle-visibility])}
+                                        :locked {:label (if locked? "Locked" "Lock Book")
+                                                 :type (if can-lock? :action :empty)
+                                                 :on-click #(re-frame/dispatch [::state/set-locked (not locked?)])}}}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [:<>
        [ui/form {:form-id    (-> (str "book-" book-id)

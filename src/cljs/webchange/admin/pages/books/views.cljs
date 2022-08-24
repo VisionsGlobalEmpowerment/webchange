@@ -7,6 +7,23 @@
     [webchange.ui.index :as ui]
     [webchange.utils.languages :refer [language-options]]))
 
+(defn- type-selector
+  []
+  (let [selected-type @(re-frame/subscribe [::state/selected-type])
+        books-counter @(re-frame/subscribe [::state/books-counter])]
+    [:div {:class-name "type-selector"}
+     [:div {:class-name (ui/get-class-name {"type-selector-item" true
+                                            "type-selector-item-active" (= selected-type :visible)})
+            :on-click #(re-frame/dispatch [::state/select-type :visible])}
+      "Global library"
+      [ui/chip {:counter (:visible books-counter)}]]
+     [:div.type-spacer]
+     [:div {:class-name (ui/get-class-name {"type-selector-item" true
+                                            "type-selector-item-active" (= selected-type :my)})
+            :on-click #(re-frame/dispatch [::state/select-type :my])}
+      "My Books"
+      [ui/chip {:counter (:my books-counter)}]]]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
@@ -16,12 +33,19 @@
           handle-card-click #(re-frame/dispatch [::state/open-book %])
           handle-edit-click #(re-frame/dispatch [::state/edit-book %])
           current-language @(re-frame/subscribe [::state/current-language])
-          handle-select-language #(re-frame/dispatch [::state/select-language %])]
+          handle-select-language #(re-frame/dispatch [::state/select-language %])
+
+          show-my-global? @(re-frame/subscribe [::state/show-my-global?])]
       [page/single-page {:class-name "page--books"
                          :header     {:title      "Books"
                                       :icon       "book"
                                       :icon-color "blue-2"
-                                      :controls   [[ui/select {:label     "Language"
+                                      :controls   [[type-selector]
+                                                   [ui/switch {:class-name "show-global-selector"
+                                                               :label "Show My Global Books"
+                                                               :checked? show-my-global?
+                                                               :on-change #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])}]
+                                                   [ui/select {:label     "Language"
                                                                :value     current-language
                                                                :options   language-options
                                                                :on-change handle-select-language}]]}}

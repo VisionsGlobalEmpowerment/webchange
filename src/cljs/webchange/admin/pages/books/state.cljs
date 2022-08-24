@@ -14,34 +14,49 @@
 
 ;; books Loading
 
-(def books-loading-key :books-loading?)
-
-(defn- set-books-loading
-  [db value]
-  (assoc db books-loading-key value))
-
 (re-frame/reg-sub
   ::books-loading?
   :<- [path-to-db]
-  #(get % books-loading-key false))
+  (fn [db]
+    (or (:visible-books-loading db)
+        (:my-books-loading db))))
 
 ;; books Data
 
-(def books-key :books)
+(re-frame/reg-sub
+  ::show-my-global?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :show-my-global? true)))
 
-(defn- get-books
-  [db]
-  (get db books-key))
-
-(defn- set-books
-  [db value]
-  (assoc db books-key value))
+(re-frame/reg-sub
+  ::selected-type
+  :<- [path-to-db]
+  (fn [db]
+    (get db :selected-type :visible)))
 
 (re-frame/reg-sub
   ::books
   :<- [path-to-db]
-  #(get-books %))
+  :<- [::selected-type]
+  :<- [::show-my-global?]
+  (fn [[db selected-type show-my-global]]
+    (let [books (if (= selected-type :visible)
+                  (:visible-books db)
+                  (:my-books db))]
+      (if show-my-global
+        books
+        (remove #(and
+                  (= (:status %) "visible")
+                  (= (:owner-id %) (get-in db [:current-user :id])))
+                books)))))
 
+(re-frame/reg-sub
+  ::books-counter
+  :<- [path-to-db]
+  (fn [db]
+    {:my      (-> db :my-books count)
+     :visible (-> db :visible-books count)}))
 ;;
 (def default-language "english")
 
@@ -55,19 +70,40 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db       (-> db
-                   (set-books-loading true)
+                   (assoc :visible-books-loading true)
+                   (assoc :my-books-loading true)
                    (assoc :current-language default-language))
-     :dispatch [::warehouse/load-available-books
-                {:lang default-language}
-                {:on-success [::load-books-success]}]}))
+     :dispatch-n [[::warehouse/load-books
+                   {:lang default-language}
+                   {:on-success [::load-visible-books-success]}]
+                  [::warehouse/load-my-books
+                   {:lang default-language}
+                   {:on-success [::load-my-books-success]}]
+                  [::warehouse/load-current-user
+                   {:on-success [::load-account-success]}]]}))
 
 (re-frame/reg-event-fx
-  ::load-books-success
+  ::load-account-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
     {:db (-> db
-             (set-books-loading false)
-             (set-books data))}))
+             (assoc :current-user data))}))
+
+(re-frame/reg-event-fx
+  ::load-visible-books-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :visible-books-loading false)
+             (assoc :visible-books data))}))
+
+(re-frame/reg-event-fx
+  ::load-my-books-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :my-books-loading false)
+             (assoc :my-books data))}))
 
 (re-frame/reg-event-fx
   ::open-book
@@ -86,8 +122,24 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ language]]
     {:db (-> db
-             (set-books-loading true)
+             (assoc :visible-books-loading true)
+             (assoc :my-books-loading true)
              (assoc :current-language language))
-     :dispatch  [::warehouse/load-available-books
-                 {:lang language}
-                 {:on-success [::load-books-success]}]}))
+     :dispatch-n [[::warehouse/load-books
+                   {:lang language}
+                   {:on-success [::load-visible-books-success]}]
+                  [::warehouse/load-my-books
+                   {:lang language}
+                   {:on-success [::load-my-books-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::select-type
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ type]]
+    {:db (assoc db :selected-type type)}))
+
+(re-frame/reg-event-fx
+  ::set-show-global
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-my-global? value)}))
