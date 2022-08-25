@@ -56,7 +56,9 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id]}]]
-    {:db (-> db (set-school-id school-id))}))
+    {:db (-> db
+             (set-school-id school-id)
+             (set-current-value []))}))
 
 (re-frame/reg-sub
   ::code
@@ -110,3 +112,8 @@
                    (assoc-in [:current-course] (:course-slug user))
                    (update-in [:user] merge user))
      :dispatch [::ie/open-student-dashboard]}))
+
+(re-frame/reg-sub
+  ::user
+  (fn [db]
+    (get-in db [:user])))

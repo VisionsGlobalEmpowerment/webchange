@@ -13,7 +13,6 @@
     [webchange.editor-v2.scenes-crossing.views :refer [scenes-crossing]]
     [webchange.editor-v2.events :as ee2]
     [webchange.editor-v2.views :refer [course-view scene-view concept-view add-concept-view lesson-view add-lesson-view]]
-    [webchange.auth.views :refer [student-access-form]]
     [webchange.dashboard.events :as dashboard-events]
     [webchange.dashboard.views :refer [dashboard]]
     [webchange.game-changer.views :as game-changer]
@@ -121,7 +120,7 @@
                :dashboard-courses [dashboard-panel :courses-list route-params]
 
                ;; student dashboard
-               :student-login [student-access-form]
+               :student-login [student-sign-in/page {:school-id (:school-id route-params)}]
                :school-student-login [student-sign-in/page {:school-id (:school-id route-params)}]
 
                ;;wizard
