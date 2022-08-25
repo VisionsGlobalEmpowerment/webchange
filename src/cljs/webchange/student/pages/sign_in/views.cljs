@@ -15,6 +15,7 @@
   []
   (let [code @(re-frame/subscribe [::state/code])
         handle-remove-click #(re-frame/dispatch [::state/remove-value])]
+    ^{:key code}
     [:div {:class-name "current-code"}
      (for [value code]
        ^{:key value}
