@@ -141,7 +141,7 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (get-activity db)
           href (str "/s/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
-      (set! js/document.location href))))
+      (js/window.open href "_blank"))))
 
 (re-frame/reg-event-fx
   ::open-activities-page
