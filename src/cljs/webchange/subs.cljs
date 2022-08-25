@@ -310,3 +310,8 @@
   :app-version
   (fn [db]
     (:app-version db)))
+
+(re-frame/reg-sub
+  :current-user
+  (fn [db]
+    (:user db)))

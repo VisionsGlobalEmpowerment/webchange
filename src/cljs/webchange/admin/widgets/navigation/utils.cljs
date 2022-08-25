@@ -11,3 +11,17 @@
                    active? (assoc :active? active?)
                    :always (assoc :children updated-children))))
        navigation-tree))
+
+(defn- item-visible-for
+  [{:keys [visible-for]} type]
+  (or (empty? visible-for)
+      (some #{type} visible-for)))
+
+(defn hide-navigation-items-by-user-type
+  [navigation-tree {:keys [type] :as user}]
+  (->> navigation-tree
+       (filter #(item-visible-for % type))
+       (map (fn [{:keys [children] :as item}]
+              (if children
+                (assoc item :children (hide-navigation-items-by-user-type children user))
+                children)))))

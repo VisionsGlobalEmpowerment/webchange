@@ -3,14 +3,16 @@
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]
     [webchange.admin.state :as parent-state]
-    [webchange.admin.widgets.navigation.utils :refer [set-navigation-items-active]]
+    [webchange.admin.widgets.navigation.utils :refer [set-navigation-items-active
+                                                      hide-navigation-items-by-user-type]]
     [webchange.utils.map :refer [map->list]]))
 
 (re-frame/reg-sub
   ::navigation-items
   (fn []
-    [(re-frame/subscribe [::parent-state/current-page])])
-  (fn [[current-page]]
+    [(re-frame/subscribe [::parent-state/current-page])
+     (re-frame/subscribe [:current-user])])
+  (fn [[current-page current-user]]
     (-> [{:id    :dashboard
           :text  "Dashboard"
           :icon  "dashboard"
@@ -41,12 +43,14 @@
           :children [{:id    :admin
                       :text  "Admin"
                       :route {:page        :accounts
-                              :page-params {:account-type "admin"}}}
+                              :page-params {:account-type "admin"}}
+                      :visible-for ["admin"]}
                      {:id    :live
                       :text  "Live Users"
                       :route {:page        :accounts
                               :page-params {:account-type "live"}}}]}]
-        (set-navigation-items-active {:page (:handler current-page)}))))
+        (set-navigation-items-active {:page (:handler current-page)})
+        (hide-navigation-items-by-user-type current-user))))
 
 (re-frame/reg-event-fx
   ::open-page
