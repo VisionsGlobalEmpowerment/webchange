@@ -1130,6 +1130,16 @@
 ;; Students
 
 (re-frame/reg-event-fx
+  ::student-login
+  (fn [{:keys [_]} [_ {:keys [access-code school-id]} handlers]]
+    (create-request {:key    :student-login
+                     :method :post
+                     :uri    (str "/api/students/login")
+                     :params {:school-id   school-id
+                              :access-code access-code}}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-unassigned-students
   (fn [{:keys [_]} [_ handlers]]
     (create-request {:key    :load-unassigned-students

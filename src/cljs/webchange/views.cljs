@@ -25,7 +25,8 @@
     [webchange.ui-framework.components.index :as ui]
     [webchange.ui-framework.test-page.index :refer [test-ui]]
     [webchange.utils.lazy-component :refer [lazy-component]]
-    [webchange.sandbox.views :as sandbox]))
+    [webchange.sandbox.views :as sandbox]
+    [webchange.student.pages.sign-in.views :as student-sign-in]))
 
 (defn- str->int-param
   [map key]
@@ -121,7 +122,7 @@
 
                ;; student dashboard
                :student-login [student-access-form]
-               :school-student-login [student-access-form (:school-id route-params)]
+               :school-student-login [student-sign-in/page {:school-id (:school-id route-params)}]
 
                ;;wizard
                :book-creator [wizard/book-creator-panel]
@@ -136,7 +137,9 @@
                [page-404])))
 
 (defn main-panel []
-  (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])]
+  (let [{:keys [handler url route-params]} @(re-frame/subscribe [::subs/active-route])
+        school-id @(re-frame/subscribe [::subs/school-id])
+        route-params (update route-params :school-id #(or % school-id))]
     [:div {:class-name (if-not (module-route? handler) "main-app")}
      [mui/css-baseline]
      [panels handler route-params url]

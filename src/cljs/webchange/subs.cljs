@@ -315,3 +315,8 @@
   :current-user
   (fn [db]
     (:user db)))
+
+(re-frame/reg-sub
+  ::school-id
+  (fn [db]
+    (:school-id db)))
