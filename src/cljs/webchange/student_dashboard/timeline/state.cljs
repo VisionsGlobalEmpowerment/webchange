@@ -44,7 +44,10 @@
                      :title    name
                      :activity activity-data
                      :letter   letter
-                     :preview  preview})))))))
+                     :preview  preview})))
+           (map-indexed (fn [idx item]
+                          (assoc item :class-names {"position-top"    (-> idx odd?)
+                                                    "position-bottom" (-> idx odd? not)})))))))
 
 (re-frame/reg-sub
   ::new-activities

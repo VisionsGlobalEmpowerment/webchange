@@ -1,16 +1,20 @@
 .header-wrapper {
-    $margin: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    position: fixed;
-    top: $margin;
-    left: 0;
-    width: calc(100% - #{$margin * 2});
-    height: 16vh;
-    margin-left: $margin;
-    z-index: 100;
+    .header {
+        position: relative;
+        width: 90%;
+        height: 70%;
+
+        z-index: 100;
+    }
 
     .header-background {
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
 
@@ -21,7 +25,7 @@
         transform: skew(350deg);
     }
 
-    .header {
+    .header-content {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
 
