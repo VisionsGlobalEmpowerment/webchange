@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as state]
-    [webchange.utils.date :refer [date-str->locale-date date-str->time]]))
+    [webchange.utils.date :refer [date-str->locale-date date-str->time]]
+    [webchange.utils.links :as links]))
 
 (re-frame/reg-sub
   ::activity-name
@@ -33,18 +34,9 @@
   :<- [::state/activity-versions-loading?]
   identity)
 
-(defn- create-link
-  [{:keys [activity-id]}]
-  (str js/location.protocol "//" js/location.host "/s/" activity-id))
-
 (re-frame/reg-event-fx
   ::preview
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (state/get-activity-info db state/path-to-db)
-          link (create-link {:activity-id id})]
-      {:open-link link})))
-
-(re-frame/reg-fx
-  :open-link
-  (fn [link]
-    (js/window.open link "_blank")))
+          link (links/activity-preview {:activity-id id})]
+      {::links/open-new-tab link})))

@@ -72,8 +72,9 @@
     (str "Drop new " (:type data) " here")]])
 
 (defn- activities-list-item
-  [{:keys [idx name preview level-idx lesson-idx]}]
-  (let [handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
+  [{:keys [id idx name preview level-idx lesson-idx]}]
+  (let [handle-play-click #(re-frame/dispatch [::state/preview-activity id])
+        handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
         handle-remove-click #(do (.stopPropagation %)
                                  (handle-remove-activity))
         locked? @(re-frame/subscribe [::state/locked?])]
@@ -94,7 +95,10 @@
                       :class-name "activities-list-item"
                       :actions    [{:icon     "trash"
                                     :title    "Remove"
-                                    :on-click handle-remove-click}]}]])))
+                                    :on-click handle-remove-click}
+                                   {:icon     "play"
+                                    :title    "Preview"
+                                    :on-click handle-play-click}]}]])))
 
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]

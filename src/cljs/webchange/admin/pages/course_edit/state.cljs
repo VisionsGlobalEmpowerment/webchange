@@ -4,7 +4,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.course-data :as utils]))
+    [webchange.utils.course-data :as utils]
+    [webchange.utils.links :as links]))
 
 (def path-to-db :page/edit-course)
 
@@ -377,3 +378,10 @@
   ::locked?
   :<- [path-to-db]
   #(get-in % [:course-info :metadata :locked] false))
+
+(re-frame/reg-event-fx
+  ::preview-activity
+  (fn [{:keys [_]} [_ activity-id]]
+    (let [link (links/activity-preview {:activity-id activity-id})]
+      {::links/open-new-tab link})))
+
