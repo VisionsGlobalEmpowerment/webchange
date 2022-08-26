@@ -103,7 +103,8 @@
       {:dispatch [::warehouse/student-login
                   {:access-code code
                    :school-id   school-id}
-                  {:on-success [::sign-in-success]}]})))
+                  {:on-success [::sign-in-success]
+                   :on-failure [::sign-in-failure]}]})))
 
 (re-frame/reg-event-fx
   ::sign-in-success
@@ -112,6 +113,12 @@
                    (assoc-in [:current-course] (:course-slug user))
                    (update-in [:user] merge user))
      :dispatch [::ie/open-student-dashboard]}))
+
+(re-frame/reg-event-fx
+  ::sign-in-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-current-value []))}))
 
 (re-frame/reg-sub
   ::user
