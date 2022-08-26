@@ -126,7 +126,8 @@
 (defn migrate-up
   []
   (let [courses ["english" "spanish"]
-        scenes ["writing-practice-v-2"]]
+        scenes ["writing-practice-v-2"
+                "practicando-la-escritura"]]
     (doseq [course-slug courses
             scene-name scenes]
       (migrate-scene course-slug scene-name))))

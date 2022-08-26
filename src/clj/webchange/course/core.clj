@@ -222,6 +222,7 @@
                                 (map :scene-id)
                                 (set))
         new-course-scenes (->> (cset/difference received-scene-ids existing-scene-ids)
+                               (remove nil?)
                                (map (fn [id] [course-id id])))
         obsolete-scene-ids (-> (cset/difference existing-scene-ids received-scene-ids)
                                (into []))]

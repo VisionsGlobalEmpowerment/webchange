@@ -169,7 +169,7 @@ SELECT pg_catalog.setval('public.lesson_sets_id_seq', (SELECT MAX(id) FROM publi
 
 -- :name create-or-update-scene! :! :n
 -- :doc creates a new scene record
-INSERT INTO scenes (id, course_id, name, slug) VALUES (:id, :course_id, :name, :slug)
+INSERT INTO scenes (id, course_id, name) VALUES (:id, :course_id, :name)
 ON CONFLICT ON CONSTRAINT scenes_pkey
 DO UPDATE SET course_id=:course_id, name=:name
 WHERE scenes.id=:id

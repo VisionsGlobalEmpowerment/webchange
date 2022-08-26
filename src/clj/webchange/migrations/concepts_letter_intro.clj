@@ -132,7 +132,13 @@
                 "letter-intro--mountains"
                 "letter-intro--safari"
                 "letter-intro--space"
-                "letter-intro--underwater"]]
+                "letter-intro--underwater"
+                "intro-a-las-letras-beach"
+                "intro-a-las-letras-mountains"
+                "intro-a-las-letras-park"
+                "intro-a-las-letras-safari"
+                "intro-a-las-letras-space"
+                "intro-a-las-letras-underwater"]]
     (doseq [course-slug courses
             scene-name scenes]
       (migrate-scene course-slug scene-name))))
