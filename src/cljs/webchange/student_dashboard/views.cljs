@@ -16,12 +16,12 @@
   [{:keys [id]}]
   (re-frame/dispatch [::state/init {:course-id id}])
   (fn []
-    [:div.student-dashboard
-     [header
+    [:div {:class-name "student-dashboard"}
+     [header {:class-name "student-dashboard--header"}
       [user]
       [logo]
       [toolbar]]
-     [:div.content
+     [:div {:class-name "student-dashboard--content"}
       [timeline]]]))
 
 (def views

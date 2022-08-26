@@ -1,6 +1,4 @@
 .student-dashboard {
-    $play-button-size: 30vh;
-
     @import "header/styles.scss";
     @import "toolbar/styles.scss";
     @import "user/styles.scss";
@@ -17,6 +15,15 @@
     background-position: center;
     background-size: cover;
 
+    .student-dashboard--header {
+        flex: 0 0;
+        min-height: 20%;
+    }
+
+    .student-dashboard--content {
+        flex: 1 1;
+    }
+
     .header-logo {
         position: relative;
         align-self: stretch;
@@ -30,10 +37,5 @@
 
             object-fit: contain;
         }
-    }
-
-    .content {
-        position: relative;
-        flex-grow: 1;
     }
 }
