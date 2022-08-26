@@ -11,24 +11,22 @@
   (println "Start updating templates" (-> @t/templates keys count))
   (time 
    (let [user-id 1
-         courses (db/get-courses)]
-     (doseq [course courses]
-       (let [scenes (db/get-scenes-by-course-id {:course_id (:id course)})]
-         (doseq [scene scenes]
-           (let [version (db/get-latest-scene-version {:scene_id (:id scene)})]
-             (if (get-in version [:data :metadata :history :created :template-id])
-               (try
-                 (core/update-course-activity-template! (:slug course) (:name scene) user-id)
-                 (print ".")
-                 (catch Exception e (str "caught exception: " (.getMessage e))))
-               (print "x"))
-             (flush)))))))
+         scenes (db/get-scenes)]
+     (doseq [scene scenes]
+       (let [version (db/get-latest-scene-version {:scene_id (:id scene)})]
+         (if (get-in version [:data :metadata :history :created :template-id])
+           (try
+             (core/update-activity-template! (:id scene) user-id)
+             (print ".")
+             (catch Exception e (str "caught exception: " (.getMessage e))))
+           (print "x"))
+         (flush)))))
   (println "Done!"))
+
 (def commands
   {"update-templates"
    (fn [config args]
-     (apply update-templates config args))
-   })
+     (apply update-templates config args))})
 
 (defn command? [[arg]]
   (contains? (set (keys commands)) arg))
