@@ -1,0 +1,112 @@
+.student--sign-in-page {
+    $base: 10vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #2d2e42;
+    background-image: url("/images/dashboard/bg_02.jpg");
+    background-position: center center;
+    background-size: cover;
+
+    font-family: Roboto;
+    font-size: .5 * $base;
+
+    .sign-in-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 7vh;
+    }
+
+    .header {
+        color: #fff;
+        font-size: 1em;
+        line-height: 1em;
+
+        user-select: none;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    $current-code-height: .8 * $base;
+
+    .current-code {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        position: relative;
+
+        height: $current-code-height;
+        width: 4.5 * $base;
+
+        background-color: #fff;
+        border: none;
+        border-radius: 9999px;
+    }
+
+    .current-code-item {
+        font-size: .9em;
+        font-weight: 400;
+
+        &.current-code-item--empty {
+            $size: .3 * $base;
+            width: $size;
+            height: $size;
+            border-radius: 9999px;
+
+            background-color: #bfbfbf;
+        }
+    }
+
+    .remove-button {
+        position: absolute;
+        top: 0;
+        right: -$current-code-height - .2 * $base;
+
+        width: $current-code-height;
+        height: $current-code-height;
+
+        border: none;
+        border-radius: 9999px;
+
+        background-image: url("/icons/backspace.svg");
+        background-size: 66%;
+        background-position: center center;
+        background-repeat: no-repeat;
+    }
+
+    .num-pad {
+        $button-size: 1 * $base;
+        $button-gap: .25 * $base;
+
+        width: $button-size * 3 + $button-gap * 2;
+
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+        column-gap: $button-gap;
+        row-gap: $button-gap;
+
+        .num-pad-key {
+            width: $button-size;
+            height: $button-size;
+
+            align-self: center;
+            justify-self: center;
+
+            border: none;
+            border-radius: 9999px;
+            font-size: 1em;
+            font-weight: 400;
+
+            &.num-pad-key--value-0 {
+                grid-column: 1 / 4;
+            }
+        }
+    }
+}
