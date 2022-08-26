@@ -163,7 +163,7 @@
           scene-version-new (db/get-latest-scene-version {:scene_id (:id scene-data)})]
       (is (not (nil? scene-old)))
       (is (not (nil? scene-version-old)))
-      (is (= scene-old scene-new))
+      (is (= (dissoc scene-old :slug) (dissoc scene-new :slug)))
       (is (= (dissoc scene-version-old :id :created-at) (dissoc scene-version-new :id :created-at))))))
 
 (deftest can-import-activity-stats
