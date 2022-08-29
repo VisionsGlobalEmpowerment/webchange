@@ -39,9 +39,12 @@
                                                              (create TimelinePlugin
                                                                      (merge (get-config :time-line)
                                                                             {:container timeline-div}))]}))]
-    (w/subscribe wavesurfer "ready" on-ready)
+    (w/subscribe wavesurfer "ready" (fn []
+                                      (js/console.log "event 'ready' fired")
+                                      (on-ready)))
+    (w/subscribe wavesurfer "waveform-ready" (fn []
+                                               (js/console.log "event 'waveform-ready' fired")))
 
-    (->> #(w/load-blob wavesurfer %)
-         (loader/get-audio-blob audio-url))
+    (loader/get-audio-blob audio-url #(w/load-blob wavesurfer %))
 
     wavesurfer))

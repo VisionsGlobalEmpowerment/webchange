@@ -8,6 +8,7 @@
 
 (defn- handle-wave-surfer-ready
   [instances {:keys [on-ready region] :as props}]
+  (js/console.log "handle wave-surfer ready")
   (core/subscribe-to-events instances props)
   (when (some? region)
     (core/add-region instances region))
