@@ -53,4 +53,14 @@
     .show-global-selector {
         min-width: 224px;
     }
+
+    .activities-search-input {
+        @include bbs--icon-size(24px);
+
+        width: 320px;
+
+        input {
+            padding: 4px 8px;
+        }
+    }
 }
