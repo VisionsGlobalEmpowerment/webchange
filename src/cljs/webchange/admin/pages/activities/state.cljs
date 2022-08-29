@@ -62,7 +62,8 @@
                (-> search-string empty? not) (filter (fn [{:keys [name]}]
                                                        (clojure.string/includes?
                                                          (clojure.string/lower-case name)
-                                                         (clojure.string/lower-case search-string))))))))
+                                                         (clojure.string/lower-case search-string))))
+               :always (sort-by :name)))))
 
 (re-frame/reg-sub
   ::activities-counter
