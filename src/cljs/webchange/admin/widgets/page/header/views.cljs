@@ -86,7 +86,7 @@
          (s/valid? ::header-avatar avatar)
          (s/valid? ::header-icon icon)
          (s/valid? ::header-icon-color icon-color)
-         (s/valid? ::header-info info)
+                                        ;         (s/valid? ::header-info info)
          (s/valid? ::header-event-handler on-click)
          (s/valid? ::header-event-handler on-close)
          (s/valid? ::header-stats stats)

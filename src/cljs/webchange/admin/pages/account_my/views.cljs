@@ -26,5 +26,6 @@
          account-loading? [ui/loading-overlay]
          (some? (:id account)) [edit-account-form {:account-id (:id account)
                                                    :class-name "my-account-form"
-                                                   :on-save    handle-save}]
+                                                   :on-save    handle-save
+                                                   :my-account? true}]
          :else nil)])))

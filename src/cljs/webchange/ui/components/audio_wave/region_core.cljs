@@ -2,19 +2,19 @@
 
 (defn get-end
   [region]
-  (.-end region))
+  (.-end ^js region))
 
 (defn get-start
   [region]
-  (.-start region))
+  (.-start ^js region))
 
 (defn play
   [region]
-  (.play region))
+  (.play ^js region))
 
 (defn remove
   [region]
-  (.remove region))
+  (.remove ^js region))
 
 (defn set-end
   [region value]
@@ -26,4 +26,4 @@
 
 (defn update-render
   [region]
-  (.updateRender region))
+  (.updateRender ^js region))

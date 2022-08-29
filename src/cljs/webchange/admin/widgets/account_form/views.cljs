@@ -52,35 +52,48 @@
                                              :icon     "trash"
                                              :on-click #(re-frame/dispatch [::state/open-remove-window])}})))
 
+(def my-account-model (-> add-account-model
+                          (dissoc :password :password-confirm :type)
+                          (merge {:filler {:type    :custom
+                                           :control filler}
+                                  :reset  {:label    "Reset password"
+                                           :type     :action
+                                           :icon     "caret-right"
+                                           :on-click #(re-frame/dispatch [::state/reset-password])}
+                                  :remove {:label    "Delete account"
+                                           :type     :action
+                                           :icon     "trash"
+                                           :on-click #(re-frame/dispatch [::state/open-remove-window])}})))
+
 (defn add-account-form
   []
   (r/create-class
-    {:display-name "Add Account Form"
+   {:display-name "Add Account Form"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init-add-form (r/props this)]))
+    :component-did-mount
+    (fn [this]
+      (re-frame/dispatch [::state/init-add-form (r/props this)]))
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset-form (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset-form (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [account-type class-name on-save]}]
-       (let [saving? @(re-frame/subscribe [::state/data-saving?])
-             errors @(re-frame/subscribe [::state/custom-errors])
-             handle-save #(re-frame/dispatch [::state/create-account % {:on-success on-save}])]
-         [:div {:class-name (c/get-class-name {"widget--account-form" true
-                                               class-name             (some? class-name)})}
-          [:h3.account-details-header "Account Details"]
-          [ui/form {:form-id (-> (str "add-account")
-                                 (keyword))
-                    :data    {:type account-type}
-                    :model   add-account-model
-                    :errors  errors
-                    :spec    ::account-spec/create-account
-                    :on-save handle-save
-                    :saving? saving?}]]))}))
+    :reagent-render
+    (fn [{:keys [account-type class-name on-save]}]
+      (let [saving? @(re-frame/subscribe [::state/data-saving?])
+            errors @(re-frame/subscribe [::state/custom-errors])
+            handle-save #(re-frame/dispatch [::state/create-account % {:on-success on-save}])]
+        [:div {:class-name (c/get-class-name {"widget--account-form" true
+                                              class-name             (some? class-name)})}
+         [:h3.account-details-header "Account Details"]
+         [ui/form {:form-id (-> (str "add-account")
+                                (keyword))
+                   :data    {:type account-type}
+                   :model   add-account-model
+                   :errors  errors
+                   :spec    ::account-spec/create-account
+                   :on-save handle-save
+                   :saving? saving?}]]))}))
 
 (defn- remove-window
   [{:keys [account-id on-remove]}]
@@ -100,30 +113,30 @@
 (defn edit-account-form
   []
   (r/create-class
-    {:display-name "Edit Account Form"
+   {:display-name "Edit Account Form"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init-edit-form (r/props this)]))
+    :component-did-mount
+    (fn [this]
+      (re-frame/dispatch [::state/init-edit-form (r/props this)]))
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset-form (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset-form (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [account-id class-name disabled? on-save]}]
-       (let [saving? @(re-frame/subscribe [::state/data-saving?])
-             data @(re-frame/subscribe [::state/form-data])
-             handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])]
-         [:div {:class-name (c/get-class-name {"widget--account-form" true
-                                               class-name             (some? class-name)})}
-          [:h3.account-details-header "Account Settings"]
-          [ui/form {:form-id   (-> (str "edit-account")
-                                   (keyword))
-                    :model     edit-account-model
-                    :data      data
-                    :spec      ::account-spec/edit-account
-                    :on-save   handle-save
-                    :disabled? disabled?
-                    :saving?   saving?}]
-          [remove-window {:account-id account-id}]]))}))
+    :reagent-render
+    (fn [{:keys [account-id class-name disabled? on-save my-account?]}]
+      (let [saving? @(re-frame/subscribe [::state/data-saving?])
+            data @(re-frame/subscribe [::state/form-data])
+            handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])]
+        [:div {:class-name (c/get-class-name {"widget--account-form" true
+                                              class-name             (some? class-name)})}
+         [:h3.account-details-header "Account Settings"]
+         [ui/form {:form-id   (-> (str "edit-account")
+                                  (keyword))
+                   :model     (if my-account? my-account-model edit-account-model)
+                   :data      data
+                   :spec      ::account-spec/edit-account
+                   :on-save   handle-save
+                   :disabled? disabled?
+                   :saving?   saving?}]
+         [remove-window {:account-id account-id}]]))}))
