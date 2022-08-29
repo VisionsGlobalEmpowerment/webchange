@@ -57,6 +57,7 @@
                                                   :on-click #(re-frame/dispatch [::state/toggle-visibility])}
                                         :locked {:label (if locked? "Locked" "Lock Activity")
                                                  :type (if can-lock? :action :empty)
+                                                 :disabled? (not can-lock?)
                                                  :on-click #(re-frame/dispatch [::state/set-locked (not locked?)])}}}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]    
       [:<>
