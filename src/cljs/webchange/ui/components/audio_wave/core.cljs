@@ -14,14 +14,15 @@
 
 (defn scroll-to-region
   [{:keys [region wave-surfer]}]
-  (if (some? @region)
-    (->> (r/get-start @region)
-         (w/scroll-to-time @wave-surfer))
-    (logger/error "Scroll to region: region is not defined")))
+  (cond
+    (nil? @region) (logger/error "Scroll to region: region is not defined")
+    (nil? @wave-surfer) (logger/error "Scroll to region: wavesurfer is not defined")
+    :default (->> (r/get-start @region)
+                  (w/scroll-to-time @wave-surfer))))
 
 (defn add-region
   [{:keys [wave-surfer]} {:keys [start end]}]
-  (if (some? wave-surfer)
+  (if (some? @wave-surfer)
     (do (print "add-region" (->> (create-region {:start start
                                                  :end   end})
                                  (w/add-region @wave-surfer))))
@@ -73,7 +74,7 @@
 
 (defn subscribe-to-events
   [{:keys [wave-surfer] :as instances} {:keys [on-change on-pause]}]
-  (if (some? wave-surfer)
+  (if (some? @wave-surfer)
     (do (w/subscribe @wave-surfer "pause" (partial handle-paused on-pause))
         (w/subscribe @wave-surfer "region-created" (partial handle-region-created instances))
         (w/subscribe @wave-surfer "region-update-end" (partial handle-region-updated instances on-change)))
@@ -81,4 +82,6 @@
 
 (defn destroy
   [{:keys [wave-surfer]}]
-  (w/destroy @wave-surfer))
+  (if (some? @wave-surfer)
+    (w/destroy @wave-surfer)
+    (logger/error "Destroy: wavesurfer is not defined")))
