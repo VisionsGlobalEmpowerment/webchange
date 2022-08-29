@@ -37,6 +37,7 @@
            on-enter-press
            on-esc-press
            on-focus
+           on-icon-click
            on-key-down
            placeholder
            ref
@@ -122,7 +123,8 @@
                        (fn? on-focus) (assoc :on-focus handle-focus))]
 
        (when (some? icon)
-         [:div.icon-wrapper [general-icon {:icon icon}]])
+         [:div.icon-wrapper [general-icon {:icon     icon
+                                           :on-click on-icon-click}]])
        (when (some? action)
          (let [with-text? (some? (:text action))
                button-props (merge {:shape "rounded"

@@ -4,6 +4,7 @@
     [webchange.admin.pages.activities.state :as state]
     [webchange.admin.widgets.activities-list.views :refer [activities-list]]
     [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.search.views :refer [search]]
     [webchange.ui.index :as ui]
     [webchange.utils.languages :refer [language-options]]))
 
@@ -27,14 +28,10 @@
 (defn- search-bar
   []
   (let [value @(re-frame/subscribe [::state/search-string])
-        handle-change #(re-frame/dispatch [::state/set-search-string %])
-        handle-reset #(re-frame/dispatch [::state/set-search-string ""])]
-    [ui/input {:value        value
-               :icon         "search"
-               :class-name   "activities-search-input"
-               :placeholder  "search"
-               :on-change    handle-change
-               :on-esc-press handle-reset}]))
+        handle-change #(re-frame/dispatch [::state/set-search-string %])]
+    [search {:value      value
+             :on-change  handle-change
+             :class-name "activities-search-input"}]))
 
 (defn page
   [props]

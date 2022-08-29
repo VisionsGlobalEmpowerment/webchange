@@ -1,0 +1,11 @@
+.widget--search {
+    @include bbs--icon-size(24px);
+
+    input {
+        padding: 4px 8px;
+    }
+
+    .bbs--icon {
+        cursor: pointer;
+    }
+}
