@@ -65,10 +65,7 @@
 (re-frame/reg-sub
   ::layers
   :<- [::state/activity-data]
-  #(->> (get-layers %)
-        (repeat)
-        (take 3)
-        (flatten)))
+  #(get-layers %))
 
 (re-frame/reg-event-fx
   ::toggle-visibility
@@ -91,4 +88,4 @@
   ::edit-object
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ object-name]]
-    {:dispatch [::editor-state/select-object object-name]}))
+    {:dispatch [::editor-state/select-object object-name {:stage-id "main"}]}))
