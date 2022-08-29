@@ -21,11 +21,12 @@
                   (w/scroll-to-time @wave-surfer))))
 
 (defn add-region
-  [{:keys [wave-surfer]} {:keys [start end]}]
-  (if (some? @wave-surfer)
-    (do (print "add-region" (->> (create-region {:start start
-                                                 :end   end})
-                                 (w/add-region @wave-surfer))))
+  [wave-surfer {:keys [start end]}]
+  (if (some? wave-surfer)
+    (do (print "add-region")
+        (->> (create-region {:start start
+                             :end   end})
+             (w/add-region wave-surfer)))
     (logger/error "Add region: wavesurfer is not defined")))
 
 (defn remove-current-region
@@ -44,15 +45,18 @@
 
 (defn update-audio-script
   [{:keys [wave-surfer]} script-data]
-  (let [fixed-script-data (remove #(= "[unk]" (:word %)) script-data)]
-    (->> #(w/set-audio-script @wave-surfer fixed-script-data)
-         (w/when-ready @wave-surfer))))
+  (if (some? @wave-surfer)
+    (let [fixed-script-data (remove #(= "[unk]" (:word %)) script-data)]
+      (->> #(w/set-audio-script @wave-surfer fixed-script-data)
+           (w/when-ready @wave-surfer)))
+    (logger/error "Update audio script: wavesurfer is not defined")))
 
 (defn update-region
   [{:keys [region] :as instances} region-data]
-  (when (some? @region)
-    (r/set-bounds @region region-data)
-    (scroll-to-region instances)))
+  (if (some? @region)
+    (do (r/set-bounds @region region-data)
+        (scroll-to-region instances))
+    (logger/error "Update region: region is not defined")))
 
 (defn handle-paused
   [on-pause]

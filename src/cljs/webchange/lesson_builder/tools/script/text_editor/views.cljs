@@ -72,8 +72,7 @@
                                                            "placeholder"   @empty-value?
                                                            class-name      (some? class-name)})
                            :ref        #(when (some? %) (reset! ref %))
-                           :on-click   #(do (try-empty!)
-                                            (.stopPropagation %))
+                           :on-click   try-empty!
                            :on-blur    handle-blur}
                           editable? (merge {:on-input                          handle-change
                                             :content-editable                  true

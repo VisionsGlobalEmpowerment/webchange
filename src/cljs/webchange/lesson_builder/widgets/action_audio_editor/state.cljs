@@ -191,12 +191,17 @@
 
 (re-frame/reg-event-fx
   ::load-audio-script
-  [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ id {:keys [audio-url]} {:keys [on-success on-failure]}]]
-    {:dispatch [::warehouse/load-audio-script-polled
-                {:file audio-url}
-                (cond-> {:on-success [::load-audio-script-success id on-success]}
-                        (some? on-failure) (assoc :on-failure on-failure))]}))
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-data]} [_ id {:keys [action-path audio-url]} {:keys [on-success on-failure]}]]
+    (let [audio-url (or audio-url
+                        (->> action-path
+                             (get-action-data activity-data)
+                             (get-audio-url)))]
+      {:dispatch [::warehouse/load-audio-script-polled
+                  {:file audio-url}
+                  (cond-> {:on-success [::load-audio-script-success id on-success]}
+                          (some? on-failure) (assoc :on-failure on-failure))]})))
 
 (re-frame/reg-event-fx
   ::load-audio-script-success
@@ -283,10 +288,8 @@
    (i/path path-to-db)]
   (fn [{:keys [activity-data db]} [_ id {:keys [action-path]}]]
     (let [action-data (get-action-data activity-data action-path)
-          url (get-audio-url action-data)
           volume (get action-data :volume 1)]
-      {:db       (-> db (set-current-volume id volume))
-       :dispatch [::load-audio-script id {:audio-url url}]})))
+      {:db (-> db (set-current-volume id volume))})))
 
 (re-frame/reg-event-fx
   ::reset

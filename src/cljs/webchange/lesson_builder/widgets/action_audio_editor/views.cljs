@@ -68,7 +68,8 @@
         audio-region @(re-frame/subscribe [::state/audio-region action-path])
         script-data @(re-frame/subscribe [::state/script-data id])
         handle-change #(re-frame/dispatch [::state/set-action-region action-path %])
-        handle-ready #(re-frame/dispatch [::state/set-loading id false])
+        handle-ready #(do (re-frame/dispatch [::state/set-loading id false])
+                          (re-frame/dispatch [::state/load-audio-script id {:action-path action-path}]))
         handle-ref #(reset! ref %)
         handle-stop-playing #(re-frame/dispatch [::state/stop-playing id ref])]
     (when (some? audio-url)
