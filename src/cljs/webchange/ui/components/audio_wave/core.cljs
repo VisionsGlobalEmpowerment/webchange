@@ -14,15 +14,18 @@
 
 (defn scroll-to-region
   [{:keys [region wave-surfer]}]
-  (->> (r/get-start @region)
-       (w/scroll-to-time @wave-surfer)))
+  (if (some? region)
+    (->> (r/get-start @region)
+         (w/scroll-to-time @wave-surfer))
+    (logger/error "Scroll to region: region is not defined")))
 
 (defn add-region
   [{:keys [wave-surfer] :as instances} {:keys [start end]}]
   (if (some? wave-surfer)
-    (do (->> (create-region {:start start
-                             :end   end})
-             (w/add-region @wave-surfer))
+    (do (print "add-region" (->> (create-region {:start start
+                                                 :end   end})
+                                 (w/add-region @wave-surfer)))
+        (print "scroll-to-region" (:region instances))
         (scroll-to-region instances))
     (logger/error "Add region: wavesurfer is not defined")))
 
