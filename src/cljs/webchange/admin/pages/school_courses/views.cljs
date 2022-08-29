@@ -79,7 +79,7 @@
                                                                   :counter    courses-number
                                                                   :label      "Courses"}]
                                                       :actions  (cond-> []
-                                                                        (not show-assign-list?) (conj {:text     "Assign Course"
+                                                                        (not show-assign-list?) (conj {:text     "Add New Course"
                                                                                                        :icon     "plus"
                                                                                                        :on-click handle-add-click}))}
                                                      show-assign-list? (assoc :on-close handle-close-click))}
