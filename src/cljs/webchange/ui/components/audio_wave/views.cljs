@@ -34,7 +34,8 @@
                  :script-class-name   "bbs--audio-wave--script"
                  :timeline-class-name "bbs--audio-wave--timeline"
                  :wave-class-name     "bbs--audio-wave--wave"}
-                (create-wavesurfer @element url))
+                (create-wavesurfer @element url)
+                (reset! wave-surfer))
 
            (when (fn? ref)
              (-> (get-controls instances)
@@ -46,8 +47,11 @@
                 old-script-data :script-data} old-props
                {new-region      :region
                 new-script-data :script-data} (r/props this)]
+           (print ":component-did-update")
+           (print "update script")
            (when-not (= old-script-data new-script-data)
              (core/update-audio-script instances new-script-data))
+           (print "update region")
            (when-not (= old-region new-region)
              (core/update-region instances new-region))))
 

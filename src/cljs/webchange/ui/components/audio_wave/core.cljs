@@ -48,8 +48,9 @@
 
 (defn update-region
   [{:keys [region] :as instances} region-data]
-  (r/set-bounds @region region-data)
-  (scroll-to-region instances))
+  (when (some? @region)
+    (r/set-bounds @region region-data)
+    (scroll-to-region instances)))
 
 (defn handle-paused
   [on-pause]
