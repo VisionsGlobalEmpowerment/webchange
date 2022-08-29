@@ -105,7 +105,8 @@
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
                   :storage-params {:action                    "manage-students"
-                                   :on-edit-students-finished [::edit-class-finished school-id]}]})))
+;                                   :on-edit-students-finished [::edit-class-finished school-id]
+                                   }]})))
 
 (re-frame/reg-event-fx
   ::edit-class-teachers
@@ -114,7 +115,8 @@
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
                   :storage-params {:action                    "manage-teachers"
-                                   :on-edit-teachers-finished [::edit-class-finished school-id]}]})))
+;                                   :on-edit-teachers-finished [::edit-class-finished school-id]
+                                   }]})))
 
 (re-frame/reg-event-fx
   ::edit-class-finished
