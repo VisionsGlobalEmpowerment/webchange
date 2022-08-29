@@ -921,7 +921,7 @@
 
 (defn my-activities
   [user-id lang]
-  (->> (db/find-scenes {:type "book" :lang lang :not_status "archived" :user_id user-id})
+  (->> (db/find-scenes {:type "activity" :lang lang :not_status "archived" :user_id user-id})
        (map ->activity-info)))
 
 (defn my-activities-admin
