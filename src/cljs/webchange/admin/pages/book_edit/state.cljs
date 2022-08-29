@@ -133,8 +133,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (get-book db)]
-      (print "::edit" id)
-      {})))
+      {:dispatch [::routes/redirect :lesson-builder :activity-id id]})))
 
 (re-frame/reg-event-fx
   ::play
