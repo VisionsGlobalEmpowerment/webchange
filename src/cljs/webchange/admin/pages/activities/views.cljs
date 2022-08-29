@@ -26,10 +26,15 @@
 
 (defn- search-bar
   []
-  [ui/input {:icon        "search"
-             :class-name  "activities-search-input"
-             :placeholder "search"}
-   ])
+  (let [value @(re-frame/subscribe [::state/search-string])
+        handle-change #(re-frame/dispatch [::state/set-search-string %])
+        handle-reset #(re-frame/dispatch [::state/set-search-string ""])]
+    [ui/input {:value        value
+               :icon         "search"
+               :class-name   "activities-search-input"
+               :placeholder  "search"
+               :on-change    handle-change
+               :on-esc-press handle-reset}]))
 
 (defn page
   [props]
