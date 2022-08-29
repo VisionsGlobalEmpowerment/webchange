@@ -15,7 +15,9 @@
                 :class-name "card--icon"}])]
    [:div.card--text
     content]
-   (when (some? action)
+   (when (and (some? action)
+              (or (:href action)
+                  (:on-click action)))
      [ui/button (merge {:shape      "rounded"
                         :class-name "card--button"}
                        action)])])

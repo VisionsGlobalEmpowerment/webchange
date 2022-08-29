@@ -26,4 +26,4 @@
                                :content [:<>
                                          "For more tips on building activities check out our help videos"]
                                :action  {:text "See Videos"
-                                         :href "#"}}]}]])
+                                         :href nil}}]}]])
