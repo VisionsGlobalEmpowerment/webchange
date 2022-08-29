@@ -8,14 +8,14 @@
 
 (defn- handle-wave-surfer-ready
   [wave-surfer-instance instances {:keys [on-ready region] :as props}]
-  (print "instances" instances)
+  (print "handle-wave-surfer-ready")
   (reset! (:wave-surfer instances) wave-surfer-instance)
-  (js/console.log "handle wave-surfer ready")
-  (print "instances updated" instances)
+  (print "subscribe-to-events")
   (core/subscribe-to-events instances props)
-  (print "region" region)
   (when (some? region)
+    (print "add-region" region)
     (core/add-region instances region))
+  (print "(fn? on-ready)" (fn? on-ready))
   (when (fn? on-ready)
     (on-ready)))
 
@@ -49,11 +49,12 @@
                 new-script-data :script-data} (r/props this)]
            (print ":component-did-update")
            (print "update script")
-           (when-not (= old-script-data new-script-data)
-             (core/update-audio-script instances new-script-data))
-           (print "update region")
-           (when-not (= old-region new-region)
-             (core/update-region instances new-region))))
+           ;(when-not (= old-script-data new-script-data)
+           ;  (core/update-audio-script instances new-script-data))
+           ;(print "update region")
+           ;(when-not (= old-region new-region)
+           ;  (core/update-region instances new-region))
+           ))
 
        :component-will-unmount
        (fn []

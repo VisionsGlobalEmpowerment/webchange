@@ -39,6 +39,7 @@
   ::set-loading
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ id value]]
+    (print "::set-loading" value)
     {:db (set-loading db id value)}))
 
 ;;
