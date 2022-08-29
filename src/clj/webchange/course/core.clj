@@ -81,7 +81,11 @@
               :slug      slug
               :lang      lang
               :image_src image-src
-              :metadata  metadata}]
+              :metadata  metadata}
+        scenes (db/scene-list {:course_id id})]
+    (when (:locked metadata)
+      (doseq [scene scenes]
+        (db/edit-scene! (assoc-in scene [:metadata :locked] true))))
     (db/save-course-info! data)
     [true (transform-keys ->kebab-case-keyword data)]))
 

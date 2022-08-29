@@ -1,3 +1,4 @@
+
 (ns webchange.admin.widgets.navigation.state
   (:require
     [re-frame.core :as re-frame]
@@ -40,11 +41,11 @@
          {:id       :accounts
           :text     "Accounts"
           :icon     "accounts"
+          :visible-for ["admin"]
           :children [{:id    :admin
                       :text  "Admin"
                       :route {:page        :accounts
-                              :page-params {:account-type "admin"}}
-                      :visible-for ["admin"]}
+                              :page-params {:account-type "admin"}}}
                      {:id    :live
                       :text  "Live Users"
                       :route {:page        :accounts

@@ -9,7 +9,7 @@
     [schema.core :as s]
     [webchange.assets.core :as assets]
     [webchange.auth.core :as auth]
-    [webchange.auth.roles :refer [is-admin?]]
+    [webchange.auth.roles :refer [is-admin? is-super-admin?]]
     [webchange.auth.website :as website]
     [webchange.common.handler :refer [current-user handle]]
     [webchange.common.hmac-sha256 :as sign]
@@ -486,14 +486,14 @@
        (-> (core/get-available-courses) response))
 
   (GET "/api/my-courses" request
-    :coercion :spec
-    (let [user-id (current-user request)
-          result (if (is-admin? user-id)
-                   (core/my-courses-admin user-id)
-                   (core/my-courses user-id))]
-      (-> result
-          response)))
-    
+       :coercion :spec
+       (let [user-id (current-user request)
+             result (if (is-super-admin? user-id)
+                      (core/my-courses-admin user-id)
+                      (core/my-courses user-id))]
+         (-> result
+             response)))
+  
   (PUT "/api/schools/:school-id/assign-course" request
        :coercion :spec
        :path-params [school-id :- ::course-spec/school-id]
@@ -517,15 +517,15 @@
              response)))
 
   (DELETE "/api/schools/:school-id/assign-course" request
-    :coercion :spec
-    :path-params [school-id :- ::course-spec/school-id]
-    :body [data ::course-spec/unassign-school-course]
-    :return ::course-spec/school-course
-    (let [user-id (current-user request)]
-      (when-not (is-admin? user-id)
-        (throw-unauthorized {:role :educator}))
-      (-> (core/unassign-school-course school-id data)
-          response)))
+          :coercion :spec
+          :path-params [school-id :- ::course-spec/school-id]
+          :body [data ::course-spec/unassign-school-course]
+          :return ::course-spec/school-course
+          (let [user-id (current-user request)]
+            (when-not (is-admin? user-id)
+              (throw-unauthorized {:role :educator}))
+            (-> (core/unassign-school-course school-id data)
+                response)))
 
   (GET "/api/schools/:school-id/courses" request
        :coercion :spec
@@ -566,7 +566,7 @@
        :coercion :spec
        :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)
-             result (if (is-admin? user-id)
+             result (if (is-super-admin? user-id)
                       (core/my-activities-admin user-id lang)
                       (core/my-activities user-id lang))]
          (-> result
@@ -575,7 +575,7 @@
        :coercion :spec
        :query-params [{lang :- string? nil}]
        (let [user-id (current-user request)
-             result (if (is-admin? user-id)
+             result (if (is-super-admin? user-id)
                       (core/my-books-admin user-id lang)
                       (core/my-books user-id lang))]
          (-> result
