@@ -2,64 +2,64 @@
 
 (defn add-region
   [ws region-data]
-  (.addRegion ws region-data))
+  (.addRegion ^js ws region-data))
 
 (defn destroy
   [ws]
-  (.destroy ws))
+  (.destroy ^js ws))
 
 (defn destroy-all-plugins
   [ws]
-  (.destroyAllPlugins ws))
+  (.destroyAllPlugins ^js ws))
 
 (defn get-drawer
   [ws]
-  (.-drawer ws))
+  (.-drawer ^js ws))
 
 (defn- get-drawer-width
   [drawer]
-  (.-width drawer))
+  (.-width ^js drawer))
 
 (defn get-duration
   [ws]
-  (.getDuration ws))
+  (.getDuration ^js ws))
 
 (defn get-params
   [ws]
-  (.-params ws))
+  (.-params ^js ws))
 
 (defn is-ready?
   [ws]
-  (.-isReady ws))
+  (.-isReady ^js ws))
 
 (defn load-blob
   [ws blob]
-  (.loadBlob ws blob))
+  (.loadBlob ^js ws blob))
 
 (defn play
   [ws]
-  (.play ws))
+  (.play ^js ws))
 
 (defn recenter-drawer
   [drawer progress]
-  (.recenter drawer progress))
+  (.recenter ^js drawer progress))
 
 (defn seek-to
   [ws progress]
-  (.seekTo ws progress))
+  (.seekTo ^js ws progress))
 
 (defn set-audio-script
   [ws value]
-  (.setAudioScript ws value))
+  (.setAudioScript ^js ws value))
 
 (defn stop
   [ws]
-  (.stop ws))
+  (.stop ^js ws))
 
 (defn subscribe
   [ws event handler]
-  (.on ws event handler))
+  (.on ^js ws event handler))
 
 (defn zoom
   [ws value]
-  (.zoom ws value))
+  (.zoom ^js ws value))
