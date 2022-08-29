@@ -1,5 +1,6 @@
 (ns webchange.ui.components.audio-wave.core
   (:require
+    [webchange.logger.index :as logger]
     [webchange.ui.components.audio-wave.config :refer [get-config]]
     [webchange.ui.components.audio-wave.region-utils :as r]
     [webchange.ui.components.audio-wave.wave-utils :as w]
@@ -18,10 +19,12 @@
 
 (defn add-region
   [{:keys [wave-surfer] :as instances} {:keys [start end]}]
-  (->> (create-region {:start start
-                       :end   end})
-       (w/add-region @wave-surfer))
-  (scroll-to-region instances))
+  (if (some? wave-surfer)
+    (do (->> (create-region {:start start
+                             :end   end})
+             (w/add-region @wave-surfer))
+        (scroll-to-region instances))
+    (logger/error "Add region: wavesurfer is not defined")))
 
 (defn remove-current-region
   [{:keys [region]}]
@@ -67,9 +70,11 @@
 
 (defn subscribe-to-events
   [{:keys [wave-surfer] :as instances} {:keys [on-change on-pause]}]
-  (w/subscribe @wave-surfer "pause" (partial handle-paused on-pause))
-  (w/subscribe @wave-surfer "region-created" (partial handle-region-created instances))
-  (w/subscribe @wave-surfer "region-update-end" (partial handle-region-updated instances on-change)))
+  (if (some? wave-surfer)
+    (do (w/subscribe @wave-surfer "pause" (partial handle-paused on-pause))
+        (w/subscribe @wave-surfer "region-created" (partial handle-region-created instances))
+        (w/subscribe @wave-surfer "region-update-end" (partial handle-region-updated instances on-change)))
+    (logger/error "Subscribe to events: wavesurfer is not defined")))
 
 (defn destroy
   [{:keys [wave-surfer]}]

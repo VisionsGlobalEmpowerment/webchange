@@ -7,9 +7,13 @@
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- handle-wave-surfer-ready
-  [instances {:keys [on-ready region] :as props}]
+  [wave-surfer-instance instances {:keys [on-ready region] :as props}]
+  (print "instances" instances)
+  (reset! (:wave-surfer instances) wave-surfer-instance)
   (js/console.log "handle wave-surfer ready")
+  (print "instances updated" instances)
   (core/subscribe-to-events instances props)
+  (print "region" region)
   (when (some? region)
     (core/add-region instances region))
   (when (fn? on-ready)
@@ -26,12 +30,11 @@
       {:component-did-mount
        (fn [this]
          (let [{:keys [url ref] :as props} (r/props this)]
-           (->> {:on-ready            #(handle-wave-surfer-ready instances props)
+           (->> {:on-ready            #(handle-wave-surfer-ready % instances props)
                  :script-class-name   "bbs--audio-wave--script"
                  :timeline-class-name "bbs--audio-wave--timeline"
                  :wave-class-name     "bbs--audio-wave--wave"}
-                (create-wavesurfer @element url)
-                (reset! wave-surfer))
+                (create-wavesurfer @element url))
 
            (when (fn? ref)
              (-> (get-controls instances)
