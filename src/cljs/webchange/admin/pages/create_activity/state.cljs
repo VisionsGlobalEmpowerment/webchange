@@ -44,7 +44,7 @@
        :description "Introduce the alphabet, one letter at a time."
        :preview "/upload/JCUMLEIECSBEOQSL.png"
        :activity-ids {:english 1786
-                      :spanish 2654}}] ;concept
+                      :spanish 1822}}] ;concept
    3 [{:name "Learn and Slide"
        :description "Present a question. Learners tap an answer that 'slides' down if correct!"
        :preview "/upload/ISHGXNYTLBKDFPRB.png"
@@ -73,8 +73,8 @@
       {:name "Run and Find"
        :description "Learners help a 'running' character collect correct answers before time runs out!"
        :preview "/upload/PGFOBUACXCCRNFIW.png"
-       :activity-ids {:english 1891
-                      :spanish 2759}} ;concept
+       :activity-ids {:english 1949
+                      :spanish 1975}} ;concept
       {:name "Sorting"
        :description "Drag and drop items into their correct category!"
        :preview "/upload/KCSNJZJUQLPOCVOP.png"
@@ -96,12 +96,12 @@
    5 [{:name "Video Viewer"
        :description "Play a short video."
        :preview "/upload/PYTRJJHHASSZMQKH.png"
-       :activity-ids {:english 1838
-                      :spanish 2706}}] ;concept
+       :activity-ids {:english 1896
+                      :spanish 1922}}] ;concept
    6 [{:name "Letter Tracing"
        :preview "/upload/YSOKFHVULRWQLTYK.png"
-       :activity-ids {:english 1812
-                      :spanish 2680}} ;concept
+       :activity-ids {:english 1841
+                      :spanish 1867}} ;concept
       {:name "Word Tracing"
        :preview "/upload/DKAZCOSCVSHTKPEB.png"
        :activity-ids {:english 579
