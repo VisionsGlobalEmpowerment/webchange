@@ -23,10 +23,9 @@
 (defn add-region
   [wave-surfer {:keys [start end]}]
   (if (some? wave-surfer)
-    (do (print "add-region")
-        (->> (create-region {:start start
-                             :end   end})
-             (w/add-region wave-surfer)))
+    (->> (create-region {:start start
+                         :end   end})
+         (w/add-region wave-surfer))
     (logger/error "Add region: wavesurfer is not defined")))
 
 (defn remove-current-region
