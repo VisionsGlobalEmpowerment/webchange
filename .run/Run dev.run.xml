@@ -2,7 +2,7 @@
   <configuration default="false" name="Run dev" type="CompoundRunConfigurationType">
     <toRun name="backend" type="ClojureREPL" />
     <toRun name="Shadow dev" type="ShConfigurationType" />
-    <toRun name="Styles" type="ShConfigurationType" />
+    <toRun name="Styles watch" type="ShConfigurationType" />
     <method v="2" />
   </configuration>
 </component>
