@@ -151,6 +151,13 @@
                         width: 100%;
                     }
                 }
+
+                .control-state {
+                    @include bbs--noto-14-r;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
             }
         }
     }

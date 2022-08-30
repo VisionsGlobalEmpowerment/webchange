@@ -4,50 +4,64 @@
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.auth.state :as auth]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
 
-(defn- lock-control
-  []
-  (let [locked? @(re-frame/subscribe [::state/activity-locked?])
-        can-lock? @(re-frame/subscribe [::auth/can-lock-activity?])
-        loading? @(re-frame/subscribe [::state/lock-loading?])
-        label (cond
-                loading? "Saving.."
-                locked? "Unlock Activity"
-                :default "Lock Activity")
-        handle-change #(re-frame/dispatch [::state/set-locked %])]
-    [ui/switch {:checked?       locked?
-                :disabled?      (not can-lock?)
-                :indeterminate? loading?
-                :label          label
-                :on-change      handle-change
-                :class-name     "switch-control"}]))
+(defn- control-state
+  [{:keys [text icon]}]
+  [:div {:class-name "control-state"}
+   (when (some? text)
+     [:label text])
+   (when (some? icon)
+     [ui/icon {:icon icon}])])
 
 (defn- publish-control
   []
-  (let [published? @(re-frame/subscribe [::state/activity-published?])
-        can-publish? @(re-frame/subscribe [::state/can-publish?])
+  (let [{:keys [disabled? read-only? visible?]} @(re-frame/subscribe [::state/publish-control-state])
+        published? @(re-frame/subscribe [::state/activity-published?])
         loading? @(re-frame/subscribe [::state/publish-loading?])
         label (cond
                 loading? "Saving.."
                 published? "Global"
                 :default "Not published")
         handle-change #(re-frame/dispatch [::state/set-published %])]
-    [ui/switch {:checked?       published?
-                :disabled?      (not can-publish?)
-                :indeterminate? loading?
-                :label          label
-                :on-change      handle-change
-                :class-name     "switch-control"}]))
+    (when visible?
+      (if read-only?
+        [control-state {:text (if published? "Global" "Not published")}]
+        [ui/switch {:checked?       published?
+                    :disabled?      disabled?
+                    :indeterminate? loading?
+                    :label          label
+                    :on-change      handle-change
+                    :class-name     "switch-control"}]))))
+
+(defn- lock-control
+  []
+  (let [{:keys [disabled? read-only? visible?]} @(re-frame/subscribe [::state/lock-control-state])
+        locked? @(re-frame/subscribe [::state/activity-locked?])
+        loading? @(re-frame/subscribe [::state/lock-loading?])
+        label (cond
+                loading? "Saving.."
+                locked? "Unlock Activity"
+                :default "Lock Activity")
+        handle-change #(re-frame/dispatch [::state/set-locked %])]
+    (when visible?
+      (if read-only?
+        [control-state {:text (if locked? "Locked" "Unlocked")
+                        :icon "lock"}]
+        [ui/switch {:checked?       locked?
+                    :disabled?      disabled?
+                    :indeterminate? loading?
+                    :label          label
+                    :on-change      handle-change
+                    :class-name     "switch-control"}]))))
 
 (defn- publish-controls
   []
   [:<>
-   [lock-control]
-   [publish-control]])
+   [publish-control]
+   [lock-control]])
 
 
 (defn- activity-form
@@ -108,7 +122,8 @@
                            :on-remove   handle-remove
                            :on-lock     handle-lock
                            :class-name  "info-form"
-                           :controls    publish-controls}]]]))
+                           :controls    {:label     "Publishing Details"
+                                         :component publish-controls}}]]]))
 
 (defn page
   [{:keys [activity-id] :as props}]

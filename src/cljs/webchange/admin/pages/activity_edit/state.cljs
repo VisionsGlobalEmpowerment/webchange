@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
+    [webchange.auth.state :as auth]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/activity-edit)
@@ -169,18 +170,24 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-lock-loading false))}))
 
+(re-frame/reg-sub
+  ::lock-control-state
+  :<- [::auth/bbs-admin?]
+  :<- [::auth/super-admin?]
+  :<- [::activity-locked?]
+  (fn [[bbs-admin? super-admin? activity-locked?]]
+    {:disabled?  false
+     :read-only? (and bbs-admin?
+                      activity-locked?)
+     :visible?   (or super-admin?
+                     activity-locked?)}))
+
 ;; publish activity
 
 (re-frame/reg-sub
   ::activity-published?
   :<- [::activity]
   #(= "visible" (:status %)))
-
-(re-frame/reg-sub
-  ::can-publish?
-  :<- [::activity-locked?]
-  (fn [activity-locked?]
-    (not activity-locked?)))
 
 (def publish-loading-key :publish-loading?)
 
@@ -218,3 +225,14 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-publish-loading false))}))
+
+(re-frame/reg-sub
+  ::publish-control-state
+  :<- [::auth/bbs-admin?]
+  :<- [::auth/super-admin?]
+  :<- [::activity-locked?]
+  (fn [[bbs-admin? super-admin? activity-locked?]]
+    {:disabled?  activity-locked?
+     :read-only? (and bbs-admin?
+                      activity-locked?)
+     :visible?   (or bbs-admin? super-admin?)}))

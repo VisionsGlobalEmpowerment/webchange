@@ -41,9 +41,7 @@
   (fn [{:keys [type]}]
     (= "admin" type)))
 
-;;
-
 (re-frame/reg-sub
-  ::can-lock-activity?
+  ::bbs-admin?
   :<- [::super-admin?]
-  identity)
+  #(not %))

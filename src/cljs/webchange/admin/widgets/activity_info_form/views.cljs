@@ -44,13 +44,14 @@
                                 :class-name "group-filler"}
                  :group-right  {:type       :group
                                 :class-name "group-right"
-                                :fields     {:name     {:label "Name"
-                                                        :type  :text}
-                                             :lang     {:label   "Language"
-                                                        :type    :select
-                                                        :options language-options}
-                                             :controls {:type    :custom
-                                                        :control controls}}}}
+                                :fields     (cond-> {:name {:label "Name"
+                                                            :type  :text}
+                                                     :lang {:label   "Language"
+                                                            :type    :select
+                                                            :options language-options}}
+                                                    (some? controls) (assoc :controls {:type    :custom
+                                                                                       :label   (:label controls)
+                                                                                       :control (:component controls)}))}}
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [:<>
        [ui/form {:form-id    (-> (str "activity-" activity-id)

@@ -38,6 +38,7 @@
     [webchange.ui.components.icon.system.icon-image-broken :as image-broken]
     [webchange.ui.components.icon.system.icon-images :as images]
     [webchange.ui.components.icon.system.icon-info :as info]
+    [webchange.ui.components.icon.system.icon-lock :as lock]
     [webchange.ui.components.icon.system.icon-move :as move]
     [webchange.ui.components.icon.system.icon-movement :as movement]
     [webchange.ui.components.icon.system.icon-play :as play]
@@ -101,6 +102,7 @@
                         "image-broken"    image-broken/data
                         "images"          images/data
                         "info"            info/data
+                        "lock"            lock/data
                         "move"            move/data
                         "movement"        movement/data
                         "play"            play/data
