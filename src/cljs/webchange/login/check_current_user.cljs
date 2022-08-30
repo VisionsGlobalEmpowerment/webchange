@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.auth.state :as auth]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :utils/check-current-user)
@@ -34,8 +35,9 @@
 (re-frame/reg-event-fx
   ::load-current-user-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (set-in-progress db false)}))
+  (fn [{:keys [db]} [_ current-user]]
+    {:db       (set-in-progress db false)
+     :dispatch [::auth/set-current-user current-user]}))
 
 (re-frame/reg-event-fx
   ::load-current-user-failure

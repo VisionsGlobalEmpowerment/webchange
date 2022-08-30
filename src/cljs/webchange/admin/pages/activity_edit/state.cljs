@@ -37,10 +37,23 @@
   [db value]
   (assoc db activity-key value))
 
+(defn- update-activity
+  [db data-patch]
+  (update db activity-key merge data-patch))
+
+(defn- update-activity-metadata
+  [db data-patch]
+  (update-in db [activity-key :metadata] merge data-patch))
+
 (re-frame/reg-sub
   ::activity
   :<- [path-to-db]
   #(get-activity %))
+
+(re-frame/reg-sub
+  ::activity-metadata
+  :<- [::activity]
+  #(get % :metadata {}))
 
 ;; Form editable
 
@@ -89,43 +102,6 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-loading false))}))
 
-;; Remove
-
-(def removing-key :removing?)
-
-(defn- set-removing
-  [db value]
-  (assoc db removing-key value))
-
-(re-frame/reg-sub
-  ::removing?
-  :<- [path-to-db]
-  #(get % removing-key false))
-
-(re-frame/reg-event-fx
-  ::remove
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-activity db)]
-      {:db       (-> db (set-removing true))
-       :dispatch [::warehouse/archive-activity
-                  {:activity-id id}
-                  {:on-success [::remove-success]
-                   :on-failure [::remove-failure]}]})))
-
-(re-frame/reg-event-fx
-  ::remove-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db       (-> db (set-removing false))
-     :dispatch [::routes/redirect :activities]}))
-
-(re-frame/reg-event-fx
-  ::remove-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-removing false))}))
-
 ;;
 
 (re-frame/reg-event-fx
@@ -140,7 +116,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [{:keys [id]} (get-activity db)
-          href (str "/s/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
+          href (str "/s/" id)]                              ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
       (js/window.open href "_blank"))))
 
 (re-frame/reg-event-fx
@@ -149,9 +125,96 @@
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :activities]}))
 
+;; lock activity
+
+(re-frame/reg-sub
+  ::activity-locked?
+  :<- [::activity-metadata]
+  #(get % :locked false))
+
+(def lock-loading-key :lock-loading?)
+
+(defn- set-lock-loading
+  [db value]
+  (assoc db lock-loading-key value))
+
+(re-frame/reg-sub
+  ::lock-loading?
+  :<- [path-to-db]
+  #(get % lock-loading-key false))
+
 (re-frame/reg-event-fx
   ::set-locked
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:activity :metadata :locked] value)}))
+    (let [{:keys [id]} (get-activity db)]
+      {:db       (-> db (set-lock-loading true))
+       :dispatch [::warehouse/toggle-activity-locked
+                  {:activity-id id
+                   :locked      value}
+                  {:on-success [::set-locked-success value]
+                   :on-failure [::set-locked-failure]}]})))
 
+(re-frame/reg-event-fx
+  ::set-locked-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (-> db
+             (update-activity-metadata {:locked value})
+             (set-lock-loading false))}))
+
+(re-frame/reg-event-fx
+  ::set-locked-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-lock-loading false))}))
+
+;; publish activity
+
+(re-frame/reg-sub
+  ::activity-published?
+  :<- [::activity]
+  #(= "visible" (:status %)))
+
+(re-frame/reg-sub
+  ::can-publish?
+  :<- [::activity-locked?]
+  (fn [activity-locked?]
+    (not activity-locked?)))
+
+(def publish-loading-key :publish-loading?)
+
+(defn- set-publish-loading
+  [db value]
+  (assoc db publish-loading-key value))
+
+(re-frame/reg-sub
+  ::publish-loading?
+  :<- [path-to-db]
+  #(get % publish-loading-key false))
+
+(re-frame/reg-event-fx
+  ::set-published
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    (let [{:keys [id]} (get-activity db)]
+      {:db       (-> db (set-publish-loading true))
+       :dispatch [::warehouse/toggle-activity-visibility
+                  {:activity-id id
+                   :visible     value}
+                  {:on-success [::set-published-success]
+                   :on-failure [::set-published-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::set-published-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db (-> db
+             (update-activity response)
+             (set-publish-loading false))}))
+
+(re-frame/reg-event-fx
+  ::set-published-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-publish-loading false))}))

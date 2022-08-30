@@ -4,22 +4,63 @@
     [webchange.admin.pages.activity-edit.state :as state]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
+    [webchange.auth.state :as auth]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
+
+(defn- lock-control
+  []
+  (let [locked? @(re-frame/subscribe [::state/activity-locked?])
+        can-lock? @(re-frame/subscribe [::auth/can-lock-activity?])
+        loading? @(re-frame/subscribe [::state/lock-loading?])
+        label (cond
+                loading? "Saving.."
+                locked? "Unlock Activity"
+                :default "Lock Activity")
+        handle-change #(re-frame/dispatch [::state/set-locked %])]
+    [ui/switch {:checked?       locked?
+                :disabled?      (not can-lock?)
+                :indeterminate? loading?
+                :label          label
+                :on-change      handle-change
+                :class-name     "switch-control"}]))
+
+(defn- publish-control
+  []
+  (let [published? @(re-frame/subscribe [::state/activity-published?])
+        can-publish? @(re-frame/subscribe [::state/can-publish?])
+        loading? @(re-frame/subscribe [::state/publish-loading?])
+        label (cond
+                loading? "Saving.."
+                published? "Global"
+                :default "Not published")
+        handle-change #(re-frame/dispatch [::state/set-published %])]
+    [ui/switch {:checked?       published?
+                :disabled?      (not can-publish?)
+                :indeterminate? loading?
+                :label          label
+                :on-change      handle-change
+                :class-name     "switch-control"}]))
+
+(defn- publish-controls
+  []
+  [:<>
+   [lock-control]
+   [publish-control]])
+
 
 (defn- activity-form
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at updated-at
                 created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/activity])
         locked? (:locked metadata)
-        
+
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
         handle-duplicate-click #(re-frame/dispatch [::state/duplicate])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
-        removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
         handle-remove #(re-frame/dispatch [::state/open-activities-page])
@@ -66,7 +107,8 @@
                            :on-cancel   handle-save
                            :on-remove   handle-remove
                            :on-lock     handle-lock
-                           :class-name  "info-form"}]]]))
+                           :class-name  "info-form"
+                           :controls    publish-controls}]]]))
 
 (defn page
   [{:keys [activity-id] :as props}]
