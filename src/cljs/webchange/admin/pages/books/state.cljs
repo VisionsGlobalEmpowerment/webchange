@@ -49,7 +49,8 @@
   :<- [path-to-db]
   :<- [::selected-type]
   :<- [::show-my-global?]
-  (fn [[db selected-type show-my-global]]
+  :<- [::search-string]
+  (fn [[db selected-type show-my-global search-string]]
     (let [current-user-id (get-in db [:current-user :id])
           books (if (= selected-type :visible)
                   (:visible-books db)
@@ -58,7 +59,12 @@
                :always (map #(with-library-type % current-user-id))
                (not show-my-global) (remove #(and
                                               (= (:status %) "visible")
-                                              (= (:owner-id %) current-user-id)))))))
+                                              (= (:owner-id %) current-user-id)))
+               (-> search-string empty? not) (filter (fn [{:keys [name]}]
+                                                       (clojure.string/includes?
+                                                         (clojure.string/lower-case name)
+                                                         (clojure.string/lower-case search-string))))
+               :always (sort-by :name)))))
 
 (re-frame/reg-sub
   ::books-counter
@@ -152,3 +158,27 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db :show-my-global? value)}))
+
+;; search string
+
+(def search-string-key :search-string)
+
+(defn- get-search-string
+  [db]
+  (get db search-string-key ""))
+
+(defn- set-search-string
+  [db value]
+  (assoc db search-string-key value))
+
+(re-frame/reg-sub
+  ::search-string
+  :<- [path-to-db]
+  get-search-string)
+
+(re-frame/reg-event-fx
+  ::set-search-string
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-search-string db value)}))
+
