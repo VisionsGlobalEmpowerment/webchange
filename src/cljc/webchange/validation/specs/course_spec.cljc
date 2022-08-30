@@ -21,3 +21,4 @@
 (s/def ::school-courses (s/keys :req-un [::school-id ::courses-id]))
 (s/def ::create-course (s/keys :req-un [::name ::lang]))
 (s/def ::edit-course (s/keys :req-un [::name ::lang]))
+(s/def ::duplicate (s/keys :req-un [::lang]))

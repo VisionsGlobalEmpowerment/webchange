@@ -380,6 +380,8 @@
               (assoc :id new-course-id)
               (->website-course))]))
 
+
+
 (defn get-available-courses
   []
   (->> (db/get-available-courses)
@@ -1005,14 +1007,14 @@
     data))
 
 (defn duplicate-activity
-  [activity-id {:keys [name lang]} owner-id]
+  [activity-id {:keys [name lang status]} owner-id]
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
         source (db/get-scene-by-id {:id activity-id})
         [{scene-id :id}] (db/create-activity! {:name       name
                                                :lang       lang
                                                :image_src  (:image-src source)
-                                               :status     "invisible"
+                                               :status     (or status "invisible")
                                                :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
@@ -1024,6 +1026,44 @@
                      :created_at  created-at
                      :description "Create"})
     {:id scene-id}))
+
+(defn- duplicate-levels
+  [levels scenes-map]
+  (let [update-activity (fn [activity]
+                          (update activity :scene-id #(get scenes-map %)))
+        update-lesson (fn [lesson]
+                        (update lesson :activities #(map update-activity %)))
+        update-level (fn [level]
+                       (update level :lessons #(map update-lesson %)))]
+    (map update-level levels)))
+
+(defn duplicate-course
+  [course-id {:keys [lang]} owner-id]
+  (let [current-time (jt/local-date-time)
+        {course-name :name image :image-src type :type} (db/get-course-by-id {:id course-id})
+        localized-course-data {:name            course-name
+                               :slug            (course-slug course-name lang)
+                               :lang            lang
+                               :owner_id        owner-id
+                               :image_src       image
+                               :website_user_id nil
+                               :status          "draft"
+                               :type            type}
+        [{new-course-id :id}] (db/create-course! localized-course-data)
+        original-scenes (db/get-scenes-by-course-id {:course_id course-id})
+        new-scenes (->> original-scenes
+                        (map #(duplicate-activity (:id %) % owner-id))
+                        (map :id))
+        scenes-map (zipmap (map :id original-scenes) new-scenes)
+        course-data (-> (db/get-latest-course-version {:course_id course-id})
+                        :data
+                        (update :levels #(duplicate-levels % scenes-map))
+                        (dissoc :templates :scene-list))]
+    (db/save-course! {:course_id  new-course-id
+                      :data       course-data
+                      :owner_id   owner-id
+                      :created_at current-time})
+    {:id new-course-id}))
 
 (defn create-book
   [data owner-id]

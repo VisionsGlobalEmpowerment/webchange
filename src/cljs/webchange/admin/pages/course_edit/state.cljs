@@ -85,13 +85,13 @@
   :<- [::activities-library]
   (fn [[course-data activities-library] [_ level-idx lesson-idx]]
     (let [activities-library (->> activities-library
-                                  (map (fn [{:keys [slug] :as activity}]
-                                         [slug activity]))
+                                  (map (fn [{:keys [id] :as activity}]
+                                         [id activity]))
                                   (into {}))]
       (->> (utils/get-activities-data course-data (dec level-idx) (dec lesson-idx))
-           (map-indexed (fn [idx {:keys [activity unique-id]}]
+           (map-indexed (fn [idx {:keys [scene-id unique-id]}]
                           (let [activity-index (inc idx)]
-                            (->> (get activities-library activity)
+                            (->> (get activities-library scene-id)
                                  (merge {:id  unique-id
                                          :idx activity-index})))))))))
 

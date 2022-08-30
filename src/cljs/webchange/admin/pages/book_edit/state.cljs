@@ -144,6 +144,32 @@
       (js/window.open href "_blank"))))
 
 (re-frame/reg-event-fx
+  ::duplicate
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [id name lang]} (get-book db)]
+      {:db       (-> db (set-book-loading true))
+       :dispatch [::warehouse/duplicate-activity
+                  {:activity-id id
+                   :data {:name name
+                          :lang lang}}
+                  {:on-success [::duplicate-success]
+                   :on-failure [::duplicate-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::duplicate-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [id]}]]
+    {:dispatch-n [[::init {:book-id id}]
+                  [::routes/redirect :book-edit :book-id id]]}))
+
+(re-frame/reg-event-fx
+  ::duplicate-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-book-loading false))}))
+
+(re-frame/reg-event-fx
   ::open-books-page
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
