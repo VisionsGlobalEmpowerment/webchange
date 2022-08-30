@@ -78,11 +78,6 @@
                    {:activity-id activity-id}
                    {:on-success [::load-activity-success]}]]}))
 
-(re-frame/reg-sub
-  ::can-lock?
-  :<- [path-to-db]
-  #(get % :is-admin? false))
-
 (re-frame/reg-event-fx
   ::load-activity-success
   [(i/path path-to-db)]
@@ -164,47 +159,6 @@
     (let [success-handler (widgets/get-callback db :on-remove)]
       {:dispatch  [::close-remove-window]
        ::widgets/callback [success-handler]})))
-
-(re-frame/reg-event-fx
-  ::toggle-visibility
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [activity-id (:activity-id db)
-          visible (-> db get-form-data :status (= "visible") not)]
-      {:dispatch [::warehouse/toggle-activity-visibility
-                  {:activity-id activity-id
-                   :visible visible}
-                  {:on-success [::toggle-visibility-success]}]})))
-
-(re-frame/reg-event-fx
-  ::toggle-visibility-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
-    (let [prepared-data (-> data
-                            (merge (:metadata data))
-                            (dissoc :metadata))]
-      {:db (update-form-data db data)})))
-
-(re-frame/reg-event-fx
-  ::set-locked
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    (let [activity-id (:activity-id db)]
-      {:dispatch [::warehouse/toggle-activity-locked
-                  {:activity-id activity-id
-                   :locked value}
-                  {:on-success [::set-locked-success]}]})))
-
-(re-frame/reg-event-fx
-  ::set-locked-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
-    (let [prepared-data (-> data
-                            (merge (:metadata data))
-                            (dissoc :metadata))
-          success-handler (widgets/get-callback db :on-lock)]
-      {:db (update-form-data db prepared-data)
-       ::widgets/callback [success-handler (:locked prepared-data)]})))
 
 (re-frame/reg-event-fx
   ::remove-activity

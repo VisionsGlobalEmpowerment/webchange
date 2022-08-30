@@ -12,7 +12,7 @@
         flex: 1 1;
 
         display: grid;
-        grid-template-columns: auto;
+        grid-template-columns: 100%;
         grid-template-rows: auto;
         column-gap: $gap;
         row-gap: $gap;
@@ -44,8 +44,8 @@
     }
 
     &.bbs--page--with-footer {
-	.widget--side-bar-page--block {
-	    padding-bottom: $footer-height - $default-gap;
-	}
+        .widget--side-bar-page--block {
+            padding-bottom: $footer-height - $default-gap;
+        }
     }
 }

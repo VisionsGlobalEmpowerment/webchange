@@ -12,11 +12,11 @@
         remove #(re-frame/dispatch [::state/remove-activity activity-id])
         close-window #(re-frame/dispatch [::state/close-remove-window])
         confirm-removed #(re-frame/dispatch [::state/handle-removed])]
-    [ui/confirm {:open?      open?
-                 :loading?   in-progress?
+    [ui/confirm {:open?        open?
+                 :loading?     in-progress?
                  :confirm-text (if done? "Ok" "Yes")
-                 :on-confirm (if done? confirm-removed remove)
-                 :on-cancel  (when-not done? close-window)}
+                 :on-confirm   (if done? confirm-removed remove)
+                 :on-cancel    (when-not done? close-window)}
      (if done?
        "Activity successfully deleted"
        "Are you sure you want to delete activity?")]))
@@ -24,42 +24,35 @@
 (defn activity-info-form
   [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
-  (fn [{:keys [editable? class-name on-save on-cancel]
+  (fn [{:keys [editable? class-name controls on-save on-cancel]
         :or   {editable? true}}]
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/data-saving?])
           data @(re-frame/subscribe [::state/form-data])
-          visible? (= "visible" (:status data))
-          can-lock? @(re-frame/subscribe [::state/can-lock?])
           locked? (:locked data)
-          model {:group-left {:type :group
-                              :class-name "group-left"
-                              :fields {:about             {:label "About"
-                                                           :type  :text-multiline}
-                                       :short-description {:label "Short Description"
-                                                           :type  :text}
-                                       :remove    {:label    "Delete Activity"
-                                                   :type     (if locked? :empty :action)
-                                                   :icon     "trash"
-                                                   :on-click #(re-frame/dispatch [::state/open-remove-window])}}}
-                 :group-filler {:type :group
+          model {:group-left   {:type       :group
+                                :class-name "group-left"
+                                :fields     {:about             {:label "About"
+                                                                 :type  :text-multiline}
+                                             :short-description {:label "Short Description"
+                                                                 :type  :text}
+                                             :remove            {:label    "Delete Activity"
+                                                                 :type     (if locked? :empty :action)
+                                                                 :icon     "trash"
+                                                                 :on-click #(re-frame/dispatch [::state/open-remove-window])}}}
+                 :group-filler {:type       :group
                                 :class-name "group-filler"}
-                 :group-right {:type :group
-                               :class-name "group-right"
-                               :fields {:name              {:label "Name"
+                 :group-right  {:type       :group
+                                :class-name "group-right"
+                                :fields     (cond-> {:name {:label "Name"
                                                             :type  :text}
-                                        :lang {:label "Language"
-                                               :type :select
-                                               :options language-options}
-                                        :visible {:label (if visible? "Global" "Not published")
-                                                  :icon (if visible? "visibility-on" "visibility-off")
-                                                  :type (if locked? :label :action)
-                                                  :on-click #(re-frame/dispatch [::state/toggle-visibility])}
-                                        :locked {:label (if locked? "Locked" "Lock Activity")
-                                                 :type (if can-lock? :action :empty)
-                                                 :disabled? (not can-lock?)
-                                                 :on-click #(re-frame/dispatch [::state/set-locked (not locked?)])}}}}
-          handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]    
+                                                     :lang {:label   "Language"
+                                                            :type    :select
+                                                            :options language-options}}
+                                                    (some? controls) (assoc :controls {:type    :custom
+                                                                                       :label   (:label controls)
+                                                                                       :control (:component controls)}))}}
+          handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [:<>
        [ui/form {:form-id    (-> (str "activity-" activity-id)
                                  (keyword))

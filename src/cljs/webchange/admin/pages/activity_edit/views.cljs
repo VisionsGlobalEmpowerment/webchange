@@ -8,18 +8,75 @@
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
 
+(defn- control-state
+  [{:keys [text icon]}]
+  [:div {:class-name "control-state"}
+   (when (some? text)
+     [:label text])
+   (when (some? icon)
+     [ui/icon {:icon icon}])])
+
+(defn- publish-control
+  []
+  (let [{:keys [disabled? read-only? visible?]} @(re-frame/subscribe [::state/publish-control-state])
+        published? @(re-frame/subscribe [::state/activity-published?])
+        loading? @(re-frame/subscribe [::state/publish-loading?])
+        label (cond
+                loading? "Saving.."
+                published? "Global"
+                :default "Not published")
+        handle-change #(re-frame/dispatch [::state/set-published %])]
+    (when visible?
+      (if read-only?
+        [control-state {:text (if published? "Global" "Not published")}]
+        [ui/switch {:checked?       published?
+                    :disabled?      disabled?
+                    :indeterminate? loading?
+                    :label          label
+                    :on-change      handle-change
+                    :color          "yellow-1"
+                    :class-name     "switch-control"}]))))
+
+(defn- lock-control
+  []
+  (let [{:keys [disabled? read-only? visible?]} @(re-frame/subscribe [::state/lock-control-state])
+        locked? @(re-frame/subscribe [::state/activity-locked?])
+        loading? @(re-frame/subscribe [::state/lock-loading?])
+        label (cond
+                loading? "Saving.."
+                locked? "Unlock Activity"
+                :default "Lock Activity")
+        handle-change #(re-frame/dispatch [::state/set-locked %])]
+    (when visible?
+      (if read-only?
+        [control-state {:text (if locked? "Locked" "Unlocked")
+                        :icon "lock"}]
+        [ui/switch {:checked?       locked?
+                    :disabled?      disabled?
+                    :indeterminate? loading?
+                    :label          label
+                    :on-change      handle-change
+                    :color          "yellow-1"
+                    :class-name     "switch-control"}]))))
+
+(defn- publish-controls
+  []
+  [:<>
+   [publish-control]
+   [lock-control]])
+
+
 (defn- activity-form
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at updated-at
                 created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/activity])
         locked? (:locked metadata)
-        
+
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
         handle-duplicate-click #(re-frame/dispatch [::state/duplicate])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
-        removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
         handle-remove #(re-frame/dispatch [::state/open-activities-page])
@@ -66,7 +123,9 @@
                            :on-cancel   handle-save
                            :on-remove   handle-remove
                            :on-lock     handle-lock
-                           :class-name  "info-form"}]]]))
+                           :class-name  "info-form"
+                           :controls    {:label     "Publishing Details"
+                                         :component publish-controls}}]]]))
 
 (defn page
   [{:keys [activity-id] :as props}]
