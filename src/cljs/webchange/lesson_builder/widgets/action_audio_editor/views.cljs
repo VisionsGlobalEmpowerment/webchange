@@ -121,8 +121,6 @@
                    :action-path action-path
                    :class-name  "audio-editor--wave"
                    :ref         audio-wave-control}]
-            (js/console.log "action-audio-editor render")
-            (js/console.log "loading?" loading?)
             (if-not loading?
               [:<>
                [zoom {:wave       audio-wave-control
