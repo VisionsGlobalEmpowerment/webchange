@@ -152,8 +152,29 @@
         }
     }
 
-    &.bbs--switch--disabled {
+    @each $color in $bbs--base-colors {
+        &.bbs--switch--color-#{$color} {
+            input[type="checkbox"] + label {
+                &::after {
+                    background-color: bbs--color($color, $variant: light);
+                }
+            }
 
+            input[type="checkbox"]:checked + label {
+                &::after {
+                    background-color: bbs--color($color);
+                }
+            }
+
+            input[type="checkbox"] + label:hover {
+                &::before {
+                    border-color: bbs--color($color, $variant: light);
+                }
+            }
+        }
+    }
+
+    &.bbs--switch--disabled {
         input[type=checkbox] {
             & + label {
                 cursor: not-allowed;

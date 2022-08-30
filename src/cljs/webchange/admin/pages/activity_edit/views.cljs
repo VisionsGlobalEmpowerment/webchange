@@ -34,6 +34,7 @@
                     :indeterminate? loading?
                     :label          label
                     :on-change      handle-change
+                    :color          "yellow-1"
                     :class-name     "switch-control"}]))))
 
 (defn- lock-control
@@ -55,6 +56,7 @@
                     :indeterminate? loading?
                     :label          label
                     :on-change      handle-change
+                    :color          "yellow-1"
                     :class-name     "switch-control"}]))))
 
 (defn- publish-controls
