@@ -182,6 +182,13 @@
      :visible?   (or super-admin?
                      activity-locked?)}))
 
+(re-frame/reg-sub
+  ::activity-ui-locked?
+  :<- [::auth/super-admin?]
+  :<- [::activity-locked?]
+  (fn [[super-admin? activity-locked?]]
+    (and activity-locked? (not super-admin?))))
+
 ;; publish activity
 
 (re-frame/reg-sub
@@ -225,6 +232,40 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-publish-loading false))}))
+
+(re-frame/reg-event-fx
+  ::duplicate
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [id name lang]} (get-activity db)]
+      {:db       (-> db (set-activity-loading true))
+       :dispatch [::warehouse/duplicate-activity
+                  {:activity-id id
+                   :data {:name name
+                          :lang lang}}
+                  {:on-success [::duplicate-success]
+                   :on-failure [::duplicate-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::duplicate-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [id]}]]
+    {:dispatch-n [[::init {:activity-id id}]
+                  [::routes/redirect :activity-edit :activity-id id]]}))
+
+(re-frame/reg-event-fx
+  ::duplicate-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-loading false))}))
+
+(re-frame/reg-event-fx
+  ::open-activities-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ response]]
+    {:db (-> db
+             (update-activity response)
+             (set-publish-loading false))}))
 
 (re-frame/reg-sub
   ::publish-control-state

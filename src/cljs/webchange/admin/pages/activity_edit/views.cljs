@@ -70,7 +70,7 @@
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at updated-at
                 created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/activity])
-        locked? (:locked metadata)
+        locked? @(re-frame/subscribe [::state/activity-ui-locked?])
 
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
