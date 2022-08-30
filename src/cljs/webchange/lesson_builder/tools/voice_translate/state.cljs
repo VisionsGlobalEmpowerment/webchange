@@ -53,3 +53,9 @@
   ::show-audio-editor?
   :<- [::selected-audio]
   #(some? %))
+
+(re-frame/reg-event-fx
+  ::apply
+  (fn [{:keys [db]} [_]]
+    {:dispatch-n [[::state/save-activity]
+                  [:layout/reset-state]]}))

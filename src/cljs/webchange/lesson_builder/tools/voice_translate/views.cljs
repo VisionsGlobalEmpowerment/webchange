@@ -9,13 +9,15 @@
     [webchange.lesson-builder.widgets.audio-add.views :refer [audio-add]]
     [webchange.lesson-builder.widgets.audio-list.views :refer [audio-list]]
     [webchange.lesson-builder.widgets.welcome-translate.views :refer [welcome-translate]]
-    [webchange.utils.uid :refer [get-uid]]))
+    [webchange.utils.uid :refer [get-uid]]
+    [webchange.ui.index :as ui]))
 
 (defn audio-manager
   []
   (let [action-path @(re-frame/subscribe [::state/selected-action])
         selected-audio @(re-frame/subscribe [::state/selected-audio])
-        handle-audio-changed #(re-frame/dispatch [::state/set-selected-audio action-path %])]
+        handle-audio-changed #(re-frame/dispatch [::state/set-selected-audio action-path %])
+        handle-apply #(re-frame/dispatch [::state/apply])]
     [:div.tool--voice-translate--audio-manager
      [:h1.audio-manager--header
       "Voice & Translate"]
@@ -25,7 +27,10 @@
      [block {:title      "Select Audio"
              :class-name "audio-list-wrapper"}
       [audio-list {:value     selected-audio
-                   :on-change handle-audio-changed}]]]))
+                   :on-change handle-audio-changed}]]
+     [ui/button {:class-name "audio-manager-apply"
+                 :on-click handle-apply}
+      "Apply"]]))
 
 (defn audio-editor
   []

@@ -47,11 +47,11 @@
       {:db         (cond-> db
                            (contains? state :focus) (set-focused-blocks (:focus state)))
        :dispatch-n (cond-> []
-                           (contains? state :menu) (conj [::menu-state/open-component (:menu state) {:on-back [::reset-state]}])
+                           (contains? state :menu) (conj [::menu-state/open-component (:menu state) {:on-back [:layout/reset-state]}])
                            (contains? state :toolbox) (conj [::toolbox-state/set-current-widget (:toolbox state)]))})))
 
 (re-frame/reg-event-fx
-  ::reset-state
+  :layout/reset-state
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::set-state :default]}))
@@ -71,7 +71,7 @@
                            (contains? tool-data :focus) (set-focused-blocks (:focus tool-data)))
        :dispatch-n (cond-> []
                            (contains? tool-data :menu)
-                           (conj [::menu-state/open-component tool-id {:on-back (cond-> [[::reset-state]]
+                           (conj [::menu-state/open-component tool-id {:on-back (cond-> [[:layout/reset-state]]
                                                                                         (some? destroy-event) (conj destroy-event))}])
 
                            (contains? tool-data :toolbox)
@@ -79,4 +79,4 @@
 
                            (contains? tool-data :init)
                            (concat [(conj (:init tool-data) (merge tool-props
-                                                                   {:reset [::reset-state]}))]))})))
+                                                                   {:reset [:layout/reset-state]}))]))})))
