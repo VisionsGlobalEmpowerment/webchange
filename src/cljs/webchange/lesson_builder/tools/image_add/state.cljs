@@ -1,9 +1,10 @@
 (ns webchange.lesson-builder.tools.image-add.state
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.state :as lesson-builder-state]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.blocks.menu.state :as menu-state]
+    [webchange.lesson-builder.state :as lesson-builder-state]))
 
 (def path-to-db :lesson-builder/image-add)
 
@@ -16,7 +17,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {}))
+    {:db (assoc db :form {:name ""})}))
 
 (re-frame/reg-sub
   ::name
@@ -38,10 +39,16 @@
   ::set-image
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    (let [name (:name value)]
+    (let [name (-> value :src (str/split #"--") last)]
       {:db (cond-> db
                    :always (assoc-in [:form :image] value)
                    (some? name) (assoc-in [:form :name] name))})))
+(comment
+  (let [value {:src "etc--elements-concepts--mother.png"}]
+    (-> value
+        :src
+        (str/split #"--") last)))
+
 
 (re-frame/reg-event-fx
   ::apply
@@ -50,3 +57,4 @@
     (let [data (get db :form)]
       {:dispatch-n [[::lesson-builder-state/add-image data]
                     [::menu-state/history-back]]})))
+
