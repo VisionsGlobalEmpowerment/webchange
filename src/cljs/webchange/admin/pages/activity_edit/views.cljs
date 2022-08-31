@@ -69,7 +69,7 @@
 (defn- activity-form
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at updated-at
-                created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/activity])
+                created-by-user updated-by-user]} @(re-frame/subscribe [::state/activity])
         locked? @(re-frame/subscribe [::state/activity-ui-locked?])
 
         handle-edit-click #(re-frame/dispatch [::state/edit])
@@ -134,8 +134,8 @@
     (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
       [page/page {:class-name    "page--activity-edit"
                   :align-content "center"}
-       [page/content {:class-name   "page--activity-edit--content"
-                      :transparent? true}
+       [page/content {:class-name-content "page--activity-edit--content"
+                      :transparent?       true}
         (if loading?
           [ui/loading-overlay]
           [activity-form {:activity-id activity-id}])]])))

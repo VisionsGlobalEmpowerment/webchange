@@ -33,7 +33,6 @@
            disabled?  false
            icon-side  "right"
            loading?   false
-           on-click   #()
            target     "_blank"
            text-align "center"}}]
   {:pre [(or (nil? chip) (some #{chip} available-values/icon-system))
@@ -52,11 +51,13 @@
         handle-click (fn [event]
                        (if (some? href)
                          (js/window.open href target)
-                         (on-click event)))]
+                         (when (fn? on-click)
+                           (on-click event))))]
     (into [:button (cond-> {:class-name (get-class-name {"bbs--button"                               true
                                                          "bbs--button--icon-button"                  icon-button?
                                                          "bbs--button--text-icon-button"             (and show-icon? (not icon-button?))
                                                          "bbs--button--with-loading"                 loading?
+                                                         "bbs--button--clickable"                    (some? on-click)
                                                          (str "bbs--button--color-" color)           (some? color)
                                                          (str "bbs--button--icon-side-" icon-side)   (some? icon-side)
                                                          (str "bbs--button--shape-" shape)           (some? shape)

@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.courses.state :as state]
     [webchange.admin.widgets.page.views :as page]
+    [webchange.auth.state :as auth]
     [webchange.ui.index :as ui]))
 
 (defn- type-selector
@@ -23,10 +24,12 @@
       [ui/chip {:counter (:my courses-counter)}]]]))
 
 (defn- courses-list-item
-  [{:keys [id name slug lang]}]
+  [{:keys [id name slug lang metadata]}]
   (let [handle-click #(re-frame/dispatch [::state/open-course slug])
         handle-edit-click #(re-frame/dispatch [::state/edit-course slug])
-        handle-duplicate-click #(re-frame/dispatch [::state/duplicate-course id])]
+        handle-duplicate-click #(re-frame/dispatch [::state/duplicate-course id])
+        course-locked? (get metadata :locked false)
+        super-admin? @(re-frame/subscribe [::auth/super-admin?])]
     [ui/list-item {:name     name
                    :info     [{:key   "Language"
                                :value lang}]
@@ -34,9 +37,13 @@
                    :actions  [{:icon     "duplicate"
                                :title    "Duplicate"
                                :on-click handle-duplicate-click}
-                              {:icon     "edit"
-                               :title    "Edit"
-                               :on-click handle-edit-click}]}]))
+                              (if (and course-locked?
+                                       (not super-admin?))
+                                {:icon     "lock"
+                                 :title    "Locked"}
+                                {:icon     "edit"
+                                 :title    "Edit"
+                                 :on-click handle-edit-click})]}]))
 
 (defn- courses-list
   []

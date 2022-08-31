@@ -5,10 +5,8 @@
         @include bbs--with-scrollbar-margin;
         display: flex;
         flex-direction: column;
-        align-items: center;
         gap: $bbs--page--margin * 2;
         padding: 10px;
-        width: 100%;
     }
 
     &.widget--side-bar-page--main-content--transparent {

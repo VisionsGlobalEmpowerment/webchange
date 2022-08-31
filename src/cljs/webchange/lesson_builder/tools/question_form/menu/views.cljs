@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.lesson-builder.components.info.views :refer [info]]
     [webchange.lesson-builder.tools.question-form.menu.state :as state]
     [webchange.lesson-builder.tools.question-form.state :as parent-state]
     [webchange.lesson-builder.tools.question-form.question-options.views :as options]
@@ -36,7 +35,7 @@
     [:div.question-form--question-menu
      [:div.params-form
       [control-group {:title title}
-       [info "Name your question so you can find and drag it into the correct place in the Script editor."]
+       [ui/info "Name your question so you can find and drag it into the correct place in the Script editor."]
        [options/question-alias]]
       [control-group {:title "Select Question Type"}
        [options/question-type]]]

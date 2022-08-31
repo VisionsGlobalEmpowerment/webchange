@@ -262,28 +262,47 @@
       text]]
     [:li (cond-> {:class-name "actions-list-item button-item"}
                  (fn? on-click) (assoc :on-click on-click))
-     [ui/icon {:icon icon}]
+     (when (some? icon)
+       [ui/icon {:icon icon}])
      text]))
+
+(defn- add-content-actions
+  []
+  (let [course-locked? @(re-frame/subscribe [::state/locked?])
+        handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
+    (when-not course-locked?
+      [:<>
+       [ui/info "Drag over a level, lesson or activity to the left in the spot where you'd like to add."]
+       [actions-list-item {:icon "dnd"
+                           :text "Add Level"
+                           :data {:type  "level"
+                                  :level "add"}}]
+       [actions-list-item {:icon "dnd"
+                           :text "Add Lesson"
+                           :data {:type   "lesson"
+                                  :lesson "add"}}]
+       [actions-list-item {:icon     "games"
+                           :text     "Add Activity"
+                           :on-click handle-activities-click}]])))
+
+(defn- duplicate-course
+  []
+  (let [course-locked? @(re-frame/subscribe [::state/locked?])
+        handle-click #(re-frame/dispatch [::state/duplicate-course])]
+    (when course-locked?
+      [:<>
+       [actions-list-item {:icon     "copy"
+                           :text     "Duplicate Course"
+                           :on-click handle-click}]
+       [ui/info "This course is locked. Duplicate course to edit."]])))
 
 (defn- actions-list
   []
-  (let [handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
+  (let []
     [:div.actions
-     [:div.info
-      [ui/icon {:icon "info"}]
-      [:p "Drag over a level, lesson or activity to the left in the spot where you'd like to add."]]
      [:ul.actions-list
-      [actions-list-item {:icon "dnd"
-                          :text "Add Level"
-                          :data {:type  "level"
-                                 :level "add"}}]
-      [actions-list-item {:icon "dnd"
-                          :text "Add Lesson"
-                          :data {:type   "lesson"
-                                 :lesson "add"}}]
-      [actions-list-item {:icon     "games"
-                          :text     "Add Activity"
-                          :on-click handle-activities-click}]]]))
+      [add-content-actions]
+      [duplicate-course]]]))
 
 (defn- main-form
   [{:keys [course-slug]}]
@@ -307,7 +326,7 @@
                         :editable?   form-editable?
                         :can-lock    can-lock?
                         :on-save     handle-form-saved}]
-     (when-not (or form-editable? locked?)
+     (when-not form-editable?
        [actions-list])]))
 
 (defn- side-bar

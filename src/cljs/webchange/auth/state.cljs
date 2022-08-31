@@ -39,7 +39,8 @@
   ::super-admin?
   :<- [::current-user]
   (fn [{:keys [type]}]
-    (= "admin" type)))
+    (= "admin" type)
+    false))
 
 (re-frame/reg-sub
   ::bbs-admin?

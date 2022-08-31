@@ -54,7 +54,7 @@
         border-radius: 9999px;
     }
 
-    &:not([disabled]):hover,
+    &:not([disabled]).bbs--button--clickable:hover,
     &:not([disabled]).bbs--button--state-hover {
         cursor: pointer;
 
@@ -63,7 +63,7 @@
         }
     }
 
-    &:not([disabled]):active,
+    &:not([disabled]).bbs--button--clickable:active,
     &:not([disabled]).bbs--button--state-active {
 
     }
@@ -81,12 +81,12 @@
         &.bbs--button--color-#{$color} {
             background-color: bbs--button-color($color, $state: regular, $variant: opaque);
 
-            &:not([disabled]):hover,
+            &:not([disabled]).bbs--button--clickable:hover,
             &:not([disabled]).bbs--button--state-hover {
                 background-color: bbs--button-color($color, $state: hover, $variant: opaque);
             }
 
-            &:not([disabled]):active,
+            &:not([disabled]).bbs--button--clickable:active,
             &:not([disabled]).bbs--button--state-active {
                 background-color: bbs--button-color($color, $state: active, $variant: opaque);
             }
@@ -160,12 +160,12 @@
 
                 background-color: bbs--button-color($color, $state: regular, $variant: transparent);
 
-                &:not([disabled]):hover,
+                &:not([disabled]).bbs--button--clickable:hover,
                 &:not([disabled]).bbs--button--state-hover {
                     background-color: bbs--button-color($color, $state: hover, $variant: transparent);
                 }
 
-                &:not([disabled]):active,
+                &:not([disabled]).bbs--button--clickable:active,
                 &:not([disabled]).bbs--button--state-active {
                     background-color: bbs--button-color($color, $state: active, $variant: transparent);
                 }
@@ -190,12 +190,12 @@
 
                     background-color: bbs--color(#{$color});
 
-                    &:not([disabled]):hover,
+                    &:not([disabled]).bbs--button--clickable:hover,
                     &:not([disabled]).bbs--button--state-hover {
                         background-color: bbs--button-color($color, $state: hover);
                     }
 
-                    &:not([disabled]):active,
+                    &:not([disabled]).bbs--button--clickable:active,
                     &:not([disabled]).bbs--button--state-active {
                         background-color: bbs--button-color($color, $state: active);
                     }
