@@ -51,7 +51,13 @@
     }
 
     .show-global-selector {
-        min-width: 224px;
+        label {
+            white-space: nowrap;
+        }
+    }
+
+    .language-selector {
+        min-width: 180px;
     }
 
     .activities-search-input {
