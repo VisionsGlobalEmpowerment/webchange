@@ -3,6 +3,7 @@
     [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.course-data :as utils]
     [webchange.utils.links :as links]))
@@ -22,10 +23,14 @@
   [db value]
   (assoc db course-info-key value))
 
+(defn- get-course-info
+  [db]
+  (get db course-info-key))
+
 (re-frame/reg-sub
   ::course-info
   :<- [path-to-db]
-  #(get % course-info-key))
+  #(get-course-info %))
 
 ;; Course Data
 
@@ -385,3 +390,15 @@
     (let [link (links/activity-preview {:activity-id activity-id})]
       {::links/open-new-tab link})))
 
+(re-frame/reg-event-fx
+  ::duplicate-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [course-id (get-course-info db)]
+      {:dispatch [::warehouse/duplicate-course {:course-id course-id} {:on-success [::duplicate-course-success]}]})))
+
+(re-frame/reg-event-fx
+  ::duplicate-course-success
+  (fn [{:keys [_]} [_ duplicated-course]]
+    (let [course-slug (:slug duplicated-course)]
+      {:dispatch [::routes/redirect :course-edit :course-slug course-slug]})))

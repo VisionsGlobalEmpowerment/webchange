@@ -22,6 +22,7 @@
     [webchange.ui.components.icon.system.icon-check :as check]
     [webchange.ui.components.icon.system.icon-close :as close]
     [webchange.ui.components.icon.system.icon-contain :as contain]
+    [webchange.ui.components.icon.system.icon-copy :as copy]
     [webchange.ui.components.icon.system.icon-cover :as cover]
     [webchange.ui.components.icon.system.icon-cup :as cup]
     [webchange.ui.components.icon.system.icon-dialogue :as dialogue]
@@ -86,6 +87,7 @@
                         "check"           check/data
                         "close"           close/data
                         "contain"         contain/data
+                        "copy"            copy/data
                         "cover"           cover/data
                         "cup"             cup/data
                         "dialogue"        dialogue/data

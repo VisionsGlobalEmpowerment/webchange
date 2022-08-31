@@ -1,7 +1,6 @@
 (ns webchange.lesson-builder.widgets.audio-list.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.components.info.views :refer [info]]
     [webchange.lesson-builder.widgets.audio-list.item-edit.views :refer [item-edit]]
     [webchange.lesson-builder.widgets.audio-list.state :as state]
     [webchange.ui.index :as ui]))
@@ -65,4 +64,4 @@
          [audio-item (merge {:selected? (= url value)
                              :on-click  handle-item-click}
                             audio-data)])
-       [info "Record audio or upload audio and the file will automatically show in this box to select and edit when done."])]))
+       [ui/info "Record audio or upload audio and the file will automatically show in this box to select and edit when done."])]))
