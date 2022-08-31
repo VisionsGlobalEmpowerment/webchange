@@ -39,3 +39,9 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (assoc db :stage-key (rand))}))
+
+(re-frame/reg-event-fx
+  :stage/reset
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :stage-key (rand))}))

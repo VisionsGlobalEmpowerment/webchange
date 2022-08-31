@@ -297,7 +297,8 @@
   (fn [{:keys [db]} [_ {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-data data))}))
+                   (set-activity-data data))
+     :dispatch [:stage/reset]}))
 
 (re-frame/reg-event-fx
   ::add-image-failure
@@ -325,7 +326,8 @@
   (fn [{:keys [db]} [_ {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-data data))}))
+                   (set-activity-data data))
+     :dispatch [:stage/reset]}))
 
 (re-frame/reg-event-fx
   ::add-character-failure

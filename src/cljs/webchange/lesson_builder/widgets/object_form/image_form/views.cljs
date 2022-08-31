@@ -50,7 +50,7 @@
   (let [{:keys [editable? src]} data
         options (get editable? :edit-form {:scale      true
                                            :flip       true
-                                           :image-size true
+                                           :image-size false
                                            :visible    false})
 
         handle-change #(when (fn? on-change) (on-change %))

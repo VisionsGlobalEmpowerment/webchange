@@ -70,5 +70,6 @@
   (fn [{:keys [db]} [_ {:keys [image]}]]
     (let [current-key (get db :current-key)
           on-change (get-in db [current-key :on-change] #())]
-      (on-change {:url (:path image)})
+      (on-change {:url (:path image)
+                  :tags (:tags image)})
       {:dispatch [::menu-state/history-back]})))

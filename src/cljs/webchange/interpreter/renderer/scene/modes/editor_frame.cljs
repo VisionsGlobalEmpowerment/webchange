@@ -62,22 +62,11 @@
   ::change-position
   (fn [{:keys [db]} [_ position container props]]
     (let [name (editor/selected-object db)
-          current-scene (subs/current-scene db)
-          init-state (subs/scene-object db current-scene name)
-          state (->> (fix-position position props container)
-                     (merge init-state))
-          dx (Math/abs (- (:x state) (:x init-state)))
-          dy (Math/abs (- (:y state) (:y init-state)))
-          delta 1]
-      (when (or (> dx delta) (> dy delta))
-        (logger/trace-folded-defs (str "change position: " name) "x" (:x state) "y" (:y state))
-        {:dispatch-n (list [::edit-scene/update-object {:scene-id current-scene
-                                                        :target   name
-                                                        :state    state}]
-                           [::edit-scene/update-current-scene-object {:target name
-                                                                      :state  state}]
-                           [::edit-scene/save-current-scene current-scene]
-                           [::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])}))))
+          state (fix-position position props container)]
+      (logger/trace-folded-defs (str "change position: " name) "x" (:x state) "y" (:y state))
+      {:dispatch-n (list 
+                    [::editor/update-object name state]
+                    #_[::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])})))
 
 (defn- handle-frame-click
   [component params]

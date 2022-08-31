@@ -38,7 +38,10 @@
   ::set-image
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:form :image] value)}))
+    (let [name (:name value)]
+      {:db (cond-> db
+                   :always (assoc-in [:form :image] value)
+                   (some? name) (assoc-in [:form :name] name))})))
 
 (re-frame/reg-event-fx
   ::apply
