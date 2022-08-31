@@ -119,6 +119,12 @@
                      :type (:type data)})
   (get-account user-id))
 
+(defn update-account-last-login
+  [user-id last-login]
+  (db/update-account-last-login! {:id         user-id
+                                  :last_login last-login})
+  (get-account user-id))
+
 (defn change-password
   [user-id {:keys [password]}]
   (let [hashed-password (hashers/derive password)]

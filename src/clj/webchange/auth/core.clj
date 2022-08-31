@@ -18,11 +18,17 @@
   (let [{teacher-id :id school-id :school-id} (db/get-teacher-by-user {:user_id user-id})]
     (assoc user :teacher-id teacher-id :school-id school-id)))
 
+(defn- update-user-last-login
+  [user-data]
+  (->> (jt/local-date-time)
+       (accounts/update-account-last-login (:id user-data))))
+
 (defn teacher-login!
   [{:keys [email password]}]
   (if-let [user (db/find-user-by-email {:email email})]
     (if (credentials-valid? user password)
-      [true (-> user user->teacher accounts/visible-user)]
+      (do (update-user-last-login user)
+          [true (-> user user->teacher accounts/visible-user)])
       [false error-invalid-credentials])
     [false error-invalid-credentials]))
 

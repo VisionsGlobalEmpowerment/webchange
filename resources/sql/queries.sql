@@ -41,6 +41,12 @@ UPDATE users
 SET first_name = :first_name, last_name = :last_name, type = :type
 WHERE id = :id
 
+-- :name update-account-last-login! :! :n
+-- :doc edit user
+UPDATE users
+SET last_login = :last_login
+WHERE id = :id
+
 -- :name get-user :? :1
 -- :doc retrieves a user record given the id
 SELECT * FROM users
