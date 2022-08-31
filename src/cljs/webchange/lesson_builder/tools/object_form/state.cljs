@@ -51,6 +51,12 @@
     {:db       (update-in db [:objects object-name] merge data-patch)
      :dispatch [::state-renderer/set-scene-object-state object-name data-patch]}))
 
+(re-frame/reg-event-fx
+  ::change-activity-data-object
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ object-name data-patch]]
+    {:db       (update-in db [:objects (keyword object-name)] merge data-patch)}))
+
 (defn- get-object-keys-by-tag
   "Return object names for each object in scene with given tag"
   [activity-data tag]
@@ -86,6 +92,10 @@
   :main-editor-frame
   [::show-object-form])
 
+(editor-state/register-update-object-handler
+  :main-editor-frame
+  [::change-activity-data-object])
+
 (re-frame/reg-event-fx
   ::show-object-form
   [(i/path path-to-db)]
@@ -93,7 +103,8 @@
     {:db       (-> db
                    (assoc :target target)
                    (assoc :objects {}))
-     :dispatch [::menu-state/open-component :object-form]}))
+     :dispatch-n [[::menu-state/open-component :object-form]
+                  [::init-object target]]}))
 
 (re-frame/reg-event-fx
   ::apply

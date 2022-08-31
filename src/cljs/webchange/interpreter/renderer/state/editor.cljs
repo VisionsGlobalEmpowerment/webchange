@@ -6,11 +6,16 @@
 
 (def editor-objects (atom {}))
 (defonce select-object-handlers (atom {}))
+(defonce update-object-handlers (atom {}))
 
 (defn register-select-object-handler
   [stage-id key handler]
   (swap! select-object-handlers assoc key {:stage-id stage-id
                                            :handler  handler}))
+
+(defn register-update-object-handler
+  [key handler]
+  (swap! update-object-handlers assoc key handler))
 
 (defn hide-frames
   []
@@ -63,3 +68,13 @@
   (fn [[previous-target current-target]]
     (when previous-target (let [{:keys [deselect]} previous-target] (deselect)))
     (when current-target (let [{:keys [select]} current-target] (select)))))
+
+(re-frame/reg-event-fx
+  ::update-object
+  (fn [{:keys [db]} [_ target state]]
+    (let [previous-target (get-in db (path-to-db [:editor :selected-object]))
+          handlers (->> @update-object-handlers
+                        (map second)
+                        (map #(conj % target state))
+                        (into []))]
+      {:dispatch-n handlers})))

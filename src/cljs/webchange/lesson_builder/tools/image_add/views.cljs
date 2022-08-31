@@ -21,7 +21,8 @@
        [ui/note {:text "Choose an image from our library or upload a new one."}]
        [select-image {:label "Image"
                       :value (:src image-value)
-                      :on-change #(re-frame/dispatch [::state/set-image {:src (:url %)}])}]
+                      :on-change #(re-frame/dispatch [::state/set-image {:src (:url %)
+                                                                         :name (-> % :tags last :name)}])}]
        [ui/button {:class-name "apply-button"
                    :on-click #(re-frame/dispatch [::state/apply])}
         "Apply"]])))
