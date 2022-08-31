@@ -156,7 +156,7 @@
         &.bbs--switch--color-#{$color} {
             input[type="checkbox"] + label {
                 &::after {
-                    background-color: bbs--color($color, $variant: light);
+                    background-color: bbs--color(grey-5);
                 }
             }
 

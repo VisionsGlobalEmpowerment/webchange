@@ -5,13 +5,13 @@
 
     .page--activity-edit--content {
         align-items: center;
+        min-width: 640px;
     }
 
     .activity-form {
         display: flex;
         flex-direction: column;
         gap: 18px;
-        min-width: 640px;
 
         .header {
             background-color: #ffffff;
