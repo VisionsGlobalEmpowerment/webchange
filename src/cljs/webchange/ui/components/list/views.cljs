@@ -84,8 +84,9 @@
                           (when (fn? on-click)
                             (on-click %)))]
     [button (merge {:color "grey-3"}
-                   props
-                   {:on-click handle-click})]))
+                   (dissoc props :on-click)
+                   (when (fn? on-click)
+                     {:on-click handle-click}))]))
 
 (defn- item-actions
   [{:keys [actions]}]
