@@ -19,6 +19,24 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc db :form {:name ""})}))
 
+(re-frame/reg-event-fx
+  ::reset
+  (fn [{:keys [db]} [_]]
+    {:db (dissoc db path-to-db)}))
+
+;;name
+
+(def name-error-key :name-error)
+
+(defn- set-name-error
+  [db value]
+  (assoc db name-error-key value))
+
+(re-frame/reg-sub
+  ::name-error
+  :<- [path-to-db]
+  #(get % name-error-key))
+
 (re-frame/reg-sub
   ::name
   :<- [path-to-db]
@@ -34,6 +52,13 @@
   ::image
   :<- [path-to-db]
   #(get-in % [:form :image]))
+
+(re-frame/reg-sub
+  ::image-selected?
+  :<- [::image]
+  (fn [image]
+    (-> (get image :src)
+        (some?))))
 
 (re-frame/reg-event-fx
   ::set-image
@@ -55,6 +80,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [data (get db :form)]
-      {:dispatch-n [[::lesson-builder-state/add-image data]
-                    [::menu-state/history-back]]})))
+      (cond
+        (empty? (:name data)) {:db (set-name-error db "Name is required")}
+        :default {:dispatch-n [[::lesson-builder-state/add-image data]
+                               [::menu-state/history-back]]}))))
 

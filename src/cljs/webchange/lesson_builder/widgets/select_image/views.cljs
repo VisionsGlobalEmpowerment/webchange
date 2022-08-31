@@ -15,7 +15,7 @@
       (.item 0)))
 
 (defn select-image
-  [{:keys [label value key hide-preview?] :as props}]
+  [{:keys [class-name-image label value key hide-preview?] :as props}]
   (r/with-let [key (or key (swap! last-key inc))
                _ (re-frame/dispatch [::state/init key props])
                file-input (atom nil)]
@@ -28,14 +28,15 @@
        [:div.options
         (when-not hide-preview?
           ^{:key value}
-          [ui/image {:src value}])
+          [ui/image {:src        value
+                     :class-name class-name-image}])
         [:input {:type      "file"
                  :accept    ["gif" "jpg" "jpeg" "png"]
                  :on-change #(-> % change-event->file handle-upload)
                  :ref       #(reset! file-input %)}]
         [:div.actions
          [ui/button {:on-click #(re-frame/dispatch [::state/show-choose-image key])
-                     :color "blue-1"}
+                     :color    "blue-1"}
           "Open Library"]
          [ui/button {:on-click #(.click @file-input)}
           (if uploading? "Uploading..." "Upload New")]]]]
@@ -47,6 +48,6 @@
   (let [handle-click #(re-frame/dispatch [::state/select-image {:image %}])]
     [:div.widget--choose-image-overlay
      [:h1 "Choose Image"]
-     [image-library {:type "etc"
+     [image-library {:type        "etc"
                      :show-search true
-                     :on-click handle-click}]]))
+                     :on-click    handle-click}]]))
