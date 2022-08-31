@@ -8,7 +8,8 @@
   [:div (cond-> {:class-name (ui/get-class-name {"component--block" true
                                                  class-name         (some? class-name)})}
                 (fn? on-click) (assoc :on-click on-click))
-   [:div.component--header title]
+   (when (some? title)
+     [:div.component--header title])
    (->> (r/current-component)
         (r/children)
         (into [:div {:class-name (ui/get-class-name {"block--content"    true
