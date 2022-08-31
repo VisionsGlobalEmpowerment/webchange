@@ -126,8 +126,10 @@
   [animation-data]
   (let [skeleton (get animation-data :name)
         skin (get animation-data :skin)
-        head (get-in animation-data [:skin-names :head])
-        clothes (get-in animation-data [:skin-names :clothes])]
+        skin-names (or (get animation-data :skin-names)
+                       (get animation-data :skin-params))
+        head (get skin-names :head)
+        clothes (get skin-names :clothes)]
     {:character (case skeleton
                   "child" (-> head
                               (clojure.string/split #"-")

@@ -51,10 +51,17 @@
            :skin-params skin})
         (assoc :change-skeleton? change-skeleton?))))
 
+(defn- character->object-state
+  [{:keys [change-skeleton? name skin-params]}]
+  (cond-> {}
+          change-skeleton? (assoc :name name)
+          (string? skin-params) (assoc :skin skin-params)
+          (map? skin-params) (assoc :skin-names skin-params)))
+
 (defn- form-changed!
   [db data]
   (let [on-change (:on-change db)
-        skin-params (form-data->skin-params data)]
+        skin-params (-> data form-data->skin-params character->object-state)]
     (when (fn? on-change)
       (on-change skin-params))))
 
