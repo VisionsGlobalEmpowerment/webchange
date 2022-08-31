@@ -53,7 +53,7 @@
                    :icon       "games"
                    :icon-color "blue-2"
                    :class-name "page--create-activity--header"}]
-     [page/content {:title "Choose a Teamplate"
+     [page/content {:title "Choose a Template"
                     :icon "check"
                     :class-name "page--create-activity--content"}
       [template-list]]
