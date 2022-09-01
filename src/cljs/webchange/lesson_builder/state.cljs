@@ -344,6 +344,7 @@
           action (case object-type
                    :uploaded-image :remove-image
                    :added-character :remove-character
+                   :animation :remove-character
                    :question :remove-question
                    :anchor :remove-anchor)]
       {:db       (-> db (set-activity-saving true))
