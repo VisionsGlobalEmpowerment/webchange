@@ -6,11 +6,6 @@
     [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.utils.scene-data :as utils]))
 
-(re-frame/reg-sub
-  ::current-track
-  :<- [::script-state/current-track]
-  identity)
-
 (re-frame/reg-event-fx
   ::set-current-track
   (fn [_ [_ value]]
@@ -26,4 +21,23 @@
                                                            :value nil}))
            (map-indexed (fn [idx {:keys [title]}]
                           {:text  title
-                           :value idx}))))))
+                           :value idx}))
+           (sort-by :text)))))
+
+(re-frame/reg-sub
+  ::current-track
+  :<- [::script-state/current-track]
+  :<- [::available-tracks]
+  (fn [[current-track available-tracks]]
+    (->> available-tracks
+         (some (fn [{:keys [text value]}]
+                 (and (= value current-track) text))))))
+
+(re-frame/reg-sub
+  ::track-options
+  :<- [::available-tracks]
+  :<- [::script-state/current-track]
+  (fn [[available-tracks current-track]]
+    (filter (fn [{:keys [value]}]
+              (not= value current-track))
+            available-tracks)))

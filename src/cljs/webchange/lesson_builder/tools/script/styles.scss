@@ -11,6 +11,11 @@
     gap: 10px;
     flex: 1 1;
 
+    h2 {
+        @include bbs--noto-14-sb;
+        color: bbs--color(blue-1);
+    }
+
     .script--header {
         $color: bbs--color(grey-1);
 

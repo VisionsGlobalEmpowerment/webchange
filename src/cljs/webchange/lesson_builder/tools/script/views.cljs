@@ -17,6 +17,7 @@
   (let [dialogs @(re-frame/subscribe [::state/track-dialogs])]
     [:div.widget--script
      [header]
+     [:h2 "Choose Sequence"]
      [track-selector]
      [:div.widget--script--content
       (for [{:keys [id] :as dialog-data} dialogs]

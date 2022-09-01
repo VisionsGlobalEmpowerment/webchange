@@ -1,5 +1,54 @@
 .track-selector {
-    select {
-        border: none;
+    $options-list-height: 150px;
+
+    background-color: bbs--color(white);
+    border-radius: 6px;
+    padding: 8px 14px;
+    @include bbs--noto-14-r;
+
+    transition: background-color, color .3s ease-out;
+
+    &.track-selector--open {
+        background-color: bbs--color(blue-1);
+        color: bbs--color(white);
+    }
+
+    .track-selector--current-value {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include bbs--icon-size(26px);
+        @include bbs--icon-color(bbs--color(grey-3));
+
+        &:hover {
+            cursor: pointer;
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+
+        &.track-selector--current-value--open {
+            @include bbs--icon-color(bbs--color(yellow-1));
+        }
+    }
+
+    .track-selector--options-list {
+        max-height: 0;
+        overflow: auto;
+        transition: max-height .3s ease-out;
+
+        @include bbs--with-scrollbar;
+
+        &.track-selector--options-list--open {
+            max-height: $options-list-height;
+            padding: 8px;
+        }
+    }
+
+    .track-selector--options-list-item {
+        padding: 4px;
+
+        &:hover {
+            cursor: pointer;
+            color: bbs--color(yellow-1);
+        }
     }
 }
