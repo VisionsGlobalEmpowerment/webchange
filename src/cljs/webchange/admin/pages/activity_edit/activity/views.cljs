@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.activity.state :as state]
+    [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.pages.activity-edit.common.publish.views :as publish]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
     [webchange.admin.widgets.page.views :as page]
@@ -15,9 +16,9 @@
                 created-by-user updated-by-user]} @(re-frame/subscribe [::state/activity])
         locked? @(re-frame/subscribe [::state/activity-ui-locked?])
 
-        handle-edit-click #(re-frame/dispatch [::state/edit])
-        handle-play-click #(re-frame/dispatch [::state/play])
-        handle-duplicate-click #(re-frame/dispatch [::state/duplicate])
+        handle-edit-click #(re-frame/dispatch [::common-state/edit-activity])
+        handle-play-click #(re-frame/dispatch [::common-state/play-activity])
+        handle-duplicate-click #(re-frame/dispatch [::state/duplicate-activity])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])

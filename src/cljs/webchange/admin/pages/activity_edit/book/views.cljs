@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.pages.activity-edit.book.state :as state]
+    [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.pages.activity-edit.common.publish.views :as publish]
     [webchange.admin.widgets.book-info-form.views :refer [book-info-form]]
     [webchange.admin.widgets.page.views :as page]
@@ -15,8 +16,8 @@
                 created-by-user updated-by-user metadata] :as book-data} @(re-frame/subscribe [::state/book])
         locked? (:locked metadata)
 
-        handle-edit-click #(re-frame/dispatch [::state/edit])
-        handle-play-click #(re-frame/dispatch [::state/play])
+        handle-edit-click #(re-frame/dispatch [::common-state/edit-activity])
+        handle-play-click #(re-frame/dispatch [::common-state/play-activity])
         handle-duplicate-click #(re-frame/dispatch [::state/duplicate book-data])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])

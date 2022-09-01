@@ -124,13 +124,13 @@
   ::open-book
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ book-id]]
-    {:dispatch [::routes/redirect :book-edit :book-id book-id]}))
+    {:dispatch [::routes/redirect :book-edit :activity-id book-id]}))
 
 (re-frame/reg-event-fx
   ::edit-book
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ book-id]]
-    {:dispatch [::routes/redirect :book-edit :book-id book-id]}))
+    {:dispatch [::routes/redirect :book-edit :activity-id book-id]}))
 
 (re-frame/reg-event-fx
   ::select-language

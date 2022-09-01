@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/activity-edit--common)
@@ -55,7 +56,7 @@
   (fn [{:keys [db]} [_ data-patch]]
     {:db (update-activity db data-patch)}))
 
-;;
+;; activity properties
 
 (re-frame/reg-sub
   ::activity-id
@@ -99,9 +100,50 @@
     {:db (-> db (set-activity-loading false))}))
 
 
-;; init
+;; actions
 
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ {:keys [activity-id]}]]
     {:dispatch [::load-activity activity-id]}))
+
+(re-frame/reg-event-fx
+  ::duplicate-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [on-success]}]]
+    (let [{:keys [id name lang]} (get-activity db)]
+      {:db       (-> db (set-activity-loading true))
+       :dispatch [::warehouse/duplicate-activity
+                  {:activity-id id
+                   :data        {:name name
+                                 :lang lang}}
+                  {:on-success [::duplicate-activity-success on-success]
+                   :on-failure [::duplicate-activity-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::duplicate-activity-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-success activity-data]]
+    (cond-> {:db (-> db (set-activity-loading false))}
+            (some? on-success) (assoc :dispatch (conj on-success activity-data)))))
+
+(re-frame/reg-event-fx
+  ::duplicate-activity-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db (set-activity-loading false))}))
+
+(re-frame/reg-event-fx
+  ::edit-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [id]} (get-activity db)]
+      {:dispatch [::routes/redirect :lesson-builder :activity-id id]})))
+
+(re-frame/reg-event-fx
+  ::play-activity
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [id]} (get-activity db)
+          href (str "/s/" id)]                              ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
+      (js/window.open href "_blank"))))

@@ -3,8 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.activity-edit.common.state :as common-state]
-    [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.admin.routes :as routes]))
 
 (def path-to-db :page/book-edit)
 
@@ -61,87 +60,16 @@
     {:db       (-> db (assoc form-editable-key false))
      :dispatch [::common-state/init props]}))
 
-;; Remove
-
-(def removing-key :removing?)
-
-(defn- set-removing
-  [db value]
-  (assoc db removing-key value))
-
-(re-frame/reg-sub
-  ::removing?
-  :<- [path-to-db]
-  #(get % removing-key false))
-
-(re-frame/reg-event-fx
-  ::remove
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (common-state/get-activity db)]
-      {:db       (-> db (set-removing true))
-       :dispatch [::warehouse/archive-activity
-                  {:activity-id id}
-                  {:on-success [::remove-success]
-                   :on-failure [::remove-failure]}]})))
-
-(re-frame/reg-event-fx
-  ::remove-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db       (-> db (set-removing false))
-     :dispatch [::routes/redirect :books]}))
-
-(re-frame/reg-event-fx
-  ::remove-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-removing false))}))
-
-;;
-
-(re-frame/reg-event-fx
-  ::edit
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (common-state/get-activity db)]
-      {:dispatch [::routes/redirect :lesson-builder :activity-id id]})))
-
-(re-frame/reg-event-fx
-  ::play
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (common-state/get-activity db)
-          href (str "/s/" id)]                              ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
-      (js/window.open href "_blank"))))
-
 (re-frame/reg-event-fx
   ::duplicate
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ book-data]]
-    (let [{:keys [id name lang] :as data} book-data]
-      (print "::duplicate" id name lang)
-      (print "data" data)
-      {:db       (-> db (set-book-loading true))
-       :dispatch [::warehouse/duplicate-activity
-                  {:activity-id id
-                   :data        {:name name
-                                 :lang lang}}
-                  {:on-success [::duplicate-success]
-                   :on-failure [::duplicate-failure]}]})))
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::common-state/duplicate-activity {:on-success [::duplicate-success]}]}))
 
 (re-frame/reg-event-fx
   ::duplicate-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [id]}]]
-    {:dispatch-n [[::init {:book-id id}]
-                  [::routes/redirect :book-edit :book-id id]]}))
-
-(re-frame/reg-event-fx
-  ::duplicate-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-book-loading false))}))
+  (fn [{:keys [_]} [_ {:keys [id]}]]
+    (print "::duplicate-success book" id)
+    {:dispatch [::routes/redirect :book-edit :activity-id id]}))
 
 (re-frame/reg-event-fx
   ::open-books-page

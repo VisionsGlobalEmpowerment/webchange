@@ -4,8 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.routes :as routes]
-    [webchange.auth.state :as auth]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.auth.state :as auth]))
 
 (def path-to-db :page/activity-edit)
 
@@ -45,34 +44,10 @@
   (fn [{:keys [db]} [_]]
     {:db (update db form-editable-key not)}))
 
-;;
-
 (re-frame/reg-event-fx
   ::init
   (fn [{:keys [_]} [_ props]]
     {:dispatch [::common-state/init props]}))
-
-;;
-
-(re-frame/reg-event-fx
-  ::handle-data-changed
-  (fn [{:keys [_]} [_ activity-data-patch]]
-    {:dispatch [::common-state/update-activity-data activity-data-patch]}))
-
-(re-frame/reg-event-fx
-  ::edit
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (common-state/get-activity db)]
-      {:dispatch [::routes/redirect :lesson-builder :activity-id id]})))
-
-(re-frame/reg-event-fx
-  ::play
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (common-state/get-activity db)
-          href (str "/s/" id)]                              ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
-      (js/window.open href "_blank"))))
 
 (re-frame/reg-event-fx
   ::open-activities-page
@@ -90,27 +65,11 @@
 ;;
 
 (re-frame/reg-event-fx
-  ::duplicate
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id name lang]} (common-state/get-activity db)] ;;<< TODO
-      {:db       (-> db (common-state/set-activity-loading true))
-       :dispatch [::warehouse/duplicate-activity
-                  {:activity-id id
-                   :data        {:name name
-                                 :lang lang}}
-                  {:on-success [::duplicate-success]
-                   :on-failure [::duplicate-failure]}]})))
+  ::duplicate-activity
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::common-state/duplicate-activity {:on-success [::duplicate-success]}]}))
 
 (re-frame/reg-event-fx
   ::duplicate-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [id]}]]
-    {:dispatch-n [[::init {:activity-id id}]
-                  [::routes/redirect :activity-edit :activity-id id]]}))
-
-(re-frame/reg-event-fx
-  ::duplicate-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (common-state/set-activity-loading false))}))
+  (fn [{:keys [_]} [_ {:keys [id]}]]
+    {:dispatch [::routes/redirect :activity-edit :activity-id id]}))
