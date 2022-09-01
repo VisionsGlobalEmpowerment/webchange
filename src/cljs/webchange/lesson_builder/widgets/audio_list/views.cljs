@@ -39,7 +39,7 @@
                                   :on-cancel handle-edit-name-cancel})]
         name)]
      [:div.audio-item--actions
-      [ui/button {:icon       "edit"
+      [ui/button {:icon       (if (= mode "edit") "check" "edit")
                   :color      "grey-3"
                   :class-name (ui/get-class-name {"audio-item--button"         true
                                                   "audio-item--button--active" (= mode "edit")})
@@ -52,16 +52,18 @@
                   :on-click   handle-remove-click}]]]))
 
 (defn audio-list
-  [{:keys [value on-change]}]
-  (let [available-audios @(re-frame/subscribe [::state/available-audios])
-        handle-item-click (fn [url]
-                            (when (fn? on-change)
-                              (on-change url)))]
-    [:div.widget--audio-list
-     (if-not (empty? available-audios)
-       (for [{:keys [url] :as audio-data} available-audios]
-         ^{:key url}
-         [audio-item (merge {:selected? (= url value)
-                             :on-click  handle-item-click}
-                            audio-data)])
-       [ui/info "Record audio or upload audio and the file will automatically show in this box to select and edit when done."])]))
+  [{:keys [value on-change] :as props}]
+  (re-frame/dispatch [::state/init props])
+  (fn [{:keys [value on-change]}]
+    (let [available-audios @(re-frame/subscribe [::state/available-audios])
+          handle-item-click (fn [url]
+                              (when (fn? on-change)
+                                (on-change url)))]
+      [:div.widget--audio-list
+       (if-not (empty? available-audios)
+         (for [{:keys [url] :as audio-data} available-audios]
+           ^{:key url}
+           [audio-item (merge {:selected? (= url value)
+                               :on-click  handle-item-click}
+                              audio-data)])
+         [ui/info "Record audio or upload audio and the file will automatically show in this box to select and edit when done."])])))

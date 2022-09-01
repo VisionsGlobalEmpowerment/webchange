@@ -59,3 +59,15 @@
   (fn [{:keys [db]} [_]]
     {:dispatch-n [[::state/save-activity]
                   [:layout/reset-state]]}))
+
+(re-frame/reg-event-fx
+  ::set-apply-disabled
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :apply-disabled? value)}))
+
+(re-frame/reg-sub
+  ::apply-disabled?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :apply-disabled? false)))

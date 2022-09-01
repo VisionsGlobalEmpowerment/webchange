@@ -17,7 +17,9 @@
   (let [action-path @(re-frame/subscribe [::state/selected-action])
         selected-audio @(re-frame/subscribe [::state/selected-audio])
         handle-audio-changed #(re-frame/dispatch [::state/set-selected-audio action-path %])
-        handle-apply #(re-frame/dispatch [::state/apply])]
+        handle-audio-item-mode-changed #(re-frame/dispatch [::state/set-apply-disabled %])
+        handle-apply #(re-frame/dispatch [::state/apply])
+        apply-disabled? @(re-frame/subscribe [::state/apply-disabled?])]
     [:div.tool--voice-translate--audio-manager
      [:h1.audio-manager--header
       "Voice & Translate"]
@@ -27,8 +29,11 @@
      [block {:title      "Select Audio"
              :class-name "audio-list-wrapper"}
       [audio-list {:value     selected-audio
-                   :on-change handle-audio-changed}]]
+                   :on-change handle-audio-changed
+                   :on-audio-item-mode-change handle-audio-item-mode-changed}]]
      [ui/button {:class-name "audio-manager-apply"
+                 :disabled? apply-disabled?
+                 :color (if apply-disabled? "grey-4" "yellow-1")
                  :on-click handle-apply}
       "Apply"]]))
 

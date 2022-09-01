@@ -15,6 +15,12 @@
   (fn [db]
     (get db path-to-db)))
 
+(re-frame/reg-event-fx
+  ::init
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [on-audio-item-mode-change]}]]
+    {:db (assoc db :on-audio-item-mode-change on-audio-item-mode-change)}))
+
 (re-frame/reg-sub
   ::available-audios
   :<- [::state/activity-data]
@@ -40,7 +46,15 @@
   ::set-item-mode
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ item-url value]]
-    {:db (assoc-in db [item-mode-key item-url] value)}))
+    (let [item-modes (-> (get db item-mode-key)
+                         (assoc item-url value))
+          has-edit? (->> item-modes
+                         vals
+                         (some #{"edit"}))
+          on-audio-item-mode-change (:on-audio-item-mode-change db)]
+      (when (fn? on-audio-item-mode-change)
+        (on-audio-item-mode-change has-edit?))
+      {:db (assoc db item-mode-key item-modes)})))
 
 (re-frame/reg-event-fx
   ::remove
