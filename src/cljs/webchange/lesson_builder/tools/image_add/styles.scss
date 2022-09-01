@@ -1,13 +1,27 @@
 .widget--image-add {
+    height: 100%;
     max-width: 280px;
 
     display: flex;
     flex-direction: column;
-    gap: 18px;
 
     justify-content: center;
 
+    .form-wrapper {
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+
+    }
+
+    .image-add--preview {
+        $size: 133px;
+        width: $size;
+        height: $size;
+    }
+
     .apply-button {
-	border-radius: 30px;
+        border-radius: 30px;
     }
 }

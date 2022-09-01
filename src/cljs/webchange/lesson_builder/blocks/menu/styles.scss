@@ -60,7 +60,7 @@
         @include bbs--noto-14-sb;
     }
 
-    label {
+    label:not(.bbs--input-error) {
         color: bbs--color(grey-1);
     }
 
