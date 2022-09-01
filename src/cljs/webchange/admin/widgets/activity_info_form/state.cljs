@@ -71,7 +71,7 @@
     {:db         (-> db
                      (reset-form-data)
                      (set-data-loading true)
-                     (widgets/set-callbacks (select-keys props [:on-remove :on-lock]))
+                     (widgets/set-callbacks (select-keys props [:on-remove]))
                      (assoc :activity-id activity-id)
                      (assoc :is-admin? (= "admin" (:type current-user))))
      :dispatch-n [[::warehouse/load-activity

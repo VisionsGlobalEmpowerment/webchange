@@ -1,7 +1,8 @@
-(ns webchange.admin.pages.book-edit.views
+(ns webchange.admin.pages.activity-edit.book.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.pages.book-edit.state :as state]
+    [webchange.admin.pages.activity-edit.book.state :as state]
+    [webchange.admin.pages.activity-edit.common.publish.views :as publish]
     [webchange.admin.widgets.book-info-form.views :refer [book-info-form]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
@@ -11,19 +12,17 @@
 (defn- book-form
   [{:keys [book-id]}]
   (let [{:keys [name preview created-at updated-at
-                created-by-user updated-by-user metadata]} @(re-frame/subscribe [::state/book])
+                created-by-user updated-by-user metadata] :as book-data} @(re-frame/subscribe [::state/book])
         locked? (:locked metadata)
-        
+
         handle-edit-click #(re-frame/dispatch [::state/edit])
         handle-play-click #(re-frame/dispatch [::state/play])
-        handle-duplicate-click #(re-frame/dispatch [::state/duplicate])
-        
+        handle-duplicate-click #(re-frame/dispatch [::state/duplicate book-data])
+
         form-editable? @(re-frame/subscribe [::state/form-editable?])
-        removing? @(re-frame/subscribe [::state/removing?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
         handle-save #(re-frame/dispatch [::state/set-form-editable false])
-        handle-remove #(re-frame/dispatch [::state/open-books-page])
-        handle-lock #(re-frame/dispatch [::state/set-locked %])]
+        handle-remove #(re-frame/dispatch [::state/open-books-page])]
     [:div.book-form
      [:div.header
       [:div.header-top
@@ -69,11 +68,12 @@
                        :on-save    handle-save
                        :on-cancel  handle-save
                        :on-remove  handle-remove
-                       :on-lock    handle-lock
-                       :class-name "info-form"}]]]))
+                       :class-name "info-form"
+                       :controls   {:label     "Publishing Details"
+                                    :component publish/publish-controls}}]]]))
 
 (defn page
-  [{:keys [book-id] :as props}]
+  [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [loading? @(re-frame/subscribe [::state/book-loading?])]
@@ -83,4 +83,4 @@
                       :transparent? true}
         (if loading?
           [ui/loading-overlay]
-          [book-form {:book-id book-id}])]])))
+          [book-form {:book-id activity-id}])]])))

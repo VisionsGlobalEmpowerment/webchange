@@ -1,7 +1,8 @@
-(ns webchange.admin.pages.book-edit.state
+(ns webchange.admin.pages.activity-edit.book.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]))
 
@@ -22,25 +23,13 @@
 
 (re-frame/reg-sub
   ::book-loading?
-  :<- [path-to-db]
-  #(get % book-loading-key false))
-
-;; book Data
-
-(def book-key :book)
-
-(defn- get-book
-  [db]
-  (get db book-key))
-
-(defn- set-book
-  [db value]
-  (assoc db book-key value))
+  :<- [::common-state/activity-loading?]
+  identity)
 
 (re-frame/reg-sub
   ::book
-  :<- [path-to-db]
-  #(get-book %))
+  :<- [::common-state/activity-data]
+  identity)
 
 ;; Form editable
 
@@ -68,28 +57,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [book-id]}]]
-    {:db       (-> db
-                   (set-book-loading true)
-                   (assoc form-editable-key false))
-     :dispatch [::warehouse/load-activity
-                {:activity-id book-id}
-                {:on-success [::load-book-success]
-                 :on-failure [::load-book-failure]}]}))
-
-(re-frame/reg-event-fx
-  ::load-book-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (set-book-loading false)
-             (set-book data))}))
-
-(re-frame/reg-event-fx
-  ::load-book-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (-> db (set-book-loading false))}))
+  (fn [{:keys [db]} [_ props]]
+    {:db       (-> db (assoc form-editable-key false))
+     :dispatch [::common-state/init props]}))
 
 ;; Remove
 
@@ -108,7 +78,7 @@
   ::remove
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-book db)]
+    (let [{:keys [id]} (common-state/get-activity db)]
       {:db       (-> db (set-removing true))
        :dispatch [::warehouse/archive-activity
                   {:activity-id id}
@@ -134,27 +104,29 @@
   ::edit
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-book db)]
+    (let [{:keys [id]} (common-state/get-activity db)]
       {:dispatch [::routes/redirect :lesson-builder :activity-id id]})))
 
 (re-frame/reg-event-fx
   ::play
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [id]} (get-book db)
-          href (str "/s/" id)] ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
+    (let [{:keys [id]} (common-state/get-activity db)
+          href (str "/s/" id)]                              ;; not working for main module [::routes/redirect :activity-sandbox :scene-id id]
       (js/window.open href "_blank"))))
 
 (re-frame/reg-event-fx
   ::duplicate
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [id name lang]} (get-book db)]
+  (fn [{:keys [db]} [_ book-data]]
+    (let [{:keys [id name lang] :as data} book-data]
+      (print "::duplicate" id name lang)
+      (print "data" data)
       {:db       (-> db (set-book-loading true))
        :dispatch [::warehouse/duplicate-activity
                   {:activity-id id
-                   :data {:name name
-                          :lang lang}}
+                   :data        {:name name
+                                 :lang lang}}
                   {:on-success [::duplicate-success]
                    :on-failure [::duplicate-failure]}]})))
 
@@ -177,8 +149,3 @@
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :books]}))
 
-(re-frame/reg-event-fx
-  ::set-locked
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:book :metadata :locked] value)}))

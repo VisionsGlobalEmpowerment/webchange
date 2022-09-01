@@ -35,9 +35,9 @@
                                 ["/" [#"[\w-%]+" :account-type]]     :accounts}
              "/library"        {"/activities" {""                              :activities
                                                ["/" [#"[\w-%]+" :activity-id]] :activity-edit}
-                                "/books"      {""                          :books
-                                               "create"                    :book-create
-                                               ["/" [#"[\w-%]+" :book-id]] :book-edit}}
+                                "/books"      {""                              :books
+                                               "create"                        :book-create
+                                               ["/" [#"[\w-%]+" :activity-id]] :book-edit}}
              "/create"         {""          :create
                                 "/activity" :create-activity
                                 "/book"     :create-book}
