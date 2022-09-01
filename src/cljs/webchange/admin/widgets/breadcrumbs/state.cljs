@@ -63,28 +63,29 @@
   :<- [::custom-current-node]
   :<- [::state/previous-page]
   (fn [[{:keys [handler props] :as route-params} current-node previous-page]]
-    (if-not (= handler :dashboard)
-      (let [path-1 (-> (get-path handler routes/sitemap) (butlast))
-            path-2 (get-path (get previous-page :handler handler) routes/sitemap)
-            path (if (shorter-path? path-1 path-2) path-2 path-1)
+    (let [show-breadcrumbs? (not (or (= handler :dashboard) (= handler :lesson-builder)))]
+      (if show-breadcrumbs?
+        (let [path-1 (-> (get-path handler routes/sitemap) (butlast))
+              path-2 (get-path (get previous-page :handler handler) routes/sitemap)
+              path (if (shorter-path? path-1 path-2) path-2 path-1)
 
-            last-node (cond-> {:route      {:page  handler
-                                            :props props}
-                               :text       (routes/get-title route-params
-                                                             {:with-root? false})
-                               :last-item? true}
-                              (some? current-node) (merge current-node))]
-        (conj (->> path
-                   (take-last 1)
-                   (map (fn [step]
-                          {:route {:page  step
-                                   :props props}
-                           :text  (routes/get-title {:handler step
-                                                     :props   props}
-                                                    {:with-root? false})}))
-                   (vec))
-              last-node))
-      [])))
+              last-node (cond-> {:route      {:page  handler
+                                              :props props}
+                                 :text       (routes/get-title route-params
+                                                               {:with-root? false})
+                                 :last-item? true}
+                                (some? current-node) (merge current-node))]
+          (conj (->> path
+                     (take-last 1)
+                     (map (fn [step]
+                            {:route {:page  step
+                                     :props props}
+                             :text  (routes/get-title {:handler step
+                                                       :props   props}
+                                                      {:with-root? false})}))
+                     (vec))
+                last-node))
+        []))))
 
 (re-frame/reg-event-fx
   ::go-to-route
