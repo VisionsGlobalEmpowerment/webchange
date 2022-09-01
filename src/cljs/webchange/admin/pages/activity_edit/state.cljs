@@ -83,7 +83,9 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [activity-id]}]]
-    {:db       (set-activity-loading db true)
+    {:db       (-> db
+                   (set-activity-loading true)
+                   (assoc form-editable-key false))
      :dispatch [::warehouse/load-activity
                 {:activity-id activity-id}
                 {:on-success [::load-activity-success]

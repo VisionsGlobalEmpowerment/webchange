@@ -69,7 +69,9 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [book-id]}]]
-    {:db       (set-book-loading db true)
+    {:db       (-> db
+                   (set-book-loading true)
+                   (assoc form-editable-key false))
      :dispatch [::warehouse/load-activity
                 {:activity-id book-id}
                 {:on-success [::load-book-success]
