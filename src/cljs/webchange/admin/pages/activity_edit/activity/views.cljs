@@ -14,7 +14,7 @@
   [{:keys [activity-id]}]
   (let [{:keys [name preview created-at updated-at
                 created-by-user updated-by-user]} @(re-frame/subscribe [::state/activity])
-        locked? @(re-frame/subscribe [::state/activity-ui-locked?])
+        locked? @(re-frame/subscribe [::common-state/activity-ui-locked?])
 
         handle-edit-click #(re-frame/dispatch [::common-state/edit-activity])
         handle-play-click #(re-frame/dispatch [::common-state/play-activity])

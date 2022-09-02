@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
+    [webchange.auth.state :as auth]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/activity-edit--common)
@@ -72,6 +73,13 @@
   ::activity-published?
   :<- [::activity-data]
   #(= "visible" (:status %)))
+
+(re-frame/reg-sub
+  ::activity-ui-locked?
+  :<- [::auth/super-admin?]
+  :<- [::activity-locked?]
+  (fn [[super-admin? activity-locked?]]
+    (and activity-locked? (not super-admin?))))
 
 ;; load activity
 

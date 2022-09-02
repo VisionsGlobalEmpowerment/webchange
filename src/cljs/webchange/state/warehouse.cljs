@@ -444,8 +444,7 @@
   (fn [{:keys [_]} [_ {:keys [activity-id]} handlers]]
     (create-request {:key    :load-activity
                      :method :get
-                     :uri    (str "/api/activities/" activity-id)
-                     :delay 3000}
+                     :uri    (str "/api/activities/" activity-id)}
                     handlers)))
 
 (re-frame/reg-event-fx

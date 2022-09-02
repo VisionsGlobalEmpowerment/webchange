@@ -50,13 +50,6 @@
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :activities]}))
 
-(re-frame/reg-sub
-  ::activity-ui-locked?
-  :<- [::auth/super-admin?]
-  :<- [::common-state/activity-locked?]
-  (fn [[super-admin? activity-locked?]]
-    (and activity-locked? (not super-admin?))))
-
 ;;
 
 (re-frame/reg-event-fx

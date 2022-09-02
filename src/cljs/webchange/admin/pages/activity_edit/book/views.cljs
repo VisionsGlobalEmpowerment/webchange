@@ -13,8 +13,8 @@
 (defn- book-form
   [{:keys [book-id]}]
   (let [{:keys [name preview created-at updated-at
-                created-by-user updated-by-user metadata] :as book-data} @(re-frame/subscribe [::state/book])
-        locked? (:locked metadata)
+                created-by-user updated-by-user] :as book-data} @(re-frame/subscribe [::state/book])
+        locked? @(re-frame/subscribe [::common-state/activity-ui-locked?])
 
         handle-edit-click #(re-frame/dispatch [::common-state/edit-activity])
         handle-play-click #(re-frame/dispatch [::common-state/play-activity])
