@@ -63,26 +63,32 @@
   ::course-levels
   :<- [::course-data]
   (fn [course-data]
-    (->> (get course-data :levels [])
-         (map-indexed (fn [idx level-data]
-                        (let [level-index (inc idx)]
-                          {:idx            level-index
-                           :name           (str "Level " level-index)
-                           :lessons-number (-> (utils/get-lessons-data level-data)
-                                               (count))}))))))
+    (let [levels (get course-data :levels [])
+          levels-number (count levels)]
+      (map-indexed (fn [idx level-data]
+                     (let [level-index (inc idx)]
+                       {:id             (str idx "of" levels-number)
+                        :idx            level-index
+                        :name           (str "Level " level-index)
+                        :lessons-number (-> (utils/get-lessons-data level-data)
+                                            (count))}))
+                   levels))))
 
 (re-frame/reg-sub
   ::level-lessons
   :<- [::course-data]
   (fn [course-data [_ level-idx]]
-    (->> (dec level-idx)
-         (utils/get-lessons-data course-data)
-         (map-indexed (fn [idx lesson-data]
-                        (let [lesson-index (inc idx)]
-                          {:idx               lesson-index
-                           :name              (str "Lesson " lesson-index)
-                           :activities-number (-> (utils/get-activities-data lesson-data)
-                                                  (count))}))))))
+    (let [lessons (->> (dec level-idx)
+                       (utils/get-lessons-data course-data))
+          lessons-number (count lessons)]
+      (map-indexed (fn [idx lesson-data]
+                     (let [lesson-index (inc idx)]
+                       {:id                (str idx "of" lessons-number)
+                        :idx               lesson-index
+                        :name              (str "Lesson " lesson-index)
+                        :activities-number (-> (utils/get-activities-data lesson-data)
+                                               (count))}))
+                   lessons))))
 
 (re-frame/reg-sub
   ::lesson-activities
