@@ -42,7 +42,8 @@
          (some #{icon-side} ["left" "right"])
          (some #{shape} ["rectangle" "rounded"])
          (some #{text-align} ["left" "center" "right"])]}
-  (let [children (->> (r/current-component)
+  (let [color (if disabled? "grey-4" color)
+        children (->> (r/current-component)
                       (r/children))
         icon-button? (and (nil? text) (empty? children))
         show-icon? (and (some? icon)

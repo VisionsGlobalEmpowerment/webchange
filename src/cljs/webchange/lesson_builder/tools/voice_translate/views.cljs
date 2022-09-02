@@ -28,13 +28,12 @@
       [audio-add]]
      [block {:title      "Select Audio"
              :class-name "audio-list-wrapper"}
-      [audio-list {:value     selected-audio
-                   :on-change handle-audio-changed
+      [audio-list {:value                     selected-audio
+                   :on-change                 handle-audio-changed
                    :on-audio-item-mode-change handle-audio-item-mode-changed}]]
      [ui/button {:class-name "audio-manager-apply"
-                 :disabled? apply-disabled?
-                 :color (if apply-disabled? "grey-4" "yellow-1")
-                 :on-click handle-apply}
+                 :disabled?  apply-disabled?
+                 :on-click   handle-apply}
       "Apply"]]))
 
 (defn audio-editor
