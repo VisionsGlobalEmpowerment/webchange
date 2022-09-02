@@ -16,10 +16,12 @@
 
 (defn- images-list
   [{:keys [data on-click]}]
-  [:div {:class-name "widget--image-library--list"}
-   (for [{:keys [id] :as image-data} data]
-     ^{:key id}
-     [images-list-item (assoc image-data :on-click on-click)])])
+  (if (empty? data)
+    [:h2 "No Results Found"]
+    [:div {:class-name "widget--image-library--list"}
+     (for [{:keys [id] :as image-data} data]
+       ^{:key id}
+       [images-list-item (assoc image-data :on-click on-click)])]))
 
 (defn image-library
   [{:keys [open? show-search] :or {open? true show-search false}}]
