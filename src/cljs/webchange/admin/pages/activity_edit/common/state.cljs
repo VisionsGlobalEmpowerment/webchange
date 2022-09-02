@@ -127,15 +127,41 @@
     {:db       (-> db (set-init-props props))
      :dispatch [::load-activity activity-id]}))
 
+(def duplicate-window-state-key :duplicate-window-state)
+
+(def duplicate-window-default-state {:open?        false
+                                     :in-progress? false
+                                     :done?        false})
+
+(re-frame/reg-sub
+  ::duplicate-window-state
+  :<- [path-to-db]
+  #(get % duplicate-window-state-key duplicate-window-default-state))
+
+(re-frame/reg-event-fx
+  ::open-duplicate-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (update db duplicate-window-state-key merge {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-duplicate-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db duplicate-window-state-key duplicate-window-default-state)}))
+
 (re-frame/reg-event-fx
   ::duplicate-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [on-success]}]]
-    (let [{:keys [id name lang]} (get-activity db)]
-      {:db       (-> db (set-activity-loading true))
+    (let [{:keys [id name lang]} (get-activity db)
+          new-name (str "COPY: " name)]
+      {:db       (-> db
+                     (set-activity-loading true)
+                     (update duplicate-window-state-key merge {:in-progress? true}))
        :dispatch [::warehouse/duplicate-activity
                   {:activity-id id
-                   :data        {:name name
+                   :data        {:name new-name
                                  :lang lang}}
                   {:on-success [::duplicate-activity-success on-success]
                    :on-failure [::duplicate-activity-failure]}]})))
@@ -146,7 +172,11 @@
   (fn [{:keys [db]} [_ on-success {:keys [id] :as activity-data}]]
     (let [props (-> (get-init-props db)
                     (assoc :activity-id id))]
-      {:db         (-> db (set-activity-loading false))
+      {:db         (-> db
+                       (set-activity-loading false)
+                       (assoc :duplicated-activity-id id)
+                       (update duplicate-window-state-key merge {:in-progress? false
+                                                                 :done? true}))
        :dispatch-n (cond-> [[::init props]]                 ;; reset current activity data for new duplicated activity
                            (some? on-success) (conj (conj on-success activity-data)))})))
 
@@ -154,7 +184,9 @@
   ::duplicate-activity-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (-> db (set-activity-loading false))}))
+    {:db (-> db
+             (set-activity-loading false)
+             (update duplicate-window-state-key merge {:in-progress? false}))}))
 
 (re-frame/reg-event-fx
   ::edit-activity

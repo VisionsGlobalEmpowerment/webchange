@@ -10,6 +10,21 @@
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
 
+(defn- duplicate-window
+  []
+  (let [{:keys [done? open? in-progress?]} @(re-frame/subscribe [::common-state/duplicate-window-state])
+        duplicate #(re-frame/dispatch [::common-state/duplicate-activity])
+        close-window #(re-frame/dispatch [::common-state/close-duplicate-window])
+        confirm-duplicated #(re-frame/dispatch [::state/handle-duplicated])]
+    [ui/confirm {:open?        open?
+                 :loading?     in-progress?
+                 :confirm-text (if done? "Ok" "Yes")
+                 :on-confirm   (if done? confirm-duplicated duplicate)
+                 :on-cancel    (when-not done? close-window)}
+     (if done?
+       "Activity successfully duplicated"
+       "Are you sure you want to duplicate book?")]))
+
 (defn- book-form
   [{:keys [book-id]}]
   (let [{:keys [name preview created-at updated-at
@@ -18,7 +33,7 @@
 
         handle-edit-click #(re-frame/dispatch [::common-state/edit-activity])
         handle-play-click #(re-frame/dispatch [::common-state/play-activity])
-        handle-duplicate-click #(re-frame/dispatch [::state/duplicate book-data])
+        handle-duplicate-click #(re-frame/dispatch [::common-state/open-duplicate-window])
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
@@ -71,7 +86,8 @@
                        :on-remove  handle-remove
                        :class-name "info-form"
                        :controls   {:label     "Publishing Details"
-                                    :component publish/publish-controls}}]]]))
+                                    :component publish/publish-controls}}]
+      [duplicate-window]]]))
 
 (defn page
   [{:keys [activity-id] :as props}]
