@@ -7,7 +7,6 @@
     [webchange.state.state :as state]
     [webchange.state.state-activity :as state-activity]
     [webchange.state.state-flipbook :as state-flipbook]
-    [webchange.utils.deep-merge :refer [deep-merge]]
     [webchange.utils.map :refer [ignore-keys]]))
 
 (defn path-to-db

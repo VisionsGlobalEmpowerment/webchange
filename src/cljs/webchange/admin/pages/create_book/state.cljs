@@ -117,7 +117,7 @@
                       (get db :form))
           validation-errors (validate ::book-spec/create-book data)]
       (if (nil? validation-errors)
-        {:db (assoc db :saving true)
+        {:db       (assoc db :saving true)
          :dispatch [::warehouse/create-book
                     {:data data}
                     {:on-success [::build-success]
@@ -128,8 +128,8 @@
   ::build-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [id]}]]
-    {:db (assoc db :saving true)
-     :dispatch [::routes/redirect :book-edit :book-id id]}))
+    {:db       (assoc db :saving true)
+     :dispatch [::routes/redirect :book-edit :activity-id id]}))
 
 (re-frame/reg-event-fx
   ::build-failure
@@ -156,12 +156,12 @@
   ::upload-cover
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ file]]
-    {:db (assoc db :uploading true)
+    {:db       (assoc db :uploading true)
      :dispatch [::warehouse/upload-file
                 {:file        file
                  :form-params [["type" "image"]]}
-                {:on-success          [::upload-cover-success]
-                 :on-failure          [::upload-cover-failure]}]}))
+                {:on-success [::upload-cover-success]
+                 :on-failure [::upload-cover-failure]}]}))
 
 (re-frame/reg-event-fx
   ::upload-cover-success
