@@ -4,8 +4,8 @@
     [webchange.admin.pages.activity-edit.book.state :as state]
     [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.pages.activity-edit.common.publish.views :as publish]
+    [webchange.admin.pages.activity-edit.common.views :as common-views]
     [webchange.admin.widgets.book-info-form.views :refer [book-info-form]]
-    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
@@ -77,11 +77,5 @@
   [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [loading? @(re-frame/subscribe [::state/book-loading?])]
-      [page/page {:class-name    "page--book-edit"
-                  :align-content "center"}
-       [page/content {:class-name   "page--book-edit--content"
-                      :transparent? true}
-        (if loading?
-          [ui/loading-overlay]
-          [book-form {:book-id activity-id}])]])))
+    [common-views/content-wrapper {:class-name "page--book-edit"}
+     [book-form {:book-id activity-id}]]))

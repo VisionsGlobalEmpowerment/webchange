@@ -14,11 +14,6 @@
     (get db path-to-db)))
 
 (re-frame/reg-sub
-  ::activity-loading?
-  :<- [::common-state/activity-loading?]
-  identity)
-
-(re-frame/reg-sub
   ::activity
   :<- [::common-state/activity-data]
   identity)

@@ -3,15 +3,11 @@
         background-color: rgba(0, 0, 0, 0);
     }
 
-    .page--activity-edit--content {
-        align-items: center;
-        min-width: 640px;
-    }
-
     .activity-form {
         display: flex;
         flex-direction: column;
         gap: 18px;
+        width: 672px;
 
         .header {
             background-color: #ffffff;

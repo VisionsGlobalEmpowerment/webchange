@@ -12,19 +12,6 @@
   (fn [db]
     (get db path-to-db)))
 
-;; book Loading
-
-(def book-loading-key :book-loading?)
-
-(defn- set-book-loading
-  [db value]
-  (assoc db book-loading-key value))
-
-(re-frame/reg-sub
-  ::book-loading?
-  :<- [::common-state/activity-loading?]
-  identity)
-
 (re-frame/reg-sub
   ::book
   :<- [::common-state/activity-data]
@@ -68,7 +55,6 @@
 (re-frame/reg-event-fx
   ::duplicate-success
   (fn [{:keys [_]} [_ {:keys [id]}]]
-    (print "::duplicate-success book" id)
     {:dispatch [::routes/redirect :book-edit :activity-id id]}))
 
 (re-frame/reg-event-fx

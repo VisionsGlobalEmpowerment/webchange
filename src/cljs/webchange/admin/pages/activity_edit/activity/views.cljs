@@ -4,8 +4,8 @@
     [webchange.admin.pages.activity-edit.activity.state :as state]
     [webchange.admin.pages.activity-edit.common.state :as common-state]
     [webchange.admin.pages.activity-edit.common.publish.views :as publish]
+    [webchange.admin.pages.activity-edit.common.views :as common-views]
     [webchange.admin.widgets.activity-info-form.views :refer [activity-info-form]]
-    [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.name :refer [fullname]]))
@@ -73,11 +73,5 @@
   [{:keys [activity-id] :as props}]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [loading? @(re-frame/subscribe [::state/activity-loading?])]
-      [page/page {:class-name    "page--activity-edit"
-                  :align-content "center"}
-       [page/content {:class-name-content "page--activity-edit--content"
-                      :transparent?       true}
-        (if loading?
-          [ui/loading-overlay]
-          [activity-form {:activity-id activity-id}])]])))
+    [common-views/content-wrapper {}
+     [activity-form {:activity-id activity-id}]]))
