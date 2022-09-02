@@ -41,8 +41,10 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ props]]
-    {:dispatch [::common-state/init props]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    {:db       (-> db (assoc form-editable-key false))
+     :dispatch [::common-state/init props]}))
 
 (re-frame/reg-event-fx
   ::open-activities-page
