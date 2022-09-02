@@ -33,6 +33,15 @@
              :on-change  handle-change
              :class-name "books-search-input"}]))
 
+(defn- language-selector
+  []
+  (let [current-language @(re-frame/subscribe [::state/current-language])
+        handle-select-language #(re-frame/dispatch [::state/select-language %])]
+    [ui/select {:label     "Language"
+                :value     current-language
+                :options   language-options
+                :on-change handle-select-language}]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
@@ -41,8 +50,6 @@
           loading? @(re-frame/subscribe [::state/books-loading?])
           handle-card-click #(re-frame/dispatch [::state/open-book %])
           handle-edit-click #(re-frame/dispatch [::state/edit-book %])
-          current-language @(re-frame/subscribe [::state/current-language])
-          handle-select-language #(re-frame/dispatch [::state/select-language %])
 
           show-my-global? @(re-frame/subscribe [::state/show-my-global?])]
       [page/single-page {:class-name "page--books"
@@ -55,10 +62,7 @@
                                                                :label      "Show My Global Books"
                                                                :checked?   show-my-global?
                                                                :on-change  #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])}]
-                                                   [ui/select {:label     "Language"
-                                                               :value     current-language
-                                                               :options   language-options
-                                                               :on-change handle-select-language}]]}}
+                                                   [language-selector]]}}
        [books-list {:data               books
                     :loading?           loading?
                     :on-book-click      handle-card-click
