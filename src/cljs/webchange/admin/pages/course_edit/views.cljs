@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
+    [webchange.admin.components.pagination.views :refer [pagination]]
     [webchange.admin.pages.course-edit.state :as state]
     [webchange.admin.widgets.course-info-form.view :refer [course-info-form]]
     [webchange.admin.widgets.page.views :as page]
@@ -237,7 +238,9 @@
   (let [filter @(re-frame/subscribe [::state/available-activities-filter])
         handle-filter-change #(re-frame/dispatch [::state/set-available-activities-filter %])
         handle-back-click #(re-frame/dispatch [::state/open-course-info])
-        available-activities @(re-frame/subscribe [::state/available-activities])]
+        available-activities @(re-frame/subscribe [::state/paged-activities])
+        pagination-state @(re-frame/subscribe [::state/pagination-state])
+        handle-page-button-click #(re-frame/dispatch [::state/set-current-page %])]
     [page/side-bar {:title         "Add Activity"
                     :icon          "arrow-left"
                     :icon-color    "blue-1"
@@ -251,7 +254,10 @@
       [:div.available-activities-list
        (for [{:keys [id] :as activity} available-activities]
          ^{:key id}
-         [available-activities-list-item activity])]]]))
+         [available-activities-list-item activity])]
+      (when (> (:total pagination-state) 1)
+        [pagination (merge pagination-state
+                           {:on-click handle-page-button-click})])]]))
 
 (defn- actions-list-item
   [{:keys [icon text data on-click]}]

@@ -112,7 +112,8 @@
   ::set-available-activities-filter
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    {:db (set-available-activities-filter db value)}))
+    {:db       (set-available-activities-filter db value)
+     :dispatch [::set-current-page 1]}))
 
 (re-frame/reg-sub
   ::available-activities-filter
@@ -137,6 +138,39 @@
                                              (s/includes? (s/lower-case name)
                                                           (s/lower-case filter-str)))))
              :always (sort-by :name))))
+
+(def page-size 10)
+(def current-page-key :current-page)
+
+(re-frame/reg-sub
+  ::current-page
+  :<- [path-to-db]
+  #(get % current-page-key 1))
+
+(re-frame/reg-event-fx
+  ::set-current-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db current-page-key value)}))
+
+(re-frame/reg-sub
+  ::pagination-state
+  :<- [::current-page]
+  :<- [::available-activities]
+  (fn [[current-page available-activities]]
+    {:current current-page
+     :total   (-> (count available-activities)
+                  (/ page-size)
+                  (Math/ceil))}))
+
+(re-frame/reg-sub
+  ::paged-activities
+  :<- [::available-activities]
+  :<- [::pagination-state]
+  (fn [[available-activities pagination]]
+    (->> available-activities
+         (drop (* page-size (dec (:current pagination))))
+         (take page-size))))
 
 ;; Side Bar
 
