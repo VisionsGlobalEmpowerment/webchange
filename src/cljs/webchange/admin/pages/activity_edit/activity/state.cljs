@@ -52,14 +52,13 @@
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :activities]}))
 
-;;
-
+;; Duplicate
 (re-frame/reg-event-fx
-  ::duplicate-activity
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::common-state/duplicate-activity {:on-success [::duplicate-success]}]}))
+  ::handle-duplicated
+  [(i/path common-state/path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [id (:duplicated-activity-id db)]
+      {:dispatch-n [[::common-state/close-duplicate-window]
+                    [::routes/redirect :activity-edit :activity-id id]]})))
 
-(re-frame/reg-event-fx
-  ::duplicate-success
-  (fn [{:keys [_]} [_ {:keys [id]}]]
-    {:dispatch [::routes/redirect :activity-edit :activity-id id]}))
+
