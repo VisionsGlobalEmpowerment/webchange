@@ -102,10 +102,22 @@
 
 ;; actions
 
+(def init-props-key :init-props)
+
+(defn- get-init-props
+  [db]
+  (get db init-props-key))
+
+(defn- set-init-props
+  [db value]
+  (assoc db init-props-key value))
+
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [_]} [_ {:keys [activity-id]}]]
-    {:dispatch [::load-activity activity-id]}))
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [activity-id] :as props}]]
+    {:db       (-> db (set-init-props props))
+     :dispatch [::load-activity activity-id]}))
 
 (re-frame/reg-event-fx
   ::duplicate-activity
@@ -123,9 +135,12 @@
 (re-frame/reg-event-fx
   ::duplicate-activity-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ on-success activity-data]]
-    (cond-> {:db (-> db (set-activity-loading false))}
-            (some? on-success) (assoc :dispatch (conj on-success activity-data)))))
+  (fn [{:keys [db]} [_ on-success {:keys [id] :as activity-data}]]
+    (let [props (-> (get-init-props db)
+                    (assoc :activity-id id))]
+      {:db         (-> db (set-activity-loading false))
+       :dispatch-n (cond-> [[::init props]]                 ;; reset current activity data for new duplicated activity
+                           (some? on-success) (conj (conj on-success activity-data)))})))
 
 (re-frame/reg-event-fx
   ::duplicate-activity-failure
