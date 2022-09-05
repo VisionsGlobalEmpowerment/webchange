@@ -50,16 +50,19 @@
   :<- [::selected-type]
   :<- [::show-my-global?]
   :<- [::search-string]
-  (fn [[db selected-type show-my-global search-string]]
+  :<- [::current-language]
+  (fn [[db selected-type show-my-global search-string current-language]]
     (let [current-user-id (get-in db [:current-user :id])
           books (if (= selected-type :visible)
                   (:visible-books db)
                   (:my-books db))]
       (cond->> books
                :always (map #(with-library-type % current-user-id))
+               :always (filter (fn [{:keys [lang]}]
+                                 (= lang current-language)))
                (not show-my-global) (remove #(and
-                                              (= (:status %) "visible")
-                                              (= (:owner-id %) current-user-id)))
+                                               (= (:status %) "visible")
+                                               (= (:owner-id %) current-user-id)))
                (-> search-string empty? not) (filter (fn [{:keys [name]}]
                                                        (clojure.string/includes?
                                                          (clojure.string/lower-case name)
@@ -84,10 +87,10 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (-> db
-                   (assoc :visible-books-loading true)
-                   (assoc :my-books-loading true)
-                   (assoc :current-language default-language))
+    {:db         (-> db
+                     (assoc :visible-books-loading true)
+                     (assoc :my-books-loading true)
+                     (assoc :current-language default-language))
      :dispatch-n [[::warehouse/load-books
                    {:lang default-language}
                    {:on-success [::load-visible-books-success]}]
@@ -136,10 +139,10 @@
   ::select-language
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ language]]
-    {:db (-> db
-             (assoc :visible-books-loading true)
-             (assoc :my-books-loading true)
-             (assoc :current-language language))
+    {:db         (-> db
+                     (assoc :visible-books-loading true)
+                     (assoc :my-books-loading true)
+                     (assoc :current-language language))
      :dispatch-n [[::warehouse/load-books
                    {:lang language}
                    {:on-success [::load-visible-books-success]}]

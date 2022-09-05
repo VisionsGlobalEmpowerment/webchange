@@ -49,13 +49,16 @@
   :<- [::selected-type]
   :<- [::show-my-global?]
   :<- [::search-string]
-  (fn [[db selected-type show-my-global search-string]]
+  :<- [::current-language]
+  (fn [[db selected-type show-my-global search-string current-language]]
     (let [current-user-id (get-in db [:current-user :id])
           activities (if (= selected-type :visible)
                        (:visible-activities db)
                        (:my-activities db))]
       (cond->> activities
                :always (map #(with-library-type % current-user-id))
+               :always (filter (fn [{:keys [lang]}]
+                                 (= lang current-language)))
                (not show-my-global) (remove #(and
                                                (= (:status %) "visible")
                                                (= (:owner-id %) current-user-id)))
