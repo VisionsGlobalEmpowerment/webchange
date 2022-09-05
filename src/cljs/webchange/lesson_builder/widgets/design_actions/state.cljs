@@ -3,7 +3,9 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.blocks.menu.state :as menu]
-    [webchange.lesson-builder.blocks.state :as layout-state]))
+    [webchange.lesson-builder.blocks.state :as layout-state]
+    [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.template-options.state :as template-options]))
 
 (def path-to-db :lesson-builder/design-actions)
 
@@ -12,30 +14,34 @@
   (fn [db]
     (get db path-to-db)))
 
-(def actions [{:id        :template-options
-               :text      "Template Options"
-               :icon      "template"
-               :menu-item :template-options}
-              {:id      :activity-actions
-               :text    "Build"
-               :icon    "build"
-               :content :activity-actions}
-              {:id      :effects-add
-               :text    "Add Effects"
-               :icon    "effects"
-               :content :effects-add}
-              {:id        :voice-translate
-               :text      "Voice & Translate"
-               :icon      "translate"
-               :menu-item :voice-translate}
-              {:id      :question-options
-               :text    "Question Options"
-               :icon    "question"
-               :content :question-options}])
-
 (re-frame/reg-sub
   ::actions
-  (constantly actions))
+  :<- [::state/activity-data]
+  (fn [activity-data]
+    (let [has-template-options? (-> (template-options/get-template-options activity-data)
+                                    (empty?)
+                                    (not))]
+      (cond-> []
+              has-template-options? (conj {:id        :template-options
+                                           :text      "Template Options"
+                                           :icon      "template"
+                                           :menu-item :template-options})
+              :always (concat [{:id      :activity-actions
+                                :text    "Build"
+                                :icon    "build"
+                                :content :activity-actions}
+                               {:id      :effects-add
+                                :text    "Add Effects"
+                                :icon    "effects"
+                                :content :effects-add}
+                               {:id        :voice-translate
+                                :text      "Voice & Translate"
+                                :icon      "translate"
+                                :menu-item :voice-translate}
+                               {:id      :question-options
+                                :text    "Question Options"
+                                :icon    "question"
+                                :content :question-options}])))))
 
 ;; active menu item
 
