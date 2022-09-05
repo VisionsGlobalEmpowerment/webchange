@@ -24,7 +24,8 @@
        (let [name-error @(re-frame/subscribe [::state/name-error])
              name-value @(re-frame/subscribe [::state/name])
              image-value @(re-frame/subscribe [::state/image])
-             image-selected? @(re-frame/subscribe [::state/image-selected?])]
+             image-selected? @(re-frame/subscribe [::state/image-selected?])
+             apply-disabled? @(re-frame/subscribe [::state/apply-disabled?])]
          [:div.widget--image-add
           [:div.form-wrapper
            [:h1 "Add Image"]
@@ -39,9 +40,10 @@
            [select-image {:label            "Image"
                           :value            (:src image-value)
                           :class-name-image "image-add--preview"
-                          :on-change        #(re-frame/dispatch [::state/set-image {:src (:url %)
+                          :on-change        #(re-frame/dispatch [::state/set-image {:src  (:url %)
                                                                                     :name (-> % :tags last :name)}])}]]
 
           [ui/button {:class-name "apply-button"
+                      :disabled?  apply-disabled?
                       :on-click   #(re-frame/dispatch [::state/apply])}
            "Apply"]]))}))

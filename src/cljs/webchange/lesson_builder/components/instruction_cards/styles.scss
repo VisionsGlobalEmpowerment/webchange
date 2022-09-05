@@ -5,6 +5,7 @@
 
     display: grid;
     column-gap: 10px;
+    height: 100%;
 
     @for $i from 4 through 5 {
         &.component--instruction-cards--columns-#{$i} {

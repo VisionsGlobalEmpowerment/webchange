@@ -5,6 +5,7 @@
 .widget--confirm-content {
     @include bbs--noto-12-r;
     @include bbs--scrollable($margin: 0);
+    line-height: 18px;
 
     h1 {
         @include bbs--noto-14-b;

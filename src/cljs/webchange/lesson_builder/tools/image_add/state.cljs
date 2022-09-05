@@ -4,7 +4,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
-    [webchange.lesson-builder.state :as lesson-builder-state]))
+    [webchange.lesson-builder.state :as lesson-builder-state]
+    [webchange.lesson-builder.widgets.confirm.state :as confirm]))
 
 (def path-to-db :lesson-builder/image-add)
 
@@ -42,6 +43,11 @@
   :<- [path-to-db]
   #(get-in % [:form :name]))
 
+(re-frame/reg-sub
+  ::name-defined?
+  :<- [::name]
+  #(-> % empty? not))
+
 (re-frame/reg-event-fx
   ::set-name
   [(i/path path-to-db)]
@@ -74,6 +80,14 @@
         :src
         (str/split #"--") last)))
 
+(re-frame/reg-sub
+  ::apply-disabled?
+  :<- [::image-selected?]
+  :<- [::name-defined?]
+  (fn [[image-selected? name-defined?]]
+    (-> (and image-selected?
+             name-defined?)
+        (not))))
 
 (re-frame/reg-event-fx
   ::apply
@@ -82,6 +96,12 @@
     (let [data (get db :form)]
       (cond
         (empty? (:name data)) {:db (set-name-error db "Name is required")}
-        :default {:dispatch-n [[::lesson-builder-state/add-image data]
-                               [::menu-state/history-back]]}))))
+        :default {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}))))
 
+(re-frame/reg-event-fx
+  ::apply-success
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::confirm/show-message-window
+                {:title      "Image Added"
+                 :message    "Image is added to scene layers, you can edit or change the image in the activity form there and choose when to show or hide."
+                 :on-confirm [::menu-state/history-back]}]}))

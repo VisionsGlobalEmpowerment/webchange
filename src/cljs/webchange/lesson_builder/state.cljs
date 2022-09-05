@@ -281,24 +281,25 @@
 (re-frame/reg-event-fx
   ::add-image
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data]]
+  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
     (let [{:keys [id]} (get-activity-info db)]
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
                    :action "add-image"
                    :data data}
-                  {:on-success [::add-image-success]
+                  {:on-success [::add-image-success on-success]
                    :on-failure [::add-image-failure]}]})))
 
 (re-frame/reg-event-fx
   ::add-image-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [data]}]]
+  (fn [{:keys [db]} [_ on-success {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
                    (set-activity-data data))
-     :dispatch [:stage/reset]}))
+     :dispatch-n (cond-> [[:stage/reset]]
+                         (some? on-success) (conj on-success))}))
 
 (re-frame/reg-event-fx
   ::add-image-failure
