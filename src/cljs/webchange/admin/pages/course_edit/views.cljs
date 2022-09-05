@@ -118,12 +118,13 @@
 
 (defn- lessons-list-item
   [{:keys [idx name activities-number level-idx]}]
-  (r/with-let [expanded? (r/atom false)
-               handle-item-click #(swap! expanded? not)
-               handle-remove-lesson #(re-frame/dispatch [::state/remove-lesson level-idx idx])
-               handle-remove-click #(do (.stopPropagation %)
-                                        (handle-remove-lesson))]
-    (let [locked? @(re-frame/subscribe [::state/locked?])]
+  (r/with-let [expanded? (r/atom (= activities-number 0))]
+    (let [locked? @(re-frame/subscribe [::state/locked?])
+          handle-item-click #(when (> activities-number 0)
+                               (swap! expanded? not))
+          handle-remove-lesson #(re-frame/dispatch [::state/remove-lesson level-idx idx])
+          handle-remove-click #(do (.stopPropagation %)
+                                   (handle-remove-lesson))]
       (if locked?
         [:<>
          [ui/list-item {:name       name
@@ -135,8 +136,7 @@
                         :controls   [:div.list-item-stats
                                      activities-number
                                      [ui/icon {:icon       "games"
-                                               :class-name "activity"}]]
-                        }]
+                                               :class-name "activity"}]]}]
          (when @expanded?
            [activities-list {:level-idx  level-idx
                              :lesson-idx idx}])]
@@ -167,8 +167,8 @@
   [{:keys [level-idx]}]
   (let [lessons @(re-frame/subscribe [::state/level-lessons level-idx])]
     [ui/list {:class-name "sub-list"}
-     (for [{:keys [idx] :as lesson-data} lessons]
-       ^{:key idx}
+     (for [{:keys [id] :as lesson-data} lessons]
+       ^{:key id}
        [lessons-list-item (assoc lesson-data :level-idx level-idx)])
      (when (empty? lessons)
        [empty-list-placeholder {:data {:type   "lesson"
@@ -177,12 +177,13 @@
 
 (defn- levels-list-item
   [{:keys [idx name lessons-number]}]
-  (r/with-let [expanded? (r/atom false)
-               handle-item-click #(swap! expanded? not)
-               handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
-               handle-remove-click #(do (.stopPropagation %)
-                                        (handle-remove-level))]
-    (let [locked? @(re-frame/subscribe [::state/locked?])]
+  (r/with-let [expanded? (r/atom (= lessons-number 0))]
+    (let [locked? @(re-frame/subscribe [::state/locked?])
+          handle-item-click #(when (> lessons-number 0)
+                               (swap! expanded? not))
+          handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
+          handle-remove-click #(do (.stopPropagation %)
+                                   (handle-remove-level))]
       (if locked?
         [:<>
          [ui/list-item {:name       name
@@ -218,8 +219,8 @@
   []
   (let [levels @(re-frame/subscribe [::state/course-levels])]
     [ui/list {:class-name "levels-list"}
-     (for [{:keys [idx] :as level-data} levels]
-       ^{:key idx}
+     (for [{:keys [id] :as level-data} levels]
+       ^{:key id}
        [levels-list-item level-data])]))
 
 (defn- available-activities-list-item
