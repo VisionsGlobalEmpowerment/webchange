@@ -88,17 +88,24 @@
 
 (defn- create-preview-panel
   []
-  (let [preview-value @(re-frame/subscribe [::state/preview])]
-    [:div.create-preview-panel
-     [menu-header "Create Preview"]
-     [:div.create-preview-fields
-      [ui/note {:text "Click button to create a snapshot of the current preview to show in the student navigation"}]
-      [ui/image {:class-name "img-wrapper"
-                 :src        preview-value}]
-      [ui/button {:class-name "take-screenshot-button"
-                  :color      "blue-1"
-                  :on-click   #(re-frame/dispatch [::state/create-preview])}
-       "Take Screenshot"]]]))
+  (let [preview-value @(re-frame/subscribe [::state/preview])
+        saving? @(re-frame/subscribe [::state/saving?])]
+    [:<>
+     [:div.create-preview-panel
+      [menu-header "Create Preview"]
+      [:div.create-preview-fields
+       [ui/note {:text "Click button to create a snapshot of the current preview to show in the student navigation"}]
+       [ui/image {:class-name "img-wrapper"
+                  :src        preview-value}]
+       [ui/button {:class-name "take-screenshot-button"
+                   :color      "blue-1"
+                   :on-click   #(re-frame/dispatch [::state/create-preview])}
+        "Take Screenshot"]]]
+     [ui/button {:class-name "apply-button"
+                 :shape      "rounded"
+                 :loading?   saving?
+                 :on-click   #(re-frame/dispatch [::state/apply])}
+      "Apply"]]))
 
 
 (defn- main-settings-panel
