@@ -1,20 +1,13 @@
 .widget--side-bar-page--main-content {
     @include bbs--page--panel;
 
-    .widget--side-bar-page--main-content--content {
-        @include bbs--with-scrollbar-margin;
-        display: flex;
-        flex-direction: column;
-        gap: $bbs--page--margin * 2;
-        padding: 10px;
-    }
-
     &.widget--side-bar-page--main-content--transparent {
+        @include bbs--scrollable;
         background-color: transparent;
 
         .widget--side-bar-page--main-content--content {
             padding: 0;
-            @include bbs--with-scrollbar-margin;
+            overflow: initial;
         }
     }
 }
