@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.utils.flipbook :refer [flipbook-activity?]]
     [webchange.utils.scene-action-data :refer [dialog-sequence-action?]]
     [webchange.utils.scene-data :refer [update-action]]
     [webchange.utils.uid :refer [get-uid]]
@@ -55,6 +56,11 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ activity-data]]
     {:db (-> db (set-activity-data activity-data))}))
+
+(re-frame/reg-sub
+  ::flipbook?
+  :<- [::activity-data]
+  flipbook-activity?)
 
 ;; activity info
 

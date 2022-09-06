@@ -12,13 +12,20 @@
    [ui/icon {:icon "edit-boxed"}]
    [:div.script--header--text "Script"]])
 
+(defn- choose-sequence
+  []
+  (let [show-control? @(re-frame/subscribe [::state/show-track-selector?])]
+    (when show-control?
+      [:<>
+       [:h2 "Choose Sequence"]
+       [track-selector]])))
+
 (defn script
   []
   (let [dialogs @(re-frame/subscribe [::state/track-dialogs])]
     [:div.widget--script
      [header]
-     [:h2 "Choose Sequence"]
-     [track-selector]
+     [choose-sequence]
      [:div.widget--script--content
       (for [{:keys [id] :as dialog-data} dialogs]
         ^{:key id}
