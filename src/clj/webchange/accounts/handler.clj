@@ -42,6 +42,12 @@
             (throw-unauthorized {:role :educator}))
           (-> (core/create-account data)
               response)))
+  (POST "/api/accounts/register" request
+        :coercion :spec
+        :body [data ::account-spec/register-account]
+          (-> (core/register-account data)
+              response))
+
   (PUT "/api/accounts/:id" request
        :coercion :spec
        :path-params [id :- ::account-spec/id]

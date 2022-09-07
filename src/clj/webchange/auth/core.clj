@@ -57,13 +57,6 @@
            :type       (:type user)}]
     [false error-invalid-credentials]))
 
-#_(defn register-user!
-    [user-data]
-    (create-user-with-credentials! user-data)
-    (if-let [user (db/find-user-by-email {:email (:email user-data)})]
-      [true (accounts/visible-user user)]
-      [false {:errors {:form "Invalid registration data"}}]))
-
 (defn- prepare-student-data
   [{:keys [first-name last-name]}]
   {:first_name first-name

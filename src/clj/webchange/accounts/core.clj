@@ -7,7 +7,8 @@
     [java-time :as jt]
     [compojure.api.exception :as ex]
     [camel-snake-kebab.extras :refer [transform-keys]]
-    [camel-snake-kebab.core :refer [->snake_case_keyword]]))
+    [camel-snake-kebab.core :refer [->snake_case_keyword]]
+    [webchange.emails.core :as e]))
 
 (defn visible-user [user]
   (select-keys user [:id :first-name :last-name :email :school-id :teacher-id :student-id :website-id :type]))
@@ -110,6 +111,16 @@
   (let [[{id :id}] (create-user-with-credentials! data)]
     (-> data
         (assoc :id id))))
+
+(defn register-account
+  [data]
+  (let [data (-> data
+                 (assoc :type "live")
+                 (assoc :active false))
+        [{id :id}] (create-user-with-credentials! data)
+        result (assoc data :id id)]
+    (e/request-email-confirmation! data)
+    data))
 
 (defn edit-account
   [user-id data]
