@@ -27,7 +27,7 @@
 
 (defn add-empty-page
   [activity-data {:keys [page-params]}]
-  (let [flipbook-name (f/get-book-object-name activity-data)
+  (let [flipbook-name (-> activity-data f/get-book-object-name keyword)
         next-page-id (-> activity-data
                           (get-in [:metadata :next-page-id] 0)
                           inc)

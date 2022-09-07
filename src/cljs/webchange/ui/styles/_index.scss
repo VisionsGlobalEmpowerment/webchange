@@ -29,9 +29,14 @@
     }
 }
 
-@mixin bbs--with-scrollbar-margin($margin: 5px) {
+@mixin bbs--with-scrollbar-margin-vertical($margin: 5px) {
     padding-right: $margin;
     margin-right: -$margin;
+}
+
+@mixin bbs--with-scrollbar-margin-horizontal($margin: 5px) {
+    padding-bottom: $margin;
+    margin-bottom: -$margin;
 }
 
 @mixin bbs--with-scrollbar-color ($color) {
@@ -40,8 +45,14 @@
     }
 }
 
-@mixin bbs--scrollable($margin: 5px) {
+@mixin bbs--scrollable($margin: 5px, $direction: vertical) {
     @include bbs--with-scrollbar;
-    @include bbs--with-scrollbar-margin($margin);
+
+    @if $direction == vertical {
+        @include bbs--with-scrollbar-margin-vertical($margin);
+    } @else {
+        @include bbs--with-scrollbar-margin-horizontal($margin);
+    }
+
     overflow: auto;
 }

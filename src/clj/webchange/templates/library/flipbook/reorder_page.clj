@@ -11,11 +11,11 @@
        (< target-position pages-count)))
 
 (defn move-page
-  [activity-data {:keys [page-idx-from page-idx-to]} page-params]
-  (let [book-name (get-book-object-name activity-data)
+  [activity-data {:keys [page-idx-from page-idx-to]} _]
+  (let [book-name (-> activity-data get-book-object-name keyword)
         pages-count (get-pages-count activity-data)]
     (if (available-target-position? page-idx-to pages-count)
       (-> activity-data
-          (update-in [:objects (keyword book-name) :pages] move-item page-idx-from page-idx-to)
+          (update-in [:objects book-name :pages] move-item page-idx-from page-idx-to)
           (recalculate-data book-name))
       activity-data)))

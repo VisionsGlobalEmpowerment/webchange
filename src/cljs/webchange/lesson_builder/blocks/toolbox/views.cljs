@@ -3,13 +3,16 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.blocks.toolbox.state :as state]
     [webchange.lesson-builder.tools.background-image.index :as background-image]
+    [webchange.lesson-builder.tools.background-image.index :as background-image]
     [webchange.lesson-builder.tools.question-form.index :as question-form]
     [webchange.lesson-builder.tools.voice-translate.index :as voice-translate]
+    [webchange.lesson-builder.widgets.pages.views :refer [activity-pages]]
     [webchange.lesson-builder.widgets.welcome.views :refer [welcome]]
     [webchange.ui.index :as ui]))
 
 (def toolboxes {:welcome          welcome
                 :background-image background-image/toolbox
+                :pages            activity-pages
                 :question-form    question-form/toolbox
                 :voice-translate  voice-translate/toolbox})
 

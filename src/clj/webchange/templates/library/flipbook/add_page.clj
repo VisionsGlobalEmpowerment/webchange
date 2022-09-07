@@ -59,7 +59,7 @@
                                  :data (get-action-data {:action-name action-name
                                                          :text-name   text-name
                                                          :text-value  (get-in objects [(keyword text-name) :text])})}))
-        book-object-name (get-book-object-name activity-data)
+        book-object-name (-> activity-data get-book-object-name keyword)
         on-text-animation-action (or on-text-animation-action (fn [x & _] x))]
     (-> activity-data
         (assoc-in [:objects book-object-name :pages page-position :action] name)
@@ -74,7 +74,7 @@
            back-cover-filler? false}
     :as   content-data}
    {:keys [name resources objects text-name action] :as page-data}]
-  (let [book-object-name (get-book-object-name activity-data)
+  (let [book-object-name (-> activity-data get-book-object-name keyword)
         new-page-position (if (some? position)
                             position
                             (let [current-pages-count (-> activity-data
