@@ -16,6 +16,13 @@
     (let [scene-id (:current-scene db)]
       (assoc-in db [:transitions scene-id name] component))))
 
+(re-frame/reg-cofx
+  :registered-transitions
+  (fn [{:keys [db] :as co-effects}]
+    (let [scene-id (:current-scene db)]
+      (->> (get-in db [:transitions scene-id])
+           (assoc co-effects :transitions)))))
+
 (re-frame/reg-event-db
   ::unregister-transition
   (fn [db [_ name]]

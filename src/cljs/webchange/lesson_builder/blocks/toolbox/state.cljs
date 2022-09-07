@@ -1,7 +1,8 @@
 (ns webchange.lesson-builder.blocks.toolbox.state
   (:require
     [re-frame.core :as re-frame]
-    [re-frame.std-interceptors :as i]))
+    [re-frame.std-interceptors :as i]
+    [webchange.lesson-builder.state :as state]))
 
 (def path-to-db :lesson-builder/toolbox)
 
@@ -19,7 +20,9 @@
 (re-frame/reg-sub
   ::current-widget
   :<- [path-to-db]
-  #(get % current-widget-key :welcome))
+  :<- [::state/flipbook?]
+  (fn [[db flipbook?]]
+    (get db current-widget-key (if flipbook? :pages :welcome))))
 
 (re-frame/reg-event-fx
   ::set-current-widget

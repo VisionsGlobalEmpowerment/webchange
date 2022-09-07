@@ -25,7 +25,7 @@
 (defn remake-covers
   [activity-data props page-params]
   (let [book-object-name (get-book-object-name activity-data)
-        pages (get-in activity-data [:objects book-object-name :pages])]
+        pages (get-in activity-data [:objects (keyword book-object-name) :pages])]
 
     (reduce (fn [activity-data {:keys [object constructor params-getter]}]
               (let [page-position (find-item-position pages #(= (:object %) object))]
