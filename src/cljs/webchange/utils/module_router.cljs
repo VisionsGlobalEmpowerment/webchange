@@ -61,16 +61,13 @@
                                      (dispatch))))
                              parse-url)
         url-for (partial bidi/path-for routes)
-        get-path (fn [key & args]
-                   (str (if (= (type key) Keyword)
-                          (apply url-for (concat [key] args))
-                          key)
-                        (-> args redirect-args->params :url-params url-params->search-string)))
         redirect-to (fn [key & args]
                       (if-let [params (-> args redirect-args->params :storage-params)]
                         (storage/set-item key params))
-                      (let [path (apply get-path (concat [key] args))]
-                        (print ">" path)
+                      (let [path (str (if (= (type key) Keyword)
+                                        (apply url-for (concat [key] args))
+                                        key)
+                                      (-> args redirect-args->params :url-params url-params->search-string))]
                         (pushy/set-token! history path)))
         location (fn [location-name]
                    (->> (get locations location-name)
@@ -80,8 +77,7 @@
     {:history     history
      :routes      routes
      :redirect-to redirect-to
-     :location    location
-     :get-path    get-path}))
+     :location    location}))
 
 (re-frame/reg-fx
   ::redirect

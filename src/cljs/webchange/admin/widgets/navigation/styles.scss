@@ -63,10 +63,6 @@
     line-height: 18px;
     white-space: nowrap;
 
-    a {
-        color: bbs--color(white);
-    }
-
     .logo {
         margin-right: 32px;
     }
@@ -76,19 +72,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
         gap: 20px;
+        padding: 18px 22px;
 
-        & > a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            padding: 18px 22px;
-
-            & > .icon {
-                padding: 0;
-                @include icon-size(18px);
-            }
+        & > .icon {
+            padding: 0;
+            @include icon-size(18px);
         }
 
         .children-list {

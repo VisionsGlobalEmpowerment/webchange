@@ -1,7 +1,6 @@
 (ns webchange.admin.widgets.navigation.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.routes :as routes]
     [webchange.admin.widgets.navigation.state :as state]
     [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]
@@ -9,32 +8,17 @@
 
 (defn- handle-item-click
   [event route]
-  (.stopImmediatePropagation (.-nativeEvent event))
-  (.preventDefault (.-nativeEvent event))
+  (.stopPropagation event)
   (re-frame/dispatch [::state/open-page route]))
 
 (declare children-list)
 
-(defn- get-path-params
-  [{:keys [page page-params]}]
-  (->> page-params
-       (map identity)
-       (flatten)
-       (concat [page])))
-
-(defn- get-path
-  [route]
-  (->> (get-path-params route)
-       (apply routes/get-path)))
-
 (defn- children-item
   [{:keys [active? children route text]}]
-  (let [handle-click #(handle-item-click % route)
-        path (get-path route)]
-    [:a (cond-> {:class-name (get-class-name {"children-item" true
-                                              "active-item"   active?})
-                 :on-click   handle-click}
-                (-> path empty? not) (assoc :href (get-path route)))
+  (let [handle-click #(handle-item-click % route)]
+    [:div {:class-name (get-class-name {"children-item" true
+                                        "active-item"   active?})
+           :on-click   handle-click}
      [:div.text text]
      (when-not (empty? children)
        [:<>
@@ -53,16 +37,14 @@
 
 (defn- root-item
   [{:keys [active? children icon route text]}]
-  (let [handle-click #(handle-item-click % route)
-        path (get-path route)]
+  (let [handle-click #(handle-item-click % route)]
     [:div {:class-name (get-class-name {"root-item"       true
                                         "navigation-item" true
-                                        "active-item"     active?})}
-     [:a (cond-> {:on-click handle-click}
-                 (-> path empty? not) (assoc :href (get-path route)))
-      [ui/navigation-icon {:icon       icon
-                           :class-name "root-icon"}]
-      [:div.text text]]
+                                        "active-item"     active?})
+           :on-click   handle-click}
+     [ui/navigation-icon {:icon       icon
+                          :class-name "root-icon"}]
+     [:div.text text]
      (when-not (empty? children)
        [:<>
         [ui/icon {:icon       "caret-down"
