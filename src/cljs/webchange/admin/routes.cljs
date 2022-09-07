@@ -101,11 +101,6 @@
   (->> (get-title page-params)
        (set! (.-title js/document))))
 
-(defn get-path
-  [& params]
-  (when (some? @router)
-    (apply (:get-path @router) params)))
-
 (re-frame/reg-event-fx
   ::redirect
   (fn [{:keys [_]} [_ & args]]
