@@ -27,6 +27,11 @@
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db current-track-key value)}))
 
+(re-frame/reg-sub
+  ::show-track-selector?
+  :<- [::state/flipbook?]
+  not)
+
 ;; selected action
 
 (def selected-action-key :selected-action)

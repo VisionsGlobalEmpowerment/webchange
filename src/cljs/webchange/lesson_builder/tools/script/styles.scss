@@ -12,7 +12,8 @@
     flex: 1 1;
 
     h2 {
-        @include bbs--noto-14-sb;
+        @include bbs--noto;
+        @include bbs--noto-16-b;
         color: bbs--color(blue-1);
     }
 
