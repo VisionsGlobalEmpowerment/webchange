@@ -5,36 +5,24 @@
     [webchange.admin.widgets.navigation.state :as state]
     [webchange.ui.index :as ui]
     [webchange.ui-framework.components.index :as c]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
-
-(defn- handle-item-click
-  [event route]
-  (.stopImmediatePropagation (.-nativeEvent event))
-  (.preventDefault (.-nativeEvent event))
-  (re-frame/dispatch [::state/open-page route]))
+    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.utils.map :refer [map->list]]))
 
 (declare children-list)
 
-(defn- get-path-params
+(defn- route->redirect-params
   [{:keys [page page-params]}]
-  (->> page-params
-       (map identity)
-       (flatten)
-       (concat [page])))
-
-(defn- get-path
-  [route]
-  (->> (get-path-params route)
-       (apply routes/get-path)))
+  (cond-> []
+          (some? page) (conj page)
+          (some? page-params) (concat (map->list page-params))))
 
 (defn- children-item
   [{:keys [active? children route text]}]
-  (let [handle-click #(handle-item-click % route)
-        path (get-path route)]
-    [:a (cond-> {:class-name (get-class-name {"children-item" true
-                                              "active-item"   active?})
-                 :on-click   handle-click}
-                (-> path empty? not) (assoc :href (get-path route)))
+  (let [route-params (route->redirect-params route)]
+    [ui/navigation-link {:route  route-params
+                         :router @routes/router
+                         :class-name (get-class-name {"children-item" true
+                                                      "active-item"   active?})}
      [:div.text text]
      (when-not (empty? children)
        [:<>
@@ -53,13 +41,12 @@
 
 (defn- root-item
   [{:keys [active? children icon route text]}]
-  (let [handle-click #(handle-item-click % route)
-        path (get-path route)]
+  (let [route-params (route->redirect-params route)]
     [:div {:class-name (get-class-name {"root-item"       true
                                         "navigation-item" true
                                         "active-item"     active?})}
-     [:a (cond-> {:on-click handle-click}
-                 (-> path empty? not) (assoc :href (get-path route)))
+     [ui/navigation-link {:route  route-params
+                          :router @routes/router}
       [ui/navigation-icon {:icon       icon
                            :class-name "root-icon"}]
       [:div.text text]]

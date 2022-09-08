@@ -21,6 +21,7 @@
     [webchange.ui.components.link.views :as link-views]
     [webchange.ui.components.list.views :as list-views]
     [webchange.ui.components.logo.views :as logo-views]
+    [webchange.ui.components.navigation-link.views :as navigation-link-views]
     [webchange.ui.components.note.views :as note-views]
     [webchange.ui.components.overlay.views :as overlay-views]
     [webchange.ui.components.panel.views :as panel-views]
@@ -55,6 +56,7 @@
 (def input-error input-error-views/input-error)
 (def input-label input-label-views/input-label)
 (def logo-with-name logo-views/logo-with-name)
+(def navigation-link navigation-link-views/navigation-link)
 (def link link-views/link)
 (def list list-views/list)
 (def list-item list-views/list-item)

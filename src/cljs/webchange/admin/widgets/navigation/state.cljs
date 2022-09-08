@@ -2,11 +2,9 @@
 (ns webchange.admin.widgets.navigation.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.routes :as routes]
     [webchange.admin.state :as parent-state]
     [webchange.admin.widgets.navigation.utils :refer [set-navigation-items-active
-                                                      hide-navigation-items-by-user-type]]
-    [webchange.utils.map :refer [map->list]]))
+                                                      hide-navigation-items-by-user-type]]))
 
 (re-frame/reg-sub
   ::navigation-items
@@ -52,13 +50,3 @@
                               :page-params {:account-type "live"}}}]}]
         (set-navigation-items-active {:page (:handler current-page)})
         (hide-navigation-items-by-user-type current-user))))
-
-(re-frame/reg-event-fx
-  ::open-page
-  (fn [{:keys []} [_ {:keys [page page-params] :as route}]]
-    (when (some? route)
-      (let [redirect-params (cond-> []
-                                    (some? page) (conj page)
-                                    (some? page-params) (concat (map->list page-params)))]
-        (when-not (empty? redirect-params)
-          {:dispatch (-> [::routes/redirect] (concat redirect-params) (vec))})))))

@@ -70,7 +70,6 @@
                       (if-let [params (-> args redirect-args->params :storage-params)]
                         (storage/set-item key params))
                       (let [path (apply get-path (concat [key] args))]
-                        (print ">" path)
                         (pushy/set-token! history path)))
         location (fn [location-name]
                    (->> (get locations location-name)
