@@ -64,11 +64,12 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [account-id] :as props}]]
+  (fn [{:keys [db]} [_ {:keys [account-id disabled?] :as props}]]
     {:db       (-> db
                    (reset-form-data)
                    (widgets/set-callbacks (select-keys props [:on-remove]))
-                   (assoc :account-id account-id))
+                   (assoc :account-id account-id)
+                   (assoc :form-edit-disabled? disabled?))
      :dispatch [::warehouse/load-account {:id account-id}
                 {:on-success [::load-account-success]}]}))
 
@@ -216,3 +217,16 @@
   (fn [{:keys [db]} [_]]
     (let [account-id (:account-id db)]
       {:dispatch [::routes/redirect :password-reset :account-id account-id]})))
+
+
+;; Enable Edit
+(re-frame/reg-event-fx
+  ::enable-edit
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :form-edit-disabled? false)}))
+
+(re-frame/reg-sub
+  ::edit-disabled?
+  :<- [path-to-db]
+  #(get % :form-edit-disabled? false))
