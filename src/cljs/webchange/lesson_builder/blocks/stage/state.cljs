@@ -45,3 +45,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (assoc db :stage-key (rand))}))
+
+(re-frame/reg-sub
+  ::show-bottom-actions?
+  :<- [::state/flipbook?]
+  identity)

@@ -1,8 +1,22 @@
 #block--stage {
     @import "second_stage/styles";
-    
-    background-color: bbs--color(blue-2, $variant: light);
-    border-radius: $border-radius;
-    overflow: hidden;
+
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    .stage-wrapper {
+        flex: 1 1;
+
+        background-color: bbs--color(blue-2, $variant: light);
+        border-radius: $border-radius;
+        overflow: hidden;
+    }
+
+    .stage-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px;
+    }
 }

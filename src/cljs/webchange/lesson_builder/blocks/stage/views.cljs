@@ -4,7 +4,15 @@
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.stage :refer [stage]]
     [webchange.lesson-builder.blocks.stage.second-stage.views :refer [second-stage]]
-    [webchange.lesson-builder.blocks.stage.state :as state]))
+    [webchange.lesson-builder.blocks.stage.state :as state]
+    [webchange.lesson-builder.widgets.select-stage.views :refer [select-stage]]
+    [webchange.ui.index :as ui]))
+
+(defn- bottom-actions
+  []
+  (let [show? @(re-frame/subscribe [::state/show-bottom-actions?])]
+    (when show?
+      [select-stage {:class-name "stage-actions"}])))
 
 (defn block-stage
   [{:keys [class-name]}]
@@ -12,8 +20,10 @@
         key @(re-frame/subscribe [::state/stage-key])]
     [:div {:id         "block--stage"
            :class-name class-name}
-     ^{:key key}
-     [stage {:id         "main"
-             :mode       ::modes/editor
-             :scene-data scene-data}]
+     [:div {:class-name "stage-wrapper"}
+      ^{:key key}
+      [stage {:id         "main"
+              :mode       ::modes/editor
+              :scene-data scene-data}]]
+     [bottom-actions]
      [second-stage]]))

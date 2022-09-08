@@ -2,13 +2,13 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
-    [webchange.lesson-builder.widgets.pages.state :as state]
+    [webchange.lesson-builder.state-flipbook :as state]
     [webchange.ui.index :as ui]))
 
 (defn- tech-pages-switch
   []
-  (let [value @(re-frame/subscribe [::state/show-tech-pages?])
-        handle-change #(re-frame/dispatch [::state/set-show-tech-pages %])]
+  (let [value @(re-frame/subscribe [::state/show-generated-pages?])
+        handle-change #(re-frame/dispatch [::state/set-show-generated-pages %])]
     [ui/switch {:checked?  value
                 :label     "Display Technical Pages"
                 :color     "yellow-1"
@@ -25,10 +25,10 @@
     title]])
 
 (defn- stage-item
-  [{:keys [idx left-page right-page title selected?]}]
-  (let [handle-click #(re-frame/dispatch [::state/select-stage idx])]
+  [{:keys [idx left-page right-page title current-stage?] :as stage-data}]
+  (let [handle-click #(re-frame/dispatch [::state/show-flipbook-stage idx])]
     [:div {:class-name (ui/get-class-name {"stage-item"                true
-                                           "stage-item--selected"      selected?
+                                           "stage-item--selected"      current-stage?
                                            "stage-item--no-left-page"  (nil? left-page)
                                            "stage-item--no-right-page" (nil? right-page)})
            :on-click   handle-click}
@@ -45,7 +45,7 @@
 
 (defn- stages-list
   []
-  (let [stages @(re-frame/subscribe [::state/stages])]
+  (let [stages @(re-frame/subscribe [::state/activity-stages-filtered])]
     [:div.widget--activity-pages
      (for [{:keys [id] :as stage-data} stages]
        ^{:key id}
