@@ -29,25 +29,6 @@
   :<- [path-to-db]
   #(get-current-stage %))
 
-;; show generated pages?
-
-(def show-generated-pages-key :show-generated-pages?)
-
-(defn- get-show-generated-pages
-  [db]
-  (get db show-generated-pages-key false))
-
-(re-frame/reg-sub
-  ::show-generated-pages?
-  :<- [path-to-db]
-  get-show-generated-pages)
-
-(re-frame/reg-event-fx
-  ::set-show-generated-pages
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc db show-generated-pages-key value)}))
-
 ;; stages sequence
 
 (defn- get-activity-stages
@@ -98,6 +79,45 @@
   :<- [::show-generated-pages?]
   (fn [[activity-data current-stage-idx show-generated-pages?]]
     (get-activity-stages-filtered activity-data current-stage-idx show-generated-pages?)))
+
+;; show generated pages?
+
+(def show-generated-pages-key :show-generated-pages?)
+
+(defn- get-show-generated-pages
+  [db]
+  (get db show-generated-pages-key false))
+
+(re-frame/reg-sub
+  ::show-generated-pages?
+  :<- [path-to-db]
+  get-show-generated-pages)
+
+(defn- get-closest-available-stage-idx
+  [current-idx available-idx]
+  (->> available-idx
+       (reduce (fn [{:keys [distance] :as result} stage-idx]
+                 (let [current-distance (- current-idx stage-idx)]
+                   (if (and (>= current-idx stage-idx)
+                            (< current-distance distance))
+                     {:idx      stage-idx
+                      :distance current-distance}
+                     result)))
+               {:idx      0
+                :distance ##Inf})
+       (:idx)))
+
+(re-frame/reg-event-fx
+  ::set-show-generated-pages
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-data db]} [_ value]]
+    (let [current-stage-idx (get-current-stage db)
+          stages-idx (->> (get-activity-stages-filtered activity-data current-stage-idx value)
+                          (map :idx))
+          closest-available-idx (get-closest-available-stage-idx current-stage-idx stages-idx)]
+      (cond-> {:db (assoc db show-generated-pages-key value)}
+              (not= current-stage-idx closest-available-idx) (assoc :dispatch [::show-flipbook-stage closest-available-idx])))))
 
 ;; stage selector
 
