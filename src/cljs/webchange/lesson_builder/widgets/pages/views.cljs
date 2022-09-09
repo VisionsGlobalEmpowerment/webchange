@@ -1,8 +1,11 @@
 (ns webchange.lesson-builder.widgets.pages.views
   (:require
     [re-frame.core :as re-frame]
+    [reagent.core :as r]
+    [webchange.lesson-builder.blocks.stage.state :as stage-state]
     [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.state-flipbook :as state]
+    [webchange.lesson-builder.state-flipbook-screenshot :as screenshot]
     [webchange.ui.index :as ui]))
 
 (defn- tech-pages-switch
@@ -15,17 +18,30 @@
                 :on-change handle-change}]))
 
 (defn- page-item
-  [{:keys [side title]}]
-  [:div {:class-name (ui/get-class-name {"page-item"              true
-                                         (str "page-item--" side) true})}
-   [:div {:class-name "page-item--preview"}
-    [ui/image {:class-name "page-item--preview-image"}]]
-   [:div {:class-name "page-item--title"
-          :title      title}
-    title]])
+  []
+  (r/create-class
+    {:display-name "page-item"
+
+     :component-did-mount
+     (fn [this]
+       (let [{:keys [idx preview]} (r/props this)]
+         (when (nil? preview)
+           (re-frame/dispatch [::screenshot/take-page-screenshot idx]))))
+
+     :reagent-render
+     (fn [{:keys [side title preview]}]
+       [:div {:class-name (ui/get-class-name {"page-item"              true
+                                              (str "page-item--" side) true})}
+        [:div {:class-name "page-item--preview"}
+         ^{:key preview}
+         [ui/image {:src        preview
+                    :class-name "page-item--preview-image"}]]
+        [:div {:class-name "page-item--title"
+               :title      title}
+         title]])}))
 
 (defn- stage-item
-  [{:keys [idx left-page right-page title current-stage?] :as stage-data}]
+  [{:keys [idx left-page right-page title current-stage?]}]
   (let [handle-click #(re-frame/dispatch [::state/show-flipbook-stage idx])]
     [:div {:class-name (ui/get-class-name {"stage-item"                true
                                            "stage-item--selected"      current-stage?
@@ -53,7 +69,14 @@
 
 (defn activity-pages
   []
-  [toolbox {:title   "Pages"
-            :icon    "create"
-            :actions [tech-pages-switch]}
-   [stages-list]])
+  (let [stage-ready? @(re-frame/subscribe [::stage-state/stage-ready?])
+        stage-busy? @(re-frame/subscribe [::stage-state/stage-busy?])
+        ready? (and stage-ready? (not stage-busy?))]
+    [toolbox {:title      "Pages"
+              :icon       "create"
+              :class-name "widget--activity-pages--toolbox"
+              :actions    (when ready?
+                            [tech-pages-switch])}
+     (if ready?
+       [stages-list]
+       [ui/loading-overlay])]))
