@@ -809,7 +809,7 @@
   ::upload-image-blob
   (fn [{:keys [_]} [_ {:keys [blob]} handlers]]
     {:dispatch [::upload-file {:file        blob
-                               :form-params [["type" "blob"]
+                               :form-params [["type" "image"]
                                              ["blob-type" "image"]]} handlers]}))
 
 (re-frame/reg-event-fx
