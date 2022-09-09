@@ -69,12 +69,14 @@
 
 (defn activity-pages
   []
-  (let [stage-ready? @(re-frame/subscribe [::stage-state/stage-ready?])]
+  (let [stage-ready? @(re-frame/subscribe [::stage-state/stage-ready?])
+        stage-busy? @(re-frame/subscribe [::stage-state/stage-busy?])
+        ready? (and stage-ready? (not stage-busy?))]
     [toolbox {:title      "Pages"
               :icon       "create"
               :class-name "widget--activity-pages--toolbox"
-              :actions    (when stage-ready?
+              :actions    (when ready?
                             [tech-pages-switch])}
-     (if stage-ready?
+     (if ready?
        [stages-list]
        [ui/loading-overlay])]))

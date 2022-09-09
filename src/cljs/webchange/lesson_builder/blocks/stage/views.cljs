@@ -13,6 +13,7 @@
   (let [scene-data @(re-frame/subscribe [::state/scene-data])
         key @(re-frame/subscribe [::state/stage-key])
         show-bottom-actions? @(re-frame/subscribe [::state/show-bottom-actions?])
+        busy? @(re-frame/subscribe [::state/stage-busy?])
         handle-ready #(re-frame/dispatch [::state/set-stage-ready true])]
     [:div {:id         "block--stage"
            :class-name class-name}
@@ -25,4 +26,6 @@
               :on-ready   handle-ready}]]
      (when show-bottom-actions?
        [select-stage {:class-name "stage-actions"}])
-     [second-stage]]))
+     [second-stage]
+     (when busy?
+       [ui/loading-overlay])]))

@@ -63,3 +63,16 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db stage-ready-key value)}))
+
+(def stage-busy-key :stage-busy?)
+
+(re-frame/reg-sub
+  ::stage-busy?
+  :<- [path-to-db]
+  #(get % stage-busy-key false))
+
+(re-frame/reg-event-fx
+  ::set-stage-busy
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db stage-busy-key value)}))

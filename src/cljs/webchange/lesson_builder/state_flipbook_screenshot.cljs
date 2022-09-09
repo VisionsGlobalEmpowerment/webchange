@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.lesson-builder.blocks.stage.state :as stage]
     [webchange.lesson-builder.state-flipbook :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.crop-image :refer [get-half-image]]
@@ -65,7 +66,8 @@
                           :saved-stage nil})
         (reset! page-screenshots {})
         {:dispatch-n [[::state/update-pages-preview screenshots]
-                      [::state/show-flipbook-stage saved-stage]]})
+                      [::state/show-flipbook-stage saved-stage]
+                      [::stage/set-stage-busy false]]})
       {:dispatch [::run-que]})))
 
 (re-frame/reg-event-fx
@@ -77,4 +79,5 @@
       (let [current-stage (state/get-current-stage db)]
         (swap! que merge {:running?    true
                           :saved-stage current-stage})
-        {:dispatch [::run-que]}))))
+        {:dispatch-n [[::run-que]
+                      [::stage/set-stage-busy true]]}))))
