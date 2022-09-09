@@ -1,6 +1,7 @@
 (ns webchange.lesson-builder.state-flipbook-screenshot
   (:require
     [re-frame.core :as re-frame]
+    [re-frame.std-interceptors :as i]
     [webchange.interpreter.renderer.scene.app :as app]
     [webchange.lesson-builder.state-flipbook :as state]
     [webchange.state.warehouse :as warehouse]
@@ -32,8 +33,9 @@
                 {:blob image-blob}
                 {:on-success [::upload-screenshot-success page-idx]}]}))
 
-(defonce que (atom {:sequence []
-                    :running? false}))
+(defonce que (atom {:sequence    []
+                    :running?    false
+                    :saved-stage nil}))
 
 (defonce page-screenshots (atom {}))
 
@@ -57,16 +59,22 @@
   ::run-que-next
   (fn [{:keys [_]} [_]]
     (if (empty? (:sequence @que))
-      (let [screenshots @page-screenshots]
-        (do (swap! que assoc :running? false)
-            (reset! page-screenshots {})
-            {:dispatch [::state/update-pages-preview screenshots]}))
+      (let [screenshots @page-screenshots
+            saved-stage (:saved-stage @que)]
+        (swap! que merge {:running?    false
+                          :saved-stage nil})
+        (reset! page-screenshots {})
+        {:dispatch-n [[::state/update-pages-preview screenshots]
+                      [::state/show-flipbook-stage saved-stage]]})
       {:dispatch [::run-que]})))
 
 (re-frame/reg-event-fx
   ::take-page-screenshot
-  (fn [{:keys [_]} [_ page-idx]]
+  (i/path state/path-to-db)
+  (fn [{:keys [db]} [_ page-idx]]
     (swap! que update :sequence conj page-idx)
     (when-not (:running? @que)
-      (swap! que assoc :running? true)
-      {:dispatch [::run-que]})))
+      (let [current-stage (state/get-current-stage db)]
+        (swap! que merge {:running?    true
+                          :saved-stage current-stage})
+        {:dispatch [::run-que]}))))
