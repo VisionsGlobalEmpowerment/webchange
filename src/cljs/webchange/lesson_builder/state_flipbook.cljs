@@ -37,8 +37,9 @@
                          (when (some? page-idx)
                            (let [page-data (flipbook-utils/get-page-data activity-data page-idx)]
                              (merge page-data
-                                    {:idx   page-idx
-                                     :title (str "Page " page-idx)}))))]
+                                    {:idx     page-idx
+                                     :title   (str "Page " page-idx)
+                                     :preview (get-in page-data [:preview :url])}))))]
     (->> (flipbook-utils/get-stages-data activity-data)
          (map (fn [{:keys [idx name pages-idx]}]
                 {:id             (->> pages-idx
@@ -209,3 +210,15 @@
     (-> (get-prev-stage-idx {:stages            stages
                              :current-stage-idx current-stage-idx})
         (some?))))
+
+(re-frame/reg-event-fx
+  ::update-pages-preview
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ page-screenshots]]
+    (let [book-name :book
+          pages (->> (flipbook-utils/get-pages-data activity-data)
+                     (map-indexed (fn [idx page-data]
+                                    (cond-> page-data
+                                            (contains? page-screenshots idx) (assoc :preview (get page-screenshots idx))))))]
+      pages
+      {:dispatch [::state/set-activity-data (assoc-in activity-data [:objects book-name :pages] pages)]})))

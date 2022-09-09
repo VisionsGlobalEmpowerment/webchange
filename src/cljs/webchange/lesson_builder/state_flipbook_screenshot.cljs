@@ -1,0 +1,72 @@
+(ns webchange.lesson-builder.state-flipbook-screenshot
+  (:require
+    [re-frame.core :as re-frame]
+    [webchange.interpreter.renderer.scene.app :as app]
+    [webchange.lesson-builder.state-flipbook :as state]
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.crop-image :refer [get-half-image]]
+    [webchange.utils.flipbook :as flipbook-utils]))
+
+(defn- get-page-data
+  [activity-data page-idx]
+  (let [stage (->> (flipbook-utils/get-stages-data activity-data)
+                   (some (fn [{:keys [pages-idx] :as stage-data}]
+                           (and (some #{page-idx} pages-idx)
+                                stage-data))))]
+    {:stage-idx (:idx stage)
+     :page-side (if (-> stage :pages-idx first (= page-idx))
+                  "left" "right")}))
+
+(defn- take-stage-screenshot
+  [callback]
+  (app/take-screenshot callback {:extract-canvas? false}))
+
+(defn- take-page-screenshot
+  [{:keys [side]} callback]
+  (take-stage-screenshot #(get-half-image % callback {:side side})))
+
+(re-frame/reg-event-fx
+  ::upload-screenshot
+  (fn [{:keys [_]} [_ page-idx image-blob]]
+    {:dispatch [::warehouse/upload-image-blob
+                {:blob image-blob}
+                {:on-success [::upload-screenshot-success page-idx]}]}))
+
+(defonce que (atom {:sequence []
+                    :running? false}))
+
+(defonce page-screenshots (atom {}))
+
+(re-frame/reg-event-fx
+  ::upload-screenshot-success
+  (fn [{:keys [_]} [_ page-idx response]]
+    (swap! page-screenshots assoc page-idx response)
+    {:dispatch [::run-que-next]}))
+
+(re-frame/reg-event-fx
+  ::run-que
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_]]
+    (let [[page-idx & rest-que] (:sequence @que)
+          {:keys [stage-idx page-side]} (get-page-data activity-data page-idx)]
+      (swap! que assoc :sequence rest-que)
+      (js/setTimeout (fn [] (take-page-screenshot {:side page-side} #(re-frame/dispatch [::upload-screenshot page-idx %]))) 100)
+      {:dispatch [::state/show-flipbook-stage stage-idx]})))
+
+(re-frame/reg-event-fx
+  ::run-que-next
+  (fn [{:keys [_]} [_]]
+    (if (empty? (:sequence @que))
+      (let [screenshots @page-screenshots]
+        (do (swap! que assoc :running? false)
+            (reset! page-screenshots {})
+            {:dispatch [::state/update-pages-preview screenshots]}))
+      {:dispatch [::run-que]})))
+
+(re-frame/reg-event-fx
+  ::take-page-screenshot
+  (fn [{:keys [_]} [_ page-idx]]
+    (swap! que update :sequence conj page-idx)
+    (when-not (:running? @que)
+      (swap! que assoc :running? true)
+      {:dispatch [::run-que]})))

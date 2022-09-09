@@ -5,6 +5,7 @@
 
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     .stage-wrapper {
         flex: 1 1;
@@ -12,11 +13,20 @@
         background-color: bbs--color(blue-2, $variant: light);
         border-radius: $border-radius;
         overflow: hidden;
+
+        height: 405px;
+        width: 720px;
+
+        &.has-bottom-actions {
+            height: 367px;
+            width: 367px * 1.7778;
+        }
     }
 
     .stage-actions {
         display: flex;
         justify-content: space-between;
         padding: 4px;
+        width: 100%;
     }
 }
