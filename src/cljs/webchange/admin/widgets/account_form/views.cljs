@@ -124,19 +124,25 @@
       (re-frame/dispatch [::state/reset-form (r/props this)]))
 
     :reagent-render
-    (fn [{:keys [account-id class-name disabled? on-save my-account?]}]
+    (fn [{:keys [account-id class-name on-save my-account?]}]
       (let [saving? @(re-frame/subscribe [::state/data-saving?])
             data @(re-frame/subscribe [::state/form-data])
-            handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])]
+            handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])
+            handle-enable-edit #(re-frame/dispatch [::state/enable-edit])
+            edit-disabled? @(re-frame/subscribe [::state/edit-disabled?])]
         [:div {:class-name (c/get-class-name {"widget--account-form" true
                                               class-name             (some? class-name)})}
-         [:h3.account-details-header "Account Settings"]
+         [:h3.account-details-header "Account Settings"
+          (when edit-disabled?
+            [ui/button {:icon "edit"
+                        :color "blue-1"
+                        :on-click handle-enable-edit}])]
          [ui/form {:form-id   (-> (str "edit-account")
                                   (keyword))
                    :model     (if my-account? my-account-model edit-account-model)
                    :data      data
                    :spec      ::account-spec/edit-account
                    :on-save   handle-save
-                   :disabled? disabled?
+                   :disabled? edit-disabled?
                    :saving?   saving?}]
          [remove-window {:account-id account-id}]]))}))
