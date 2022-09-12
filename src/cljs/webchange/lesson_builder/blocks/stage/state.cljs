@@ -47,7 +47,7 @@
     {:db (assoc db :stage-key (rand))}))
 
 (re-frame/reg-sub
-  ::show-bottom-actions?
+  ::show-flipbook-actions?
   :<- [::state/flipbook?]
   identity)
 

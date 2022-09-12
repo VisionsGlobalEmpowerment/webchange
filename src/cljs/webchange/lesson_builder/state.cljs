@@ -93,10 +93,10 @@
   #(get-activity-info %))
 
 (re-frame/reg-cofx
- :activity-info
- (fn [{:keys [db] :as co-effects}]
-   (->> (get-activity-info db path-to-db)
-        (assoc co-effects :activity-info))))
+  :activity-info
+  (fn [{:keys [db] :as co-effects}]
+    (->> (get-activity-info db path-to-db)
+         (assoc co-effects :activity-info))))
 
 (re-frame/reg-event-fx
   ::set-activity-info
@@ -236,8 +236,8 @@
           data (get-activity-data db)]
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/save-activity-version
-                  {:activity-id id
-                   :activity-data  data}
+                  {:activity-id   id
+                   :activity-data data}
                   {:on-success [::save-activity-success]
                    :on-failure [::save-activity-failure]}]})))
 
@@ -273,9 +273,9 @@
   ::update-template-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [data]}]]
-    {:db       (-> db
-                   (set-activity-saving false)
-                   (set-activity-data data))}))
+    {:db (-> db
+             (set-activity-saving false)
+             (set-activity-data data))}))
 
 (re-frame/reg-event-fx
   ::update-template-failure
@@ -292,8 +292,8 @@
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
-                   :action "add-image"
-                   :data data}
+                   :action      "add-image"
+                   :data        data}
                   {:on-success [::add-image-success on-success]
                    :on-failure [::add-image-failure]}]})))
 
@@ -301,9 +301,9 @@
   ::add-image-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ on-success {:keys [data]}]]
-    {:db       (-> db
-                   (set-activity-saving false)
-                   (set-activity-data data))
+    {:db         (-> db
+                     (set-activity-saving false)
+                     (set-activity-data data))
      :dispatch-n (cond-> [[:stage/reset]]
                          (some? on-success) (conj on-success))}))
 
@@ -322,8 +322,8 @@
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
-                   :action "add-character"
-                   :data data}
+                   :action      "add-character"
+                   :data        data}
                   {:on-success [::add-character-success]
                    :on-failure [::add-character-failure]}]})))
 
@@ -357,8 +357,8 @@
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
-                   :action action
-                   :data {:name object-name}}
+                   :action      action
+                   :data        {:name object-name}}
                   {:on-success [::remove-object-success on-success]
                    :on-failure [::remove-object-failure]}]})))
 
@@ -387,15 +387,15 @@
         {:db       (-> db (set-activity-saving true))
          :dispatch [::warehouse/activity-template-action
                     {:activity-id id
-                     :action :background-music
-                     :data {:background-music {:src src
-                                               :volume volume}}}
+                     :action      :background-music
+                     :data        {:background-music {:src    src
+                                                      :volume volume}}}
                     {:on-success [::update-background-music-success on-success]
                      :on-failure [::update-background-music-failure]}]}
         {:db       (-> db (set-activity-saving true))
          :dispatch [::warehouse/activity-template-action
                     {:activity-id id
-                     :action :background-music-remove}
+                     :action      :background-music-remove}
                     {:on-success [::update-background-music-success on-success]
                      :on-failure [::update-background-music-failure]}]}))))
 
@@ -413,3 +413,31 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-saving false))}))
+
+(re-frame/reg-event-fx
+  ::call-activity-action
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [action data common-action?] :or {common-action? true}} {:keys [on-success on-failure]}]]
+    (let [{:keys [id]} (get-activity-info db)]
+      {:db       (set-activity-saving db true)
+       :dispatch [::warehouse/activity-template-action
+                  {:activity-id    id
+                   :action         action
+                   :data           data
+                   :common-action? common-action?}
+                  {:on-success [::call-activity-action-success on-success]
+                   :on-failure [::call-activity-action-failure on-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-success response]]
+    (cond-> {:db (set-activity-saving db false)}
+            (some? on-success) (assoc :dispatch (conj on-success response)))))
+
+(re-frame/reg-event-fx
+  ::call-activity-action-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ on-failure response]]
+    (cond-> {:db (set-activity-saving db false)}
+            (some? on-failure) (assoc :dispatch (conj on-failure response)))))
