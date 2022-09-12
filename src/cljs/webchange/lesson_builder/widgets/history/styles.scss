@@ -1,0 +1,18 @@
+.widget--activity-history-dialog {
+    width: 620px;
+    max-width: unset;
+}
+
+.widget--activity-history-form {
+    @include bbs--noto-14-r;
+    display: grid;
+    grid-template-columns: 85px 45px auto 140px;
+    column-gap: 12px;
+    row-gap: 12px;
+
+    .history-item--action {
+        justify-self: center;
+        height: 30px;
+    }
+}
+
