@@ -5,6 +5,7 @@
     height: 100%;
 
     @include bbs--scrollable($direction: horizontal);
+    overflow-y: hidden;
 
     @mixin item-title {
         @include bbs--noto-12-r;
@@ -94,7 +95,7 @@
 
     .page-item--preview {
         width: 120px;
-        height: 160px;
+        height: 140px;
         border: solid 1px bbs--color(grey-5);
         border-radius: 6px;
         overflow: hidden;

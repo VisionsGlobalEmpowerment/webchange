@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.lesson-builder.blocks.stage.state :as stage-state]
     [webchange.lesson-builder.state :as state]
     [webchange.utils.flipbook :as flipbook-utils]))
 
@@ -94,6 +95,15 @@
   :<- [path-to-db]
   get-show-generated-pages)
 
+(re-frame/reg-event-fx
+  ::set-show-generated-pages
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db       (assoc db show-generated-pages-key value)
+     :dispatch [::update-current-flipbook-stage]}))
+
+;; stage selector
+
 (defn- get-closest-available-stage-idx
   [current-idx available-idx]
   (->> available-idx
@@ -109,18 +119,18 @@
        (:idx)))
 
 (re-frame/reg-event-fx
-  ::set-show-generated-pages
+  ::update-current-flipbook-stage
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
-  (fn [{:keys [activity-data db]} [_ value]]
+  (fn [{:keys [activity-data db]} [_ {:keys [force?] :or {force? false}}]]
     (let [current-stage-idx (get-current-stage db)
-          stages-idx (->> (get-activity-stages-filtered activity-data current-stage-idx value)
+          show-generated-pages? (get-show-generated-pages db)
+          stages-idx (->> (get-activity-stages-filtered activity-data current-stage-idx show-generated-pages?)
                           (map :idx))
           closest-available-idx (get-closest-available-stage-idx current-stage-idx stages-idx)]
-      (cond-> {:db (assoc db show-generated-pages-key value)}
-              (not= current-stage-idx closest-available-idx) (assoc :dispatch [::show-flipbook-stage closest-available-idx])))))
-
-;; stage selector
+      (when (or (not= current-stage-idx closest-available-idx)
+                force?)
+        {:dispatch [::show-flipbook-stage closest-available-idx]}))))
 
 (re-frame/reg-event-fx
   ::show-flipbook-stage
@@ -222,3 +232,44 @@
                                             (contains? page-screenshots idx) (assoc :preview (get page-screenshots idx))))))]
       pages
       {:dispatch [::state/set-activity-data (assoc-in activity-data [:objects book-name :pages] pages)]})))
+
+;; remove page
+
+(re-frame/reg-event-fx
+  ::remove-page
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ page-idx]]
+    (let [spread-id (-> (flipbook-utils/get-page-data activity-data page-idx)
+                        (get :spread-id))
+          pages-to-remove (if (some? spread-id)
+                            (->> (flipbook-utils/get-pages-data activity-data #(= spread-id (:spread-id %)))
+                                 (map :idx)
+                                 (sort)
+                                 (reverse))                 ;; delete in index descending order
+                            [page-idx])]
+      {:dispatch-n [[::stage-state/set-stage-busy true]
+                    [::remove-pages-sequence pages-to-remove]]})))
+
+(re-frame/reg-event-fx
+  ::remove-pages-sequence
+  (fn [{:keys []} [_ [page-idx & rest-pages]]]
+    {:dispatch [::state/call-activity-action
+                {:action         "remove-page"
+                 :data           {:page-number page-idx}
+                 :common-action? false}
+                {:on-success (if (empty? rest-pages)
+                               [::remove-page-success]
+                               [::remove-pages-sequence rest-pages])}]}))
+
+(re-frame/reg-event-fx
+  ::remove-page-success
+  (fn [{:keys [_]} [_ {:keys [data]}]]
+    {:dispatch-n [[::stage-state/set-stage-busy false]
+                  [::stage-state/reset]                     ;; reset stage to update flipbook instance in interpreter
+                  [::state/set-activity-data data]
+                  [::update-current-flipbook-stage {:force? true}]]}))
+
+(re-frame/reg-event-fx
+  ::remove-page-failure
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::stage-state/set-stage-busy false]}))

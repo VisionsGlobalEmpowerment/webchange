@@ -15,9 +15,14 @@
       (some?)))
 
 (defn get-pages-data
-  [activity-data]
-  (let [flipbook-name (get-book-object-name activity-data)]
-    (get-in activity-data [:objects (keyword flipbook-name) :pages])))
+  ([activity-data]
+   (let [flipbook-name (get-book-object-name activity-data)]
+     (->> (get-in activity-data [:objects (keyword flipbook-name) :pages])
+          (map-indexed (fn [idx page-data]
+                         (assoc page-data :idx idx))))))
+  ([activity-data predicate]
+   (->> (get-pages-data activity-data)
+        (filter predicate))))
 
 (defn get-stages-data
   [activity-data]

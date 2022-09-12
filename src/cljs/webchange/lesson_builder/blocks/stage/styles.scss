@@ -1,11 +1,13 @@
 #block--stage {
-    @import "second_stage/styles";
+    $stage-block-height: 405px;
+    $actions-block-height: 38px;
 
-    position: relative;
+    @import "second_stage/styles";
 
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 
     .stage-wrapper {
         flex: 1 1;
@@ -17,9 +19,13 @@
         height: 405px;
         width: 720px;
 
-        &.has-bottom-actions {
-            height: 367px;
-            width: 367px * 1.7778;
+        &.stage-wrapper--has-actions {
+            $ratio: 1920 / 1080;
+            $height: $stage-block-height - $actions-block-height * 2;
+            $width: $height * $ratio;
+
+            height: $height;
+            width: $width;
         }
     }
 
@@ -28,5 +34,6 @@
         justify-content: space-between;
         padding: 4px;
         width: 100%;
+        height: $actions-block-height;
     }
 }

@@ -512,10 +512,10 @@
 
 (re-frame/reg-event-fx
   ::activity-template-action
-  (fn [{:keys [_]} [_ {:keys [activity-id action data]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [activity-id action common-action? data] :or {common-action? true}} handlers]]
     (create-request {:key    :apply-activity-template-action
                      :method :post
-                     :params {:common-action? true
+                     :params {:common-action? common-action?
                               :action         action
                               :data           data}
                      :uri    (str "/api/activities/" activity-id "/template-actions")}

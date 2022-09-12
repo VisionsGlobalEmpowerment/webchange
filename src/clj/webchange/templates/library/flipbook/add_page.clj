@@ -68,7 +68,7 @@
 
 (defn- add-page-to-book
   [activity-data
-   {:keys [with-action? shift-from-end removable? position back-cover-filler?]
+   {:keys [with-action? shift-from-end removable? position back-cover-filler? spread-id]
     :or   {shift-from-end     0
            removable?         true
            back-cover-filler? false}
@@ -89,7 +89,8 @@
                            (cond-> {:object     name
                                     :text       text-name
                                     :removable? removable?}
-                                   back-cover-filler? (assoc :back-cover-filler? true))
+                                   back-cover-filler? (assoc :back-cover-filler? true)
+                                   (some? spread-id) (assoc :spread-id spread-id))
                            new-page-position))
             (and with-action?
                  (or (some? action)
