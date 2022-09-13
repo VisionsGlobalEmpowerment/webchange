@@ -237,18 +237,35 @@
 
 (re-frame/reg-event-fx
   ::remove-page
-  (fn [{:keys [_]} [_ page-idx]]
-    {:dispatch-n [[::stage-state/set-stage-busy true]
-                  [::state/call-activity-action
-                   {:action         "remove-page"
-                    :data           {:page-number page-idx}
-                    :common-action? false}
-                   {:on-success [::remove-page-success]}]]}))
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ page-idx]]
+    (let [spread-id (-> (flipbook-utils/get-page-data activity-data page-idx)
+                        (get :spread-id))
+          pages-to-remove (if (some? spread-id)
+                            (->> (flipbook-utils/get-pages-data activity-data #(= spread-id (:spread-id %)))
+                                 (map :idx)
+                                 (sort)
+                                 (reverse))                 ;; delete in index descending order
+                            [page-idx])]
+      {:dispatch-n [[::stage-state/set-stage-busy true]
+                    [::remove-pages-sequence pages-to-remove]]})))
+
+(re-frame/reg-event-fx
+  ::remove-pages-sequence
+  (fn [{:keys []} [_ [page-idx & rest-pages]]]
+    {:dispatch [::state/call-activity-action
+                {:action         "remove-page"
+                 :data           {:page-number page-idx}
+                 :common-action? false}
+                {:on-success (if (empty? rest-pages)
+                               [::remove-page-success]
+                               [::remove-pages-sequence rest-pages])}]}))
 
 (re-frame/reg-event-fx
   ::remove-page-success
   (fn [{:keys [_]} [_ {:keys [data]}]]
     {:dispatch-n [[::stage-state/set-stage-busy false]
+                  [::stage-state/reset]                     ;; reset stage to update flipbook instance in interpreter
                   [::state/set-activity-data data]
                   [::update-current-flipbook-stage {:force? true}]]}))
 
