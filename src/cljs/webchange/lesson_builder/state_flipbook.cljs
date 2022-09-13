@@ -72,7 +72,8 @@
                     (update :right-page filter-generated-page show-generated-pages?)))))
        (filter (fn [{:keys [left-page right-page]}]
                  (or (some? left-page)
-                     (some? right-page))))))
+                     (some? right-page))))
+       (vec)))
 
 (re-frame/reg-sub
   ::activity-stages-filtered

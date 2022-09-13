@@ -94,6 +94,7 @@
     }
 
     .page-item--preview {
+        flex-shrink: 0;
         width: 120px;
         height: 140px;
         border: solid 1px bbs--color(grey-5);
@@ -108,6 +109,30 @@
 
         .not-loaded {
             background-color: transparent;
+        }
+    }
+
+    .page-item--add-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        .page-item--add-image {
+            $size: 38px;
+
+            width: $size;
+            height: $size;
+
+            border: solid 1px bbs--color(grey-4);
+            border-radius: 9999px;
+            box-shadow: 0px 2px 4px 0px bbs--color(grey-4);
+        }
+
+        &:hover {
+            .page-item--add-image {
+                border-color: bbs--color(blue-2);
+            }
         }
     }
 
