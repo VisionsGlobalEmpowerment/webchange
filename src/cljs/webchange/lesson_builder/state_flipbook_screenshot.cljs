@@ -53,7 +53,7 @@
     (let [[page-idx & rest-que] (:sequence @que)
           {:keys [stage-idx page-side]} (get-page-data activity-data page-idx)]
       (swap! que assoc :sequence rest-que)
-      (js/setTimeout (fn [] (take-page-screenshot {:side page-side} #(re-frame/dispatch [::upload-screenshot page-idx %]))) 100)
+      (js/setTimeout (fn [] (take-page-screenshot {:side page-side} #(re-frame/dispatch [::upload-screenshot page-idx %]))) 300)
       {:dispatch [::state/show-flipbook-stage stage-idx]})))
 
 (re-frame/reg-event-fx

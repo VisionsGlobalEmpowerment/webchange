@@ -1,0 +1,129 @@
+.widget--flipbook-page-layout--form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .form-content {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    .layout-form-item-block {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .layout-form-item-block--title {
+        @include bbs--noto-18-b;
+    }
+
+    .layout-form-item-block--text {
+        border-width: 1px;
+    }
+}
+
+.widget--flipbook-page-layout-selector {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+
+    @include bbs--scrollable;
+
+    .layout-item {
+        position: relative;
+
+        padding: 8px;
+        border: solid 1px bbs--color(grey-5);
+        border-radius: 6px;
+
+        .layout-item--preview {
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        &.layout-item--type-page {
+            .layout-item--preview {
+                width: 104px;
+                height: 142px;
+            }
+        }
+
+        &.layout-item--type-spread {
+            .layout-item--preview {
+                width: 224px;
+                height: 142px;
+            }
+        }
+
+        &:hover {
+            @include bbs--icon-color(bbs--color(blue-2, $variant: light));
+            cursor: pointer;
+        }
+
+        &.layout-item--selected {
+            background-color: bbs--color(blue-1);
+            @include bbs--icon-color(bbs--color(yellow-1));
+        }
+
+        .layout-item--select-mark {
+            $size: 28px;
+
+            position: absolute;
+            top: -$size * 0.3;
+            right: -$size * 0.3;
+
+            width: $size;
+            height: $size;
+
+            background-color: bbs--color(yellow-1);
+            border-radius: 9999px;
+            @include bbs--icon-color(bbs--color(blue-1));
+        }
+    }
+}
+
+.widget--flipbook-page-layout-type-selector {
+    $gap: 16px;
+
+    display: flex;
+    gap: $gap;
+
+    .switcher-button {
+        position: relative;
+        color: bbs--color(white);
+
+        &:hover,
+        &.switcher-button--active {
+            color: bbs--color(yellow-1);
+        }
+
+        &:after {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            right: - $gap * 0.5;
+            width: 1px;
+            height: 100%;
+
+            border-right: solid 1px bbs--color(grey-3, $opacity: 0.3);
+        }
+
+        &:last-child:after {
+            display: none;
+        }
+    }
+}

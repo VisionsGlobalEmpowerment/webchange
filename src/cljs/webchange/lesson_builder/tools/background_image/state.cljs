@@ -115,7 +115,6 @@
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_ options]]
-    (print "::init options" options)
     (let [[name {:keys [type] :as data}] (get-scene-background activity-data)
           background-data {:name name
                            :type type

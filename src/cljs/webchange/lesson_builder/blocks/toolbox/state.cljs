@@ -18,11 +18,17 @@
   (get db current-widget-key))
 
 (re-frame/reg-sub
+  ::default-widget
+  :<- [::state/flipbook?]
+  (fn [flipbook?]
+    (if flipbook? :pages :welcome)))
+
+(re-frame/reg-sub
   ::current-widget
   :<- [path-to-db]
-  :<- [::state/flipbook?]
-  (fn [[db flipbook?]]
-    (get db current-widget-key (if flipbook? :pages :welcome))))
+  :<- [::default-widget]
+  (fn [[db default-widget]]
+    (get db current-widget-key default-widget)))
 
 (re-frame/reg-event-fx
   ::set-current-widget

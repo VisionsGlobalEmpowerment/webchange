@@ -72,7 +72,8 @@
                     (update :right-page filter-generated-page show-generated-pages?)))))
        (filter (fn [{:keys [left-page right-page]}]
                  (or (some? left-page)
-                     (some? right-page))))))
+                     (some? right-page))))
+       (vec)))
 
 (re-frame/reg-sub
   ::activity-stages-filtered
@@ -273,3 +274,28 @@
   ::remove-page-failure
   (fn [{:keys [_]} [_]]
     {:dispatch [::stage-state/set-stage-busy false]}))
+
+(re-frame/reg-event-fx
+  ::add-page
+  (fn [{:keys [_]} [_ page-data {:keys [on-success on-failure]}]]
+    {:dispatch-n [[::stage-state/set-stage-busy true]
+                  [::state/call-activity-action
+                   {:action         "add-page"
+                    :data           page-data
+                    :common-action? false}
+                   {:on-success [::add-page-success on-success]
+                    :on-failure [::add-page-failure on-failure]}]]}))
+
+(re-frame/reg-event-fx
+  ::add-page-success
+  (fn [{:keys [_]} [_ on-success {:keys [data]}]]
+    {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
+                          [::state/set-activity-data data]
+                          [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::add-page-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))

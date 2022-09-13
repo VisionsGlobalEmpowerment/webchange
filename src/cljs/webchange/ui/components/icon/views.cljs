@@ -2,6 +2,7 @@
   (:require
     [webchange.ui.components.icon.flags.index :as flags-icons]
     [webchange.ui.components.icon.navigation.index :as navigation-icons]
+    [webchange.ui.components.icon.layout.index :as layout-icons]
     [webchange.ui.components.icon.social.index :as social-icons]
     [webchange.ui.components.icon.system.index :as system-icons]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
@@ -11,6 +12,7 @@
   (let [svg-data (-> (case type
                        "flag" flags-icons/data
                        "navigation" navigation-icons/data
+                       "layout" layout-icons/data
                        "social" social-icons/data
                        "system" system-icons/data)
                      (get icon))]
@@ -41,6 +43,10 @@
   [props]
   [icon-component (assoc props :type "social")])
 
+(defn layout-icon
+  [props]
+  [icon-component (assoc props :type "layout")])
+
 (defn general-icon
   [{:keys [icon] :as props}]
   (let [type (cond
@@ -48,5 +54,6 @@
                (contains? navigation-icons/data icon) "navigation"
                (contains? social-icons/data icon) "social"
                (contains? system-icons/data icon) "system"
-               (contains? flags-icons/data icon) "flag")]
+               (contains? flags-icons/data icon) "flag"
+               (contains? layout-icons/data icon) "layout")]
     [icon-component (assoc props :type type)]))

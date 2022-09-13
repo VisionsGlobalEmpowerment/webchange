@@ -4,18 +4,33 @@
     [reagent.core :as r]
     [webchange.lesson-builder.blocks.stage.state :as stage-state]
     [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
-    [webchange.lesson-builder.state-flipbook :as state]
+    [webchange.lesson-builder.state-flipbook :as flipbook-state]
     [webchange.lesson-builder.state-flipbook-screenshot :as screenshot]
+    [webchange.lesson-builder.widgets.pages.state :as state]
     [webchange.ui.index :as ui]))
 
 (defn- tech-pages-switch
   []
-  (let [value @(re-frame/subscribe [::state/show-generated-pages?])
-        handle-change #(re-frame/dispatch [::state/set-show-generated-pages %])]
+  (let [value @(re-frame/subscribe [::flipbook-state/show-generated-pages?])
+        handle-change #(re-frame/dispatch [::flipbook-state/set-show-generated-pages %])]
     [ui/switch {:checked?  value
                 :label     "Display Technical Pages"
                 :color     "yellow-1"
                 :on-change handle-change}]))
+
+(defn- add-page-item
+  [{:keys [side title]}]
+  (let [handle-click #(re-frame/dispatch [::state/add-page])]
+    [:div {:class-name (ui/get-class-name {"page-item"              true
+                                           (str "page-item--" side) true})
+           :on-click   handle-click}
+     [:div {:class-name (ui/get-class-name {"page-item--preview"     true
+                                            "page-item--add-preview" true})}
+      [ui/icon {:icon       "plus"
+                :class-name "page-item--add-image"}]]
+     [:div {:class-name "page-item--title"
+            :title      title}
+      title]]))
 
 (defn- page-item
   []
@@ -25,24 +40,28 @@
      :component-did-mount
      (fn [this]
        (let [{:keys [idx preview]} (r/props this)]
-         (when (nil? preview)
+         (when (and (nil? preview)
+                    (number? idx))
            (re-frame/dispatch [::screenshot/take-page-screenshot idx]))))
 
      :reagent-render
-     (fn [{:keys [side title preview]}]
-       [:div {:class-name (ui/get-class-name {"page-item"              true
-                                              (str "page-item--" side) true})}
-        [:div {:class-name "page-item--preview"}
-         ^{:key preview}
-         [ui/image {:src        preview
-                    :class-name "page-item--preview-image"}]]
-        [:div {:class-name "page-item--title"
-               :title      title}
-         title]])}))
+     (fn [{:keys [id side title preview] :as props}]
+       (if-not (= id :add)
+         [:div {:class-name (ui/get-class-name {"page-item"              true
+                                                (str "page-item--" side) true})}
+          [:div {:class-name "page-item--preview"}
+           ^{:key preview}
+           [ui/image {:src        preview
+                      :class-name "page-item--preview-image"}]]
+          [:div {:class-name "page-item--title"
+                 :title      title}
+           title]]
+         [add-page-item props]))}))
 
 (defn- stage-item
   [{:keys [idx left-page right-page title current-stage?]}]
-  (let [handle-click #(re-frame/dispatch [::state/show-flipbook-stage idx])]
+  (let [handle-click #(when (number? idx)
+                        (re-frame/dispatch [::flipbook-state/show-flipbook-stage idx]))]
     [:div {:class-name (ui/get-class-name {"stage-item"                true
                                            "stage-item--selected"      current-stage?
                                            "stage-item--no-left-page"  (nil? left-page)
@@ -61,7 +80,7 @@
 
 (defn- stages-list
   []
-  (let [stages @(re-frame/subscribe [::state/activity-stages-filtered])]
+  (let [stages @(re-frame/subscribe [::state/stages])]
     [:div.widget--activity-pages
      (for [{:keys [id] :as stage-data} stages]
        ^{:key id}
