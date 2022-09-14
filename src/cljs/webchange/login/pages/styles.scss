@@ -1,0 +1,79 @@
+.pages-page {
+    .registration-success {
+	position: relative;
+	color: $color-blue-1;
+	
+	.title {
+	    font-family: 'Ranille';
+	    font-style: normal;
+	    font-weight: 400;
+	    font-size: 48px;
+	    line-height: 64px;
+
+	    padding-bottom: 30px;
+	}
+	.subtitle {
+	    font-family: 'Noto Sans';
+	    font-style: normal;
+	    font-weight: 400;
+	    font-size: 16px;
+	    line-height: 30px;
+	    
+	    width: 500px;
+	    padding-bottom: 30px;
+	}
+	.vaca-image {
+	    position: absolute;
+	    left: 621px;
+	    top: 91px;
+	    width: 116px;
+	}
+    }
+    .subfooter {
+	display: flex;
+	justify-content: center;
+	
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	height: 240;
+	width: 100%;
+
+	padding: 64px 133px;
+
+
+	z-index: 1;
+
+
+	border-top: 2px solid $color-blue-1;
+
+
+	.subfooter-left {
+	    flex: 1 1;
+	    color: $color-blue-1;
+	    
+	    .subfooter-title {
+		font-family: 'Noto Sans';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 40px;
+		line-height: 140.62%;
+	    }
+	    .subfooter-subtitle {
+		font-family: 'Noto Sans';
+		font-style: normal;
+		font-weight: 400;
+		font-size: 40px;
+		line-height: 140.62%;
+	    }
+	}
+	.subfooter-right {
+	    flex: 1 1;
+	    display: flex;
+	    gap: 36px;
+
+	    justify-content: end;
+	    align-items: center;
+	}
+    }
+}

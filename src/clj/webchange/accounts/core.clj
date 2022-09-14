@@ -119,7 +119,7 @@
                  (assoc :active false))
         [{id :id}] (create-user-with-credentials! data)
         result (assoc data :id id)]
-    (e/request-email-confirmation! data)
+    (e/request-email-confirmation! result)
     data))
 
 (defn edit-account
@@ -149,3 +149,19 @@
                            :active active})
   {:id user-id
    :active active})
+
+
+(defn string->uuid [value]
+  (try
+    (java.util.UUID/fromString value)
+    (catch Exception e nil)))
+
+(defn confirm-email
+  [code]
+  (when (string->uuid code)
+    (let [uuid (java.util.UUID/fromString code)]
+      (when-let [{{:keys [user-id]} :metadata} (db/get-code {:code uuid})]
+        (db/set-account-status! {:id user-id
+                                 :active true})
+        (db/delete-code! {:code uuid})
+        true))))

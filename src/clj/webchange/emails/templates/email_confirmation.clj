@@ -6,7 +6,7 @@
 
 (defn- verify-code-link
   [user-id code]
-  (str  "https://" hostname "/activation-page/?key=" code "&user=" user-id))
+  (str "https://" hostname "/accounts/confirm-email/" code))
 
 (defn email-confirmation-template
   [{:keys [email id code name]}]

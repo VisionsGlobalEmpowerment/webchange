@@ -9,13 +9,16 @@
     @import "components/styles";
     @import "header/styles";
     @import "sign_in/styles";
-
-    color: #fff;
+    @import "pages/styles";
+    @import "registration/styles";
 
     background-color: bbs--color(grey-5);
-    background-image: url("/images/admin/page/page_login_background.svg");
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-position-y: 100px;
-    background-size: cover;
+    
+    &.background-with-image {
+	background-image: url("/images/admin/page/page_login_background.svg");
+	background-repeat: no-repeat;
+	background-position: bottom right;
+	background-position-y: 100px;
+	background-size: cover;
+    }
 }

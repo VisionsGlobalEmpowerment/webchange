@@ -242,6 +242,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::register-account
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :register-account
+                     :method :post
+                     :uri    "/api/accounts/register"
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-account
   (fn [{:keys [_]} [_ {:keys [id]} handlers]]
     (create-request {:key    :load-account

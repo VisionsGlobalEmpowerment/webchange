@@ -22,7 +22,7 @@
     [webchange.auth.handler :refer [auth-routes]]
     [webchange.auth.roles :as roles]
     [webchange.auth.website :as website]
-    [webchange.accounts.handler :refer [accounts-routes]]
+    [webchange.accounts.handler :refer [accounts-routes accounts-pages-routes]]
     [webchange.book-library.handler :refer [book-library-api-routes]]
     [webchange.class.handler :refer [class-routes]]
     [webchange.common.audio-parser :refer [get-talking-animation]]
@@ -176,6 +176,7 @@
   (GET "/teacher/*" [] (public-route))
   (GET "/ui" [] (public-route))
   (GET "/ui/*" [] (public-route))
+  (GET "/accounts/*" [] (public-route))
   
   ;; Technical
   (GET "/test-ui" [] (public-route))
@@ -233,7 +234,8 @@
     templates-api-routes
     class-routes
     accounts-routes
-    course-routes)
+    course-routes
+    accounts-pages-routes)
   pages-routes
   animation-routes
   auth-routes

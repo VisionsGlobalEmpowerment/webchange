@@ -1,17 +1,17 @@
-.sign-in-form {
+.registration-form {
     color: #fff;
-
+    
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 64px;
+   
 
-    width: 50%;
-    max-width: 500px;
+    min-width: 500px;
     padding: 46px 68px;
     padding-bottom: 86px;
-
+    
     background: bbs--color(blue-1);
     border-radius: 20px;
 
@@ -21,6 +21,7 @@
         margin: 0;
     }
 
+    
     .form {
         display: flex;
         flex-direction: column;
@@ -30,7 +31,9 @@
         max-width: 240px;
     }
 
-    .login-button {
+    .submit {
         margin-top: 16px;
+	border-radius: 20px;
     }
 }
+
