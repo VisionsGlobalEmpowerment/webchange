@@ -55,6 +55,7 @@
 (def input-error input-error-views/input-error)
 (def input-label input-label-views/input-label)
 (def logo-with-name logo-views/logo-with-name)
+(def layout-icon icon-views/layout-icon)
 (def link link-views/link)
 (def list list-views/list)
 (def list-item list-views/list-item)
