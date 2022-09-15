@@ -1,10 +1,42 @@
+.widget--flipbook-page-layout--form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .form-content {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+    .layout-form-item-block {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .layout-form-item-block--title {
+        @include bbs--noto-18-b;
+    }
+
+    .layout-form-item-block--text {
+        border-width: 1px;
+    }
+}
+
 .widget--flipbook-page-layout-selector {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 16px;
 
     width: 100%;
     height: 100%;
+    padding: 8px;
 
     @include bbs--scrollable;
 

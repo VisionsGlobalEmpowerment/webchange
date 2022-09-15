@@ -29,7 +29,8 @@
         (when-not hide-preview?
           ^{:key value}
           [ui/image {:src        value
-                     :class-name class-name-image}])
+                     :class-name (ui/get-class-name {"select-image-preview" true
+                                                     class-name-image       (some? class-name-image)})}])
         [:input {:type      "file"
                  :accept    ["gif" "jpg" "jpeg" "png"]
                  :on-change #(-> % change-event->file handle-upload)

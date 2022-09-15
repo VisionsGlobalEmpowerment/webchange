@@ -20,7 +20,9 @@
 (defn block-toolbox
   [{:keys [class-name]}]
   (let [current-widget @(re-frame/subscribe [::state/current-widget])
-        component (get toolboxes current-widget)]
+        default-widget @(re-frame/subscribe [::state/default-widget])
+        component (->> (get toolboxes default-widget)
+                       (get toolboxes current-widget))]
     [:div {:class-name (ui/get-class-name {"block-toolbox" true
                                            class-name      (some? class-name)})}
      [component]]))

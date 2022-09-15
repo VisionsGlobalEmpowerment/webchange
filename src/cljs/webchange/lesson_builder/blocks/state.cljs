@@ -32,7 +32,7 @@
 ;; general
 
 (def states
-  {:default                 {:toolbox :welcome
+  {:default                 {:toolbox :default
                              :menu    :default
                              :focus   #{}}
    :change-background-image {:toolbox :background-image
