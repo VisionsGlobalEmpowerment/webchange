@@ -37,7 +37,8 @@
                  :ref       #(reset! file-input %)}]
         [:div.actions
          [ui/button {:on-click #(re-frame/dispatch [::state/show-choose-image key])
-                     :color    "blue-1"}
+                     :color    "blue-1"
+                     :data     {:test-id "open-library"}}
           "Open Library"]
          [ui/button {:on-click #(.click @file-input)}
           (if uploading? "Uploading..." "Upload New")]]]]

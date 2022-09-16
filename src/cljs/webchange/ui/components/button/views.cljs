@@ -6,7 +6,8 @@
     [webchange.ui.components.icon.views :refer [general-icon]]
     [webchange.ui.components.progress.views :refer [circular-progress]]
     [webchange.ui.spec :as ui-spec]
-    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]
+    [webchange.ui.utils.get-data-attributes :refer [get-data-attributes]]))
 
 (s/def ::button-icon (s/or :empty nil? :defined ::ui-spec/general-icon))
 
@@ -15,6 +16,7 @@
            chip
            chip-color
            color
+           data
            disabled?
            href
            icon
@@ -68,7 +70,8 @@
                                                          class-name                                  (some? class-name)})
                             :disabled   (or disabled? loading?)
                             :on-click   handle-click}
-                           (some? title) (assoc :title title))
+                           (some? title) (assoc :title title)
+                           (some? data) (merge (get-data-attributes data)))
            (when show-icon?
              [general-icon {:icon       icon
                             :class-name "bbs--button--icon"}])

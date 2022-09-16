@@ -6,13 +6,14 @@
     [webchange.ui.index :as ui]))
 
 (defn- images-list-item
-  [{:keys [on-click thumbnail-path] :as props}]
+  [{:keys [id on-click thumbnail-path] :as props}]
   (let [image-props (dissoc props :on-click)
         handle-click #(when (fn? on-click) (on-click image-props))]
     [ui/image {:src        thumbnail-path
                :class-name "widget--image-library--list-item"
                :lazy?      true
-               :on-click   handle-click}]))
+               :on-click   handle-click
+               :data       {:test-id id}}]))
 
 (defn- images-list
   [{:keys [data on-click]}]
@@ -48,7 +49,7 @@
             [ui/input {:placeholder "search"
                        :icon        "search"
                        :class-name  "search"
-                       :on-change #(re-frame/dispatch [::state/update-filter {:query %}])}])
+                       :on-change   #(re-frame/dispatch [::state/update-filter {:query %}])}])
           (if-not loading?
             [images-list {:data     assets
                           :on-click on-click}]

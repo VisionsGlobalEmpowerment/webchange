@@ -32,7 +32,8 @@
     [layout-form-item-block {:title "Text"}
      [ui/text-area {:value      value
                     :on-change  handle-change
-                    :class-name "layout-form-item-block--text"}]]))
+                    :class-name "layout-form-item-block--text"
+                    :data       {:test-id (str "page-layout-form-" id)}}]]))
 
 (defn- layout-form-item
   [{:keys [type] :as props}]
@@ -58,15 +59,17 @@
         [ui/info "Select layout"])]
      [form-actions {:on-cancel  handle-cancel
                     :on-save    handle-save
-                    :save-props {:disabled? save-button-disabled?}}]]))
+                    :save-props {:disabled? save-button-disabled?
+                                 :data {:test-id "page-layout-form-save"}}}]]))
 
 (defn- layout-selector-item
   [{:keys [icon selected? type value]}]
   (let [handle-click #(re-frame/dispatch [::state/set-current-layout value])]
-    [:div {:class-name (ui/get-class-name {"layout-item"                   true
-                                           (str "layout-item--type-" type) true
-                                           "layout-item--selected"         selected?})
-           :on-click   handle-click}
+    [:div {:class-name   (ui/get-class-name {"layout-item"                   true
+                                             (str "layout-item--type-" type) true
+                                             "layout-item--selected"         selected?})
+           :on-click     handle-click
+           :data-test-id value}
      [ui/layout-icon {:icon       icon
                       :class-name "layout-item--preview"}]
      (when selected?

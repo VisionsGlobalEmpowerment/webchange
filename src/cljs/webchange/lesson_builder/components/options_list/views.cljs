@@ -6,8 +6,9 @@
   [{:keys [id icon text on-click]}]
   (let [handle-click #(when (fn? on-click)
                         (on-click id))]
-    [:div {:class-name "options-list-item"
-           :on-click   handle-click}
+    [:div {:class-name   "options-list-item"
+           :on-click     handle-click
+           :data-test-id id}
      [:span.options-list-item--name
       text]
      [ui/icon {:icon       icon

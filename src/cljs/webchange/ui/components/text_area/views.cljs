@@ -2,10 +2,12 @@
   (:require
     [webchange.ui.components.input-error.views :refer [input-error]]
     [webchange.ui.components.input-label.views :refer [input-label]]
-    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]
+    [webchange.ui.utils.get-data-attributes :refer [get-data-attributes]]))
 
 (defn text-area
   [{:keys [class-name
+           data
            disabled?
            error
            id
@@ -41,4 +43,5 @@
                          :placeholder placeholder
                          :disabled    disabled?
                          :rows        rows}
-                        (some? id) (assoc :id id))]]))
+                        (some? id) (assoc :id id)
+                        (some? data) (merge (get-data-attributes data)))]]))

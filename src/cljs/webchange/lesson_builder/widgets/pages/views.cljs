@@ -21,9 +21,10 @@
 (defn- add-page-item
   [{:keys [side title]}]
   (let [handle-click #(re-frame/dispatch [::state/add-page])]
-    [:div {:class-name (ui/get-class-name {"page-item"              true
-                                           (str "page-item--" side) true})
-           :on-click   handle-click}
+    [:div {:class-name   (ui/get-class-name {"page-item"              true
+                                             (str "page-item--" side) true})
+           :on-click     handle-click
+           :data-test-id "flipbook-add-page"}
      [:div {:class-name (ui/get-class-name {"page-item--preview"     true
                                             "page-item--add-preview" true})}
       [ui/icon {:icon       "plus"
