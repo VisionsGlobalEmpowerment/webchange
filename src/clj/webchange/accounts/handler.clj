@@ -47,7 +47,17 @@
         :body [data ::account-spec/register-account]
         (-> (core/register-account data)
             response))
-
+  (POST "/api/accounts/reset-password-by-email" request
+        :coercion :spec
+        :body [data ::account-spec/reset-password-for]
+        (-> (core/reset-password-for-email data)
+            response))
+  (POST "/api/accounts/reset-password/:code" request
+        :coercion :spec
+        :path-params [code :- string?]
+        :body [data ::account-spec/change-password]
+        (-> (core/reset-password-by-code code data)
+            response))
   (PUT "/api/accounts/:id" request
        :coercion :spec
        :path-params [id :- ::account-spec/id]

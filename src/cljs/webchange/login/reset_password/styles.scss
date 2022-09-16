@@ -1,0 +1,38 @@
+.reset-password-form {
+    color: #fff;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 64px;
+   
+
+    min-width: 500px;
+    padding: 46px 68px;
+    padding-bottom: 86px;
+    
+    background: bbs--color(blue-1);
+    border-radius: 20px;
+
+    h1 {
+        @include bbs--ranille-18-r;
+        width: 100%;
+        margin: 0;
+    }
+
+    
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+
+        width: 90%;
+        max-width: 240px;
+    }
+
+    .submit-button {
+        margin-top: 16px;
+	border-radius: 20px;
+    }
+}

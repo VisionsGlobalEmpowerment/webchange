@@ -32,8 +32,13 @@
 
 (defn request-email-confirmation!
   [{:keys [id email first-name]}]
-  (let [code (generate-code! {:user-id id :email email})]
+  (let [code (generate-code! {:user-id id :email email :type "confirm-email"})]
     (send-email-template! email :email-confirmation {:email email :id id :code code :name first-name})))
+
+(defn reset-password
+  [{:keys [user-id email]}]
+  (let [code (generate-code! {:user-id user-id :email email :type "reset-password"})]
+    (send-email-template! email :reset-password {:code code})))
 
 (comment
 

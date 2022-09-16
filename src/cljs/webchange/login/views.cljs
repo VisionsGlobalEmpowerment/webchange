@@ -7,6 +7,7 @@
     [webchange.login.sign-in.views :refer [sign-in-form]]
     [webchange.login.pages.views :refer [registration-success]]
     [webchange.login.registration.views :refer [registration]]
+    [webchange.login.reset-password.views :refer [provide-email-form reset-password-form]]
     [webchange.login.state :as state]
     [webchange.ui.index :as ui]))
 
@@ -28,4 +29,6 @@
          (case handler
            :sign-up-success [registration-success props]
            :sign-up [registration props]
+           :reset-password-email [provide-email-form props]
+           :reset-password-code [reset-password-form props]
            [sign-in-form props])]))}))

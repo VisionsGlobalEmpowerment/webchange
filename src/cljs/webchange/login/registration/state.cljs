@@ -62,7 +62,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)
-     :dispatch [::routes/redirect :email-confirmation-success]}))
+     :dispatch [::routes/redirect :sign-up-success]}))
 
 (re-frame/reg-event-fx
   ::register-failure

@@ -165,3 +165,30 @@
                                  :active true})
         (db/delete-code! {:code uuid})
         true))))
+
+(defn reset-password-for-email
+  [{:keys [email]}]
+  (if-let [{id :id} (db/find-user-by-email {:email email})]
+    (do (e/reset-password {:user-id id
+                           :email email})
+        {:message "ok"})
+    (throw (ex-info "Email not found"
+                    {:type ::ex/request-validation
+                     :errors {:email "Not found"}}))))
+
+(defn reset-password-by-code
+  [code {:keys [password]}]
+  (when-not (string->uuid code)
+    (throw (ex-info "The code is invalied"
+                    {:type ::ex/request-validation
+                     :errors {:code "Code is invalid"}})))
+  (let [uuid (java.util.UUID/fromString code)]
+    (if-let [{{:keys [user-id]} :metadata} (db/get-code {:code uuid})]
+      (let [hashed-password (hashers/derive password)]
+        (db/change-password! {:id user-id
+                              :password hashed-password})
+        (db/delete-code! {:code uuid})
+        {:message "ok"})
+      (throw (ex-info "The code is not found"
+                      {:type ::ex/request-validation
+                       :errors {:code "Code is not found"}})))))
