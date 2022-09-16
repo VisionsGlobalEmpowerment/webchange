@@ -24,10 +24,41 @@
     .form {
         display: flex;
         flex-direction: column;
-        gap: 32px;
 
         width: 90%;
         max-width: 240px;
+
+	.fields {
+	    display: flex;
+            flex-direction: column;
+            gap: 32px;
+	}
+    }
+
+    .forgot-password-link {
+	display: flex;
+	justify-content: end;
+
+	.bbs--link {
+	    color: #fff;
+
+	    font-style: normal;
+	    font-weight: 400;
+	    font-size: 13px;
+	}
+    }
+
+    .sign-up-link {
+	display: flex;
+	justify-content: end;
+
+	.bbs--link {
+	    color: #fff;
+
+	    font-style: normal;
+	    font-weight: 600;
+	    font-size: 16px;
+	}
     }
 
     .login-button {

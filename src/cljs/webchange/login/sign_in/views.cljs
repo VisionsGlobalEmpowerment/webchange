@@ -22,22 +22,29 @@
         [:div.sign-in-form
          [:h1 "Log in"]
          [:div.form
-          [ui/input {:label          "Username"
-                     :value          username
-                     :name           "email"
-                     :on-change      handle-username-changed
-                     :disabled?      loading?
-                     :on-enter-press submit}]
-          [ui/password {:label          "Password"
-                        :value          password
-                        :name           "password"
-                        :on-change      handle-password-changed
-                        :disabled?      loading?
-                        :on-enter-press submit}]
+          [:div.fields
+           [ui/input {:label          "Username"
+                      :value          username
+                      :name           "email"
+                      :on-change      handle-username-changed
+                      :disabled?      loading?
+                      :on-enter-press submit}]
+           [ui/password {:label          "Password"
+                         :value          password
+                         :name           "password"
+                         :on-change      handle-password-changed
+                         :disabled?      loading?
+                         :on-enter-press submit}]]
+          [:div.forgot-password-link
+           [ui/link {:href "/accounts/reset-password"
+                     :target "_self"} "Forgot your password?"]]
           [ui/button {:on-click   submit
                       :class-name "login-button"
                       :shape      "rounded"
                       :loading?   loading?
                       :disabled?  loading?}
-           "Log In"]]]
+           "Log In"]
+          [:div.sign-up-link
+           [ui/link {:href "/accounts/sign-up"
+                     :target "_self"} "Sign Up"]]]]
         [ui/loading-overlay]))))
