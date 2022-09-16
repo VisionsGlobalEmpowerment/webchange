@@ -31,14 +31,24 @@
     },
     {
       "type": "click",
+      "selectors": [
+        [
+          "[data-test-id=activity-actions]"
+        ]
+      ],
+      "offsetX": 0,
+      "offsetY": 0
+    },
+    {
+      "type": "click",
       "target": "main",
       "selectors": [
         [
-          "[data-test-id=flipbook-add-page]"
+          "[data-test-id=add-layout]"
         ]
       ],
-      "offsetX": 98,
-      "offsetY": 50
+      "offsetX": 0,
+      "offsetY": 0
     },
     {
       "type": "click",

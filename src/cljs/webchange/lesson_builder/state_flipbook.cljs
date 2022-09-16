@@ -280,9 +280,11 @@
   (fn [{:keys [_]} [_ page-data {:keys [on-success on-failure]}]]
     {:dispatch-n [[::stage-state/set-stage-busy true]
                   [::state/call-activity-action
-                   {:action         "add-page"
-                    :data           page-data
-                    :common-action? false}
+                   (merge (if (some? page-data)
+                            {:action "add-page"
+                             :data   page-data}
+                            {:action "add-empty-page"})
+                          {:common-action? false})
                    {:on-success [::add-page-success on-success]
                     :on-failure [::add-page-failure on-failure]}]]}))
 

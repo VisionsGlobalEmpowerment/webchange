@@ -1,7 +1,6 @@
 (ns webchange.lesson-builder.widgets.pages.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.blocks.state :as blocks]
     [webchange.lesson-builder.state-flipbook :as state]))
 
 (defn set-last
@@ -25,4 +24,4 @@
 (re-frame/reg-event-fx
   ::add-page
   (fn [{:keys [_]} [_]]
-    {:dispatch [::blocks/open-tool :add-page]}))
+    {:dispatch [::state/add-page]}))

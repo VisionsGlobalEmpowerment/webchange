@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.blocks.menu.state :as menu]
     [webchange.lesson-builder.blocks.state :as layout-state]
-    [webchange.lesson-builder.state :as state]))
+    [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.state-flipbook :as flipbook-state]))
 
 (re-frame/reg-sub
   ::menu-items
@@ -13,9 +14,10 @@
             flipbook? (concat [#_{:id   :edit-cover
                                   :text "Edit Cover"
                                   :icon "edit"}
-                               #_{:id   :add-empty-page
-                                  :text "Add Empty Page"
-                                  :icon "plus"}
+                               {:id       :add-empty-page
+                                :text     "Add Empty Page"
+                                :icon     "plus"
+                                :on-click #(re-frame/dispatch [::flipbook-state/add-page])}
                                {:id   :add-layout
                                 :text "Add Layout"
                                 :icon "plus"}])
