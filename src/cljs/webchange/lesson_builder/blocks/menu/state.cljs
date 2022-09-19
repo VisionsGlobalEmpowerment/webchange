@@ -89,11 +89,6 @@
                                               (push-history :default)))))))
 
 (re-frame/reg-event-fx
-  ::reset
-  (fn [{:keys [db]} [_]]
-    {:db (dissoc db path-to-db)}))
-
-(re-frame/reg-event-fx
   ::open-component
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ component-id {:keys [on-back reset-history? title] :or {reset-history? false}}]]

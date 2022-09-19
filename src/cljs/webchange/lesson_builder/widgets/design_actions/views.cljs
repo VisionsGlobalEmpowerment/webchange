@@ -13,14 +13,15 @@
                          :question-options question-options-views/question-options})
 
 (defn- action-item
-  [{:keys [content icon text] :as props}]
+  [{:keys [id content icon text] :as props}]
   (let [active? (and (some? content)
                      @(re-frame/subscribe [::state/active-menu-item? content]))
         handle-click #(re-frame/dispatch [::state/handle-item-click props])]
     [:div {:class-name "design-action"}
-     [:div {:class-name (ui/get-class-name {"design-action--header"         true
-                                            "design-action--header--active" active?})
-            :on-click   handle-click}
+     [:div {:class-name   (ui/get-class-name {"design-action--header"         true
+                                              "design-action--header--active" active?})
+            :on-click     handle-click
+            :data-test-id id}
       [ui/icon {:icon       icon
                 :class-name "design-action--icon"}]
       [:div.design-action--name

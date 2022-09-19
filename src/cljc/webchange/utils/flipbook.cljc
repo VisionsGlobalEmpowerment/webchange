@@ -7,9 +7,7 @@
 
 (defn get-book-object-name
   [activity-data]
-  (-> activity-data
-      (get-in [:metadata :flipbook-name])
-      (keyword)))
+  (get-in activity-data [:metadata :flipbook-name]))
 
 (defn flipbook-activity?
   [activity-data]
@@ -17,9 +15,14 @@
       (some?)))
 
 (defn get-pages-data
-  [activity-data]
-  (let [flipbook-name (get-book-object-name activity-data)]
-    (get-in activity-data [:objects flipbook-name :pages])))
+  ([activity-data]
+   (let [flipbook-name (get-book-object-name activity-data)]
+     (->> (get-in activity-data [:objects (keyword flipbook-name) :pages])
+          (map-indexed (fn [idx page-data]
+                         (assoc page-data :idx idx))))))
+  ([activity-data predicate]
+   (->> (get-pages-data activity-data)
+        (filter predicate))))
 
 (defn get-stages-data
   [activity-data]
@@ -49,8 +52,8 @@
                            (keyword)
                            (conj [:objects])
                            (get-in activity-data))]
-      (-> page-data
-          (assoc :generated? (:generated? page-object))))))
+      (cond-> page-data
+              (:generated? page-object) (assoc :generated? true)))))
 
 (defn page-object-name->page-number
   [activity-data page-object-name]

@@ -10,6 +10,7 @@
     [webchange.lesson-builder.tools.image-add.views :refer [image-add]]
     [webchange.lesson-builder.tools.object-form.views :refer [object-form]]
     [webchange.lesson-builder.tools.question-form.index :as question-form]
+    [webchange.lesson-builder.tools.flipbook-add-page.views :as add-page-views]
     [webchange.lesson-builder.tools.scene-layers.views :refer [scene-layers]]
     [webchange.lesson-builder.tools.settings.views :refer [settings]]
     [webchange.lesson-builder.tools.template-options.index :as template-options]
@@ -31,7 +32,8 @@
                      :object-form      object-form
                      :scene-layers     scene-layers
                      :settings         settings
-                     :choose-image     choose-image-overlay}
+                     :choose-image     choose-image-overlay
+                     :add-page         add-page-views/layout-form}
                     (add-menu-items :question-form question-form/menu)
                     (add-menu-items :template-options template-options/menu)
                     (add-menu-items :voice-translate voice-translate/menu)))
@@ -52,10 +54,6 @@
     {:component-did-mount
      (fn [this]
        (re-frame/dispatch [::state/init (r/props this)]))
-
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset (r/props this)]))
 
      :reagent-render
      (fn [{:keys [class-name tabs-disabled?]}]

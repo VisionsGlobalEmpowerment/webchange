@@ -203,4 +203,10 @@
             }
         }
     }
+
+    &.bbs--button--color-transparent {
+        progress {
+            @include bbs--progress-color(bbs--color(blue-1));
+        }
+    }
 }

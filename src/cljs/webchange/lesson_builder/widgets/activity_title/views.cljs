@@ -2,13 +2,17 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.widgets.activity-title.state :as state]
+    [webchange.lesson-builder.widgets.history.state :as history-state]
+    [webchange.lesson-builder.widgets.history.views :refer [activity-history-window]]
     [webchange.ui.index :as ui]))
 
 (defn- last-save
   []
   (let [{:keys [date time]} @(re-frame/subscribe [::state/last-save])
-        loading? @(re-frame/subscribe [::state/versions-loading?])]
-    [:div.activity-title--last-save
+        loading? @(re-frame/subscribe [::state/versions-loading?])
+        open-history #(re-frame/dispatch [::history-state/open-window])]
+    [:div {:class-name "activity-title--last-save"
+           :on-click   open-history}
      [:span "Last Save"]
      [:div.activity-title--last-save--date
       (if-not loading?
@@ -36,4 +40,5 @@
                  :color      "blue-1"
                  :class-name "activity-title--action-button"
                  :on-click   handle-preview-click}
-      "Preview"]]))
+      "Preview"]
+     [activity-history-window]]))

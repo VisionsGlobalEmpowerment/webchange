@@ -28,8 +28,8 @@
   (update-in activity-data [:actions] dissoc action-name))
 
 (defn remove-page
-  [activity-data {:keys [page-side stage page-number force-remove?]} page-params]
-  (let [book-name (get-book-object-name activity-data)
+  [activity-data {:keys [page-side stage page-number force-remove?]} _]
+  (let [book-name (-> activity-data get-book-object-name keyword)
         page-number (if (some? page-number)
                       page-number
                       (stage-number->page-number activity-data stage page-side))

@@ -29,14 +29,16 @@
         (when-not hide-preview?
           ^{:key value}
           [ui/image {:src        value
-                     :class-name class-name-image}])
+                     :class-name (ui/get-class-name {"select-image-preview" true
+                                                     class-name-image       (some? class-name-image)})}])
         [:input {:type      "file"
                  :accept    ["gif" "jpg" "jpeg" "png"]
                  :on-change #(-> % change-event->file handle-upload)
                  :ref       #(reset! file-input %)}]
         [:div.actions
          [ui/button {:on-click #(re-frame/dispatch [::state/show-choose-image key])
-                     :color    "blue-1"}
+                     :color    "blue-1"
+                     :data     {:test-id "open-library"}}
           "Open Library"]
          [ui/button {:on-click #(.click @file-input)}
           (if uploading? "Uploading..." "Upload New")]]]]

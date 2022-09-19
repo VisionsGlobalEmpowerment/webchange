@@ -1,8 +1,39 @@
 #block--stage {
+    $stage-block-height: 405px;
+    $actions-block-height: 38px;
+
     @import "second_stage/styles";
-    
-    background-color: bbs--color(blue-2, $variant: light);
-    border-radius: $border-radius;
-    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: relative;
+
+    .stage-wrapper {
+        flex: 1 1;
+
+        background-color: bbs--color(blue-2, $variant: light);
+        border-radius: $border-radius;
+        overflow: hidden;
+
+        height: 405px;
+        width: 720px;
+
+        &.stage-wrapper--has-actions {
+            $ratio: 1920 / 1080;
+            $height: $stage-block-height - $actions-block-height * 2;
+            $width: $height * $ratio;
+
+            height: $height;
+            width: $width;
+        }
+    }
+
+    .stage-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 4px;
+        width: 100%;
+        height: $actions-block-height;
+    }
 }

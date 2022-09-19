@@ -4,6 +4,7 @@
     [webchange.ui.components.progress.views :refer [circular-progress]]
     [webchange.ui.components.icon.views :refer [system-icon]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]
+    [webchange.ui.utils.get-data-attributes :refer [get-data-attributes]]
     [webchange.utils.observer :as observer]
     [webchange.utils.uid :refer [get-uid]]))
 
@@ -45,7 +46,7 @@
          (observer/un-observe id))
 
        :reagent-render
-       (fn [{:keys [class-name on-click src title]}]
+       (fn [{:keys [class-name data on-click src title]}]
          (->> (r/current-component)
               (r/children)
               (into [:div (cond-> {:id         id
@@ -58,6 +59,7 @@
                      (case @status
                        :loading [:div.loading
                                  [circular-progress]]
-                       :loaded [:img {:src src}]
+                       :loaded [:img (cond-> {:src src}
+                                             (some? data) (merge (get-data-attributes data)))]
                        :error [:div.not-loaded
                                [system-icon {:icon "image-broken"}]])])))})))

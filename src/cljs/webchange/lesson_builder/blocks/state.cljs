@@ -5,6 +5,7 @@
     [webchange.lesson-builder.blocks.menu.state :as menu-state]
     [webchange.lesson-builder.blocks.toolbox.state :as toolbox-state]
     [webchange.lesson-builder.tools.background-image.index :as background-image]
+    [webchange.lesson-builder.tools.flipbook-add-page.index :as flipbook-add-page]
     [webchange.lesson-builder.tools.question-form.index :as question-form]
     [webchange.lesson-builder.tools.voice-translate.index :as voice-translate]))
 
@@ -31,7 +32,7 @@
 ;; general
 
 (def states
-  {:default                 {:toolbox :welcome
+  {:default                 {:toolbox :default
                              :menu    :default
                              :focus   #{}}
    :change-background-image {:toolbox :background-image
@@ -57,6 +58,7 @@
     {:dispatch [::set-state :default]}))
 
 (def tools {:background-image background-image/data
+            :add-page         flipbook-add-page/data
             :question-form    question-form/data
             :voice-translate  voice-translate/data})
 

@@ -87,7 +87,8 @@
   [version-id request]
   (let [version-id (Integer/parseInt version-id)
         user-id (current-user request)]
-    (when-not (core/collaborator-by-course-version? user-id version-id)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-course-version? user-id version-id))
       (throw-unauthorized {:role :educator}))
     (-> (core/restore-course-version! version-id user-id)
         handle)))
@@ -96,7 +97,8 @@
   [version-id request]
   (let [version-id (Integer/parseInt version-id)
         user-id (current-user request)]
-    (when-not (core/collaborator-by-scene-version? user-id version-id)
+    (when-not (or (is-admin? user-id)
+                  (core/collaborator-by-scene-version? user-id version-id))
       (throw-unauthorized {:role :educator}))
     (-> (core/restore-scene-version! version-id user-id)
         handle)))
@@ -299,7 +301,7 @@
         :summary "Return list of available assets"
         :query-params [{type :- s/Str nil}, {q :- s/Str ""} {tag :- s/Int nil}]
         :return [EditorAssetWithTags]
-        (editor-assets-search q tag type))             
+        (editor-assets-search q tag type))
       (GET "/editor/tags" []
         :summary "Return list of available tags"
         :return [EditorTag]
@@ -502,7 +504,7 @@
                    (core/my-courses user-id))]
       (-> result
           response)))
-  
+
   (PUT "/api/schools/:school-id/assign-course" request
     :coercion :spec
     :path-params [school-id :- ::course-spec/school-id]

@@ -7,36 +7,44 @@
     padding: 10px;
 
     h3 {
-	font-weight: 700;
-	font-size: 14px;
-	line-height: 18px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 18px;
     }
 
     .options {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 26px;
-	
-	.bbs--image {
-	    width: 133px;
-	    border-radius: 6px;
-	    overflow: hidden;
-	}
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 26px;
 
-	.actions {
-	    display: flex;
-	    gap: 5px;
-	    .bbs--button {
-		width: 120px;
-		border-radius: 30px;
-	    }
-	}
-	
-	input[type="file"] {
-	    display: none;
-	}
+        .bbs--image {
+            width: 133px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+
+            .bbs--button {
+                width: 120px;
+                border-radius: 30px;
+            }
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    }
+
+    .select-image-preview {
+        height: 100px;
+
+        img {
+            object-fit: contain;
+        }
     }
 }
-

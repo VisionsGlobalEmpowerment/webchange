@@ -1,0 +1,11 @@
+.widget--form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+
+    & > * {
+        flex: 1 1;
+    }
+}
+

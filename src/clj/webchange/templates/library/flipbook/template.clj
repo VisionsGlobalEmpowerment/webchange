@@ -1,5 +1,6 @@
 (ns webchange.templates.library.flipbook.template
   (:require
+    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.flipbook.activity-template :refer [get-template]]
     [webchange.templates.library.flipbook.add-empty-page :refer [add-empty-page]]
@@ -153,16 +154,19 @@
 
 (defn add-page-handler
   [activity-data {:keys [type page-layout spread-layout image text]}]
-  (let [constructors (case type
+  (let [next-spread-id (-> activity-data (get-in [:metadata :next-spread-id] 0) (inc))
+        constructors (case type
                        "page" (custom-page/constructors (keyword page-layout))
                        "spread" (custom-spread/constructors (keyword spread-layout)))]
-    (reduce (fn [activity-data constructor]
-              (add-page activity-data constructor page-params {:image-src      (:src image)
-                                                               :text           text
-                                                               :with-action?   true
-                                                               :shift-from-end 2}))
-            activity-data
-            constructors)))
+    (-> (reduce (fn [activity-data constructor]
+                  (add-page activity-data constructor page-params {:image-src      (:src image)
+                                                                   :text           text
+                                                                   :with-action?   true
+                                                                   :shift-from-end 2
+                                                                   :spread-id      next-spread-id}))
+                activity-data
+                constructors)
+        (assoc-in [:metadata :next-spread-id] next-spread-id))))
 
 (defn- update-names
   [activity-data]

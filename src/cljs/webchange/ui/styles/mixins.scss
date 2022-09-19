@@ -8,6 +8,16 @@
     background-position: 0 0, 0 $size-half, $size-half (- $size-half), -$size-half 0px;
 }
 
+@mixin bbs--dashed ($color: #333, $length: 21px){
+    background-image: linear-gradient(to right, $color 50%, transparent 50%),
+                      linear-gradient(to right, $color 50%, transparent 50%),
+                      linear-gradient(to bottom, $color 50%, transparent 50%),
+                      linear-gradient(to bottom, $color 50%, transparent 50%);
+    background-position: left top, left bottom, left top, right top;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    background-size: $length 3px, $length 3px, 3px $length, 3px $length;
+}
+
 @mixin bbs--focus-shadow {
     box-shadow: 0px 2px 4px 2px bbs--color(blue-1, $opacity: 0.2);
 }

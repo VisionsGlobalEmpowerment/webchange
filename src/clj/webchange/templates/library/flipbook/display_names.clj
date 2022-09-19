@@ -1,6 +1,5 @@
 (ns webchange.templates.library.flipbook.display-names
   (:require
-    [clojure.tools.logging :as log]
     [webchange.utils.flipbook :as flipbook]
     [webchange.utils.scene-action-data :refer [get-inner-action text-animation-action?]]
     [webchange.utils.scene-data :refer [get-action]]))
@@ -45,7 +44,7 @@
 
 (defn update-display-names
   [activity-data]
-  (let [book-name (flipbook/get-book-object-name activity-data)]
+  (let [book-name (-> activity-data flipbook/get-book-object-name keyword)]
     (->> (get-in activity-data [:objects book-name :pages])
          (map-indexed vector)
          (reduce (fn [activity-data [page-idx {:keys [action]}]]
