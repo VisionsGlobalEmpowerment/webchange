@@ -1,10 +1,10 @@
-(ns webchange.lesson-builder.blocks.stage.views
+(ns webchange.lesson-builder.layout.stage.views
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.stage :refer [stage]]
-    [webchange.lesson-builder.blocks.stage.second-stage.views :refer [second-stage]]
-    [webchange.lesson-builder.blocks.stage.state :as state]
+    [webchange.lesson-builder.layout.stage.second-stage.views :refer [second-stage]]
+    [webchange.lesson-builder.layout.stage.state :as state]
     [webchange.lesson-builder.widgets.page-remove.views :refer [remove-flipbook-page]]
     [webchange.lesson-builder.widgets.select-stage.views :refer [select-stage]]
     [webchange.ui.index :as ui]))

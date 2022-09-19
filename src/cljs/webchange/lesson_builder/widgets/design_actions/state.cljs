@@ -2,8 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.menu.state :as menu]
-    [webchange.lesson-builder.blocks.state :as layout-state]
+    [webchange.lesson-builder.layout.menu.state :as menu]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.tools.template-options.state :as template-options]))
 
@@ -72,7 +71,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [content menu-item]}]]
     (cond
-      (= menu-item :voice-translate) {:dispatch [::layout-state/open-tool :voice-translate]}
+      (= menu-item :voice-translate) {:dispatch [:layout/open-tool :voice-translate]}
       (some? menu-item) {:dispatch [::menu/open-component menu-item]}
       (some? content) {:db (toggle-active-menu-item db content)}
       :default {})))

@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.blocks.title.views
+(ns webchange.lesson-builder.layout.title.views
   (:require
     [webchange.lesson-builder.widgets.activity-title.views :refer [activity-title]]))
 

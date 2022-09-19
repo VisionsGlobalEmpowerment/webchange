@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.state-flipbook :as flipbook-state]
     [webchange.lesson-builder.state-flipbook-screenshot :as screenshot]

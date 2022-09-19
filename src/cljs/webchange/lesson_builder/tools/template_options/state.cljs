@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as lesson-builder-state]
     [webchange.lesson-builder.stage-actions :as stage-actions]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]
+    [webchange.lesson-builder.layout.menu.state :as menu-state]
     [webchange.utils.alphabets :as alphabets]
     [webchange.utils.uid :refer [get-uid]]))
 

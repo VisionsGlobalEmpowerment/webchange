@@ -58,7 +58,7 @@
   ::apply
   (fn [{:keys [db]} [_]]
     {:dispatch-n [[::state/save-activity]
-                  [:layout/reset-state]]}))
+                  [:layout/reset]]}))
 
 (re-frame/reg-event-fx
   ::set-apply-disabled

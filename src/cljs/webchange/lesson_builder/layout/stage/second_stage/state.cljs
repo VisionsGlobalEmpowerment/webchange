@@ -1,8 +1,8 @@
-(ns webchange.lesson-builder.blocks.stage.second-stage.state
+(ns webchange.lesson-builder.layout.stage.second-stage.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]))
+    [webchange.lesson-builder.layout.stage.state :as stage-state]))
 
 (def path-to-db :lesson-builder/second-stage)
 

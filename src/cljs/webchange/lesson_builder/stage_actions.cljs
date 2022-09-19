@@ -6,7 +6,7 @@
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.stage-actions-spec :as spec]
     [webchange.lesson-builder.tools.script.state :as script-state]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.list :as list-utils]
     [webchange.utils.scene-action-data :as action-utils]

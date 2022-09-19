@@ -4,7 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.logger.index :as logger]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.stage-actions :as stage]
     [webchange.interpreter.renderer.state.editor :as editor-state]))
 

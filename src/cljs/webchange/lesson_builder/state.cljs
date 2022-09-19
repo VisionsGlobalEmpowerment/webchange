@@ -208,13 +208,6 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-info-loading false))}))
 
-(re-frame/reg-sub
-  ::loading?
-  :<- [::activity-loading?]
-  :<- [::activity-info-loading?]
-  (fn [[activity-loading? activity-info-loading?]]
-    (or activity-loading? activity-info-loading?)))
-
 ;; save
 
 (def activity-saving-key :activity-saving?)

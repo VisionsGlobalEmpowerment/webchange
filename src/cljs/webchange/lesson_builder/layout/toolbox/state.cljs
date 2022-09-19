@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.blocks.toolbox.state
+(ns webchange.lesson-builder.layout.toolbox.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
@@ -28,7 +28,10 @@
   :<- [path-to-db]
   :<- [::default-widget]
   (fn [[db default-widget]]
-    (get db current-widget-key default-widget)))
+    (let [current-widget (get-current-widget db)]
+      (if (= current-widget :default)
+        default-widget
+        current-widget))))
 
 (re-frame/reg-event-fx
   ::set-current-widget

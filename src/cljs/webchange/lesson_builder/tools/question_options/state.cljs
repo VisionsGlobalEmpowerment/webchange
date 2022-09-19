@@ -2,7 +2,6 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.state :as layout-state]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.widgets.confirm.state :as confirm-state]
@@ -28,12 +27,12 @@
 (re-frame/reg-event-fx
   ::add-question
   (fn [{:keys [_]} [_]]
-    {:dispatch [::layout-state/open-tool :question-form]}))
+    {:dispatch [:layout/open-tool :question-form]}))
 
 (re-frame/reg-event-fx
   ::edit-question
   (fn [{:keys [_]} [_ action]]
-    {:dispatch [::layout-state/open-tool :question-form {:question-id action}]}))
+    {:dispatch [:layout/open-tool :question-form {:question-id action}]}))
 
 ;; remove
 

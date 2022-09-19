@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.state :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.date :refer [date-str->locale-date date-str->time]]))

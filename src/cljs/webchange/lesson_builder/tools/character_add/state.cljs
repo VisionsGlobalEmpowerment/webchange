@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]
+    [webchange.lesson-builder.layout.menu.state :as menu-state]
     [webchange.lesson-builder.state :as lesson-builder-state]))
 
 (def path-to-db :lesson-builder/character-add)

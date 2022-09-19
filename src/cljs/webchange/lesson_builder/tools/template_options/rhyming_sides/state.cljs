@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.menu.state :as menu]
+    [webchange.lesson-builder.layout.menu.state :as menu]
     [webchange.lesson-builder.tools.template-options.state :refer [path-to-db]]))
 
 (re-frame/reg-event-fx
