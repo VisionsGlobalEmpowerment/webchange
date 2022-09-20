@@ -8,7 +8,11 @@
                       :parent "/parents"})
 
 (def routes {""               :sign-in
-             "reset-password" :reset-password})
+             "reset-password" :reset-password
+             "accounts" {"/sign-up" :sign-up
+                         "/sign-up-success" :sign-up-success
+                         "/reset-password" {"" :reset-password-email
+                                            ["/" [#"[\w-%]+" :code]] :reset-password-code}}})
 
 (defonce router (atom nil))
 

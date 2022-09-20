@@ -1,7 +1,7 @@
 (ns webchange.accounts.handler
   (:require [buddy.auth :refer [throw-unauthorized]]
             [compojure.api.sweet :refer [context GET POST PUT DELETE defroutes]]
-            [ring.util.response :refer [response]]
+            [ring.util.response :refer [response redirect]]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [current-user]]
             [webchange.auth.roles :refer [is-admin?]]
@@ -27,13 +27,13 @@
          (-> (core/get-account id)
              response)))
   (DELETE "/api/accounts/:id" request
-       :coercion :spec
-       :path-params [id :- ::account-spec/id]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/delete-account id)
-             response)))
+          :coercion :spec
+          :path-params [id :- ::account-spec/id]
+          (let [user-id (current-user request)]
+            (when-not (is-admin? user-id)
+              (throw-unauthorized {:role :educator}))
+            (-> (core/delete-account id)
+                response)))
   (POST "/api/accounts" request
         :coercion :spec
         :body [data ::account-spec/create-account]
@@ -42,6 +42,22 @@
             (throw-unauthorized {:role :educator}))
           (-> (core/create-account data)
               response)))
+  (POST "/api/accounts/register" request
+        :coercion :spec
+        :body [data ::account-spec/register-account]
+        (-> (core/register-account data)
+            response))
+  (POST "/api/accounts/reset-password-by-email" request
+        :coercion :spec
+        :body [data ::account-spec/reset-password-for]
+        (-> (core/reset-password-for-email data)
+            response))
+  (POST "/api/accounts/reset-password/:code" request
+        :coercion :spec
+        :path-params [code :- string?]
+        :body [data ::account-spec/change-password]
+        (-> (core/reset-password-by-code code data)
+            response))
   (PUT "/api/accounts/:id" request
        :coercion :spec
        :path-params [id :- ::account-spec/id]
@@ -69,3 +85,11 @@
            (throw-unauthorized {:role :educator}))
          (-> (core/set-account-status id data)
              response))))
+
+(defroutes accounts-pages-routes
+  (GET "/accounts/confirm-email/:code" request
+       :coercion :spec
+       :path-params [code :- string?]
+       (if (core/confirm-email code)
+         (redirect "/")
+         (redirect "/"))))

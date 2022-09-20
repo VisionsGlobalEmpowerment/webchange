@@ -184,7 +184,7 @@
       :empty [:div])))
 
 (defn- form-actions
-  [{:keys [form-id disabled? on-save on-cancel saving? spec]}]
+  [{:keys [form-id disabled? on-save on-cancel saving? spec save-text]}]
   (let [handle-save-click #(re-frame/dispatch [::state/save form-id spec on-save])
         handle-cancel-click #(when (fn? on-cancel) (on-cancel))]
     [:div.form-actions
@@ -198,50 +198,51 @@
               :disabled?  (or disabled? saving?)
               :loading?   saving?
               :class-name "submit"}
-      "Save"]]))
+      (or save-text "Save")]]))
 
 (defn form
   []
   (r/create-class
-    {:display-name "Generic Form"
+   {:display-name "Generic Form"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init (r/props this)]))
+    :component-did-mount
+    (fn [this]
+      (re-frame/dispatch [::state/init (r/props this)]))
 
-     :component-did-update
-     (fn [this [_ prev-props]]
-       (let [{:keys [form-id data model errors] :or {data {}}} (r/props this)]
-         (re-frame/dispatch [::state/set-custom-errors form-id errors])
-         (when (not= data (:data prev-props))
-           (re-frame/dispatch [::state/set-form-data form-id data model]))))
+    :component-did-update
+    (fn [this [_ prev-props]]
+      (let [{:keys [form-id data model errors] :or {data {}}} (r/props this)]
+        (re-frame/dispatch [::state/set-custom-errors form-id errors])
+        (when (not= data (:data prev-props))
+          (re-frame/dispatch [::state/set-form-data form-id data model]))))
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [class-name disabled? errors form-id loading? model on-cancel on-save saving? spec]
-           :or   {disabled? false
-                  errors    {}
-                  loading?  false
-                  saving?   false}}]
-       [:div {:class-name (c/get-class-name {"component--form" true
-                                             class-name        (some? class-name)})}
-        [:div.controls
-         (for [[field-name field-options] model]
-           ^{:key field-name}
-           [form-control {:id        field-name
-                          :form-id   form-id
-                          :options   field-options
-                          :disabled? disabled?
-                          :spec      spec}])]
-        (when-not disabled?
-          [form-actions {:form-id   form-id
-                         :disabled? loading?
-                         :saving?   saving?
-                         :spec      spec
-                         :on-save   on-save
-                         :on-cancel on-cancel}])
-        (when loading?
-          [loading-overlay])])}))
+    :reagent-render
+    (fn [{:keys [class-name disabled? errors form-id loading? model on-cancel on-save saving? spec save-text]
+          :or   {disabled? false
+                 errors    {}
+                 loading?  false
+                 saving?   false}}]
+      [:div {:class-name (c/get-class-name {"component--form" true
+                                            class-name        (some? class-name)})}
+       [:div.controls
+        (for [[field-name field-options] model]
+          ^{:key field-name}
+          [form-control {:id        field-name
+                         :form-id   form-id
+                         :options   field-options
+                         :disabled? disabled?
+                         :spec      spec}])]
+       (when-not disabled?
+         [form-actions {:form-id   form-id
+                        :disabled? loading?
+                        :saving?   saving?
+                        :spec      spec
+                        :on-save   on-save
+                        :on-cancel on-cancel
+                        :save-text save-text}])
+       (when loading?
+         [loading-overlay])])}))

@@ -242,6 +242,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::register-account
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :register-account
+                     :method :post
+                     :uri    "/api/accounts/register"
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-account
   (fn [{:keys [_]} [_ {:keys [id]} handlers]]
     (create-request {:key    :load-account
@@ -1328,4 +1337,22 @@
     (create-request {:key    :load-overall-statistics
                      :method :get
                      :uri    "/api/overall-statistics"}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::reset-password-by-code
+  (fn [{:keys [_]} [_ {:keys [code data]} handlers]]
+    (create-request {:key    :reset-password-by-code
+                     :method :post
+                     :uri    (str "/api/accounts/reset-password/" code)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::reset-password-by-email
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :reset-password-by-email
+                     :method :post
+                     :uri    (str "/api/accounts/reset-password-by-email")
+                     :params data}
                     handlers)))

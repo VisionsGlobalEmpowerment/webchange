@@ -5,27 +5,30 @@
     [webchange.login.header.views :refer [header]]
     [webchange.login.routes :as routes]
     [webchange.login.sign-in.views :refer [sign-in-form]]
+    [webchange.login.pages.views :refer [registration-success]]
+    [webchange.login.registration.views :refer [registration]]
+    [webchange.login.reset-password.views :refer [provide-email-form reset-password-form]]
     [webchange.login.state :as state]
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn index
   []
   (r/create-class
-    {:display-name "Log In Index"
+   {:display-name "Log In Index"
 
-     :component-did-mount
-     (fn [this]
-       (let [{:keys [route]} (r/props this)]
-         (routes/init! (:path route))
-         (re-frame/dispatch [::state/load-current-user])))
+    :component-did-mount
+    (fn [this]
+      (let [{:keys [route]} (r/props this)]
+        (routes/init! (:path route))))
 
-     :reagent-render
-     (fn []
-       (let [current-user-loaded? @(re-frame/subscribe [::state/current-user-loaded?])
-             {:keys [handler props]} @(re-frame/subscribe [::state/current-page])]
-         (if current-user-loaded?
-           [:div#tabschool-login
-            [header]
-            (case handler
-              [sign-in-form props])]
-           [ui/loading-overlay])))}))
+    :reagent-render
+    (fn []
+      (let [{:keys [handler props]} @(re-frame/subscribe [::state/current-page])]
+        [:div#tabschool-login {:class-name (ui/get-class-name {"background-with-image" (= handler :sign-in)})}
+         [header]
+         (case handler
+           :sign-up-success [registration-success props]
+           :sign-up [registration props]
+           :reset-password-email [provide-email-form props]
+           :reset-password-code [reset-password-form props]
+           [sign-in-form props])]))}))

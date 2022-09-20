@@ -18,7 +18,10 @@
 
 (s/def ::create-account (s/keys :req-un [::first-name ::last-name ::email ::password ::type]
                                 :opt-un []))
+(s/def ::register-account (s/keys :req-un [::first-name ::last-name ::email ::password]
+                                  :opt-un []))
 (s/def ::edit-account (s/keys :req-un [::first-name ::last-name ::email ::type]
                               :opt-un []))
 (s/def ::change-password (s/keys :req-un [::password]))
+(s/def ::reset-password-for (s/keys :req-un [::email]))
 (s/def ::set-status (s/keys :req-un [::active]))

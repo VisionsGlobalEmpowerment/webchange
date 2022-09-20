@@ -24,33 +24,3 @@
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db current-page-key value)}))
 
-;; Authentication
-
-(def current-user-loaded-key :current-user-loaded?)
-
-(defn- set-current-user-loaded
-  [db value]
-  (assoc db current-user-loaded-key value))
-
-(re-frame/reg-sub
-  ::current-user-loaded?
-  :<- [path-to-db]
-  #(get % current-user-loaded-key false))
-
-(re-frame/reg-event-fx
-  ::load-current-user
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::warehouse/load-current-user
-                {:on-success [::load-current-user-success]
-                 :on-failure [::load-current-user-failure]}]}))
-
-(re-frame/reg-event-fx
-  ::load-current-user-success
-  (fn [{:keys [_]} [_ {:keys [type]}]]
-    {:redirect-to-module type}))
-
-(re-frame/reg-event-fx
-  ::load-current-user-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (set-current-user-loaded db true)}))

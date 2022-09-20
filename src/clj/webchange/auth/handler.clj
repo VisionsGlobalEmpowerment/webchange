@@ -49,8 +49,6 @@
   (GET "/api/users/current" request (handle-current-user request))
   (POST "/api/users/logout" request
         (core/logout (status 204)))
-  #_(POST "/api/users/register-user" request
-          (-> request :body :user core/register-user! handle))
 
   (GET "/user/profile" [] (redirect (website/website-profile-page)))
   (GET "/user/courses" [] (redirect (website/website-courses-page)))

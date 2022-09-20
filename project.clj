@@ -53,7 +53,9 @@
                  [org.clojure/data.csv "1.0.0"]
                  [me.raynes/fs "1.4.6"]
                  [io.djy/ezzmq "0.8.2"]
-                 [com.taoensso/tempura "1.2.1"]]
+                 [com.taoensso/tempura "1.2.1"]
+                 [com.draines/postal "2.0.5"]
+                 [hiccup "1.0.5"]]
 
   :plugins [[lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
