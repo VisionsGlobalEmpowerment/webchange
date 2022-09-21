@@ -22,11 +22,14 @@
 
 (defn add-region
   [wave-surfer {:keys [start end]}]
-  (if (some? wave-surfer)
-    (->> (create-region {:start start
-                         :end   end})
-         (w/add-region wave-surfer))
-    (logger/error "Add region: wavesurfer is not defined")))
+  (try
+    (if (some? wave-surfer)
+      (->> (create-region {:start start
+                           :end   end})
+           (w/add-region wave-surfer))
+      (logger/error "Add region: wavesurfer is not defined"))    
+    (catch js/Error e
+      (logger/error e))))
 
 (defn remove-current-region
   [{:keys [region]}]
