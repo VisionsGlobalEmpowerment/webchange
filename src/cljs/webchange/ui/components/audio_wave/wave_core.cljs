@@ -16,7 +16,7 @@
   [ws]
   (.-drawer ^js ws))
 
-(defn- get-drawer-width
+(defn get-drawer-width
   [drawer]
   (.-width ^js drawer))
 
