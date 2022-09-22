@@ -203,6 +203,21 @@
                           (some? on-failure) (assoc :on-failure on-failure))]})))
 
 (re-frame/reg-event-fx
+  ::load-audio-script-once
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-data]} [_ id {:keys [action-path audio-url]} {:keys [on-success on-failure]}]]
+    (let [audio-url (or audio-url
+                        (->> action-path
+                             (get-action-data activity-data)
+                             (get-audio-url)))]
+      {:dispatch [::warehouse/load-audio-script
+                  {:file audio-url}
+                  (cond-> {:on-success [::load-audio-script-success id on-success]
+                           :suppress-api-error? true}
+                          (some? on-failure) (assoc :on-failure on-failure))]})))
+
+(re-frame/reg-event-fx
   ::load-audio-script-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ id on-success script-data]]
@@ -227,23 +242,45 @@
   ::auto-select-region
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
-  (fn [{:keys [activity-data db]} [_ id action-path {:keys [retry?] :or {retry? false}}]]
+  (fn [{:keys [activity-data db]} [_ id action-path {:keys [retry? poll?] :or {retry? true poll? true}}]]
     (let [action-data (get-action-data activity-data action-path)
-          audio-script (get-script-data db id)]
-      (if (some? audio-script)
+          audio-script (get-script-data db id)
+          audio-url (get-audio-url action-data)]
+      (cond
+        (some? audio-script)
         (let [text (get-action-text action-data)
               region-data (audio-analyzer/get-region-data text audio-script)]
           {:db       (set-auto-select-loading db id false)
            :dispatch [::set-action-region action-path region-data]})
-        (let [audio-url (get-audio-url action-data)]
-          (if (not retry?)
-            {:db       (set-auto-select-loading db id true)
-             :dispatch [::load-audio-script
-                        id
-                        {:audio-url audio-url}
-                        {:on-success [::auto-select-region id action-path {:retry? true}]
-                         :on-failure [::auto-select-region id action-path {:retry? true}]}]}
-            {:db (set-auto-select-loading db id false)}))))))
+
+        retry?
+        {:db       (set-auto-select-loading db id true)
+         :dispatch [::load-audio-script-once
+                    id
+                    {:audio-url audio-url}
+                    {:on-success [::auto-select-region id action-path {:retry? false}]
+                     :on-failure [::retry-audio-recognition audio-url id action-path]}]}
+
+        poll?
+        {:db       (set-auto-select-loading db id true)
+         :dispatch [::load-audio-script
+                    id
+                    {:audio-url audio-url}
+                    {:on-success [::auto-select-region id action-path {:retry? false :poll? false}]
+                     :on-failure [::auto-select-region id action-path {:retry? false :poll? false}]}]}
+        
+        :else
+        {:db (set-auto-select-loading db id false)}))))
+
+(re-frame/reg-event-fx
+  ::retry-audio-recognition
+  [(re-frame/inject-cofx :activity-info)
+   (i/path path-to-db)]
+  (fn [{:keys [db activity-info]} [_ url id action-path]]
+    (let [lang (:lang activity-info)]
+      {:dispatch [::warehouse/retry-audio-recognition
+                  {:url url :lang lang}
+                  {:on-success [::auto-select-region id action-path {:retry? false}]}]})))
 
 ;; selection options
 
