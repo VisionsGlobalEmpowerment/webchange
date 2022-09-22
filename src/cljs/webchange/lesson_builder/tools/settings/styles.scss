@@ -64,6 +64,16 @@
                 flex-direction: column;
             }
         }
+
+	.settings-actions {
+	    display: flex;
+	    justify-content: space-between;
+
+	   
+	    button {
+		width: 135px;
+	    }
+	}
     }
 
     .create-preview-panel {
@@ -86,6 +96,12 @@
 
                 height: 167px;
             }
+
+	    .img-wrapper-book {
+		img {
+		    object-fit: contain;
+		}
+	    }
 
             .take-screenshot-button {
                 margin-top: 30px;

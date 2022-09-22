@@ -1155,7 +1155,7 @@
                                                                  :common-action? true
                                                                  :data           guide-settings}))]
     (db/edit-scene! {:id       activity-id
-                     :metadata (:metadata activity-info)
+                     :metadata (merge (:metadata activity-info) (:metadata activity-settings))
                      :name     (:name activity-settings)
                      :lang     (:lang activity-settings)})
     (db/update-scene-image! {:id        activity-id
