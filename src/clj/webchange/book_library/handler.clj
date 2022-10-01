@@ -3,7 +3,7 @@
     [clojure.tools.logging :as log]
     [compojure.api.sweet :refer [GET POST PUT DELETE api context defroutes]]
     [schema.core :as s]
-    [webchange.book-library.data :refer [ages categories genres languages reading-levels tags]]
+    [webchange.utils.book-library :refer [ages categories genres languages reading-levels tags]]
     [webchange.common.handler :refer [handle]]
     [webchange.course.core :as core]
     [webchange.course.handler :refer [Course]]))

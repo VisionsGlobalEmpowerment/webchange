@@ -1,4 +1,4 @@
-(ns webchange.book-library.data
+(ns webchange.utils.book-library
   (:require
     [webchange.utils.languages :as l]))
 
@@ -21,19 +21,19 @@
                       {:name "Vehicles" :value "vehicles"}]
                      (map #(assoc % :metadata {:book-library? true}))
                      (concat
-                       [{:name "All About Me" :value "all-about-me"}
-                        {:name "Arts and Music" :value "arts-and-music"}
-                        {:name "Autobiography and Biography" :value "autobiography-and-biography"}
-                        {:name "Countries and Cultures" :value "countries-and-cultures"}
-                        {:name "Early Learning Concepts" :value "early-learning-concepts"}
-                        {:name "Everyday Life" :value "everyday-life"}
-                        {:name "History" :value "history"}
-                        {:name "Life Skills" :value "life-skills"}
-                        {:name "Math" :value "math"}
-                        {:name "Mystery and Adventure" :value "mystery-and-adventure"}
-                        {:name "Series" :value "series"}
-                        {:name "Social Emotional Learning (SEL)" :value "social-emotional-learning"}
-                        {:name "Traditional Tales" :value "traditional-tales"}])))
+                      [{:name "All About Me" :value "all-about-me"}
+                       {:name "Arts and Music" :value "arts-and-music"}
+                       {:name "Autobiography and Biography" :value "autobiography-and-biography"}
+                       {:name "Countries and Cultures" :value "countries-and-cultures"}
+                       {:name "Early Learning Concepts" :value "early-learning-concepts"}
+                       {:name "Everyday Life" :value "everyday-life"}
+                       {:name "History" :value "history"}
+                       {:name "Life Skills" :value "life-skills"}
+                       {:name "Math" :value "math"}
+                       {:name "Mystery and Adventure" :value "mystery-and-adventure"}
+                       {:name "Series" :value "series"}
+                       {:name "Social Emotional Learning (SEL)" :value "social-emotional-learning"}
+                       {:name "Traditional Tales" :value "traditional-tales"}])))
 
 (def genres [{:name "Fiction" :value "fiction"}
              {:name "Non-Fiction" :value "non-fiction"}
@@ -79,3 +79,28 @@
            {:name "dialogue" :value "dialogue"}
            {:name "rhyming" :value "rhyming"}
            {:name "repetitive sentence structure" :value "repetitive-sentence-structure"}])
+
+(def age-options (->> ages
+                      (map (fn [{:keys [name value]}]
+                             {:text  name
+                              :value value}))))
+
+(def genre-options (->> genres
+                        (map (fn [{:keys [name value]}]
+                               {:text  name
+                                :value value}))))
+
+(def reading-level-options (->> reading-levels
+                                (map (fn [{:keys [name value]}]
+                                       {:text  name
+                                        :value value}))))
+
+(def category-options (->> categories
+                           (map (fn [{:keys [name value]}]
+                                  {:text  name
+                                   :value value}))))
+
+(def tag-options (->> tags
+                      (map (fn [{:keys [name value]}]
+                             {:text  name
+                              :value value}))))
