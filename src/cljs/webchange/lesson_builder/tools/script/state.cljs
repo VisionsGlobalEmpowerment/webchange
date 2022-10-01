@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
+    [webchange.utils.flipbook :as flipbook-utils]
     [webchange.utils.scene-data :as utils]))
 
 (def path-to-db :lesson-builder/script)
@@ -62,22 +63,38 @@
                                  (set tracked-actions))
          (vec))))
 
+(defn- sort-by-page-number
+  [activity-data track-dialogs]
+  (let [pages-data (flipbook-utils/get-pages-data activity-data)]
+    (->> track-dialogs
+         (map (fn [{:keys [action-path] :as dialog-data}]
+                (let [action-name (-> action-path first clojure.core/name)
+                      action-page-data (some (fn [{:keys [action] :as page-data}]
+                                               (and (= action action-name) page-data))
+                                             pages-data)]
+                  [(get action-page-data :idx ##Inf) dialog-data])))
+         (sort-by first)
+         (map second))))
+
 (re-frame/reg-sub
   ::track-dialogs
   (fn []
     [(re-frame/subscribe [::current-track])
-     (re-frame/subscribe [::state/activity-data])])
-  (fn [[current-track-idx activity-data]]
+     (re-frame/subscribe [::state/activity-data])
+     (re-frame/subscribe [::state/flipbook?])])
+  (fn [[current-track-idx activity-data flipbook?]]
     (let [current-track (utils/get-track-by-index activity-data current-track-idx)
-          untracked-actions (collect-untracked-actions activity-data)]
-      (if (some? current-track)
-        (->> (:nodes current-track)
-             (filter (fn [{:keys [type]}]
-                       (= type "dialog")))
-             (map (fn [{:keys [action-id]}]
-                    {:id          action-id
-                     :action-path [(keyword action-id)]})))
-        (map (fn [action-name]
-               {:id          action-name
-                :action-path [(keyword action-name)]})
-             untracked-actions)))))
+          untracked-actions (collect-untracked-actions activity-data)
+          track-dialogs (if (some? current-track)
+                          (->> (:nodes current-track)
+                               (filter (fn [{:keys [type]}]
+                                         (= type "dialog")))
+                               (map (fn [{:keys [action-id]}]
+                                      {:id          action-id
+                                       :action-path [(keyword action-id)]})))
+                          (map (fn [action-name]
+                                 {:id          action-name
+                                  :action-path [(keyword action-name)]})
+                               untracked-actions))]
+      (cond->> track-dialogs
+               flipbook? (sort-by-page-number activity-data)))))
