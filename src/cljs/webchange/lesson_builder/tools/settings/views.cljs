@@ -113,7 +113,6 @@
   (let [saving? @(re-frame/subscribe [::state/saving?])]
     [:<>
      [:div.main-setting-panel
-      [:div.menu-header]
       [activity-settings]
       [create-preview-image]
       [guide-settings]

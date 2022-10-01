@@ -1,0 +1,44 @@
+$menu-padding-v: 10px;
+$menu-padding-h: 20px;
+
+#bbs-lesson-builder {
+    $border-radius: 6px;
+    $default-gap: 20px;
+
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 720px auto 320px;
+    grid-template-rows: 50px 405px auto; // 405 = 1080 / (1920 / 720)
+    grid-template-areas:
+        "title script menu"
+        "stage script menu"
+        "toolbox script menu";
+
+    column-gap: $default-gap;
+    row-gap: $default-gap;
+    padding: $default-gap;
+
+    .bbs-lesson-builder--menu { grid-area: menu; }
+    .bbs-lesson-builder--script { grid-area: script; }
+    .bbs-lesson-builder--stage { grid-area: stage; }
+    .bbs-lesson-builder--title { grid-area: title; }
+    .bbs-lesson-builder--toolbox { grid-area: toolbox; }
+
+    .bbs-lesson-builder--menu {
+        margin-bottom: -$default-gap;
+        margin-right: -$default-gap;
+    }
+
+    .bbs-lesson-builder--focused-block {
+        z-index: 11;
+    }
+
+    @import "menu/styles";
+    @import "script/styles";
+    @import "stage/styles";
+    @import "title/styles";
+    @import "toolbox/styles";
+}

@@ -1,8 +1,7 @@
 (ns webchange.lesson-builder.widgets.activity-actions.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.blocks.menu.state :as menu]
-    [webchange.lesson-builder.blocks.state :as layout-state]
+    [webchange.lesson-builder.layout.menu.state :as menu]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.state-flipbook :as flipbook-state]))
 
@@ -20,9 +19,10 @@
                                 :on-click #(re-frame/dispatch [::flipbook-state/add-page])}
                                {:id   :add-layout
                                 :text "Add Layout"
-                                :icon "plus"}])
+                                :icon "plus"
+                                :tool :add-page}])
             :always (concat [
-                             #_{:id   :image-text
+                             #_{:id   :add-text
                                 :text "Add Text"
                                 :icon "plus"}
                              ])
@@ -31,18 +31,19 @@
                                       :icon "plus"}
                                      {:id   :character-add
                                       :text "Add Character"
-                                      :icon "plus"}
+                                      :icon "plus"
+                                      :tool :character-add}
                                      {:id   :background-image
                                       :text "Background"
-                                      :icon "plus"}])
+                                      :icon "plus"
+                                      :tool :background-image}])
             :always (concat [{:id   :background-music
                               :text "Background Music"
                               :icon "plus"}]))))
 
 (re-frame/reg-event-fx
   ::handle-item-click
-  (fn [{:keys [_]} [_ component-name]]
+  (fn [{:keys [_]} [_ {:keys [id tool]}]]
     {:dispatch (cond
-                 (= component-name :add-layout) [::layout-state/open-tool :add-page]
-                 (= component-name :background-image) [::layout-state/open-tool :background-image]
-                 :default [::menu/open-component component-name])}))
+                 (some? tool) [:layout/open-tool tool]
+                 :default [::menu/open-component id])}))

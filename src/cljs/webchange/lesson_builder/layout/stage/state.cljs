@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.blocks.stage.state
+(ns webchange.lesson-builder.layout.stage.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]

@@ -1,11 +1,11 @@
-(ns webchange.lesson-builder.blocks.stage.second-stage.views
+(ns webchange.lesson-builder.layout.stage.second-stage.views
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.interpreter.components :refer [get-scene-objects-data-by-scene-data get-activity-resources]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.renderer.stage :refer [stage]]
-    [webchange.lesson-builder.blocks.stage.second-stage.state :as state]))
+    [webchange.lesson-builder.layout.stage.second-stage.state :as state]))
 
 (defn second-stage
   []

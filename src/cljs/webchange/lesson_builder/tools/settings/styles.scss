@@ -6,6 +6,10 @@
     gap: 18px;
     height: 100%;
 
+    margin-left: -$menu-padding-h;
+    margin-right: -$menu-padding-h;
+    padding-top: 8px;
+
     .main-setting-panel {
         flex: 1 1;
 

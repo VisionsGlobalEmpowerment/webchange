@@ -1,15 +1,15 @@
-(ns webchange.lesson-builder.blocks.menu.menu-tabs.state
+(ns webchange.lesson-builder.layout.menu.menu-tabs.state
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.layout.menu.state :as menu-state]))
 
 (def path-to-db :lesson-builder/menu)
 
 ;; tabs
 
-(def menu-tabs {:design       {:title     "Design"
-                               :component :design-actions}
+(def menu-tabs {:design       {:title "Design"
+                               :tool  :default}
                 :scene-layers {:title     "Scene Layers"
                                :component :scene-layers}
                 :settings     {:title     "Settings"
@@ -33,6 +33,7 @@
   ::set-current-tab
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ tab-key]]
-    (let [{:keys [component]} (get menu-tabs tab-key)]
-      {:db       (assoc db current-tab-key tab-key)
-       :dispatch [::menu-state/open-component component {:reset-history? true}]})))
+    (let [{:keys [component tool]} (get menu-tabs tab-key)]
+      (cond-> {:db (assoc db current-tab-key tab-key)}
+              (some? tool) (assoc :dispatch [:layout/open-tool tool nil {:reset-history? true}])
+              (some? component) (assoc :dispatch [::menu-state/open-component component {:reset-history? true}])))))

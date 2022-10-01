@@ -5,8 +5,8 @@
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.stage-actions :as stage]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.menu.state :as menu-state]))
 
 (def path-to-db :lesson-builder/object-form)
 

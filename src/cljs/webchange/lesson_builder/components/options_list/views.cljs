@@ -3,9 +3,9 @@
     [webchange.ui.index :as ui]))
 
 (defn- options-list-item
-  [{:keys [id icon text on-click]}]
+  [{:keys [id icon text on-click] :as data}]
   (let [handle-click #(when (fn? on-click)
-                        (on-click id))]
+                        (on-click data))]
     [:div {:class-name   "options-list-item"
            :on-click     handle-click
            :data-test-id id}

@@ -1,4 +1,4 @@
-(ns webchange.lesson-builder.blocks.script.views
+(ns webchange.lesson-builder.layout.script.views
   (:require
     [webchange.lesson-builder.tools.script.views :refer [script]]))
 

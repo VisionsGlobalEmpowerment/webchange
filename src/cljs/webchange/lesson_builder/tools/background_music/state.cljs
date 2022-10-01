@@ -4,7 +4,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.blocks.stage.state :as stage-state]
+    [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.state.warehouse :as warehouse]))
 
 (def default-volume 0.5)

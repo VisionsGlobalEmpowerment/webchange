@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    ;[webchange.lesson-builder.blocks.state :as layout-state]
+    ;[webchange.lesson-builder.layout.state :as layout-state]
     [webchange.lesson-builder.stage-actions :as stage]
     [webchange.utils.scene-data :refer [get-scene-background]]))
 
@@ -96,25 +96,13 @@
                    (set-form-content {:component type}))
      :dispatch [::update-background]}))
 
-;; options
-
-(def options-key :options)
-
-(defn- get-options
-  [db]
-  (get db options-key))
-
-(defn- set-options
-  [db value]
-  (assoc db options-key value))
-
 ;; events
 
 (re-frame/reg-event-fx
   ::init
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
-  (fn [{:keys [db activity-data]} [_ options]]
+  (fn [{:keys [db activity-data]} [_]]
     (let [[name {:keys [type] :as data}] (get-scene-background activity-data)
           background-data {:name name
                            :type type
@@ -123,7 +111,6 @@
                                   :decoration        (get-in data [:decoration :src])
                                   :surface           (get-in data [:surface :src])}}]
       {:db (-> db
-               (set-options options)
                (set-initial-background background-data)
                (set-current-background background-data)
                (set-form-content {:component type}))})))
@@ -162,20 +149,17 @@
 (re-frame/reg-event-fx
   ::save
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [{:keys [reset]} (get-options db)]
-      {:dispatch-n (cond-> []
-                           (some? reset) (conj reset))})))
+  (fn [{:keys [_]} [_]]
+    {:dispatch [:layout/reset]}))
 
 (re-frame/reg-event-fx
   ::cancel
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [{:keys [reset]} (get-options db)
-          initial-background (get-initial-background db)
+    (let [initial-background (get-initial-background db)
           background-object-data (->background-object-data initial-background)]
-      {:dispatch-n (cond-> [[::stage/change-background background-object-data]]
-                           (some? reset) (conj reset))})))
+      {:dispatch-n [[::stage/change-background background-object-data]
+                    [:layout/reset]]})))
 
 (re-frame/reg-event-fx
   ::reset

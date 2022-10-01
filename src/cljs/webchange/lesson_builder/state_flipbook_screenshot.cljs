@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.renderer.scene.app :as app]
-    [webchange.lesson-builder.blocks.stage.state :as stage]
+    [webchange.lesson-builder.layout.stage.state :as stage]
     [webchange.lesson-builder.state-flipbook :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.crop-image :refer [get-half-image]]

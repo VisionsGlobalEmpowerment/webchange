@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.state.warehouse :as warehouse]
-    [webchange.lesson-builder.blocks.menu.state :as menu-state]))
+    [webchange.lesson-builder.layout.menu.state :as menu-state]))
 
 (def path-to-db :widgets/select-image)
 

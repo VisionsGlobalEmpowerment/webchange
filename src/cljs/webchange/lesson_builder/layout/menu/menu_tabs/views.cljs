@@ -1,7 +1,7 @@
-(ns webchange.lesson-builder.blocks.menu.menu-tabs.views
+(ns webchange.lesson-builder.layout.menu.menu-tabs.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.blocks.menu.menu-tabs.state :as state]
+    [webchange.lesson-builder.layout.menu.menu-tabs.state :as state]
     [webchange.ui.index :as ui]))
 
 (defn- menu-tabs-item
