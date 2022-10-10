@@ -4,7 +4,9 @@
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.object-data.get-object-data :refer [get-object-data]]
     [webchange.lesson-builder.state :as state]
-    [webchange.resources.scene-parser :refer [get-activity-resources]]))
+    [webchange.resources.scene-parser :refer [get-activity-resources]]
+    [webchange.state.state :as core-state]
+    [webchange.utils.flipbook :as flipbook-utils]))
 
 (def path-to-db :lesson-builder/stage)
 
@@ -76,3 +78,16 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db stage-busy-key value)}))
+
+(re-frame/reg-sub
+  ::current-page-side
+  :<- [::state/activity-data]
+  :<- [::core-state/current-object]
+  (fn [[scene-data current-object] [_]]
+    (when (some? current-object)
+      (let [page-number (flipbook-utils/page-object-name->page-number scene-data current-object)
+            stage-number (flipbook-utils/page-number->stage-number scene-data page-number)
+            {:keys [pages-idx]} (flipbook-utils/get-stage-data scene-data stage-number)]
+        (cond
+          (= page-number (first pages-idx)) "left"
+          (= page-number (last pages-idx)) "right")))))

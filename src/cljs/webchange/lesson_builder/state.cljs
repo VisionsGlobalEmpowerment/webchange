@@ -280,13 +280,14 @@
 (re-frame/reg-event-fx
   ::add-image
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ data {:keys [on-success]}]]
+  (fn [{:keys [db]} [_ data {:keys [on-success common-action?] :or {common-action? true}}]]
     (let [{:keys [id]} (get-activity-info db)]
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
                    :action      "add-image"
-                   :data        data}
+                   :data        data
+                   :common-action? common-action?}
                   {:on-success [::add-image-success on-success]
                    :on-failure [::add-image-failure]}]})))
 

@@ -20,12 +20,15 @@
                                {:id   :add-layout
                                 :text "Add Layout"
                                 :icon "plus"
-                                :tool :add-page}])
-            :always (concat [
-                             #_{:id   :add-text
-                                :text "Add Text"
-                                :icon "plus"}
-                             ])
+                                :tool :add-page}
+                               {:id       :add-text
+                                :text     "Add Text"
+                                :icon     "plus"
+                                :on-click #(re-frame/dispatch [::flipbook-state/add-text])}
+                               {:id   :image-add
+                                :text "Add Image"
+                                :icon "plus"
+                                :on-click #(re-frame/dispatch [::flipbook-state/open-add-image])}])
             (not flipbook?) (concat [{:id   :image-add
                                       :text "Add Image"
                                       :icon "plus"}

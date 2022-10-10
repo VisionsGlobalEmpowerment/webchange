@@ -2,18 +2,16 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.pixi :refer [clear-texture-cache Loader]]
+    [webchange.interpreter.pixi :refer [Loader]]
     [webchange.interpreter.renderer.loader-screen :refer [loader-screen]]
     [webchange.interpreter.renderer.waiting-screen :refer [waiting-screen]]
     [webchange.interpreter.renderer.scene.scene :refer [scene]]
     [webchange.interpreter.renderer.scene.app :refer [reset-app! resize-app!]]
     [webchange.resources.manager :as resources]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
-    [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.state.state-flipbook :as state-flipbook]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 
 (defn- init-scene
@@ -115,11 +113,10 @@
                        (let [{:keys [reset-resources? scene-data]} (r/props this)]
                          (init-scene scene-data current-scene-id loading reset-resources?)))
        :reagent-render
-                     (fn [{:keys [id mode on-ready on-ready-to-start on-start-click scene-data force-show-scene?] :as props}]
+                     (fn [{:keys [id mode on-ready on-ready-to-start on-start-click scene-data force-show-scene? current-page] :as props}]
                        (let [viewport (-> (element->viewport @container)
                                           (get-stage-params))
                              show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
-                             current-page @(re-frame/subscribe [::state-flipbook/current-page-side])
                              {:keys [ready-to-start? show-loader-screen? show-scene? show-waiting-screen?]}
                              (get-screens-state {:loading-state        @loading
                                                  :props                props

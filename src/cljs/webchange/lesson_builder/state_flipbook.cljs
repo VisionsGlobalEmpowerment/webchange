@@ -4,7 +4,9 @@
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.state :as state]
-    [webchange.utils.flipbook :as flipbook-utils]))
+    [webchange.state.state :as core-state]
+    [webchange.utils.flipbook :as flipbook-utils]
+    [webchange.lesson-builder.tools.image-add.state :as image-add-state]))
 
 (def path-to-db :lesson-builder/flipbook)
 
@@ -301,3 +303,42 @@
   (fn [{:keys [_]} [_ on-failure]]
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
+
+;; db should be global to retrieve current-object
+(re-frame/reg-event-fx
+  ::add-text
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [db activity-data]} [_ {:keys [on-success on-failure]}]]
+    (let [current-object (core-state/get-current-object db)
+          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)]
+      {:dispatch-n [[::stage-state/set-stage-busy true]
+                    [::state/call-activity-action
+                     {:common-action? false
+                      :action "add-text"
+                      :data {:page-number page-number}}
+                     {:on-success [::add-text-success on-success]
+                      :on-failure [::add-text-failure on-failure]}]]})))
+
+(re-frame/reg-event-fx
+  ::add-text-success
+  (fn [{:keys [_]} [_ on-success {:keys [data]}]]
+    {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
+                          [::state/set-activity-data data]
+                          [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::add-text-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))
+
+;; db should be global to retrieve current-object
+(re-frame/reg-event-fx
+  ::open-add-image
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [db activity-data]} [_]]
+    (let [current-object (core-state/get-current-object db)
+          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)]
+      {:dispatch-n [[::image-add-state/set-page-number page-number]
+                    [:layout/open-tool :image-add]]})))
