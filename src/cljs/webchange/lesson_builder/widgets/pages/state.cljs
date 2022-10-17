@@ -1,7 +1,16 @@
 (ns webchange.lesson-builder.widgets.pages.state
   (:require
     [re-frame.core :as re-frame]
-    [webchange.lesson-builder.state-flipbook :as state]))
+    [re-frame.std-interceptors :as i]
+    [webchange.lesson-builder.state-flipbook :as state]
+    [webchange.state.state-flipbook :as state-flipbook]))
+
+(def path-to-db :lesson-builder/pages)
+
+(re-frame/reg-sub
+  path-to-db
+  (fn [db]
+    (get db path-to-db)))
 
 (defn set-last
   [coll x]
@@ -25,3 +34,34 @@
   ::add-page
   (fn [{:keys [_]} [_]]
     {:dispatch [::state/add-page]}))
+
+;;reorder pages
+
+(re-frame/reg-sub
+  ::current-page-over
+  :<- [path-to-db]
+  #(get % :current-page-over))
+
+(re-frame/reg-event-fx
+  ::drag-start-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ idx]]
+    {:db (assoc db :current-page-from idx)}))
+
+(re-frame/reg-event-fx
+  ::drag-enter-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ idx page-offset]]
+    {:db (assoc db :current-page-over (+ idx page-offset))}))
+
+(re-frame/reg-event-fx
+  ::drag-drop-page
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [page-from (:current-page-from db)
+          page-to (:current-page-over db)]
+      {:db (dissoc db :current-page-over :current-page-from)
+       :dispatch [::state/move-page {:from page-from
+                                     :to (if (>= page-from page-to)
+                                           page-to
+                                           (dec page-to))}]})))

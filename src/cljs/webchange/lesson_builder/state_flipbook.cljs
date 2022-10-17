@@ -304,6 +304,33 @@
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
 
+;; move page
+(re-frame/reg-event-fx
+  ::move-page
+  (fn [{:keys [_]} [_ {:keys [from to]} {:keys [on-success on-failure]}]]
+    {:dispatch-n [[::stage-state/set-stage-busy true]
+                  [::state/call-activity-action
+                   {:action "move-page"
+                    :data   {:page-idx-from from
+                             :page-idx-to to}
+                    :common-action? false}
+                   {:on-success [::move-page-success on-success]
+                    :on-failure [::move-page-failure on-failure]}]]}))
+
+(re-frame/reg-event-fx
+  ::move-page-success
+  (fn [{:keys [_]} [_ on-success {:keys [data]}]]
+    {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
+                          [::state/set-activity-data data]
+                          [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
+                         (some? on-success) (conj on-success))}))
+
+(re-frame/reg-event-fx
+  ::move-page-failure
+  (fn [{:keys [_]} [_ on-failure]]
+    {:dispatch-n (cond-> []
+                         (some? on-failure) (conj on-failure))}))
+
 ;; db should be global to retrieve current-object
 (re-frame/reg-event-fx
   ::add-text
