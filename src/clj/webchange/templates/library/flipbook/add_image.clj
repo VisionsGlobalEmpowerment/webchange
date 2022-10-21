@@ -14,7 +14,7 @@
   [{:keys [src]} {:keys [width padding]}]
   (let [content {:src        src
                  :image-size "contain"
-                 :origin     {:type "center-center"}}
+                 :origin     {:type "left-top"}}
         side-length (->> (* 2 padding) (- width))
         dimensions {:x      (-> (/ width 2) Math/floor int)
                     :y      (-> (/ side-length 2) (+ padding) Math/floor int)

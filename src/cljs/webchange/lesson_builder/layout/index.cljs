@@ -5,6 +5,7 @@
     [webchange.lesson-builder.tools.background-music.views :refer [background-music]]
     [webchange.lesson-builder.tools.character-add.views :refer [character-add]]
     [webchange.lesson-builder.tools.flipbook-add-page.views :as add-page-views]
+    [webchange.lesson-builder.tools.flipbook-add-page.state :as add-page-state]
     [webchange.lesson-builder.tools.image-add.views :refer [image-add]]
     [webchange.lesson-builder.tools.object-form.views :refer [object-form]]
     [webchange.lesson-builder.tools.question-form.object-form.views :refer [question-object-form]]
@@ -26,7 +27,8 @@
                       :toolbox welcome}
    :add-page         {:menu    add-page-views/layout-form
                       :toolbox add-page-views/select-layout
-                      :focus   #{:toolbox :menu}}
+                      :focus   #{:toolbox :menu}
+                      :init    ::add-page-state/init}
    :background-image {:toolbox background-image
                       :focus   #{:stage :toolbox}
                       :init    ::background-image-state/init}

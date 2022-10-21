@@ -67,7 +67,8 @@
                                                   "page-item-drag-over" (= idx @current-page-over)})
                   :draggable true
                   :on-drag-start #(re-frame/dispatch [::state/drag-start-page idx])
-                  :on-drop #(re-frame/dispatch [::state/drag-drop-page])
+                  :on-drop #(do (.stopPropagation %)
+                                (re-frame/dispatch [::state/drag-drop-page]))
                   :on-drag-over #(re-frame/dispatch [::state/drag-enter-page idx (drag-event->page-offset %)])}
             [:div {:class-name "page-item--preview"}
              ^{:key preview}
@@ -102,7 +103,8 @@
   []
   (let [stages @(re-frame/subscribe [::state/stages])]
     [:div.widget--activity-pages
-     {:on-drop #(re-frame/dispatch [::state/drag-drop-page])
+     {:on-drop #(do (.stopPropagation %)
+                    (re-frame/dispatch [::state/drag-drop-page]))
       :on-drag-over #(.preventDefault %)}
      (for [{:keys [id] :as stage-data} stages]
        ^{:key id}

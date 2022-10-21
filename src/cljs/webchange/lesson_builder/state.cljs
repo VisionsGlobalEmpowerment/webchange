@@ -45,6 +45,10 @@
   :<- [path-to-db]
   #(get-activity-data %))
 
+(comment
+  (-> @(re-frame/subscribe [::activity-data])
+      :metadata
+      (select-keys [:next-page-id :next-spread-id :flipbook-pages])))
 (re-frame/reg-cofx
   :activity-data
   (fn [{:keys [db] :as co-effects}]

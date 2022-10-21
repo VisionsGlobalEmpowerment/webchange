@@ -47,15 +47,19 @@
   (let [layout-selected? @(re-frame/subscribe [::state/layout-selected?])
         layout-params @(re-frame/subscribe [::state/layout-params])
         save-button-disabled? @(re-frame/subscribe [::state/save-button-disabled?])
+        note @(re-frame/subscribe [::state/note-value])
         handle-cancel #(re-frame/dispatch [::state/cancel])
         handle-save #(re-frame/dispatch [::state/save])]
     [:div {:class-name "widget--flipbook-page-layout--form"}
      [:div {:class-name "form-content"}
       [:h1 "Add Layout"]
       (if layout-selected?
-        (for [{:keys [id] :as layout-param} layout-params]
-          ^{:key id}
-          [layout-form-item layout-param])
+        [:<>
+         (for [{:keys [id] :as layout-param} layout-params]
+           ^{:key id}
+           [layout-form-item layout-param])
+         (when note
+           [ui/note {:text note}])]
         [ui/info "Select layout"])]
      [form-actions {:on-cancel  handle-cancel
                     :on-save    handle-save

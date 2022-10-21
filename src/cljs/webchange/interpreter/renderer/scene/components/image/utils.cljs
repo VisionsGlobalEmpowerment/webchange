@@ -50,13 +50,17 @@
   (cond
     (some? image-size) (let [sprite-size (utils/get-local-bounds sprite)
                              {scale-x :x scale-y :y} scale
-                             w-scale (/ (* width scale-x) (:width sprite-size))
-                             h-scale (/ (* height scale-y) (:height sprite-size))
+                             scale-x-sign (/ scale-x (Math/abs scale-x))
+                             scale-y-sign (/ scale-y (Math/abs scale-y))
+                             w-scale (Math/abs (/ (* width scale-x) (:width sprite-size)))
+                             h-scale (Math/abs (/ (* height scale-y) (:height sprite-size)))
                              scale (case image-size
-                                     "cover" (Math/max w-scale h-scale)
-                                     "contain" (Math/min w-scale h-scale))
-                             x (->> (:width sprite-size) (* scale) (- width) (* 0.5))
-                             y (->> (:height sprite-size) (* scale) (- height) (* 0.5))]
+                                     "cover" {:x (* scale-x-sign (Math/max w-scale h-scale))
+                                              :y (* scale-y-sign (Math/max w-scale h-scale))}
+                                     "contain" {:x (* scale-x-sign (Math/min w-scale h-scale))
+                                                :y (* scale-y-sign (Math/min w-scale h-scale))})
+                             x (->> (:width sprite-size) (* (:x scale)) (- width) (* 0.5))
+                             y (->> (:height sprite-size) (* (:y scale)) (- height) (* 0.5))]
                          (utils/set-scale sprite scale)
                          (utils/set-position sprite x y))
     (some? scale) (utils/set-scale container scale)
