@@ -33,6 +33,19 @@
             :title      title}
       title]]))
 
+(defn drag-event->page-offset
+  [event]
+  (let [event (if (some? (.-nativeEvent event))
+                (.. event -nativeEvent)
+                event)
+        target (.-target event)
+        offset-x (.-offsetX event)
+        target-width (.. target -clientWidth)]
+    (.preventDefault event)
+    (if (< offset-x (/ target-width 2))
+      0
+      1)))
+
 (defn- page-item
   []
   (r/create-class
@@ -46,18 +59,25 @@
            (re-frame/dispatch [::screenshot/take-page-screenshot idx]))))
 
      :reagent-render
-     (fn [{:keys [id side title preview] :as props}]
-       (if-not (= id :add)
-         [:div {:class-name (ui/get-class-name {"page-item"              true
-                                                (str "page-item--" side) true})}
-          [:div {:class-name "page-item--preview"}
-           ^{:key preview}
-           [ui/image {:src        preview
-                      :class-name "page-item--preview-image"}]]
-          [:div {:class-name "page-item--title"
-                 :title      title}
-           title]]
-         [add-page-item props]))}))
+     (fn [{:keys [id idx side title preview] :as props}]
+       (let [current-page-over (re-frame/subscribe [::state/current-page-over])]
+         (if-not (= id :add)
+           [:div {:class-name (ui/get-class-name {"page-item"              true
+                                                  (str "page-item--" side) true
+                                                  "page-item-drag-over" (= idx @current-page-over)})
+                  :draggable true
+                  :on-drag-start #(re-frame/dispatch [::state/drag-start-page idx])
+                  :on-drop #(do (.stopPropagation %)
+                                (re-frame/dispatch [::state/drag-drop-page]))
+                  :on-drag-over #(re-frame/dispatch [::state/drag-enter-page idx (drag-event->page-offset %)])}
+            [:div {:class-name "page-item--preview"}
+             ^{:key preview}
+             [ui/image {:src        preview
+                        :class-name "page-item--preview-image"}]]
+            [:div {:class-name "page-item--title"
+                   :title      title}
+             title]]
+           [add-page-item props])))}))
 
 (defn- stage-item
   [{:keys [idx left-page right-page title current-stage?]}]
@@ -83,6 +103,9 @@
   []
   (let [stages @(re-frame/subscribe [::state/stages])]
     [:div.widget--activity-pages
+     {:on-drop #(do (.stopPropagation %)
+                    (re-frame/dispatch [::state/drag-drop-page]))
+      :on-drag-over #(.preventDefault %)}
      (for [{:keys [id] :as stage-data} stages]
        ^{:key id}
        [stage-item stage-data])]))

@@ -18,7 +18,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (assoc db :form {:name ""})}))
+    {:db (assoc-in db [:form :name] "")}))
 
 (re-frame/reg-event-fx
   ::reset
@@ -75,6 +75,8 @@
                    :always (assoc-in [:form :image] value)
                    (some? name) (assoc-in [:form :name] name))})))
 (comment
+  (-> @re-frame.db/app-db
+      (get path-to-db))
   (let [value {:src "etc--elements-concepts--mother.png"}]
     (-> value
         :src
@@ -96,7 +98,9 @@
     (let [data (get db :form)]
       (cond
         (empty? (:name data)) {:db (set-name-error db "Name is required")}
-        :default {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}))))
+        (:page-number data) {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]
+                                                                               :common-action? false}]}
+        :else {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}))))
 
 (re-frame/reg-event-fx
   ::apply-success
@@ -105,3 +109,9 @@
                 {:title      "Image Added"
                  :message    "Image is added to scene layers, you can edit or change the image in the activity form there and choose when to show or hide."
                  :on-confirm [::menu-state/history-back]}]}))
+
+(re-frame/reg-event-fx
+  ::set-page-number
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db [:form :page-number] value)}))

@@ -26,8 +26,7 @@
    :height      "---"
    :mask-width  "---"
    :mask-height "---"
-   :src         "---"
-   :editable?   {:select true}})
+   :src         "---"})
 
 (def page-text-template
   {:type           "text"

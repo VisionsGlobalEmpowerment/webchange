@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.state-flipbook :as flipbook-state]))
+    [webchange.lesson-builder.state-flipbook :as flipbook-state]
+    [webchange.lesson-builder.layout.menu.state :as menu-state]))
 
 (def path-to-db :lesson-builder/flipbook-add-page)
 
@@ -179,14 +180,19 @@
 
 (re-frame/reg-event-fx
   ::init
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ options]]
-    {:db (set-options db options)}))
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [db activity-data]} [_ options]]
+    (let [current-side (-> activity-data :metadata :flipbook-pages :current-side)]
+      {:db (-> db
+               (set-options options)
+               (assoc :can-add-spread? (= current-side "left")))})))
 
 (re-frame/reg-event-fx
   ::reset
   (fn [{:keys [db]} [_]]
-    {:db (dissoc db path-to-db)}))
+    {:db (dissoc db path-to-db)
+     :dispatch-n [[::menu-state/history-back]]}))
 
 (re-frame/reg-event-fx
   ::cancel
@@ -215,10 +221,26 @@
   :<- [::current-layout]
   :<- [::layout-params]
   :<- [::form-params]
-  (fn [[current-layout layout-params form-params]]
+  :<- [::note-value]
+  (fn [[current-layout layout-params form-params note-value]]
     (-> (and (some? current-layout)
              (->> layout-params
                   (map (fn [{:keys [id]}]
                          (get form-params id)))
                   (every? some?)))
-        (not))))
+        (not)
+        (or note-value))))
+
+(re-frame/reg-sub
+  ::note-value
+  :<- [path-to-db]
+  :<- [::layout-type]
+  (fn [[db layout-type]]
+    (if (and (= layout-type "spread") (not (:can-add-spread? db)))
+      "Can't add spread because you have add number of pages.")))
+
+(comment
+  (-> @(re-frame/subscribe [path-to-db])
+      :can-add-spread?)
+  (-> @(re-frame/subscribe [::layout-type]))
+  )

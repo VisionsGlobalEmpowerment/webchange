@@ -84,8 +84,8 @@
 (defn- create-sprite-container
   [{:keys [x y offset scale filters name]
     :or   {scale {:x 1 :y 1}}}]
-  (let [position {:x (- x (* (:x offset) (:x scale)))
-                  :y (- y (* (:y offset) (:y scale)))}]
+  (let [position {:x (- x (* (:x offset) (Math/abs (:x scale))))
+                  :y (- y (* (:y offset) (Math/abs (:y scale))))}]
     (doto (Container.)
       (aset "name" (str name "-sprite-container"))
       (utils/set-position position)

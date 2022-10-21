@@ -15,7 +15,8 @@
         key @(re-frame/subscribe [::state/stage-key])
         show-flipbook-actions? @(re-frame/subscribe [::state/show-flipbook-actions?])
         busy? @(re-frame/subscribe [::state/stage-busy?])
-        handle-ready #(re-frame/dispatch [::state/set-stage-ready true])]
+        handle-ready #(re-frame/dispatch [::state/set-stage-ready true])
+        current-page @(re-frame/subscribe [::state/current-page-side])]
     [:div {:id         "block--stage"
            :class-name class-name}
      (when show-flipbook-actions?
@@ -26,7 +27,8 @@
       [stage {:id         "main"
               :mode       ::modes/editor
               :scene-data scene-data
-              :on-ready   handle-ready}]]
+              :on-ready   handle-ready
+              :current-page current-page}]]
      (when show-flipbook-actions?
        [select-stage {:class-name "stage-actions"}])
      [second-stage]

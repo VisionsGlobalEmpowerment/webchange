@@ -78,6 +78,14 @@
     (u/set-prop this "object-moved" false)
     (u/set-prop this "object-picked" false)))
 
+(defn- handle-pointer-up-outside
+  [event]
+  (this-as this
+    (when (u/get-prop this "object-moved")
+      (on-drag-end this event))
+    (u/set-prop this "object-moved" false)
+    (u/set-prop this "object-picked" false)))
+
 (defn- handle-pointer-move
   [event]
   (this-as this
@@ -109,5 +117,5 @@
     
     (.on "pointerdown" handle-pointer-down)
     (.on "pointerup" handle-pointer-up)
-    (.on "pointerupoutside" handle-pointer-up)
+    (.on "pointerupoutside" handle-pointer-up-outside)
     (.on "pointermove" handle-pointer-move)))

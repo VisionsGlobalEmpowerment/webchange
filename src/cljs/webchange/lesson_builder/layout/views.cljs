@@ -5,7 +5,6 @@
     [webchange.lesson-builder.layout.menu.views :refer [block-menu]]
     [webchange.lesson-builder.layout.stage.views :refer [block-stage]]
     [webchange.lesson-builder.layout.script.views :refer [block-script]]
-    [webchange.lesson-builder.layout.stage.views :refer [block-stage]]
     [webchange.lesson-builder.layout.title.views :refer [block-title]]
     [webchange.lesson-builder.layout.toolbox.views :refer [block-toolbox]]
     [webchange.lesson-builder.widgets.confirm.views :refer [block-confirm]]
