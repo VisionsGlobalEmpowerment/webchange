@@ -1210,9 +1210,9 @@
 (re-frame/reg-event-fx
   ::delete-student
   (fn [{:keys [_]} [_ {:keys [student-id]} handlers]]
-    (create-request {:key    :delete-student
-                     :method :delete
-                     :uri    (str "/api/students/" student-id)}
+    (create-request {:key    :archive-student
+                     :method :put
+                     :uri    (str "/api/students/" student-id "/archive")}
                     handlers)))
 
 (re-frame/reg-event-fx

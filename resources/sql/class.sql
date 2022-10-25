@@ -276,7 +276,7 @@ WHERE id = :id
 
 -- :name archive-student! :! :n
 -- :doc mark student record as archived
-UPDATE student
+UPDATE students
 SET archived = true
 WHERE id = :id
 

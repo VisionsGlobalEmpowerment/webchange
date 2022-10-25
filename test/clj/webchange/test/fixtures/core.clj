@@ -702,6 +702,13 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
+(defn archive-student!
+  [id]
+  (let [url (str "/api/students/" id "/archive")
+        request (-> (mock/request :put url (json/write-str {}))
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-course-lessons
   [course-name]
   (let [url (str "/api/courses/" course-name "/lesson-sets")
