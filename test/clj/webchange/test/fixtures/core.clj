@@ -27,6 +27,7 @@
 (def default-school-id 1)
 
 (defn clear-db []
+  (db/clear-table :class_teachers)
   (db/clear-table :course_scenes)
   (db/clear-table :collaborators)
   (db/clear-table :school_courses)
@@ -1008,4 +1009,56 @@
                     (mock/header :content-type "application/json")
                     (mock/header :accept "application/json")
                     teacher-logged-in)]
+    (handler/dev-handler request)))
+
+(defn create-teacher!
+  [school-id data]
+  (let [url (str "/api/schools/" school-id "/teachers")
+        request (-> (mock/request :post url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    admin-logged-in)]
+    (-> (handler/dev-handler request)
+        :body
+        slurp
+        (json/read-str :key-fn keyword))))
+
+(defn get-school-teachers
+  [school-id]
+  (let [url (str "/api/schools/" school-id "/teachers")
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
+(defn assign-teachers-to-class
+  [class-id data]
+  (let [url (str "/api/classes/" class-id "/teachers")
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
+(defn remove-teacher-from-class
+  [teacher-id class-id]
+  (let [url (str "/api/teachers/" teacher-id "/classes/" class-id)
+        request (-> (mock/request :delete url)
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
+(defn remove-teacher
+  [teacher-id]
+  (let [url (str "/api/teachers/" teacher-id)
+        request (-> (mock/request :delete url)
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-class-teachers
+  [class-id]
+  (let [url (str "/api/classes/" class-id "/teachers")
+        request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    admin-logged-in)]
     (handler/dev-handler request)))

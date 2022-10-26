@@ -188,11 +188,23 @@
    (assign-teacher-to-class teacher-id class-id {}))
   ([teacher-id class-id {:keys [batched?]
                          :or   {batched? false}}]
-   (db/assign_teacher_to_class! {:class_id   class-id
+   (db/assign-teacher-to-class! {:class_id   class-id
                                  :teacher_id teacher-id})
    (when-not batched?
      (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
      {:class (get-class class-id)})))
+
+(defn get-teacher
+  [teacher-id]
+  (-> (db/get-teacher {:id teacher-id})
+      (with-user)))
+
+(defn remove-teacher-from-class
+  [teacher-id class-id]
+  (db/remove-teacher-from-class! {:class_id   class-id
+                                  :teacher_id teacher-id})
+  (e/dispatch {:type :teachers/removed-from-class :class-id class-id})
+  (get-teacher teacher-id))
 
 (defn assign-teachers-to-class
   [teachers-ids class-id]
@@ -200,11 +212,6 @@
     (assign-teacher-to-class teacher-id class-id {:batched? true}))
   (e/dispatch {:type :teachers/assigned-to-class :class-id class-id})
   {:class (get-class class-id)})
-
-(defn get-teacher
-  [teacher-id]
-  (-> (db/get-teacher {:id teacher-id})
-      (with-user)))
 
 (defn create-teacher!
   [data]

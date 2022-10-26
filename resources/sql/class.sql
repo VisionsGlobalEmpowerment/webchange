@@ -135,7 +135,7 @@ SELECT * from classes c
 INNER JOIN class_teachers ct ON ct.class_id = c.id
 WHERE ct.teacher_id = :teacher_id
 
--- :name assign_teacher_to_class! :! :n
+-- :name assign-teacher-to-class! :! :n
 -- :doc assign teacher by class id
 INSERT INTO class_teachers
 (class_id, teacher_id)
@@ -307,6 +307,11 @@ WHERE class_id = :class_id
 -- :doc remove all classes for given teacher
 DELETE FROM class_teachers
 WHERE teacher_id = :teacher_id
+
+-- :name remove-teacher-from-class! :! :n
+-- :doc remove given teacher from given class
+DELETE FROM class_teachers
+WHERE teacher_id = :teacher_id and class_id = :class_id
 
 -- :name remove-students-from-class! :! :n
 -- :doc remove all students from given class

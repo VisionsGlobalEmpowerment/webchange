@@ -101,3 +101,43 @@
         _ (f/delete-student! id)
         status (-> id f/get-student :status)]
     (is (= 404 status))))
+
+(deftest teachers
+  (let [first-name "Test"
+        last-name "Test"
+        email "test-teacher@example.com"
+        {teacher-id :id} (f/create-teacher!
+                          f/default-school-id
+                          {:first-name first-name
+                           :last-name last-name
+                           :email email
+                           :password "test-teacher"
+                           :type "teacher"})
+        {class-id :id} (f/class-created)]
+    (testing "created teacher can be retrieved"
+      (let [retrieved (-> f/default-school-id f/get-school-teachers :body slurp (json/read-str :key-fn keyword))
+            user (-> retrieved last :user)]
+        (is (= 1 (count retrieved)))
+        (is (= first-name (:first-name user)))
+        (is (= last-name (:last-name user)))
+        (is (= email (:email user)))))
+    (testing "teacher can be assigned to class"
+      (let [_ (f/assign-teachers-to-class class-id [teacher-id])
+            retrieved (-> class-id f/get-class-teachers :body slurp (json/read-str :key-fn keyword))
+            class-teacher-email (-> retrieved first :user :email)]
+        (is (= email class-teacher-email))))
+    (testing "teacher can be removed from class"
+      (let [_ (f/remove-teacher-from-class teacher-id class-id)
+            retrieved (-> class-id f/get-class-teachers :body slurp (json/read-str :key-fn keyword))]
+        (is (= 0 (count retrieved)))))
+    (testing "teacher can be archived"
+      (let [_ (f/remove-teacher teacher-id)
+            retrieved (-> class-id f/get-school-teachers :body slurp (json/read-str :key-fn keyword))]
+        (is (= 0 (count retrieved)))))))
+
+
+#_(deftest teacher-can-be-removed-from-class
+  (let [{id :id class-id :class-id} (f/student-created)
+        _ (f/unassigned-student! id)
+        students (-> class-id f/get-students :body slurp (json/read-str :key-fn keyword) :students)]
+    (is (= 0 (count students)))))

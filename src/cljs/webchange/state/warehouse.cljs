@@ -1281,20 +1281,18 @@
 (re-frame/reg-event-fx
   ::remove-teacher
   (fn [{:keys [_]} [_ {:keys [teacher-id]} handlers]]
-    (create-fake-request {:key    :remove-teacher
-                          :method :delete
-                          :uri    (str "/api/teachers/" teacher-id)}
-                         handlers
-                         {:delay 3000})))
+    (create-request {:key    :remove-teacher
+                     :method :delete
+                     :uri    (str "/api/teachers/" teacher-id)}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::remove-teacher-from-class
   (fn [{:keys [_]} [_ {:keys [class-id teacher-id]} handlers]]
-    (create-fake-request {:key    :remove-teacher-from-class
-                          :method :delete
-                          :uri    (str "/api/teachers/" teacher-id "/class/" class-id)}
-                         handlers
-                         {:delay 2000})))
+    (create-request {:key    :remove-teacher-from-class
+                     :method :delete
+                     :uri    (str "/api/teachers/" teacher-id "/classes/" class-id)}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::load-class-teachers

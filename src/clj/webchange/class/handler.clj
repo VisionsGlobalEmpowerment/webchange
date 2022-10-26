@@ -119,6 +119,24 @@
       (-> (core/edit-teacher! teacher-id teacher-data)
           response))))
 
+(defn handle-delete-teacher
+  [teacher-id request]
+  (let [user-id (current-user request)
+        teacher (core/get-teacher teacher-id)]
+    (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
+      (throw-unauthorized {:role :educator}))
+      (-> (core/archive-teacher! teacher-id)
+          response)))
+
+(defn handle-remove-teacher-from-class
+  [teacher-id class-id request]
+  (let [user-id (current-user request)
+        teacher (core/get-teacher teacher-id)]
+    (when-not (or (is-admin? user-id) (school/school-admin? (:school-id teacher) user-id))
+      (throw-unauthorized {:role :educator}))
+    (-> (core/remove-teacher-from-class teacher-id class-id)
+        response)))
+
 (defn- can-edit-class?
   [class-id request]
   (let [user-id (current-user request)
@@ -213,6 +231,15 @@
     :path-params [teacher-id :- ::teacher-spec/id]
     :body [data ::teacher-spec/edit-teacher]
     (handle-edit-teacher teacher-id data request))
+  (DELETE "/api/teachers/:teacher-id" request
+    :coercion :spec
+    :path-params [teacher-id :- ::teacher-spec/id]
+    (handle-delete-teacher teacher-id request))
+  (DELETE "/api/teachers/:teacher-id/classes/:class-id" request
+    :coercion :spec
+    :path-params [teacher-id :- ::teacher-spec/id
+                  class-id :- ::class-spec/id]
+    (handle-remove-teacher-from-class teacher-id class-id request))
   (GET "/api/schools/:school-id/teachers" request
     :coercion :spec
     :path-params [school-id :- ::school-spec/id]
