@@ -81,3 +81,17 @@
                           :saved-stage current-stage})
         {:dispatch-n [[::run-que]
                       [::stage/set-stage-busy true]]}))))
+
+(re-frame/reg-event-fx
+  ::take-current-stage-screenshot
+  [(re-frame/inject-cofx :activity-data)
+   (i/path state/path-to-db)]
+  (fn [{:keys [db activity-data]} [_]]
+    (let [current-stage-idx (state/get-current-stage db)
+          stage (flipbook-utils/get-stage-data activity-data current-stage-idx)]
+      (swap! que update :sequence concat (:pages-idx stage))
+      (when-not (:running? @que)
+        (swap! que merge {:running?    true
+                          :saved-stage current-stage-idx})
+        {:dispatch-n [[::run-que]
+                      [::stage/set-stage-busy true]]}))))

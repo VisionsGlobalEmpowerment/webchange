@@ -69,6 +69,17 @@
     (when previous-target (let [{:keys [deselect]} previous-target] (deselect)))
     (when current-target (let [{:keys [select]} current-target] (select)))))
 
+(re-frame/reg-fx
+  :deselect-object
+  (fn [previous-target]
+    (when previous-target (let [{:keys [deselect]} previous-target] (deselect)))))
+
+(re-frame/reg-event-fx
+  ::deselect-object
+  (fn [{:keys [db]} [_]]
+    (let [previous-target (get-in db (path-to-db [:editor :selected-object]))]
+      {:deselect-object (->> previous-target (object-name->wrapper-name) (scene/get-scene-object db))})))
+
 (re-frame/reg-event-fx
   ::update-object
   (fn [{:keys [db]} [_ target state]]

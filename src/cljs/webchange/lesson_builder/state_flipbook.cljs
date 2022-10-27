@@ -19,7 +19,7 @@
 
 (def current-stage-key :current-stage)
 
-(defn- get-current-stage
+(defn get-current-stage
   [db]
   (get db current-stage-key 0))
 
@@ -233,7 +233,6 @@
                      (map-indexed (fn [idx page-data]
                                     (cond-> page-data
                                             (contains? page-screenshots idx) (assoc :preview (get page-screenshots idx))))))]
-      pages
       {:dispatch [::state/set-activity-data (assoc-in activity-data [:objects book-name :pages] pages)]})))
 
 ;; remove page

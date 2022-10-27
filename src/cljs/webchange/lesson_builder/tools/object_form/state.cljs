@@ -6,7 +6,9 @@
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.stage-actions :as stage]
     [webchange.lesson-builder.layout.stage.state :as stage-state]
-    [webchange.lesson-builder.layout.menu.state :as menu-state]))
+    [webchange.lesson-builder.layout.menu.state :as menu-state]
+    [webchange.utils.flipbook :as flipbook-utils]
+    [webchange.lesson-builder.state-flipbook-screenshot :as flipbook-screenshot]))
 
 (def path-to-db :lesson-builder/object-form)
 
@@ -108,11 +110,16 @@
 
 (re-frame/reg-event-fx
   ::apply
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [objects (:objects db)]
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [db activity-data]} [_]]
+    (let [objects (:objects db)
+          flipbook? (flipbook-utils/flipbook-activity? activity-data)]
       {:dispatch-n [[::stage/update-objects {:objects objects}]
-                    [::menu-state/history-back]]})))
+                    [::editor-state/deselect-object]
+                    [::menu-state/history-back]
+                    (when flipbook?
+                      [::flipbook-screenshot/take-current-stage-screenshot])]})))
 
 (re-frame/reg-event-fx
   ::reset
