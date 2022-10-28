@@ -12,4 +12,11 @@
         width: 50px;
         padding: 4px 0;
     }
+    input[type=number]::-webkit-inner-spin-button {
+	opacity: 1;
+    }
+    input[type=number]::-webkit-outer-spin-button {  
+	opacity: 1;
+    }
+
 }
