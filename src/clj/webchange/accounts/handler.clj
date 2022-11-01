@@ -92,4 +92,15 @@
        :path-params [code :- string?]
        (if (core/confirm-email code)
          (redirect "/")
-         (redirect "/"))))
+         (redirect "/")))
+  (POST "/accounts/registration" request
+        :coercion :spec
+        :form-params [firstname :- ::account-spec/first-name
+                      lastname :- ::account-spec/last-name
+                      email :- ::account-spec/email
+                      password :- ::account-spec/password]
+        (core/register-account {:first-name firstname
+                                :last-name lastname
+                                :email email
+                                :password password})
+        (redirect "/accounts/sign-up-success")))
