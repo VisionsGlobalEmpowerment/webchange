@@ -8,7 +8,14 @@
     padding: 10px;
 
     .component--header {
+	display: flex;
+	gap: 10px;
+	
         @include bbs--noto-16-b;
         text-transform: capitalize;
+    }
+
+    .block--content-hidden {
+        display: none;
     }
 }

@@ -1,6 +1,7 @@
 (ns webchange.lesson-builder.tools.script.dialog.state
   (:require
     [re-frame.core :as re-frame]
+    [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.utils.scene-action-data :as action-data-utils]
@@ -37,3 +38,10 @@
   (fn [_ [_ dialog-action-path]]
     {:dispatch [::stage-actions/toggle-action-tag {:action-path dialog-action-path
                                                    :tag         (:user-interactions-blocked action-data-utils/action-tags)}]}))
+(re-frame/reg-sub
+  ::collapse-state
+  :<- [::state/flipbook?]
+  (fn [flipbook? [_]]
+    (if flipbook?
+      :expanded
+      nil)))

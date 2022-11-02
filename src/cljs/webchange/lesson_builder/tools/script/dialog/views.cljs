@@ -21,8 +21,10 @@
   [{:keys [action-path] :as props}]
   (let [dialog-name @(re-frame/subscribe [::state/dialog-name action-path])
         dialog-items @(re-frame/subscribe [::state/dialog-items action-path])
-        handle-click #(re-frame/dispatch [::script-state/set-selected-action nil])]
-    [block {:title               dialog-name
+        handle-click #(re-frame/dispatch [::script-state/set-selected-action nil])
+        collapse-state @(re-frame/subscribe [::state/collapse-state])]
+    [block {:collapse-state collapse-state
+            :title               dialog-name
             :class-name--content "component--dialog"
             :footer              [dialog-footer props]
             :on-click            handle-click}
