@@ -1,12 +1,13 @@
 (ns webchange.lesson-builder.state-flipbook
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.state :as state]
+    [webchange.lesson-builder.tools.image-add.state :as image-add-state]
     [webchange.state.state :as core-state]
-    [webchange.utils.flipbook :as flipbook-utils]
-    [webchange.lesson-builder.tools.image-add.state :as image-add-state]))
+    [webchange.utils.flipbook :as flipbook-utils]))
 
 (def path-to-db :lesson-builder/flipbook)
 
@@ -34,6 +35,12 @@
 
 ;; stages sequence
 
+(defn- page-title
+  [idx]
+  (if (= 0 idx)
+    "Book Cover"
+    (str "Page " idx)))
+
 (defn- get-activity-stages
   [activity-data current-stage-idx]
   (let [page-idx->data (fn [page-idx]
@@ -41,13 +48,13 @@
                            (let [page-data (flipbook-utils/get-page-data activity-data page-idx)]
                              (merge page-data
                                     {:idx     page-idx
-                                     :title   (str "Page " page-idx)
+                                     :title   (page-title page-idx)
                                      :preview (get-in page-data [:preview :url])}))))]
     (->> (flipbook-utils/get-stages-data activity-data)
          (map (fn [{:keys [idx name pages-idx]}]
                 {:id             (->> pages-idx
                                       (map #(or % "*"))
-                                      (clojure.string/join "-")
+                                      (s/join "-")
                                       (str idx "-"))
                  :idx            idx
                  :title          name
@@ -85,6 +92,9 @@
   (fn [[activity-data current-stage-idx show-generated-pages?]]
     (get-activity-stages-filtered activity-data current-stage-idx show-generated-pages?)))
 
+(comment
+  (-> @(re-frame/subscribe [::state/activity-data])
+      :metadata))
 ;; show generated pages?
 
 (def show-generated-pages-key :show-generated-pages?)
