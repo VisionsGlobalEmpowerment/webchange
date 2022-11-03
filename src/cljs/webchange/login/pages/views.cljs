@@ -9,10 +9,10 @@
     [:h2.subfooter-title "Ready to get started?"]
     [:div.subfooter-subtitle "Sign up free for Beta or contact us"]]
    [:div.subfooter-right
-    [ui/button {:on-click #()
+    [ui/button {:href "/users/sign-up"
                 :color "blue-1"}
      "Sign Up Free"]
-    [ui/button {:on-click #()
+    [ui/button {:href "mailto:hello@bluebrickschool.org"
                 :color "blue-1"}
      "Contact Us"]]])
 
@@ -22,7 +22,8 @@
    [:div.registration-success
     [:h2.title "Thank you for creating your account!"]
     [:div.subtitle "Please check your email (and junk folder just in case!) and click the link to verify and activate your account in order to get started."]
-    [ui/button {:color "green-1"}
+    [ui/button {:href "/accounts/login"
+                :color "green-1"}
      "Login Now"]
     [ui/image {:class-name "vaca-image"
                :src "/images/auth/vaca.svg"}]]

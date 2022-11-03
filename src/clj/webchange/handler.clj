@@ -44,17 +44,8 @@
   [request]
   (-> request :headers (get "accept") (= "application/json")))
 
-(defn- login-resource
-  [{role :role} prev cookies]
-  (case role
-    :student (if (-> cookies (get "parent-login") :value (= "true"))
-               (str (website/website-logout-page))
-               (str "/student-login"))
-    :teacher (str "/login" "?redirect=" prev)
-    (str (website/website-logout-page) "?redirect=" prev)))
-
 (defn unauthorized-handler
-  [request metadata]
+  [request _metadata]
   (if (api-request? request)
     (if (authenticated? request)
       {:status 403
@@ -63,19 +54,10 @@
        :body   {:errors [{:message "Unauthenticated"}]}})
     (if (authenticated? request)
       (-> (resource-response "error403.html" {:root "public"}) (status 403))
-      (redirect (login-resource metadata (:uri request) (:cookies request))))))
+      (redirect "/accounts/login"))))
 
 (def auth-backend
   (session-backend {:unauthorized-handler unauthorized-handler}))
-
-(defn wrap-exception-handling
-  [handler]
-  (fn [request]
-    (try
-      (handler request)
-      (catch Exception e
-        (log/error e)
-        {:status 400 :body (str "Invalid data" e)}))))
 
 (defn handle-parse-audio-animation
   [request]

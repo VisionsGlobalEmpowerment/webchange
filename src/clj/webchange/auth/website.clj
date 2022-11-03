@@ -8,20 +8,10 @@
             [buddy.auth :as buddy]
             [webchange.auth.core :as core]))
 
-(defn website-profile-page
+(defn website-sign-up-page
   []
   (let [website-host (env :website-host)]
-    (str "https://" website-host "/user/profile")))
-
-(defn website-courses-page
-  []
-  (let [website-host (env :website-host)]
-    (str "https://" website-host "/user/courses")))
-
-(defn website-login-page
-  []
-  (let [website-host (env :website-host)]
-    (str "https://" website-host "/user/login")))
+    (str "https://" website-host "/sign-up/")))
 
 (defn website-logout-page
   []
