@@ -370,8 +370,7 @@
     (let [course-fetching? @(re-frame/subscribe [::state/course-fetching?])]
       [page/page {:class-name "page--edit-course with-header"}
        [header]
-       [page/content {:title "Course Table"
-                      :icon  "edit"}
+       [page/content {:title "Course Table"}
         [levels-list]
         (when course-fetching?
           [ui/loading-overlay])]
