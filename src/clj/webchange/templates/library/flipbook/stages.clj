@@ -22,7 +22,7 @@
         right-page-title (get-page-title activity right-page)]
     (if (and (empty? left-page-title)
              (empty? right-page-title))
-      (str "Stage " stage-idx)
+      (str "Spread " stage-idx)
       (cond-> ""
               (not-empty? left-page-title) (str left-page-title)
               (and (not-empty? left-page-title)
