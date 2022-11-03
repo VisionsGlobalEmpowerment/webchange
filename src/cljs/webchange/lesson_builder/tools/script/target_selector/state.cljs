@@ -28,6 +28,7 @@
                          #(first %)])
        (map (fn [[object-name {:keys [metadata text]}]]
               {:text        text
+               :display-name (:display-name metadata)
                :text-prefix (or (:display-name metadata)
                                 (clojure.core/name object-name))
                :value       (clojure.core/name object-name)}))))

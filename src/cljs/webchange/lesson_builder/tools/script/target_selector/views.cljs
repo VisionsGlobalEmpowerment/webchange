@@ -6,12 +6,12 @@
     [webchange.ui.index :as ui]))
 
 (defn- target-option
-  [{:keys [text-prefix text value on-click]}]
+  [{:keys [display-name text value on-click]}]
   (let [handle-click #(on-click value)]
     [:div {:class-name "target-selector--option"
            :on-click   handle-click}
-     (if text-prefix
-       text-prefix
+     (if (some? display-name)
+       display-name
        text)]))
 
 (defn target-selector
@@ -33,7 +33,10 @@
         [ui/icon {:icon       "caret-down"
                   :class-name (ui/get-class-name {"target-selector--expand-icon"         true
                                                   "target-selector--expand-icon--active" @expanded?})}]
-        (get current-value-data :text "Select target")]
+        (or
+         (get current-value-data :display-name)
+         (get current-value-data :text)
+         "Select target")]
        (when @expanded?
          [:div {:class-name (ui/get-class-name {"target-selector--options" true})}
           (for [{:keys [value] :as option} target-options]
