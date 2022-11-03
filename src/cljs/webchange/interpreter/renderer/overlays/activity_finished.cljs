@@ -1,11 +1,12 @@
 (ns webchange.interpreter.renderer.overlays.activity-finished
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [webchange.i18n.translate :as i18n]
     [webchange.interpreter.events :as ie]
     [webchange.interpreter.renderer.overlays.utils :as utils]
-    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
+    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.student-dashboard.timeline.state :as timeline-state]))
 
 (defn show-overlay?
@@ -45,8 +46,8 @@
      :y               232
      :type            "text"
      :text            (-> @(re-frame/subscribe [::i18n/t [:great-work]])
-                          (clojure.string/upper-case)
-                          (clojure.string/replace " " "\n"))
+                          (str/upper-case)
+                          (str/replace " " "\n"))
      :object-name     :form-title
      :vertical-align  "top"
      :align           "center"

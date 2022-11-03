@@ -1,83 +1,74 @@
 (ns webchange.interpreter.renderer.overlays.goodbye
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [webchange.i18n.translate :as i18n]
-    [webchange.interpreter.renderer.overlays.utils :as utils]
-    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn show-overlay?
   [mode]
   (some #{mode} [::modes/game ::modes/game-with-nav ::modes/sandbox]))
 
-
-(def goodbye-window-name :goodbye-window)
-(def goodbye-window-size {:width  600
-                          :height 600})
-
-(defn- get-goodbye-window-position
-  [viewport]
-  (utils/get-coordinates {:viewport   viewport
-                          :vertical   "center"
-                          :horizontal "center"
-                          :object     goodbye-window-size}))
-
 (defn- get-background
   []
   {:type        "group"
-   :object-name :goodbye-background-group
+   :object-name :activity-finished-background-group
    :children    [{:type        "image"
-                  :src         "/raw/img/bg.png"
-                  :object-name :goodbye-background}]})
+                  :src         "/raw/img/ui/activity_finished/bg.png"
+                  :object-name :activity-finished-background}]})
 
 (defn- get-title
   []
-  (let [font-size 102]
-    {:x              (/ (:width goodbye-window-size) 2)
-     :y              (+ (:height goodbye-window-size) 20)
-     :type           "text"
-     :text           @(re-frame/subscribe [::i18n/t [:goodbye]])
-     :object-name    :goodbye-title
-     :align          "center"
-     :vertical-align "bottom"
-     :font-size      font-size
-     :font-family    "Luckiest Guy"
-     :fill           0xffffff}))
-
-(defn- get-character
-  [{:keys [x y]}]
-  (let [image-size {:width  321
-                    :height 350}]
-    {:type        "image"
-     :src         "/raw/img/ui/ts_321x350.png"
-     :object-name :goodbye-ts
-     :x           (- x (/ (:width image-size) 2))
-     :y           (- y (/ (:height image-size) 2))}))
-
-(defn- get-goodbye-window
-  [viewport]
-  (merge
-    {:type        "group"
-     :object-name goodbye-window-name
-     :children    [(merge
-                     {:type          "rectangle"
-                      :object-name   :goodbye-frame
-                      :border-radius (/ (:width goodbye-window-size) 2)
-                      :fill          0x2d0e7a}
-                     goodbye-window-size)
-                   (get-title)
-                   (get-character {:x (/ (:width goodbye-window-size) 2)
-                                   :y (/ (:height goodbye-window-size) 2)})]}
-    (get-goodbye-window-position viewport)))
+  (let [font-size 90]
+    {:x               964
+     :y               232
+     :type            "text"
+     :text            (-> @(re-frame/subscribe [::i18n/t [:great-work]])
+                          (str/upper-case)
+                          (str/replace " " "\n"))
+     :object-name     :form-title
+     :vertical-align  "top"
+     :align           "center"
+     :font-size       font-size
+     :font-family     "Luckiest Guy"
+     :fill            0xffffff
+     :line-height     98
+     :shadow-color    0xa6006d
+     :shadow-distance 12
+     :shadow-blur     16
+     :shadow-angle    1.5
+     :shadow-opacity  1}))
 
 (defn create
-  [{:keys [viewport]}]
+  [{:keys [_viewport]}]
   {:type        "group"
    :object-name :goodbye-overlay
    :visible     false
    :children    [(get-background)
-                 (get-goodbye-window viewport)]})
+                 {:type        "animation",
+                  :x           960
+                  :y           590
+                  :scale       {:x 1, :y 1},
+                  :anim        "opt-1",
+                  :meshes      true,
+                  :name        "ui-shooting-star",
+                  :skin        "default",
+                  :speed       1,
+                  :start       false,
+                  :visible     true
+                  :object-name :form-shooting-star}
+                 {:type        "image"
+                  :src         "/raw/img/ui/activity_finished/form.png"
+                  :object-name :form-bg
+                  :x           612
+                  :y           146}
+                 {:type        "image"
+                  :src         "/raw/img/ui/activity_finished/student.png"
+                  :object-name :form-vera
+                  :x           784
+                  :y           418}
+                 (get-title)]})
 
 (defn update-viewport
-  [{:keys [viewport]}]
-  (re-frame/dispatch [::scene/change-scene-object goodbye-window-name [[:set-position (get-goodbye-window-position viewport)]]]))
+  [{:keys [_viewport]}])
+
