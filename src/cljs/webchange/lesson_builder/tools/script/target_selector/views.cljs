@@ -6,11 +6,13 @@
     [webchange.ui.index :as ui]))
 
 (defn- target-option
-  [{:keys [text value on-click]}]
+  [{:keys [text-prefix text value on-click]}]
   (let [handle-click #(on-click value)]
     [:div {:class-name "target-selector--option"
            :on-click   handle-click}
-     text]))
+     (if text-prefix
+       text-prefix
+       text)]))
 
 (defn target-selector
   [{:keys [class-name value on-change type]
