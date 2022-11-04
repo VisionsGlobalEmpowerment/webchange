@@ -65,11 +65,13 @@
           ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
           (= extension "wav")
           ["audio" (convert-to-mp3 relative-path {:remove-origin? true})]
+          (= extension "svg")
+          ["image" relative-path]
           (= type "image") (let [target (f/replace-extension relative-path "png")]
                              (im/scale-to-window
-                               (f/relative->absolute-path relative-path)
-                               (f/relative->absolute-path target)
-                               convert-params)
+                              (f/relative->absolute-path relative-path)
+                              (f/relative->absolute-path target)
+                              convert-params)
                              [type target])
           :else [type relative-path])))
 
