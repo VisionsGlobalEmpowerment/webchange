@@ -10,6 +10,15 @@
         display: flex;
         flex-direction: column;
         gap: $gap;
+
+	.group-archive {
+	    width: 100%;
+	    margin-top: auto;
+	    
+	    button {
+		width: 100%;
+	    }
+	}
     }
 
     .data-loading-indicator {
@@ -17,19 +26,5 @@
         align-items: center;
         justify-content: center;
         padding: 24px;
-    }
-
-    label {
-        color: $color-secondary;
-        font-weight: 400;
-        font-size: 10px;
-    }
-
-    .submit {
-        margin-top: 16px;
-
-        progress {
-            @include progress-size(12px, 2px);
-        }
     }
 }

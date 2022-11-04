@@ -210,3 +210,10 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [class-id school-id]} db]
       {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
+
+(re-frame/reg-event-fx
+  ::handle-class-deleted
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [{:keys [school-id]} db]
+      {:dispatch [::routes/redirect :school-profile :school-id school-id]})))

@@ -230,8 +230,8 @@
 (defn archive-class!
   [class-id]
   (db/archive-class! {:id class-id})
-  (db/remove-teachers-from-class! {:class-id class-id})
-  (db/remove-students-from-class! {:class-id class-id})
+  (db/remove-teachers-from-class! {:class_id class-id})
+  (db/remove-students-from-class! {:class_id class-id})
   (e/dispatch {:type :classes/archived :class-id class-id})
   (db/get-class {:id class-id}))
 

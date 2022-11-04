@@ -4,7 +4,8 @@
     [re-frame.std-interceptors :as i]
     [webchange.ui.components.form.data :refer [init]]
     [webchange.admin.widgets.state :as widgets]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.admin.widgets.confirm.state :as confirm-state]))
 
 (def path-to-db :widget/class-form)
 
@@ -100,10 +101,11 @@
 (re-frame/reg-event-fx
   ::init-edit-form
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id]}]]
+  (fn [{:keys [db]} [_ {:keys [class-id on-delete]}]]
     {:db       (-> db
                    (reset-form-data)
-                   (set-data-loading true))
+                   (set-data-loading true)
+                   (widgets/set-callbacks {:on-delete on-delete}))
      :dispatch [::warehouse/load-class {:class-id class-id}
                 {:on-success [::load-class-success]}]}))
 
@@ -163,6 +165,40 @@
 
 (re-frame/reg-event-fx
   ::save-failure
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-data-saving db false)}))
+
+(re-frame/reg-event-fx
+  ::open-archive-window
+  [(i/path path-to-db)]
+  (fn [_ [_]]
+    {:dispatch [::confirm-state/show-confirm-window {:title      "Are you sure you want to archive this class?"
+                                                     :on-confirm [::archive]}]}))
+(re-frame/reg-event-fx
+  ::archive
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [class-id (-> (get-form-data db)
+                       (get :id))]
+      {:db       (set-data-saving db true)
+       :dispatch [::warehouse/archive-class
+                  {:class-id class-id}
+                  {:on-success [::archive-success]
+                   :on-failure [::archive-failure]}]})))
+
+(re-frame/reg-event-fx
+  ::archive-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [data]}]]
+    (let [on-delete-handler (widgets/get-callback db :on-delete)]
+      {:db                (-> db
+                              (set-data-saving false)
+                              (update-form-data data))
+       ::widgets/callback [on-delete-handler data]})))
+
+(re-frame/reg-event-fx
+  ::archive-failure
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-data-saving db false)}))

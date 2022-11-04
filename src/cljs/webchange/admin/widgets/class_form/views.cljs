@@ -13,7 +13,13 @@
                               :options-type "int"}})
 
 (def class-edit-model {:name {:label "Class Name"
-                              :type  :text}})
+                              :type  :text}
+                       :group {:type :group
+                               :class-name "group-archive"
+                               :fields {:archive {:label    "Archive Class"
+                                                  :type     :action
+                                                  :icon     "archive"
+                                                  :on-click #(re-frame/dispatch [::state/open-archive-window])}}}})
 
 (defn class-add-form
   [{:keys [school-id] :as props}]
@@ -46,6 +52,7 @@
           handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
       [ui/form {:form-id   (-> (str "school-" school-id "-class-" class-id)
                                (keyword))
+                :class-name "widget--class-form"
                 :data      class-data
                 :model     class-edit-model
                 :spec      ::class-spec/class

@@ -67,6 +67,7 @@
   (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
         handle-cancel-click #(re-frame/dispatch [::state/handle-class-edit-cancel])
+        handle-delete-click #(re-frame/dispatch [::state/handle-class-deleted])
         handle-data-save #(re-frame/dispatch [::state/update-class-data %])]
     [page/side-bar {:title    "Class Info"
                     :icon     "info"
@@ -80,7 +81,8 @@
                        :school-id school-id
                        :editable? form-editable?
                        :on-save   handle-data-save
-                       :on-cancel handle-cancel-click}]]))
+                       :on-cancel handle-cancel-click
+                       :on-delete handle-delete-click}]]))
 
 (defn- side-bar
   [side-bar-props]

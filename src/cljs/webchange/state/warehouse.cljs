@@ -1104,6 +1104,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::archive-class
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :archive-class
+                     :method :put
+                     :params {:archive true}
+                     :uri    (str "/api/classes/" class-id "/archive")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::delete-class
   (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
     (create-request {:key    :delete-class
