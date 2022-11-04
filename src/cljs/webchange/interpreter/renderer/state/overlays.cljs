@@ -107,5 +107,9 @@
   ::show-goodbye-screen
   (fn [{:keys [db]}]
     (set-scene-interactive db false)
-    {:dispatch-n (list 
+    (js/setTimeout #(re-frame/dispatch [::scene/change-scene-object :form-shooting-star [[:set-visibility {:visible false}]]])
+                   3500)
+    {:dispatch-n (list
+                  [::scene/change-scene-object :form-shooting-star [[:generic-handler [[:start-animation]]]]]
+                  [::scene/change-scene-object :activity-finished-overlay [[:set-visibility {:visible true}]]]
                   [::scene/change-scene-object :goodbye-overlay [[:set-visibility {:visible true}]]])}))

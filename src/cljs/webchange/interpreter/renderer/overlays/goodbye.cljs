@@ -33,7 +33,7 @@
      :font-family     "Luckiest Guy"
      :fill            0xffffff
      :line-height     98
-     :shadow-color    0xa6006d
+     :shadow-color    0x3453A1
      :shadow-distance 12
      :shadow-blur     16
      :shadow-angle    1.5
@@ -63,9 +63,9 @@
                   :x           612
                   :y           146}
                  {:type        "image"
-                  :src         "/raw/img/ui/activity_finished/student.png"
+                  :src         "/raw/img/ui/activity_finished/student_big.png"
                   :object-name :form-vera
-                  :x           784
+                  :x           754
                   :y           418}
                  (get-title)]})
 

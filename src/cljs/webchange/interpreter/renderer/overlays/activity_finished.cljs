@@ -55,7 +55,7 @@
      :font-family     "Luckiest Guy"
      :fill            0xffffff
      :line-height     98
-     :shadow-color    0xa6006d
+     :shadow-color    0x3453A1
      :shadow-distance 12
      :shadow-blur     16
      :shadow-angle    1.5
