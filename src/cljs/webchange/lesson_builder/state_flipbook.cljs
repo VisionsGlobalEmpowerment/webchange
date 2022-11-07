@@ -376,5 +376,13 @@
   (fn [{:keys [db activity-data]} [_]]
     (let [current-object (core-state/get-current-object db)
           page-number (flipbook-utils/page-object-name->page-number activity-data current-object)]
-      {:dispatch-n [[::image-add-state/set-page-number page-number]
+      {:dispatch-n [[::image-add-state/config {:form {:page-number page-number}}]
                     [:layout/open-tool :image-add]]})))
+
+(re-frame/reg-event-fx
+  ::init-flipbook-stage
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [current-stage (get-current-stage db)]
+      {:dispatch [::show-flipbook-stage current-stage]})))
+

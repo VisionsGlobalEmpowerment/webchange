@@ -21,6 +21,13 @@
     {:db (assoc-in db [:form :name] "")}))
 
 (re-frame/reg-event-fx
+  ::config
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    {:db (-> db
+             (update :form merge (:form props)))}))
+
+(re-frame/reg-event-fx
   ::reset
   (fn [{:keys [db]} [_]]
     {:db (dissoc db path-to-db)}))
@@ -91,6 +98,10 @@
              name-defined?)
         (not))))
 
+(defn- flipbook?
+  [db]
+  (-> db :form :page-number some?))
+
 (re-frame/reg-event-fx
   ::apply
   [(i/path path-to-db)]
@@ -98,20 +109,17 @@
     (let [data (get db :form)]
       (cond
         (empty? (:name data)) {:db (set-name-error db "Name is required")}
-        (:page-number data) {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]
-                                                                               :common-action? false}]}
+        (flipbook? db) {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]
+                                                                          :common-action? false}]}
         :else {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}))))
 
 (re-frame/reg-event-fx
   ::apply-success
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::confirm/show-message-window
-                {:title      "Image Added"
-                 :message    "Image is added to scene layers, you can edit or change the image in the activity form there and choose when to show or hide."
-                 :on-confirm [::menu-state/history-back]}]}))
-
-(re-frame/reg-event-fx
-  ::set-page-number
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ value]]
-    {:db (assoc-in db [:form :page-number] value)}))
+  (fn [{:keys [db]} [_]]
+    (if (flipbook? db)
+      {:dispatch-n [[::menu-state/history-back]]}
+      {:dispatch-n [[::confirm/show-message-window
+                     {:title      "Image Added"
+                      :message    "Image is added to scene layers, you can edit or change the image in the activity form there and choose when to show or hide."
+                      :on-confirm [::menu-state/history-back]}]]})))

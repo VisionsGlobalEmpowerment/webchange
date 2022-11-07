@@ -19,7 +19,7 @@
         handle-ready (fn []
                        (re-frame/dispatch [::state/set-stage-ready true])
                        (when show-flipbook-actions?
-                         (re-frame/dispatch [::flipbook-state/show-flipbook-stage 0])))
+                         (re-frame/dispatch [::flipbook-state/init-flipbook-stage])))
         current-page @(re-frame/subscribe [::state/current-page-side])]
     [:div {:id         "block--stage"
            :class-name class-name}
