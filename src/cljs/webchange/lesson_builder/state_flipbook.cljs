@@ -36,24 +36,29 @@
 ;; stages sequence
 
 (defn- page-title
-  [idx]
-  (if (= 0 idx)
-    "Book Cover"
-    (str "Page " idx)))
+  [idx pages-number]
+  (cond
+    (= 0 idx) "Book Cover"
+    (= 1 idx) ""
+    (= 2 idx) "Authors Page"
+    (= (dec pages-number) idx) "Back Cover"
+    :else (str "Page " idx)))
 
 (defn- get-activity-stages
   [activity-data current-stage-idx]
-  (let [page-idx->data (fn [page-idx]
+  (let [pages-number (-> (flipbook-utils/get-pages-data activity-data) count)
+        page-idx->data (fn [page-idx]
                          (when (some? page-idx)
                            (let [page-data (flipbook-utils/get-page-data activity-data page-idx)]
                              (merge page-data
                                     {:idx     page-idx
-                                     :title   (page-title page-idx)
+                                     :title   (page-title page-idx pages-number)
                                      :preview (get-in page-data [:preview :url])}))))]
     (->> (flipbook-utils/get-stages-data activity-data)
          (map (fn [{:keys [idx name pages-idx]}]
                 {:id             (->> pages-idx
                                       (map #(or % "*"))
+
                                       (s/join "-")
                                       (str idx "-"))
                  :idx            idx
@@ -101,7 +106,7 @@
 
 (defn- get-show-generated-pages
   [db]
-  (get db show-generated-pages-key false))
+  (get db show-generated-pages-key true))
 
 (re-frame/reg-sub
   ::show-generated-pages?

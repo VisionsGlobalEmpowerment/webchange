@@ -20,8 +20,7 @@
                                         :x          "---"
                                         :y          450
                                         :origin     {:type "center-center"}
-                                        :src        "---"
-                                        :editable?  {:select true}}})
+                                        :src        "---"}})
 
 (defn- apply-page-size
   [page-data {:keys [width height]}]

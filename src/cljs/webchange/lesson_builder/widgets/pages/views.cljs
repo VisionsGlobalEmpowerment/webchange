@@ -49,35 +49,35 @@
 (defn- page-item
   []
   (r/create-class
-    {:display-name "page-item"
+   {:display-name "page-item"
 
-     :component-did-mount
-     (fn [this]
-       (let [{:keys [idx preview]} (r/props this)]
-         (when (and (nil? preview)
-                    (number? idx))
-           (re-frame/dispatch [::screenshot/take-page-screenshot idx]))))
+    :component-did-mount
+    (fn [this]
+      (let [{:keys [idx preview]} (r/props this)]
+        (when (and (nil? preview)
+                   (number? idx))
+          (re-frame/dispatch [::screenshot/take-page-screenshot idx]))))
 
-     :reagent-render
-     (fn [{:keys [id idx side title preview] :as props}]
-       (let [current-page-over (re-frame/subscribe [::state/current-page-over])]
-         (if-not (= id :add)
-           [:div {:class-name (ui/get-class-name {"page-item"              true
-                                                  (str "page-item--" side) true
-                                                  "page-item-drag-over" (= idx @current-page-over)})
-                  :draggable true
-                  :on-drag-start #(re-frame/dispatch [::state/drag-start-page idx])
-                  :on-drop #(do (.stopPropagation %)
-                                (re-frame/dispatch [::state/drag-drop-page]))
-                  :on-drag-over #(re-frame/dispatch [::state/drag-enter-page idx (drag-event->page-offset %)])}
-            [:div {:class-name "page-item--preview"}
-             ^{:key preview}
-             [ui/image {:src        preview
-                        :class-name "page-item--preview-image"}]]
-            [:div {:class-name "page-item--title"
-                   :title      title}
-             title]]
-           [add-page-item props])))}))
+    :reagent-render
+    (fn [{:keys [id idx side title preview removable?] :as props}]
+      (let [current-page-over (re-frame/subscribe [::state/current-page-over])]
+        (if-not (= id :add)
+          [:div (cond-> {:class-name (ui/get-class-name {"page-item"              true
+                                                         (str "page-item--" side) true
+                                                         "page-item-drag-over" (= idx @current-page-over)})}
+                        removable? (merge {:draggable true
+                                           :on-drag-start #(re-frame/dispatch [::state/drag-start-page idx])
+                                           :on-drop #(do (.stopPropagation %)
+                                                         (re-frame/dispatch [::state/drag-drop-page]))
+                                           :on-drag-over #(re-frame/dispatch [::state/drag-enter-page idx (drag-event->page-offset %)])}))
+           [:div {:class-name "page-item--preview"}
+            ^{:key preview}
+            [ui/image {:src        preview
+                       :class-name "page-item--preview-image"}]]
+           [:div {:class-name "page-item--title"
+                  :title      title}
+            title]]
+          [add-page-item props])))}))
 
 (defn- stage-item
   [{:keys [idx left-page right-page title current-stage?]}]
@@ -92,10 +92,12 @@
             :title      title}
       title]
      (when (some? left-page)
+       ^{:key (str "stage-" idx "-left")}
        [page-item (merge left-page
                          {:side "left"})])
      [:div.stage-item--divider]
      (when (some? right-page)
+       ^{:key (str "stage-" idx "-right")}
        [page-item (merge right-page
                          {:side "right"})])]))
 

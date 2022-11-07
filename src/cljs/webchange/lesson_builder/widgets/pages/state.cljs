@@ -48,20 +48,26 @@
   (fn [{:keys [db]} [_ idx]]
     {:db (assoc db :current-page-from idx)}))
 
+(defn- drag-started?
+  [db]
+  (-> db :current-page-from some?))
+
 (re-frame/reg-event-fx
   ::drag-enter-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx page-offset]]
-    {:db (assoc db :current-page-over (+ idx page-offset))}))
+    (when (drag-started? db)
+      {:db (assoc db :current-page-over (+ idx page-offset))})))
 
 (re-frame/reg-event-fx
   ::drag-drop-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (let [page-from (:current-page-from db)
-          page-to (:current-page-over db)]
-      {:db (dissoc db :current-page-over :current-page-from)
-       :dispatch [::state/move-page {:from page-from
-                                     :to (if (>= page-from page-to)
-                                           page-to
-                                           (dec page-to))}]})))
+    (when (drag-started? db)
+      (let [page-from (:current-page-from db)
+            page-to (:current-page-over db)]
+        {:db (dissoc db :current-page-over :current-page-from)
+         :dispatch [::state/move-page {:from page-from
+                                       :to (if (>= page-from page-to)
+                                             page-to
+                                             (dec page-to))}]}))))
