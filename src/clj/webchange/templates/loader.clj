@@ -1,10 +1,10 @@
 (ns webchange.templates.loader
   (:require
-    [clojure.string :refer [join]]
-    [webchange.templates.core :as t]
-    [webchange.templates.library]
+    [clojure.string :refer [join includes?]]
     [webchange.course.core :as core]
-    [webchange.db.core :as db]))
+    [webchange.db.core :as db]
+    [webchange.templates.core :as t]
+    [webchange.templates.library]))
 
 (defn update-templates
   [config]
@@ -23,10 +23,33 @@
          (flush)))))
   (println "Done!"))
 
+(defn search-scenes-for
+  [config text]
+  (time 
+   (let [scenes (db/get-scenes)]
+     (doseq [scene scenes]
+       (let [version (db/get-latest-scene-version {:scene_id (:id scene)})
+             assets (-> version :data :assets)
+             links (->> assets
+                        (map #(if (map? %) (:url %) %))
+                        (remove nil?)
+                        (filter #(includes? % text)))]
+         (if (empty? links)
+           (print ".")
+           (do
+             (println)
+             (print (:id scene) (apply str links))
+             (println)))
+         (flush)))))
+  (println "Done!"))
+
 (def commands
   {"update-templates"
    (fn [config args]
-     (apply update-templates config args))})
+     (apply update-templates config args))
+   "search-scenes-for"
+   (fn [config args]
+     (apply search-scenes-for config args))})
 
 (defn command? [[arg]]
   (contains? (set (keys commands)) arg))
