@@ -24,8 +24,7 @@
                                 :x         "---"
                                 :y         350
                                 :src       "/raw/img/flipbook/logo_2.png"
-                                :origin    {:type "center-center"}
-                                :editable? {:select true}}
+                                :origin    {:type "center-center"}}
    :page-cover-back-license    {:type           "text"
                                 :word-wrap      true
                                 :vertical-align "top"
