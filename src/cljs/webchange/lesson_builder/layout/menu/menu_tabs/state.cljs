@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.layout.menu.state :as menu-state]))
+    [webchange.lesson-builder.layout.menu.state :as menu-state]
+    [webchange.lesson-builder.state :as state]))
 
 (def path-to-db :lesson-builder/menu)
 
@@ -17,10 +18,13 @@
 
 (re-frame/reg-sub
   ::menu-tabs
-  (fn []
-    (map (fn [[id data]]
-           (assoc data :id id))
-         menu-tabs)))
+  :<- [::state/flipbook?]
+  (fn [flipbook?]
+    (->> menu-tabs
+         (remove (fn [[id _data]]
+                   (and flipbook? (= id :scene-layers))))
+         (map (fn [[id data]]
+                (assoc data :id id))))))
 
 (def current-tab-key :current-tab)
 
