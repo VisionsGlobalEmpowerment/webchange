@@ -116,7 +116,7 @@ WHERE slug = :slug;
 -- :doc retrieve all available courses
 SELECT c.*,t.updated_at from courses c
 JOIN (SELECT course_id, max(created_at) as updated_at from course_versions group by course_id) t on(c.id=t.course_id)
-WHERE status != 'archived' AND type = 'course'
+WHERE status = 'published' AND type = 'course'
 ORDER BY updated_at DESC, name DESC;
 
 -- :name get-sync-courses :? :*

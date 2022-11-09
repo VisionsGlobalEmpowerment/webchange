@@ -204,7 +204,7 @@ SELECT
 (SELECT count(*) FROM users WHERE type = 'live') as accounts,
 (SELECT count(*) FROM teachers WHERE archived = false) as teachers,
 (SELECT count(*) FROM students WHERE archived = false) as students,
-(SELECT count(*) FROM courses WHERE status = 'published') as courses,
+(SELECT count(*) FROM courses WHERE type = 'course' AND status = 'published') as courses,
 (SELECT count(*) FROM classes WHERE archived = false) as classes
 
 -- :name is-school-teacher? :? :1
