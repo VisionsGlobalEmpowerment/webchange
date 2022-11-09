@@ -48,3 +48,10 @@
       {:db (-> db
                (set-current-page value)
                (set-previous-page current-page))})))
+
+(re-frame/reg-event-fx
+  ::add-current-page-props
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (-> db
+             (update-in [current-page-key :props] merge value))}))

@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
+    [webchange.admin.state :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.date :refer [date-str->locale-date]]
     [webchange.utils.devices :refer [devices]]))
@@ -75,9 +76,11 @@
   ::load-account-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
-    {:db (-> db
-             (set-account-loading false)
-             (set-account-data data))}))
+    (let [type (:type data)]
+      {:db (-> db
+               (set-account-loading false)
+               (set-account-data data))
+       :dispatch [::state/add-current-page-props {:account-type type}]})))
 
 (re-frame/reg-sub
   ::form-editable?

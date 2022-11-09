@@ -3,7 +3,8 @@
     [clojure.string :as str]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.admin.routes :as routes]))
+    [webchange.admin.routes :as routes]
+    [webchange.admin.state :as state]))
 
 (def path-to-db :page/add-account)
 
@@ -35,7 +36,8 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [account-type]}]]
-    {:db (-> db (set-account-type account-type))}))
+    {:db (-> db (set-account-type account-type))
+     :dispatch [::state/add-current-page-props {:account-type account-type}]}))
 
 (re-frame/reg-event-fx
   ::open-accounts-list
