@@ -270,7 +270,8 @@
                        (set-course-slug course-slug)
                        (set-course-fetching true)
                        (assoc :is-admin? (= "admin" (:type current-user)))
-                       (assoc :params params))
+                       (assoc :params params)
+                       (set-side-bar-content :course-info))
        :dispatch-n (cond-> [[::warehouse/load-course course-slug
                              {:on-success [::load-course-success]}]
                             [::warehouse/load-course-info course-slug
