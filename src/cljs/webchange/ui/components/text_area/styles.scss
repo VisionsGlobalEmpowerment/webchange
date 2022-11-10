@@ -16,7 +16,8 @@
 
     textarea {
         @include bbs--scrollable;
-
+	@include bbs--input-font;
+	
         background-color: transparent;
         border: none;
         outline: none;
