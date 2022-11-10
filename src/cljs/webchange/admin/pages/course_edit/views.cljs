@@ -177,9 +177,9 @@
 
 (defn- levels-list-item
   [{:keys [idx name lessons-number]}]
-  (r/with-let [expanded? (r/atom (= lessons-number 0))]
+  (r/with-let [expanded? (r/atom (= lessons-number 1))]
     (let [locked? @(re-frame/subscribe [::state/locked?])
-          handle-item-click #(when (> lessons-number 0)
+          handle-item-click #(when (> lessons-number 1)
                                (swap! expanded? not))
           handle-remove-level #(re-frame/dispatch [::state/remove-level idx])
           handle-remove-click #(do (.stopPropagation %)
