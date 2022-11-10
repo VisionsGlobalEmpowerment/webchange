@@ -10,7 +10,8 @@
   (fn []
     (let [user-name @(re-frame/subscribe [::state/user-name])
           handle-click #(re-frame/dispatch [::state/open-my-account-page])
-          handle-logout #(re-frame/dispatch [::state/logout])]
+          handle-logout #(do (re-frame/dispatch [::state/logout])
+                             (.stopPropagation %))]
       [:div {:class-name "top-bar--auth"
              :on-click   handle-click}
        [:span {:class-name "logout"
