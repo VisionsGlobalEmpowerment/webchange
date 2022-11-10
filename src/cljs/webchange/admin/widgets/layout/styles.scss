@@ -29,7 +29,10 @@
         min-height: 0;
 
         &.content-wrapper--no-padding {
-            padding: 0;
+	    padding: 0;
+	    .content {
+		max-width: none;
+	    }
         }
 
         & > .content {
