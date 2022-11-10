@@ -30,13 +30,14 @@
          (fn? on-click)]}
   (let [has-arrow? (-> items count (> 1))
         handle-arrow-click #(-> items butlast last :route on-click)]
-    [:div {:class-name "bbs--breadcrumbs"}
-     (when has-arrow?
-       [system-icon {:icon       "arrow-left"
-                     :class-name "back-button"
-                     :on-click   handle-arrow-click}])
-     (for [[idx item] (map-indexed vector items)]
-       ^{:key idx}
-       [breadcrumbs-item (merge item
-                                {:on-click   on-click
-                                 :last-item? (->> items count dec (>= idx))})])]))
+    [:div {:class-name "bbs--breadcrumbs-wrapper"}
+     [:div {:class-name "bbs--breadcrumbs"}
+      (when has-arrow?
+        [system-icon {:icon       "arrow-left"
+                      :class-name "back-button"
+                      :on-click   handle-arrow-click}])
+      (for [[idx item] (map-indexed vector items)]
+        ^{:key idx}
+        [breadcrumbs-item (merge item
+                                 {:on-click   on-click
+                                  :last-item? (->> items count dec (>= idx))})])]]))

@@ -33,6 +33,8 @@
         }
 
         & > .content {
+	    margin: 0 auto;
+	    max-width: 1260px;
             min-height: 0;
             flex: 1 1;
             display: flex;

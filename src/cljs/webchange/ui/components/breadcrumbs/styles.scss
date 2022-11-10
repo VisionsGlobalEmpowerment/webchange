@@ -1,29 +1,33 @@
-.bbs--breadcrumbs {
-    @include bbs--noto-14-b;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    padding: 12px 20px;
-    padding-bottom: 0;
+.bbs--breadcrumbs-wrapper {
+    .bbs--breadcrumbs {
+	margin: 0 auto;
+	max-width: 1300px;
+	@include bbs--noto-14-b;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	padding: 12px 20px;
+	padding-bottom: 0;
 
-    .back-button {
-        @include bbs--color-clickable(blue-1);
-        cursor: pointer;
-
-        &:hover {
-            @include bbs--icon-color(bbs--button-color(blue-1, hover));
-        }
-
-        &:active {
-            @include bbs--icon-color(bbs--button-color(blue-1, active));
-        }
-    }
-
-    .bbs--breadcrumbs-item {
-        &:not(.bbs--breadcrumbs-item--last-item) {
+	.back-button {
             @include bbs--color-clickable(blue-1);
             cursor: pointer;
-        }
+
+            &:hover {
+		@include bbs--icon-color(bbs--button-color(blue-1, hover));
+            }
+
+            &:active {
+		@include bbs--icon-color(bbs--button-color(blue-1, active));
+            }
+	}
+
+	.bbs--breadcrumbs-item {
+            &:not(.bbs--breadcrumbs-item--last-item) {
+		@include bbs--color-clickable(blue-1);
+		cursor: pointer;
+            }
+	}
     }
 }
