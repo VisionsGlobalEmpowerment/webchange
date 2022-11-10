@@ -7,7 +7,8 @@
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.tools.image-add.state :as image-add-state]
     [webchange.state.state :as core-state]
-    [webchange.utils.flipbook :as flipbook-utils]))
+    [webchange.utils.flipbook :as flipbook-utils]
+    [webchange.lesson-builder.widgets.confirm.state :as confirm]))
 
 (def path-to-db :lesson-builder/flipbook)
 
@@ -161,6 +162,7 @@
           component-wrapper (get transitions book-name)]
       (when (some? component-wrapper)
         {:db                   (set-current-stage db stage-idx)
+         :dispatch [::core-state/reset-current-object]
          :flipbook-show-spread {:component-wrapper     @component-wrapper
                                 :spread-idx            stage-idx
                                 :hide-generated-pages? (not show-generated-pages?)}}))))
@@ -345,20 +347,29 @@
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
 
+(defn- page-in-stage?
+  [stage page]
+  (some #(= % page) (:pages-idx stage)))
+
 ;; db should be global to retrieve current-object
 (re-frame/reg-event-fx
   ::add-text
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [db activity-data]} [_ {:keys [on-success on-failure]}]]
     (let [current-object (core-state/get-current-object db)
-          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)]
-      {:dispatch-n [[::stage-state/set-stage-busy true]
-                    [::state/call-activity-action
-                     {:common-action? false
-                      :action "add-text"
-                      :data {:page-number page-number}}
-                     {:on-success [::add-text-success on-success]
-                      :on-failure [::add-text-failure on-failure]}]]})))
+          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)
+          current-stage-data (->> (get db path-to-db) get-current-stage (flipbook-utils/get-stage-data activity-data))]
+      (if (page-in-stage? current-stage-data page-number)
+        {:dispatch-n [[::stage-state/set-stage-busy true]
+                      [::state/call-activity-action
+                       {:common-action? false
+                        :action "add-text"
+                        :data {:page-number page-number}}
+                       {:on-success [::add-text-success on-success]
+                        :on-failure [::add-text-failure on-failure]}]]}
+        {:dispatch-n [[::confirm/show-message-window
+                       {:title      "Select page"
+                        :message    "Please select page before adding text."}]]}))))
 
 (re-frame/reg-event-fx
   ::add-text-success
@@ -380,9 +391,14 @@
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [db activity-data]} [_]]
     (let [current-object (core-state/get-current-object db)
-          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)]
-      {:dispatch-n [[::image-add-state/config {:form {:page-number page-number}}]
-                    [:layout/open-tool :image-add]]})))
+          page-number (flipbook-utils/page-object-name->page-number activity-data current-object)
+          current-stage-data (->> (get db path-to-db) get-current-stage (flipbook-utils/get-stage-data activity-data))]
+      (if (page-in-stage? current-stage-data page-number)
+        {:dispatch-n [[::image-add-state/config {:form {:page-number page-number}}]
+                      [:layout/open-tool :image-add]]}
+        {:dispatch-n [[::confirm/show-message-window
+                       {:title      "Select page"
+                        :message    "Please select page before adding image."}]]}))))
 
 (re-frame/reg-event-fx
   ::init-flipbook-stage

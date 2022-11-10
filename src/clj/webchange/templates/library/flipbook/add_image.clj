@@ -14,10 +14,10 @@
   [{:keys [src]} {:keys [width padding]}]
   (let [content {:src        src
                  :image-size "contain"
-                 :origin     {:type "left-top"}}
+                 :origin     {:type "top-left"}}
         side-length (->> (* 2 padding) (- width))
-        dimensions {:x      (-> (/ width 2) Math/floor int)
-                    :y      (-> (/ side-length 2) (+ padding) Math/floor int)
+        dimensions {:x      padding
+                    :y      padding
                     :width  side-length
                     :height side-length}]
     (merge {:type      "image"
