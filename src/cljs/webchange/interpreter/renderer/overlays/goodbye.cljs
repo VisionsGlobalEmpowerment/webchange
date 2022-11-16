@@ -12,10 +12,10 @@
 (defn- get-background
   []
   {:type        "group"
-   :object-name :activity-finished-background-group
+   :object-name :goodbye-overlay-background-group
    :children    [{:type        "image"
                   :src         "/raw/img/ui/activity_finished/bg.png"
-                  :object-name :activity-finished-background}]})
+                  :object-name :goodbye-overlay-background}]})
 
 (defn- get-title
   []
@@ -26,7 +26,7 @@
      :text            (-> @(re-frame/subscribe [::i18n/t [:great-work]])
                           (str/upper-case)
                           (str/replace " " "\n"))
-     :object-name     :form-title
+     :object-name     :goodbye-overlay-form-title
      :vertical-align  "top"
      :align           "center"
      :font-size       font-size
@@ -56,15 +56,15 @@
                   :speed       1,
                   :start       false,
                   :visible     true
-                  :object-name :form-shooting-star}
+                  :object-name :goodbye-overlay-form-shooting-star}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/form.png"
-                  :object-name :form-bg
+                  :object-name :goodbye-overlay-form-bg
                   :x           612
                   :y           146}
                  {:type        "image"
                   :src         "/raw/img/ui/activity_finished/student_big.png"
-                  :object-name :form-vera
+                  :object-name :goodbye-overlay-form-vera
                   :x           754
                   :y           418}
                  (get-title)]})
