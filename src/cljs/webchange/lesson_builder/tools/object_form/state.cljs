@@ -22,7 +22,9 @@
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_ object-name]]
-    {:db (assoc-in db [:objects object-name] (get-in activity-data [:objects object-name]))}))
+    (let [initialized? (-> db :objects (get object-name) some?)]
+      (when-not initialized?
+        {:db (assoc-in db [:objects object-name] (get-in activity-data [:objects object-name]))}))))
 
 (re-frame/reg-event-fx
   ::init-group
@@ -128,9 +130,9 @@
   (fn [{:keys [db activity-data]} [_]]
     (let [objects (:objects db)
           has-changes? (-> activity-data :objects (#(select-keys % (keys objects))) (not= objects))]
-      (when has-changes?
-        {:db       (assoc db :objects {})
-         :dispatch [::stage-state/reset]}))))
+      {:db       (assoc db :objects {})
+       :dispatch-n [(when has-changes?
+                      [::stage-state/reset])]})))
 
 (comment
   @(re-frame/subscribe [path-to-db]))

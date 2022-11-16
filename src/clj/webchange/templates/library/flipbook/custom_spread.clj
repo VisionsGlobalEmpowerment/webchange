@@ -41,8 +41,7 @@
    :height         "---"
    :fill           "---"
    :editable?      {:select     true
-                    :drag       true
-                    :restrict-x true}
+                    :drag       true}
    :metadata       {:removable? true}
    :text           "---"})
 

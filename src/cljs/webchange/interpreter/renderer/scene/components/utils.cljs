@@ -155,3 +155,33 @@
         (apply callback args)
         (reset! waiting? true)
         (js/setTimeout #(reset! waiting? false) timeout)))))
+
+(defn get-object-local-bounds
+  [object]
+  (let [bounds (.getLocalBounds object)]
+    {:x      (.-x bounds)
+     :y      (.-y bounds)
+     :width  (.-width bounds)
+     :height (.-height bounds)}))
+
+(defn get-anchor
+  [object]
+  (if-let [anchor (.-anchor object)]
+    {:x (.-x anchor)
+     :y (.-y anchor)}
+    {:x 0
+     :y 0}))
+
+(defn get-bounds
+  [object]
+  (let [local-bounds (get-object-local-bounds object)
+        pivot (get-pivot object)
+        scale (get-scale object {:abs? true})
+        pos (get-position object)]
+    (-> local-bounds
+        (update :width * (:x scale))
+        (update :height * (:y scale))
+        (update :x + (:x pos))
+        (update :y + (:y pos))
+        (update :x - (* (:x pivot) (:x scale)))
+        (update :y - (* (:y pivot) (:y scale))))))

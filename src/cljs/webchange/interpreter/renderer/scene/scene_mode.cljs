@@ -73,7 +73,7 @@
 
 (defn init-mode-object-helpers!
   [{:keys [props wrapper children]} mode params]
-  (enable-mode-helpers! mode (:object wrapper) props params)
+  (enable-mode-helpers! mode wrapper props params)
   (doseq [child children]
     (init-mode-object-helpers! child mode params)))
 

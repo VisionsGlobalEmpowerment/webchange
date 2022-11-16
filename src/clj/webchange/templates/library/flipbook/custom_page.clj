@@ -55,8 +55,7 @@
    :fill           "---"
    :text           "---"
    :editable?      {:select     true
-                    :drag       true
-                    :restrict-x true}
+                    :drag       true}
    :metadata       {:removable? true}})
 
 (defn- generate-page-id

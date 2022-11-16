@@ -15,12 +15,13 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable? type]}]
-  (cond-> [:type :editable? :origin :max-width :max-height :width :height :image-size :metadata :actions :filters]
+  (cond-> [:type :editable? :origin :max-width :max-height :image-size :metadata :actions :filters]
           (and
-            (-> (get editable? :drag) true? not)
-            (not (true? editable?))) (concat [:x :y])
+           (-> (get editable? :drag) true? not)
+           (not (true? editable?))) (concat [:x :y])
           (not editable?) (concat [:visible])
-          (= type "group") (concat [:children])))
+          (= type "group") (concat [:children])
+          (not= type "text") (concat [:width :height])))
 
 (defn- preserve-default
   [prev-data new-data]
@@ -38,7 +39,7 @@
     (let [created-object (get-in created-activity [:objects key])]
       [key (cond
              (utils/background? object) (preserve-background object created-object)
-             :default (preserve-default object created-object))])))
+             :else (preserve-default object created-object))])))
 
 (defn- preserve-objects
   [scene-data created-activity]

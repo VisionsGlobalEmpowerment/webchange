@@ -15,6 +15,11 @@
 (def frame-default-color 0x59acff)
 (def frame-selected-color 0xFFA500)
 
+(def resize-control-width 26)
+(def resize-control-offset 13)
+
+(def maximize-offset 250)
+
 (defn- apply-img-origin
   [position props]
   (let [{:keys [origin width height scale]} props
@@ -44,11 +49,12 @@
                                   (.-x local-bounds))
                        0)))))
 
+(def round #(-> % Math/round int))
+
 (defn round-position
   [{:keys [x y]}]
-  (let [round #(-> % Math/round int)]
-    {:x (round x)
-     :y (round y)}))
+  {:x (round x)
+   :y (round y)})
 
 (defn- fix-position
   [position props container]
@@ -58,56 +64,30 @@
             (= type "text") (apply-text-align props container)
             :always (round-position))))
 
-(re-frame/reg-event-fx
-  ::change-position
-  (fn [{:keys [db]} [_ position container props]]
-    (let [name (editor/selected-object db)
-          state (fix-position position props container)]
-      (logger/trace-folded-defs (str "change position: " name) "x" (:x state) "y" (:y state))
-      {:dispatch-n (list 
-                    [::editor/update-object name state]
-                    #_[::state-flipbook/generate-stages-screenshots {:only-current-stage? true}])})))
-
 (defn- handle-frame-click
   [component params]
   (re-frame/dispatch [::editor/select-object (:object-name component) params]))
 
 (defn- handle-drag
   [container props]
-  (re-frame/dispatch [::change-position (utils/get-position container) container props]))
+  (let [state (fix-position (utils/get-position container) props container)]
+    (re-frame/dispatch [::editor/update-selected-object state])))
 
 (defn- wrap
-  [name sprite]
+  [name sprite resize-controls]
   {:name     name
-   :hide     (fn [] (aset sprite "visible" false))
-   :show     (fn [] (aset sprite "visible" true))
+   :hide     (fn [] (aset sprite "visible" false)
+               (aset resize-controls "visible" false))
+   :show     (fn []
+               (aset sprite "visible" true)
+               (aset resize-controls "visible" true))
    :select   (fn []
                (aset sprite "visible" true)
+               (aset resize-controls "visible" true)
                (aset sprite "tint" frame-selected-color))
    :deselect (fn []
-               (aset sprite "visible" false))})
-
-(defn- get-object-local-bounds
-  [object]
-  (let [bounds (.getLocalBounds object)]
-    {:x      (.-x bounds)
-     :y      (.-y bounds)
-     :width  (.-width bounds)
-     :height (.-height bounds)}))
-
-(defn- get-frame-position
-  [object]
-  (let [local-bounds (get-object-local-bounds object)
-        pivot (utils/get-pivot object)
-        scale (utils/get-scale object {:abs? true})
-        pos (utils/get-position object)]
-    (-> local-bounds
-        (update :width * (:x scale))
-        (update :height * (:y scale))
-        (update :x + (:x pos))
-        (update :y + (:y pos))
-        (update :x - (* (:x pivot) (:x scale)))
-        (update :y - (* (:y pivot) (:y scale))))))
+               (aset sprite "visible" false)
+               (aset resize-controls "visible" false))})
 
 (defn- draw-border
   [mask width height padding]
@@ -129,12 +109,11 @@
       (.lineTo (:x top-left) (- (:y top-left) (/ frame-width 2))))))
 
 (defn- get-sprite-dimensions
-  [object]
-  (let [{:keys [x y width height]} (get-frame-position object)]
-    {:x      (- x frame-padding frame-width)
-     :y      (- y frame-padding frame-width)
-     :width  (+ width (* 2 (+ frame-padding frame-width)))
-     :height (+ height (* 2 (+ frame-padding frame-width)))}))
+  [{:keys [x y width height]}]
+  {:x      (- x frame-padding frame-width)
+   :y      (- y frame-padding frame-width)
+   :width  (+ width (* 2 (+ frame-padding frame-width)))
+   :height (+ height (* 2 (+ frame-padding frame-width)))})
 
 (defn- set-sprite-dimensions!
   [sprite {:keys [x y width height]}]
@@ -145,36 +124,42 @@
                          :y (- y frame-padding frame-width)})))
 
 (defn- update-sprite-dimensions!
-  [sprite object]
-  (->> (get-sprite-dimensions object)
+  [sprite bounds]
+  (->> (get-sprite-dimensions bounds)
        (set-sprite-dimensions! sprite)))
 
 (defn- get-mask-dimensions
-  [object]
-  (let [{:keys [x y]} (get-frame-position object)]
-    {:x (- x frame-padding)
-     :y (- y frame-padding)}))
+  [{:keys [x y]}]
+  {:x (- x frame-padding)
+   :y (- y frame-padding)})
 
 (defn- set-mask-dimensions!
   [mask position]
   (utils/set-position mask position))
 
 (defn- update-mask-dimensions!
-  [mask object]
-  (->> (get-mask-dimensions object)
+  [mask bounds]
+  (->> (get-mask-dimensions bounds)
        (set-mask-dimensions! mask)))
 
+(defn- rectangle-with-offset
+  [{:keys [x y width height]} offset]
+  (Rectangle.
+   (- x offset)
+   (- y offset)
+   (+ width (* 2 offset))
+   (+ height (* 2 offset))))
+
 (defn- update-editor-frame
-  [object sprite mask component-container]
-  (let [{:keys [x y width height]} (get-frame-position object)]
-    (update-sprite-dimensions! sprite object)
+  [{:keys [width height] :as bounds} sprite mask component-container]
+  (update-sprite-dimensions! sprite bounds)
 
-    (doto mask
-      (draw-border width height frame-padding)
-      (update-mask-dimensions! object))
+  (doto mask
+    (draw-border width height frame-padding)
+    (update-mask-dimensions! bounds)
+    (draw-border width height frame-padding))
 
-    (draw-border mask width height frame-padding)
-    (aset component-container "hitArea" (Rectangle. x y width height))))
+  (aset component-container "hitArea" (rectangle-with-offset bounds resize-control-offset)))
 
 (defn- update-text-frame-position
   [state text-object frame-container]
@@ -191,39 +176,165 @@
     (aset (.-anchor text-object) "x" anchor-x)
     (utils/set-position frame-container {:x position-x})))
 
+(defn- resize-control-element
+  [x y cursor]
+  (doto (Graphics.)
+    (.beginFill frame-default-color)
+    (.drawRect 0 0 resize-control-width resize-control-width)
+    (.endFill)
+    (aset "x" x)
+    (aset "y" y)
+    (aset "interactive" true)
+    (aset "cursor" cursor)))
+
+(defn- update-resize-control-positions!
+  [{:keys [x y width height]} top-left top-right bottom-right bottom-left]
+  (when top-left
+    (doto top-left
+      (aset "x" (- x resize-control-offset))
+      (aset "y" (- y resize-control-offset))))
+
+  (when top-right
+    (doto top-right
+      (aset "x" (+ x width (- resize-control-offset)))
+      (aset "y" (- y resize-control-offset))))
+
+  (when bottom-right
+    (doto bottom-right
+      (aset "x" (+ x width (- resize-control-offset)))
+      (aset "y" (+ y height (- resize-control-offset)))))
+
+  (when bottom-left
+    (doto bottom-left
+      (aset "x" (- x resize-control-offset))
+      (aset "y" (+ y height (- resize-control-offset))))))
+
+(defn- control-position
+  [control]
+  (-> (utils/get-position control)
+      (update :x round)
+      (update :y round)
+      (update :x + resize-control-offset)
+      (update :y + resize-control-offset)))
+
+(defn- redraw-resize-elements
+  [container wrapper sprite mask component-container]
+  (.removeChildren container)
+  (let [{:keys [get-bounds resize]} wrapper
+        current-bounds (atom (get-bounds))
+        {:keys [x y width height]} @current-bounds
+        
+        top-left (resize-control-element (- x resize-control-offset) (- y resize-control-offset) "nwse-resize")
+        bottom-right (resize-control-element (+ x width (- resize-control-offset)) (+ y height (- resize-control-offset)) "nwse-resize")
+        top-right (resize-control-element (+ x width (- resize-control-offset)) (- y resize-control-offset) "nesw-resize")
+        bottom-left (resize-control-element (- x resize-control-offset) (+ y height (- resize-control-offset)) "nesw-resize")
+
+        handle-drag-start #(let [bounds @current-bounds]
+                             (aset component-container "hitArea" (rectangle-with-offset bounds maximize-offset)))
+        handle-drag-end #(let [original-position (utils/get-position component-container)
+                               inner-position (utils/get-position (:object wrapper))
+                               inner-object (:object wrapper)]
+                           (doto component-container
+                             (aset "x" (+ (.-x inner-object) (.-x component-container)))
+                             (aset "y" (+ (.-y inner-object) (.-y component-container))))
+                           (set! (.-x inner-object) 0)
+                           (set! (.-y inner-object) 0)
+                           (reset! current-bounds (get-bounds))
+                           (update-editor-frame @current-bounds sprite mask component-container)
+                           (update-resize-control-positions! @current-bounds top-left top-right bottom-right bottom-left)
+                           (re-frame/dispatch [::editor/update-selected-object (-> @current-bounds
+                                                                                   (update :x + (:x inner-position) (:x original-position))
+                                                                                   (update :y + (:y inner-position) (:y original-position))
+                                                                                   (update :y - (:offset-y @current-bounds)))]))
+        handle-drag-move (fn [get-new-bounds]
+                           (fn []
+                             (let [{:keys [offset-y]} @current-bounds
+                                   new-bounds (get-new-bounds @current-bounds)
+                                   original-position (utils/get-position component-container)]
+                               (update-editor-frame new-bounds sprite mask component-container)
+                               (update-resize-control-positions! new-bounds top-left top-right bottom-right bottom-left)
+                               (resize (-> new-bounds
+                                           (assoc :orig-x (:x original-position))
+                                           (assoc :orig-y (:y original-position))
+                                           (update :y - offset-y)))
+                               (aset component-container "hitArea" (rectangle-with-offset new-bounds maximize-offset)))))]
+    (enable-drag! top-left
+                  {:on-drag-start handle-drag-start
+                   :on-drag-move (handle-drag-move #(let [{:keys [x y width height]} @current-bounds
+                                                          {c-x :x c-y :y} (control-position top-left)]
+                                                      {:x c-x :y c-y
+                                                       :width (- width (- c-x x)) :height (- height (- c-y y))}))
+                   :on-drag-end handle-drag-end})
+    (enable-drag! top-right
+                  {:on-drag-start handle-drag-start
+                   :on-drag-move (handle-drag-move #(let [{:keys [x y width height]} @current-bounds
+                                                          {c-x :x c-y :y} (control-position top-right)]
+                                                      {:x x :y c-y
+                                                       :width (+ width (- c-x (+ width x))) :height (- height (- c-y y))}))
+                   :on-drag-end handle-drag-end})
+    (enable-drag! bottom-right
+                  {:on-drag-start handle-drag-start
+                   :on-drag-move (handle-drag-move #(let [{:keys [x y width height]} @current-bounds
+                                                          {c-x :x c-y :y} (control-position bottom-right)]
+                                                      {:x x :y y
+                                                       :width (+ width (- c-x (+ width x))) :height (+ height (- c-y (+ height y)))}))
+                   :on-drag-end handle-drag-end})
+    (enable-drag! bottom-left
+                  {:on-drag-start handle-drag-start
+                   :on-drag-move (handle-drag-move #(let [{:keys [x y width height]} @current-bounds
+                                                          {c-x :x c-y :y} (control-position bottom-left)]
+                                                      {:x c-x :y y
+                                                       :width (- width (- c-x x)) :height (+ height (- c-y (+ height y)))}))
+                   :on-drag-end handle-drag-end})
+    (.addChild container top-left)
+    (.addChild container bottom-right)
+    (.addChild container top-right)
+    (.addChild container bottom-left)))
+
 (defn- create-frame
-  [component-container object-props object]
-  (let [{:keys [x y width height]} (get-frame-position object)
+  [component-container object-props wrapper]
+  (let [{:keys [object get-bounds]} wrapper
+        {:keys [x y width height] :as bounds} (get-bounds)
         sprite (doto (Sprite. WHITE)
                  (aset "visible" false)
-                 (update-sprite-dimensions! object))
+                 (update-sprite-dimensions! bounds))
 
         mask (doto (Graphics.)
-               (update-mask-dimensions! object)
-               (draw-border width height frame-padding))]
+               (update-mask-dimensions! bounds)
+               (draw-border width height frame-padding))
+        resize (doto (Container.)
+                 (aset "visible" false))]
 
     (when (instance? Container object)
-      (utils/set-handler object "childAdded" #(update-editor-frame object sprite mask component-container))
+      (utils/set-handler object "childAdded" #(update-editor-frame (get-bounds) sprite mask component-container))
       (utils/set-handler object "visibilityChanged" (fn [visible?] (utils/set-visibility component-container visible?))))
 
     (when (instance? Text object)
-      (utils/set-handler object "textChanged" #(update-editor-frame object sprite mask component-container))
-      (utils/set-handler object "fontSizeChanged" #(update-editor-frame object sprite mask component-container))
-      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame object sprite mask component-container))
+      (redraw-resize-elements resize wrapper sprite mask component-container)
+      
+      (utils/set-handler object "textChanged" #(update-editor-frame (get-bounds) sprite mask component-container))
+      (utils/set-handler object "fontSizeChanged" #(update-editor-frame (get-bounds) sprite mask component-container))
+      (utils/set-handler object "fontFamilyChanged" #(update-editor-frame (get-bounds) sprite mask component-container))
       (utils/set-handler object "textAlignChanged" #(do (update-text-frame-position % object component-container)
-                                                        (update-editor-frame object sprite mask component-container))))
+                                                        (update-editor-frame (get-bounds) sprite mask component-container)
+                                                        (redraw-resize-elements resize wrapper sprite mask component-container))))
 
-    (utils/set-handler object "scaleChanged" #(update-editor-frame object sprite mask component-container))
-    (utils/set-handler object "srcChanged" #(update-editor-frame object sprite mask component-container))
+    (utils/set-handler object "scaleChanged" #(update-editor-frame (get-bounds) sprite mask component-container))
+    (utils/set-handler object "srcChanged" #(update-editor-frame (get-bounds) sprite mask component-container))
 
     (when (some? (:visible object-props))
       (utils/set-visibility component-container (:visible object-props)))
 
     (aset sprite "mask" mask)
-    (aset component-container "hitArea" (Rectangle. x y width height))
+    (aset component-container "hitArea" (Rectangle.
+                                         (- x resize-control-offset)
+                                         (- y resize-control-offset)
+                                         (+ width (* 2 resize-control-offset))
+                                         (+ height (* 2 resize-control-offset))))
     (.addChild component-container mask)
     (.addChild component-container sprite)
-    (re-frame/dispatch [::editor/register-object (wrap (:object-name object-props) sprite)])))
+    (.addChild component-container resize)
+    (re-frame/dispatch [::editor/register-object (wrap (:object-name object-props) sprite resize)])))
 
 (defn- selectable?
   [{:keys [editable?]}]
@@ -274,8 +385,8 @@
     container))
 
 (defn add-editor-frame
-  [object {:keys [editable?] :as props} params]
+  [wrapper {:keys [editable?] :as props} params]
   (when editable?
-    (logger/trace-folded ["add editor frame for" (:object-name props)] props object)
-    (let [container (wrap-in-container object props params)]
-      (create-frame container props object))))
+    (logger/trace-folded ["add editor frame for" (:object-name props)] props (:object wrapper))
+    (let [container (wrap-in-container (:object wrapper) props params)]
+      (create-frame container props wrapper))))

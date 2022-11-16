@@ -19,7 +19,6 @@
                     :shadow-blur     {}
                     :shadow-opacity  {}
                     :shadow-angle    {}
-                    :scale           {}
                     :align           {:default "left"}
                     :vertical-align  {:default "bottom"}
                     :font-weight     {:default "normal"}
@@ -41,7 +40,6 @@
   Props params:
   :x - component x-position.
   :y - component y-position.
-  :scale - image scale. Default: {:x 1 :y 1}.
   :text - text string.
   :font-family - specify font family. Default: Liberation Sans.
   :font-size - font size. Default 12.

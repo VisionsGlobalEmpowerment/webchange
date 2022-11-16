@@ -82,7 +82,9 @@
 
     (when (and flipbook-page?
                (= mode ::modes/editor))
-      (utils/set-handler group "click" #(re-frame/dispatch [::state/set-current-object (-> props :object-name clojure.core/name)])))
+      (utils/set-handler group "click" #(re-frame/dispatch [::state/set-current-object (-> props :object-name clojure.core/name)]))
+      (aset group "buttonMode" false))
+    
     (when-not (nil? on-click) (utils/set-handler group "click" on-click))
     (when-not (nil? ref) (ref wrapped-group))
 

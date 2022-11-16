@@ -29,12 +29,13 @@
     (u/call-handler this "drag-start-handler")))
 
 (defn- on-drag-end
-  [this _]
+  [this event]
   (u/call-handler this "drag-end-handler")
   (reset! mouse-position-data empty-position)
   (set! (.-data this) nil)
   (set! (.-alpha this) 1)
-  (u/set-prop this "dragging" false))
+  (u/set-prop this "dragging" false)
+  (.stopPropagation event))
 
 (defn- on-drag-move
   [this _]
@@ -65,6 +66,7 @@
 
 (defn- handle-pointer-down
   [event]
+  (.stopPropagation event)
   (this-as this
     (u/set-prop this "object-picked" true)
     (u/set-prop this "cursor-start-position" (get-cursor-position event this))))
@@ -72,9 +74,10 @@
 (defn- handle-pointer-up
   [event]
   (this-as this
-    (if-not (u/get-prop this "object-moved")
-      (u/call-click-handler this [event])
-      (on-drag-end this event))
+    (when (u/get-prop this "object-picked")
+      (if-not (u/get-prop this "object-moved") 
+        (u/call-click-handler this [event])
+        (on-drag-end this event)))
     (u/set-prop this "object-moved" false)
     (u/set-prop this "object-picked" false)))
 
@@ -95,6 +98,7 @@
                                                   (u/get-prop this "cursor-start-position")))]
       (when (and object-picked?
                  object-moved-enough?)
+        (.stopPropagation event)
         (u/set-prop this "object-moved" true)
         (if object-moved?
           (on-drag-move this event)

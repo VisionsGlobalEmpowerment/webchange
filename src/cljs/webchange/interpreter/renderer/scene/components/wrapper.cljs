@@ -66,14 +66,16 @@
                                  (utils/set-opacity main-display-object value))
             :set-alpha-pulsation (fn [alpha-pulsation]
                                    (let [pulsation-filter-set (filters/has-filter-by-name main-display-object "alpha-pulsation")]
-                                     (if (and (not alpha-pulsation) pulsation-filter-set) (filters/set-filter main-display-object "" {}))
-                                     (if (and alpha-pulsation (not pulsation-filter-set))
-                                       (filters/set-filter main-display-object "alpha-pulsation" (assoc alpha-pulsation :no-interval true))))
-                                   )
+                                     (when (and (not alpha-pulsation) pulsation-filter-set)
+                                       (filters/set-filter main-display-object "" {}))
+                                     (when (and alpha-pulsation (not pulsation-filter-set))
+                                       (filters/set-filter main-display-object "alpha-pulsation" (assoc alpha-pulsation :no-interval true)))))
             :set-interactive   (fn [interactive?]
                                  (set! main-display-object -interactive interactive?)
                                  (set! main-display-object -interactiveChildren interactive?))
-            :get-wrapped-props (fn [] [])}
+            :get-wrapped-props (fn [] [])
+            :get-bounds (fn []
+                          (utils/get-bounds main-display-object))}
            wrapper-object)))
 
 (defn- with-destroy

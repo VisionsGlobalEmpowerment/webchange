@@ -5,7 +5,7 @@
     [webchange.interpreter.renderer.scene.components.text.chunked-text :refer [create-chunked-text]]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]
     [webchange.interpreter.renderer.scene.components.text.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.utils :refer [emit]]
+    [webchange.interpreter.renderer.scene.components.utils :refer [emit] :as component-utils]
     [webchange.interpreter.renderer.scene.components.wrapper :refer [create-wrapper]]
     [webchange.interpreter.renderer.scene.filters.filters :as f]
     [webchange.interpreter.renderer.state.scene :as scene]
@@ -77,14 +77,16 @@
                                                 (callback)))
                    :set-highlight           (fn [highlight]
                                               (let [highlight-filter-set (f/has-filter-by-name text-object "glow")]
-                                                (if (and (not highlight) highlight-filter-set) (f/set-filter text-object "" {}))
-                                                (if (and highlight (not highlight-filter-set))
+                                                (when (and (not highlight) highlight-filter-set)
+                                                  (f/set-filter text-object "" {}))
+                                                (when (and highlight (not highlight-filter-set))
                                                   (f/set-filter text-object "glow" {}))))
 
                    :set-permanent-pulsation (fn [permanent-pulsation]
                                               (let [pulsation-filter-set (f/has-filter-by-name text-object "pulsation")]
-                                                (if (and (not permanent-pulsation) pulsation-filter-set) (f/set-filter text-object "" {}))
-                                                (if (and permanent-pulsation (not pulsation-filter-set))
+                                                (when (and (not permanent-pulsation) pulsation-filter-set)
+                                                  (f/set-filter text-object "" {}))
+                                                (when (and permanent-pulsation (not pulsation-filter-set))
                                                   (f/set-filter text-object "pulsation" (assoc permanent-pulsation :no-interval true)))))
                    :set-fill                (fn [value]
                                               (swap! state assoc-in [:props :fill] value)
@@ -104,4 +106,23 @@
                                               (if (some? font-family)
                                                 (do (utils/set-font-family text-object font-family)
                                                     (emit text-object "fontFamilyChanged"))
-                                                (logger/warn "[:set-font-family] Font family is not defined")))}))
+                                                (logger/warn "[:set-font-family] Font family is not defined")))
+                   :get-bounds (fn []
+                                 (let [parent-bounds (component-utils/get-bounds text-object)
+                                       anchor (component-utils/get-anchor text-object)
+                                       offset (utils/calculate-position (merge (:props @state) {:x 0 :y 0}))]
+                                   {:width (-> @state :props :width)
+                                    :height (js/Math.max (:height parent-bounds) (-> @state :props :height))
+                                    :x (-> (.-x text-object) (- (* (-> @state :props :width) (:x anchor))))
+                                    :y (-> (.-y text-object) (- (* (-> @state :props :height) (:y anchor))))
+                                    :offset-x (:x offset)
+                                    :offset-y (:y offset)}))
+                   :resize (fn [bounds]
+                             (let [style (.-style text-object)
+                                   current-state (:props @state)
+                                   position (utils/calculate-position (merge current-state bounds))]
+                               (swap! state update :props merge (-> bounds
+                                                                    (update :x + (:orig-x bounds))))
+                               (set! (.-wordWrapWidth style) (:width bounds))
+                               (set! (.-x text-object) (:x position))
+                               (set! (.-y text-object) (:y position))))}))

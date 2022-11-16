@@ -21,5 +21,5 @@
       (modify-common-props)))
 
 (defn enable-mode-helpers!
-  [object object-props params]
-  (add-editor-frame object object-props params))
+  [wrapper object-props params]
+  (add-editor-frame wrapper object-props params))

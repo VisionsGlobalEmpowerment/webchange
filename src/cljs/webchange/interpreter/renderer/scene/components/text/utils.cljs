@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.text.utils
   (:require
-    [webchange.interpreter.pixi :refer [Text]]
+    [webchange.interpreter.pixi :refer [Text TextMetrics TextStyle]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]))
 
 (defn- text?
@@ -77,3 +77,31 @@
     "middle" (aset (.-anchor text) "y" 0.5)
     "bottom" (aset (.-anchor text) "y" 1)
     nil))
+
+(defn- get-font-props
+  [{:keys [font-family font-size font-weight]}]
+  (cond-> {:fontFamily font-family
+           :fontWeight font-weight
+           :fontSize   font-size}))
+
+(defn calculate-position
+  [{:keys [x y width height align vertical-align text] :as props}]
+  (let [style (TextStyle. (clj->js (get-font-props props)))
+        metrics (.measureText TextMetrics text style)
+        top-empty-line (- (.-lineHeight metrics)
+                          (.. metrics -fontProperties -ascent))]
+    {:x (if (number? width)
+          (case align
+            "left" x
+            "center" (+ x (/ width 2))
+            "right" (+ x width))
+          x)
+     :y (if (number? height)
+          (case vertical-align
+            "top" (- y top-empty-line)
+            "middle" (-> y
+                         (+ (/ height 2))
+                         (- (/ top-empty-line 2)))
+            "bottom" (+ y height))
+          y)}))
+
