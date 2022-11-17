@@ -2,7 +2,8 @@
   (:require
     [webchange.templates.library.flipbook.utils :as utils]
     [webchange.utils.scene-data :refer [generate-name rename-object]]
-    [webchange.utils.text :as text-utils]))
+    [webchange.utils.text :as text-utils]
+    [clojure.tools.logging :as log]))
 
 (def page-template
   {:type     "group"
@@ -26,7 +27,9 @@
    :height      "---"
    :mask-width  "---"
    :mask-height "---"
-   :src         "---"})
+   :src         "---"
+   :editable?      {:select     true
+                    :drag       true}})
 
 (def page-text-template
   {:type           "text"
@@ -75,13 +78,17 @@
 
 (defn- add-image
   [page-data mask-align {:keys [width height]} {:keys [image-src next-page-id]}]
-  (let [page-image (assoc page-image-template
-                     :mask-align (name mask-align)
-                     :width (* width 2)
-                     :height height
-                     :mask-width width
-                     :mask-height height
-                     :src image-src)
+  (let [main? (= :left-of-center mask-align)
+        page-image (assoc page-image-template
+                          :mask-align (name mask-align)
+                          :width (* width 2)
+                          :height height
+                          :mask-width width
+                          :mask-height height
+                          :src image-src
+                          :metadata {:links [(if main?
+                                               {:type "secondary" :id (generate-image-id (inc next-page-id))}
+                                               {:type "main" :id (generate-image-id (dec next-page-id))})]})
         page-id (generate-page-id next-page-id)
         object-id (generate-image-id next-page-id)]
     (-> page-data
@@ -94,13 +101,13 @@
                           padding
                           (-> height (/ 4) (* 3)))
         page-text (assoc page-text-template
-                    :x padding
-                    :y text-y-position
-                    :width (- width (* padding 2))
-                    :height (- height (* padding 2))
-                    :fill text-color
-                    :text text
-                    :chunks (text-utils/text->chunks text))
+                         :x padding
+                         :y text-y-position
+                         :width (- width (* padding 2))
+                         :height (- height (* padding 2))
+                         :fill text-color
+                         :text text
+                         :chunks (text-utils/text->chunks text))
         page-id (generate-page-id next-page-id)
         object-id (generate-text-id next-page-id)]
     (-> page-data

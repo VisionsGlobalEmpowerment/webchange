@@ -9,7 +9,6 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    (js/console.log (get-in db [:form :balls]))
     {:db (update-in db [:form :balls] #(into [] %))}))
 
 (re-frame/reg-event-fx

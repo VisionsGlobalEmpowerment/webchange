@@ -17,14 +17,26 @@
   (fn [db]
     (get db path-to-db)))
 
+(defn- secondary-object-names
+  [db main-object-name]
+  (->> (get-in db [:objects main-object-name :metadata :links])
+       (filter #(= (:type %) "secondary"))
+       (map :id)
+       (map keyword)))
+
+(defn- secondary-objects
+  [activity-data main-object-name]
+  (select-keys (:objects activity-data) (secondary-object-names activity-data main-object-name)))
+
 (re-frame/reg-event-fx
   ::init-object
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_ object-name]]
-    (let [initialized? (-> db :objects (get object-name) some?)]
-      (when-not initialized?
-        {:db (assoc-in db [:objects object-name] (get-in activity-data [:objects object-name]))}))))
+    (when-not (-> db :objects (get object-name) some?)
+      (let [objects (merge {object-name (get-in activity-data [:objects object-name])}
+                           (secondary-objects activity-data object-name))]
+        {:db (update db :objects merge objects)}))))
 
 (re-frame/reg-event-fx
   ::init-group
@@ -52,14 +64,25 @@
   ::change-object
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ object-name data-patch]]
-    {:db       (update-in db [:objects object-name] merge data-patch)
-     :dispatch [::state-renderer/set-scene-object-state object-name data-patch]}))
+    (if-let [secondary-object-name (-> (secondary-object-names db object-name) first)]
+      {:db       (-> db
+                     (update-in [:objects object-name] merge data-patch)
+                     (update-in [:objects secondary-object-name] merge data-patch))
+       :dispatch-n [[::state-renderer/set-scene-object-state object-name data-patch]
+                    [::state-renderer/set-scene-object-state secondary-object-name data-patch]]}
+      {:db       (update-in db [:objects object-name] merge data-patch)
+       :dispatch [::state-renderer/set-scene-object-state object-name data-patch]})))
+
 
 (re-frame/reg-event-fx
   ::change-activity-data-object
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ object-name data-patch]]
-    {:db       (update-in db [:objects (keyword object-name)] merge data-patch)}))
+    (if-let [secondary-object-name (-> (secondary-object-names db object-name) first)]
+      {:db       (-> db
+                     (update-in [:objects (keyword object-name)] merge data-patch)
+                     (update-in [:objects secondary-object-name] merge data-patch))}
+      {:db       (update-in db [:objects (keyword object-name)] merge data-patch)})))
 
 (defn- get-object-keys-by-tag
   "Return object names for each object in scene with given tag"

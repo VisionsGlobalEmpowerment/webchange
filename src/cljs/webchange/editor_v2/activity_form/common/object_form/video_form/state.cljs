@@ -13,7 +13,6 @@
   ::init
   (fn [{:keys [_]} [_ id objects-data objects-names]]
     (let [video-data (merge (select-keys objects-data [:volume]))]
-      (print "video-data" video-data)
       {:dispatch-n [[::state/init id {:data  video-data
                                       :names objects-names}]]})))
 
@@ -30,5 +29,4 @@
 (re-frame/reg-event-fx
   ::set-volume
   (fn [{:keys [_]} [_ id volume]]
-    (js/console.log [volume])
     {:dispatch [::state/update-current-data id {:volume volume}]}))

@@ -66,16 +66,45 @@
 
 (defn- handle-frame-click
   [component params]
-  (re-frame/dispatch [::editor/select-object (:object-name component) params]))
+  (if-let [main-object-name (->> component
+                                 :metadata
+                                 :links
+                                 (filter #(= (:type %) "main"))
+                                 first
+                                 :id)]
+    (re-frame/dispatch [::editor/select-object (keyword main-object-name) params])
+    (re-frame/dispatch [::editor/select-object (:object-name component) params])))
 
 (defn- handle-drag
   [container props]
   (let [state (fix-position (utils/get-position container) props container)]
     (re-frame/dispatch [::editor/update-selected-object state])))
 
+(defn- handle-drag-linked
+  [container component]
+  (when-let [linked-object-name (->> component
+                                     :metadata
+                                     :links
+                                     (filter #(or (= (:type %) "main")
+                                                  (= (:type %) "secondary")))
+                                     first
+                                     :id
+                                     keyword)]
+    (let [component-position (fix-position component component container)
+          dx (- (.-x container) (:x component-position))
+          dy (- (.-y container) (:y component-position))
+          linked-wrapper (get @editor/editor-objects linked-object-name)
+          linked-object (:object linked-wrapper)
+          position (select-keys (:props linked-wrapper) [:x :y])]
+      (utils/set-position linked-object {:x (+ (:x position) dx)
+                                         :y (+ (:y position) dy)}))))
+
 (defn- wrap
-  [name sprite resize-controls]
+  [name component-container props sprite resize-controls]
   {:name     name
+   :type     "editor-frame"
+   :object   component-container
+   :props    props
    :hide     (fn [] (aset sprite "visible" false)
                (aset resize-controls "visible" false))
    :show     (fn []
@@ -291,6 +320,15 @@
     (.addChild container top-right)
     (.addChild container bottom-left)))
 
+(defn- filter-props
+  [props]
+  (->> props
+       (filter (fn [[_ value]]
+                 (or (number? value)
+                     (string? value)
+                     (map? value))))
+       (into {})))
+
 (defn- create-frame
   [component-container object-props wrapper]
   (let [{:keys [object get-bounds]} wrapper
@@ -334,7 +372,7 @@
     (.addChild component-container mask)
     (.addChild component-container sprite)
     (.addChild component-container resize)
-    (re-frame/dispatch [::editor/register-object (wrap (:object-name object-props) sprite resize)])))
+    (re-frame/dispatch [::editor/register-object (wrap (:object-name object-props) component-container (filter-props object-props) sprite resize)])))
 
 (defn- selectable?
   [{:keys [editable?]}]
@@ -352,15 +390,6 @@
     {:restrict-x restrict-x
      :restrict-y restrict-y}))
 
-(defn- filter-props
-  [props]
-  (->> props
-       (filter (fn [[_ value]]
-                 (or (number? value)
-                     (string? value)
-                     (map? value))))
-       (into {})))
-
 (defn- create-editor-container
   [props params]
   (let [container (Container.)]
@@ -368,6 +397,7 @@
     (when (draggable? props)
       (enable-drag! container {:on-drag-start        #(handle-frame-click props params)
                                :on-drag-end          #(handle-drag container (filter-props props))
+                               :on-drag-move         #(handle-drag-linked container (filter-props props))
                                :on-drag-move-options (drag-options props)}))
     container))
 

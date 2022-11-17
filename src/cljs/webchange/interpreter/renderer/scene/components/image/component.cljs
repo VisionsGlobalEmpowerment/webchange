@@ -30,7 +30,8 @@
                     :max-width     {}
                     :max-height    {}
                     :min-width     {}
-                    :min-height    {}})
+                    :min-height    {}
+                    :metadata      {}})
 
 (defn- create-sprite
   [{:keys [src object-name raw]}]
@@ -69,12 +70,13 @@
                               (.endFill 0x000000)))
 
     (and (some? mask-width)
-         (some? mask-height)) (doto (Graphics.)
-                                (.beginFill 0x000000)
-                                (.drawRect (or mask-x 0) (or mask-y 0) mask-width mask-height)
-                                (.endFill 0x000000))
+         (some? mask-height)
+         (not= "cover" image-size)) (doto (Graphics.)
+                                      (.beginFill 0x000000)
+                                      (.drawRect (or mask-x 0) (or mask-y 0) mask-width mask-height)
+                                      (.endFill 0x000000))
 
-    (and (some? image-size)
+    (and (= "contain" image-size)
          (some? width)
          (some? height)) (doto (Graphics.)
                            (.beginFill 0x000000)

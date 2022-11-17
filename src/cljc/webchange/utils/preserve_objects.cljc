@@ -15,7 +15,7 @@
 
 (defn- get-object-keys-to-update
   [{:keys [editable? type]}]
-  (cond-> [:type :editable? :origin :max-width :max-height :image-size :metadata :actions :filters]
+  (cond-> [:type :editable? :origin :max-width :max-height :image-size :metadata :actions :filters :mask-width :mask-height]
           (and
            (-> (get editable? :drag) true? not)
            (not (true? editable?))) (concat [:x :y])
