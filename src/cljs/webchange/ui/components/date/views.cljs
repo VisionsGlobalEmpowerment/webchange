@@ -17,7 +17,7 @@
                           (when (fn? on-change)
                             (on-change value)))
           handle-picker-click #(when (some? @el)
-                                 (.showPicker @el))
+                                 (.showPicker ^js @el))
           has-label? (some? label)]
       [:div {:class-name (get-class-name {"bbs--date-wrapper" true
                                           class-name          (some? class-name)})}
