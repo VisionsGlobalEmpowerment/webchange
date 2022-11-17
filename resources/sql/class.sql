@@ -199,8 +199,8 @@ SELECT
 -- :doc retrieve statistics for dashboard
 SELECT
 (SELECT count(*) FROM schools WHERE archived = false) as schools,
-(SELECT count(*) FROM scenes WHERE type = 'activity') as activities,
-(SELECT count(*) FROM scenes WHERE type = 'book') as books,
+(SELECT count(*) FROM scenes WHERE type = 'activity' AND status = 'visible') as activities,
+(SELECT count(*) FROM scenes WHERE type = 'book' AND status = 'visible') as books,
 (SELECT count(*) FROM users WHERE type = 'live') as accounts,
 (SELECT count(*) FROM teachers WHERE archived = false) as teachers,
 (SELECT count(*) FROM students WHERE archived = false) as students,
