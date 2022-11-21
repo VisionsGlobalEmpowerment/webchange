@@ -40,7 +40,7 @@
   (let [control-id (str id "-selection-options")
         show? @(re-frame/subscribe [::state/show-selection-options? id action-path])
         options @(re-frame/subscribe [::state/selection-options id action-path])
-        handle-change #(re-frame/dispatch [::state/handle-selection-option action-path %])]
+        handle-change #(re-frame/dispatch [::state/handle-selection-option id action-path %])]
     (when show?
       [:div {:class-name class-name}
        [:label {:for control-id}

@@ -127,7 +127,6 @@
 (re-frame/reg-event-fx
   ::set-action-phrase-region
   (fn [_ [_ {:keys [action-path region]}]]
-    {:pre [(s/valid? ::spec/audio-region region)]}
     {:dispatch [::update-inner-action {:action-path action-path
                                        :data-patch  region}]}))
 

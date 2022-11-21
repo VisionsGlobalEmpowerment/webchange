@@ -10,7 +10,8 @@
 (s/def :audio-region/duration number?)
 (s/def :audio-region/end number?)
 (s/def :audio-region/start number?)
-(s/def ::audio-region (s/keys :req-un [:audio-region/duration :audio-region/end :audio-region/start]))
+(s/def ::audio-region (s/keys :req-un [:audio-region/duration :audio-region/end :audio-region/start]
+                              :opt-un [::data]))
 
 (s/def :background-single-data/type #(= "background"))
 (s/def :background-single-data/src string?)

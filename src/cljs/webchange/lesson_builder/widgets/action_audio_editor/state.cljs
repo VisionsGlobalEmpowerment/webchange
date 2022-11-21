@@ -1,14 +1,16 @@
 (ns webchange.lesson-builder.widgets.action-audio-editor.state
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.state :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.audio-analyzer.index :as audio-analyzer]
+    [webchange.utils.audio-analyzer.talk-data :as talk-data]
     [webchange.utils.numbers :refer [to-precision try-parse-number]]
-    [webchange.utils.scene-data :as utils]
-    [webchange.utils.scene-action-data :as action-utils]))
+    [webchange.utils.scene-action-data :as action-utils]
+    [webchange.utils.scene-data :as utils]))
 
 (def path-to-db :widget/audio-editor)
 
@@ -238,6 +240,33 @@
   (fn [db [_ id]]
     (get-in db [id auto-select-loading-key])))
 
+(defn question-audio-data?
+  [action]
+  (not (:type action)))
+
+(defn update-text-animation-data?
+  [action]
+  (or (question-audio-data? action) (action-utils/text-animation-action? action)))
+
+(defn update-talk-animation-data?
+  [action]
+  (action-utils/animation-sequence-action? action))
+
+(defn- with-animation-data
+  [region-data action-data text audio-script]
+  (cond-> region-data
+          (update-text-animation-data? action-data)
+          (assoc :data
+                 (talk-data/get-chunks-data-if-possible {:text   text
+                                                         :region region-data
+                                                         :script audio-script}))
+
+          (update-talk-animation-data? action-data)
+          (assoc :data
+                 (talk-data/get-talk-data-if-possible {:text   text
+                                                       :region region-data
+                                                       :script audio-script}))))
+
 (re-frame/reg-event-fx
   ::auto-select-region
   [(re-frame/inject-cofx :activity-data)
@@ -249,7 +278,8 @@
       (cond
         (some? audio-script)
         (let [text (get-action-text action-data)
-              region-data (audio-analyzer/get-region-data text audio-script)]
+              region-data (-> (audio-analyzer/get-region-data text audio-script)
+                              (with-animation-data action-data text audio-script))]
           {:db       (set-auto-select-loading db id false)
            :dispatch [::set-action-region action-path region-data]})
 
@@ -276,7 +306,7 @@
   ::retry-audio-recognition
   [(re-frame/inject-cofx :activity-info)
    (i/path path-to-db)]
-  (fn [{:keys [db activity-info]} [_ url id action-path]]
+  (fn [{:keys [activity-info]} [_ url id action-path]]
     (let [lang (:lang activity-info)]
       {:dispatch [::warehouse/retry-audio-recognition
                   {:url url :lang lang}
@@ -289,7 +319,7 @@
   (fn [[_ id action-path]]
     (re-frame/subscribe [::selection-options id action-path]))
   (fn [selection-options]
-    (-> selection-options empty? not)))
+    (seq selection-options)))
 
 (re-frame/reg-sub
   ::selection-options
@@ -301,19 +331,24 @@
              (some? script-data))
       (->> (audio-analyzer/get-available-regions action-text script-data)
            (map (fn [{:keys [start end region-text]}]
-                  {:text  (clojure.string/capitalize region-text)
+                  {:text  (s/capitalize region-text)
                    :value (str start "-" end)})))
       [])))
 
 (re-frame/reg-event-fx
   ::handle-selection-option
-  [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ action-path value]]
-    (let [[start end] (->> (clojure.string/split value "-")
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-data db]} [_ id action-path value]]
+    (let [action-data (get-action-data activity-data action-path)
+          audio-script (get-script-data db id)
+          text (get-action-text action-data)
+          [start end] (->> (s/split value "-")
                            (map try-parse-number))
-          region-data {:start    start
-                       :end      end
-                       :duration (-> (- end start) (to-precision 2))}]
+          region-data (-> {:start    start
+                           :end      end
+                           :duration (-> (- end start) (to-precision 2))}
+                          (with-animation-data action-data text audio-script))]
       {:dispatch [::set-action-region action-path region-data]})))
 
 ;; events
