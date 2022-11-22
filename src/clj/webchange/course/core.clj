@@ -1071,7 +1071,7 @@
         updated-at (jt/local-date-time)
         [{scene-id :id}] (db/create-activity! {:name       (:cover-title data)
                                                :lang       (:lang data)
-                                               :image_src  nil
+                                               :image_src  (-> data :cover-image :src)
                                                :status     "invisible"
                                                :owner_id   owner-id
                                                :created_at created-at
