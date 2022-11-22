@@ -349,7 +349,10 @@
 
 (defn- page-in-stage?
   [stage page]
-  (some #(= % page) (:pages-idx stage)))
+  (->> stage
+       :pages-idx
+       (remove nil?)
+       (some #(= % page))))
 
 ;; db should be global to retrieve current-object
 (re-frame/reg-event-fx
