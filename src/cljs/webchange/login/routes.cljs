@@ -12,7 +12,8 @@
              "accounts" {"/sign-up" :sign-up
                          "/sign-up-success" :sign-up-success
                          "/reset-password" {"" :reset-password-email
-                                            ["/" [#"[\w-%]+" :code]] :reset-password-code}}})
+                                            ["/" [#"[\w-%]+" :code]] :reset-password-code}
+                         ["/sign-in/" [#"[\w-%]+" :type]] :sign-in}})
 
 (defonce router (atom nil))
 

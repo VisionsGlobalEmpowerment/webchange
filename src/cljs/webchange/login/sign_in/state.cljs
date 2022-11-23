@@ -6,6 +6,12 @@
 
 (def path-to-db :form/login)
 
+(defn- validated-type
+  [type]
+  (case type
+    "admin" "admin"
+    "parent"))
+
 (re-frame/reg-sub
   path-to-db
   (fn [db]
@@ -70,18 +76,18 @@
 (re-frame/reg-event-fx
   ::login
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ type]]
     (let [data (get-form-data db)]
       {:db       (set-loading db true)
-       :dispatch [::warehouse/admin-login {:data data} {:on-success [::login-success]
+       :dispatch [::warehouse/admin-login {:data data} {:on-success [::login-success type]
                                                         :on-failure [::login-failure]}]})))
 
 (re-frame/reg-event-fx
   ::login-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [type]}]]
+  (fn [{:keys [db]} [_ type]]
     {:db                 (set-loading db false)
-     :redirect-to-module type}))
+     :redirect-to-module (validated-type type)}))
 
 (re-frame/reg-event-fx
   ::login-failure
@@ -89,33 +95,7 @@
   (fn [{:keys [db]} [_]]
     {:db (set-loading db false)}))
 
-;; Authentication
-
-(def current-user-loaded-key :current-user-loaded?)
-
-(defn- set-current-user-loaded
-  [db value]
-  (assoc db current-user-loaded-key value))
-
 (re-frame/reg-sub
-  ::current-user-loaded?
-  :<- [path-to-db]
-  #(get % current-user-loaded-key false))
-
-(re-frame/reg-event-fx
-  ::load-current-user
-  (fn [{:keys [_]} [_]]
-    {:dispatch [::warehouse/load-current-user
-                {:on-success [::load-current-user-success]
-                 :on-failure [::load-current-user-failure]}]}))
-
-(re-frame/reg-event-fx
-  ::load-current-user-success
-  (fn [{:keys [_]} [_ {:keys [type]}]]
-    {:redirect-to-module type}))
-
-(re-frame/reg-event-fx
-  ::load-current-user-failure
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (set-current-user-loaded db true)}))
+  ::sign-in-as-type
+  (fn [_ [_ type]]
+    (validated-type type)))

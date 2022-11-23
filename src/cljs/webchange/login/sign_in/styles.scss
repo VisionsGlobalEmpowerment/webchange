@@ -10,7 +10,7 @@
     width: 50%;
     max-width: 500px;
     padding: 46px 68px;
-    padding-bottom: 86px;
+    padding-bottom: 46px;
 
     background: bbs--color(blue-1);
     border-radius: 20px;
@@ -52,6 +52,7 @@
 	display: flex;
 	justify-content: end;
 
+	padding: 10px;
 	.bbs--link {
 	    color: #fff;
 
