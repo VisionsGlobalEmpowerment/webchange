@@ -10,7 +10,7 @@
 (defn- logo
   []
   [:div.header-logo
-   [:img {:src "/images/student_dashboard/tabschool_logo.svg"}]])
+   [:img {:src "/images/student_dashboard/bluebrickschool_logo.svg"}]])
 
 (defn student-dashboard
   [{:keys [id]}]

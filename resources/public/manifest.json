@@ -1,6 +1,6 @@
 {
-  "short_name": "Webchange",
-  "name": "Webchange Test App",
+  "short_name": "BlueBrickSchool",
+  "name": "BlueBrickSchool App",
   "start_url": "/student-login",
   "display": "fullscreen",
   "orientation": "landscape",
