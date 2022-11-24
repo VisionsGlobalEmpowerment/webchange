@@ -90,6 +90,7 @@
                                          (start-triggers))
                                        (when (fn? on-ready)
                                          (on-ready)))
+                   :trigger          #(re-frame/dispatch [::ie/trigger %])
                    :on-start-click   start-scene
                    :reset-resources? reset-resources?}
                   stage-props)]))

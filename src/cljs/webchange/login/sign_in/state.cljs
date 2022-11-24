@@ -7,10 +7,18 @@
 (def path-to-db :form/login)
 
 (defn- validated-type
-  [type]
-  (case type
-    "admin" "admin"
-    "parent"))
+  [type user-type]
+  (let [prepared-type (case type
+                        "admin" "admin"
+                        "parent")
+        prepared-user-type (case user-type
+                             "admin" "admin"
+                             "bbs-admin" "admin"
+                             "parent")]
+    (cond
+      (= prepared-type prepared-user-type) prepared-type
+      (= prepared-user-type "admin") prepared-type
+      :else "parent")))
 
 (re-frame/reg-sub
   path-to-db
@@ -85,9 +93,9 @@
 (re-frame/reg-event-fx
   ::login-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ type]]
+  (fn [{:keys [db]} [_ type {user-type :type}]]
     {:db                 (set-loading db false)
-     :redirect-to-module (validated-type type)}))
+     :redirect-to-module (validated-type type user-type)}))
 
 (re-frame/reg-event-fx
   ::login-failure
@@ -98,4 +106,4 @@
 (re-frame/reg-sub
   ::sign-in-as-type
   (fn [_ [_ type]]
-    (validated-type type)))
+    (validated-type type "admin")))

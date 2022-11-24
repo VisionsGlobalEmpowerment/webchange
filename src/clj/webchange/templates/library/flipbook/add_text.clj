@@ -51,7 +51,8 @@
 
 (defn add-text
   [activity-data page-idx {:keys [page-params]}]
-  (let [{:keys [action object]} (f/get-page-data activity-data page-idx)
+  (let [page-idx (or page-idx 0)
+        {:keys [action object]} (f/get-page-data activity-data page-idx)
         text "Text"
         text-name (get-text-name activity-data object)
         text-data (get-text-data text page-params)]

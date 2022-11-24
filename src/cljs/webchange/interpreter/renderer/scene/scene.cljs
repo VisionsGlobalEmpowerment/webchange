@@ -2,31 +2,22 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.interpreter.pixi :refer [Application clear-texture-cache]]
+    [webchange.interpreter.pixi :refer [Application]]
+    [webchange.interpreter.renderer.overlays.index :refer [create-overlays
+                                                           update-viewport]]
+    [webchange.interpreter.renderer.question.overlay :as question]
+    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app
+                                                      get-renderer get-stage
+                                                      register-app remove-all-tickers resize-app!]]
     [webchange.interpreter.renderer.scene.components.collisions :as collisions]
     [webchange.interpreter.renderer.scene.components.create-component :refer [create-component]]
-    [webchange.interpreter.renderer.state.scene :as state]
-    [webchange.interpreter.renderer.question.overlay :as question]
-    [webchange.interpreter.renderer.overlays.index :refer [create-overlays update-viewport]]
-    [webchange.interpreter.renderer.scene.app :refer [app-exists? get-app register-app resize-app! get-renderer get-stage remove-all-tickers]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.interpreter.renderer.scene.scene-mode :refer [init-mode-helpers! apply-mode]]
+    [webchange.interpreter.renderer.scene.scene-mode :refer [apply-mode
+                                                             init-mode-helpers!]]
     [webchange.interpreter.renderer.stage-utils :refer [get-stage-params]]
+    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.logger.index :as logger]))
-
-(defn- set-position
-  [stage x y]
-  (doto (.-position stage)
-    (aset "x" x)
-    (aset "y" y)))
-
-(defn- set-scale
-  ([stage scale]
-   (set-scale stage scale scale))
-  ([stage scale-x scale-y]
-   (doto (.-scale stage)
-     (aset "x" scale-x)
-     (aset "y" scale-y))))
 
 (defn- init-app
   [viewport mode]
@@ -58,57 +49,75 @@
   (when (some? object)
     (.off object event handler)))
 
+(defn- enable-gestures!
+  [container trigger]
+  (let [last-pos (atom nil)]
+    (utils/set-handler container "pointerdown" #(reset! last-pos {:x (-> % .-data .-global .-x)
+                                                                  :y (-> % .-data .-global .-y)}))
+    (utils/set-handler container "pointerup" #(let [new-pos (-> % .-data .-global)
+                                                    x (- (.-x new-pos) (:x @last-pos))
+                                                    y (- (.-y new-pos) (:y @last-pos))]
+                                                (cond
+                                                  (and (> x 150) (< y 50) (> y -50)) (trigger :swipe-right)
+                                                  (and (< x -150) (< y 50) (> y -50)) (trigger :swipe-left)
+                                                  (and (> y 150) (< x 50) (> x -50)) (trigger :swipe-down)
+                                                  (and (< y -150) (< x 50) (> x -50)) (trigger :swipe-up)
+                                                  :else nil)))))
+
 (defn scene
   [{:keys []}]
   (let [container (atom nil)
         scene-container (atom nil)]
     (r/create-class
-      {:display-name "web-gl-scene"
+     {:display-name "web-gl-scene"
 
-       :component-did-mount
-                     (fn [this]
-                       (re-frame/dispatch [::state/init])
-                       (re-frame/dispatch [::state/set-rendering-state true])
+      :component-did-mount
+      (fn [this]
+        (re-frame/dispatch [::state/init])
+        (re-frame/dispatch [::state/set-rendering-state true])
 
-                       (let [{:keys [mode on-ready stage-id viewport objects metadata]} (r/props this)
-                             app (init-app viewport mode)]
-                         (logger/trace-folded "scene mounted" viewport mode)
-                         (.appendChild @container (.-view app))
-                         (reset! scene-container (-> (create-component {:type        "group"
-                                                                        :object-name :scene
-                                                                        :parent      (.-stage app)
-                                                                        :children    (apply-mode objects mode)
-                                                                        :mode        mode})
-                                                     (init-mode-helpers! mode {:stage-id stage-id})
-                                                     (get-in [:wrapper :object])))
+        (let [{:keys [mode on-ready trigger stage-id viewport objects metadata]} (r/props this)
+              app (init-app viewport mode)]
+          (logger/trace-folded "scene mounted" viewport mode)
+          (.appendChild @container (.-view app))
+          (reset! scene-container (-> (create-component {:type        "group"
+                                                         :object-name :scene
+                                                         :parent      (.-stage app)
+                                                         :children    (apply-mode objects mode)
+                                                         :mode        mode})
+                                      (init-mode-helpers! mode {:stage-id stage-id})
+                                      (get-in [:wrapper :object])))
 
-                         (-> (get-renderer)
-                             (register-handler "resize" handle-renderer-resize))
-                         (create-overlays {:parent   (get-stage)
-                                           :viewport viewport
-                                           :mode     mode
-                                           :metadata metadata})
+          (when trigger
+            (enable-gestures! @scene-container trigger))
 
-                         (create-component (question/create {:parent   (get-stage)
-                                                             :viewport viewport}))
+          (-> (get-renderer)
+              (register-handler "resize" handle-renderer-resize))
+          (create-overlays {:parent   (get-stage)
+                            :viewport viewport
+                            :mode     mode
+                            :metadata metadata})
 
-                         (re-frame/dispatch [::state/set-rendering-state false])
-                         (when (fn? on-ready) (on-ready))))
+          (create-component (question/create {:parent   (get-stage)
+                                              :viewport viewport}))
 
-       :component-will-unmount
-                     (fn []
-                       (remove-all-tickers)
-                       (collisions/reset-ticker)
-                       (.destroy @scene-container (clj->js {:children true}))
-                       (-> (get-renderer)
-                           (unregister-handler "resize" handle-renderer-resize)))
+          (re-frame/dispatch [::state/set-rendering-state false])
+          (when (fn? on-ready) (on-ready))))
 
-       :should-component-update
-                     (fn [] false)
+      :component-will-unmount
+      (fn []
+        (remove-all-tickers)
+        (collisions/reset-ticker)
+        (.destroy @scene-container (clj->js {:children true}))
+        (-> (get-renderer)
+            (unregister-handler "resize" handle-renderer-resize)))
 
-       :reagent-render
-                     (fn [{:keys []}]
-                       [:div {:style {:position "absolute"
-                                      :width    "100%"
-                                      :height   "100%"}
-                              :ref   #(when % (reset! container %))}])})))
+      :should-component-update
+      (fn [] false)
+
+      :reagent-render
+      (fn [{:keys []}]
+        [:div {:style {:position "absolute"
+                       :width    "100%"
+                       :height   "100%"}
+               :ref   #(when % (reset! container %))}])})))

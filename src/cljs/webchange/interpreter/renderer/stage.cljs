@@ -98,57 +98,58 @@
         handle-resize (get-handler handle-screen-resize container)
         prev-viewport (atom nil)]
     (r/create-class
-      {:display-name "web-gl-stage"
-       :component-did-mount
-                     (fn [this]
-                       (.addEventListener js/window "resize" handle-resize)
-                       (resources/init (.-shared Loader))
-                       (let [{:keys [reset-resources? scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading reset-resources?)))
-       :component-will-unmount
-                     (fn []
-                       (.removeEventListener js/window "resize" handle-resize))
-       :component-did-update
-                     (fn [this]
-                       (let [{:keys [reset-resources? scene-data]} (r/props this)]
-                         (init-scene scene-data current-scene-id loading reset-resources?)))
-       :reagent-render
-                     (fn [{:keys [id mode on-ready on-ready-to-start on-start-click scene-data force-show-scene? current-page] :as props}]
-                       (let [viewport (-> (element->viewport @container)
-                                          (get-stage-params))
-                             show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
-                             {:keys [ready-to-start? show-loader-screen? show-scene? show-waiting-screen?]}
-                             (get-screens-state {:loading-state        @loading
-                                                 :props                props
-                                                 :scene-data           scene-data
-                                                 :show-waiting-screen? show-waiting-screen?
-                                                 :force-show-scene?    force-show-scene?
-                                                 :viewport             viewport})]
-                         (when (and (some? @prev-viewport)
-                                    (not= @prev-viewport viewport))
-                           (handle-resize))
-                         (when (and ready-to-start?
-                                    (fn? on-ready-to-start))
-                           (on-ready-to-start))
-                         (reset! prev-viewport viewport)
-                         [:div {:ref        #(when % (reset! container (.-parentNode %)))
-                                :class-name (get-class-name {"stage-container"                  true
-                                                             (str "current-page-" current-page) (some? current-page)})
-                                :style      {:width    "100%"
-                                             :height   "100%"
-                                             :position "relative"}}
-                          (when show-scene?
-                            [scene {:mode     mode
-                                    :stage-id id
-                                    :objects  (:objects scene-data)
-                                    :metadata (:metadata scene-data)
-                                    :viewport viewport
-                                    :on-ready on-ready
-                                    :started? (:started? scene-data)}])
-                          (when show-loader-screen?
-                            [overlay-wrapper {:viewport viewport}
-                             [loader-screen {:on-start-click on-start-click
-                                             :loading        @loading}]])
-                          (when show-waiting-screen?
-                            [overlay-wrapper {:viewport viewport}
-                             [waiting-screen]])]))})))
+     {:display-name "web-gl-stage"
+      :component-did-mount
+      (fn [this]
+        (.addEventListener js/window "resize" handle-resize)
+        (resources/init (.-shared Loader))
+        (let [{:keys [reset-resources? scene-data]} (r/props this)]
+          (init-scene scene-data current-scene-id loading reset-resources?)))
+      :component-will-unmount
+      (fn []
+        (.removeEventListener js/window "resize" handle-resize))
+      :component-did-update
+      (fn [this]
+        (let [{:keys [reset-resources? scene-data]} (r/props this)]
+          (init-scene scene-data current-scene-id loading reset-resources?)))
+      :reagent-render
+      (fn [{:keys [id mode on-ready trigger on-ready-to-start on-start-click scene-data force-show-scene? current-page] :as props}]
+        (let [viewport (-> (element->viewport @container)
+                           (get-stage-params))
+              show-waiting-screen? @(re-frame/subscribe [::overlays/show-waiting-screen?])
+              {:keys [ready-to-start? show-loader-screen? show-scene? show-waiting-screen?]}
+              (get-screens-state {:loading-state        @loading
+                                  :props                props
+                                  :scene-data           scene-data
+                                  :show-waiting-screen? show-waiting-screen?
+                                  :force-show-scene?    force-show-scene?
+                                  :viewport             viewport})]
+          (when (and (some? @prev-viewport)
+                     (not= @prev-viewport viewport))
+            (handle-resize))
+          (when (and ready-to-start?
+                     (fn? on-ready-to-start))
+            (on-ready-to-start))
+          (reset! prev-viewport viewport)
+          [:div {:ref        #(when % (reset! container (.-parentNode %)))
+                 :class-name (get-class-name {"stage-container"                  true
+                                              (str "current-page-" current-page) (some? current-page)})
+                 :style      {:width    "100%"
+                              :height   "100%"
+                              :position "relative"}}
+           (when show-scene?
+             [scene {:mode     mode
+                     :stage-id id
+                     :objects  (:objects scene-data)
+                     :metadata (:metadata scene-data)
+                     :viewport viewport
+                     :on-ready on-ready
+                     :trigger  trigger
+                     :started? (:started? scene-data)}])
+           (when show-loader-screen?
+             [overlay-wrapper {:viewport viewport}
+              [loader-screen {:on-start-click on-start-click
+                              :loading        @loading}]])
+           (when show-waiting-screen?
+             [overlay-wrapper {:viewport viewport}
+              [waiting-screen]])]))})))

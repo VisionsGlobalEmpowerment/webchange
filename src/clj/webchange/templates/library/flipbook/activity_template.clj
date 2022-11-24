@@ -42,19 +42,37 @@
                                                    :align          "right"
                                                    :text           "01"
                                                    :metadata       {:text-animation-target? false}}
-                               :prev-page         {:type             "image"
+                               :prev-page         {:type "group"
+                                                   :x 0
+                                                   :y 0
+                                                   :actions          {:click {:id "prev-page-click" :on "click" :type "action"}}
+                                                   :children ["prev-page-area" "prev-page-image"]}
+                               :prev-page-area    {:type "transparent"
+                                                   :x 0
+                                                   :y 0
+                                                   :width 133
+                                                   :height 1080}
+                               :prev-page-image   {:type             "image"
                                                    :x                32
                                                    :y                979
                                                    :opacity          0.7
                                                    :src              "/raw/img/flipbook/corner_left.png"
-                                                   :actions          {:click {:id "prev-page-click" :on "click" :type "action"}}
                                                    :interpreter-mode "!editor"}
-                               :next-page         {:type             "image"
-                                                   :x                1787
+                               :next-page         {:type "group"
+                                                   :x 1787
+                                                   :y 0
+                                                   :actions          {:click {:id "next-page-click" :on "click" :type "action"}}
+                                                   :children ["next-page-area" "next-page-image"]}
+                               :next-page-area    {:type "transparent"
+                                                   :x 0
+                                                   :y 0
+                                                   :width 133
+                                                   :height 1080}
+                               :next-page-image   {:type             "image"
+                                                   :x                0
                                                    :y                979
                                                    :opacity          0.7
                                                    :src              "/raw/img/flipbook/corner_right.png"
-                                                   :actions          {:click {:id "next-page-click" :on "click" :type "action"}}
                                                    :interpreter-mode "!editor"}
                                :spine             {:type "group" :x "---" :y 0 :children []}}
                :scene-objects [["spine" "book"] ["prev-page" "next-page" "page-numbers"]]
@@ -72,7 +90,11 @@
                :triggers      {:render {:on     "render"
                                         :action "render-scene"}
                                :start  {:on     "start"
-                                        :action "start-scene"}}
+                                        :action "start-scene"}
+                               :prev-page {:on "swipe-right"
+                                           :action "prev-page-click"}
+                               :next-page {:on "swipe-left"
+                                           :action "next-page-click"}}
                :metadata      {:autostart      true
                                :stage-size     :contain
                                :stages         []
