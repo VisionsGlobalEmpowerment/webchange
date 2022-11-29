@@ -19,17 +19,18 @@
                               {:key   "Last Login"
                                :value last-login}]
                    :on-click handle-click
-                   :controls [ui/switch {:label          (cond
-                                                           loading? "Saving.."
-                                                           (not determinate?) "..."
-                                                           active? "Active"
-                                                           :default "Inactive")
+                   :controls [:div {:on-click  #(.stopPropagation %)}
+                              [ui/switch {:label          (cond
+                                                            loading? "Saving.."
+                                                            (not determinate?) "..."
+                                                            active? "Active"
+                                                            :else "Inactive")
 
-                                         :checked?       active?
-                                         :indeterminate? (not determinate?)
-                                         :disabled?      loading?
-                                         :on-change      handle-active-click
-                                         :class-name     "active-switch"}]
+                                          :checked?       active?
+                                          :indeterminate? (not determinate?)
+                                          :disabled?      loading?
+                                          :on-change      handle-active-click
+                                          :class-name     "active-switch"}]]
                    :actions  [{:icon     "edit"
                                :title    "Edit teacher"
                                :on-click handle-edit-click}]}]))

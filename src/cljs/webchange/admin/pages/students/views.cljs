@@ -23,7 +23,7 @@
                                                            loading? "Saving.."
                                                            (not determinate?) "..."
                                                            active? "Active"
-                                                           :default "Inactive")
+                                                           :else "Inactive")
 
                                          :checked?       active?
                                          :indeterminate? (not determinate?)

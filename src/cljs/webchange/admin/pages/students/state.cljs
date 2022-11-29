@@ -61,7 +61,7 @@
    :name       (str (:first-name user) " " (:last-name user))
    :email      (:email user)
    :active?    (when (some? status) (= status "active"))
-   :last-login (date-str->locale-date "2022-05-18T11:33:36.316428")})
+   :last-login (date-str->locale-date (:last-login user))})
 
 (re-frame/reg-event-fx
   ::load-school-students-success

@@ -19,3 +19,5 @@
                                 :opt-un []))
 (s/def ::edit-teacher (s/keys :req-un [::first-name ::last-name ::type]
                               :opt-un [::password]))
+
+(s/def ::edit-teacher-status (s/keys :req-un [::status]))
