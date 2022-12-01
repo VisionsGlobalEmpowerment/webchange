@@ -16,7 +16,21 @@
 
         submit #(re-frame/dispatch [::state/login sign-in-as-type])]
     [:div.sign-in-form
-     [:h1 "Log in as " sign-in-as-type]
+     [:div.login-as
+      [:h1 "Log In As:"]
+      [ui/button {:href "/accounts/sign-in/parent"
+                  :shape "rounded"
+                  :target "_self"
+                  :class-name (ui/get-class-name {"log-in-as-button"        true
+                                                  "log-in-as-button-active" (= sign-in-as-type "parent")})}
+       "Parent"]
+      [ui/button {:href "/accounts/sign-in/admin"
+                  :shape "rounded"
+                  :target "_self"
+                  :class-name (ui/get-class-name {"log-in-as-button"        true
+                                                  "log-in-as-button-active" (= sign-in-as-type "admin")})}
+       "Admin"]]
+     [ui/logo-with-name {:class-name "sign-in-logo"}]
      [:div.form
       [:div.fields
        [ui/input {:label          "Username"
@@ -31,23 +45,15 @@
                      :on-change      handle-password-changed
                      :disabled?      loading?
                      :on-enter-press submit}]]
-      [:div.forgot-password-link
-       [ui/link {:href "/accounts/reset-password"
-                 :target "_self"} "Forgot your password?"]]
+
+      [:div.forgot-password
+       [:p "Forgot password?"]
+       [:div.forgot-password-link
+        [ui/link {:href "/accounts/reset-password"
+                  :target "_self"} "Reset password"]]]
       [ui/button {:on-click   submit
                   :class-name "login-button"
                   :shape      "rounded"
                   :loading?   loading?
                   :disabled?  loading?}
-       "Log In"]
-      [:div.sign-up-link
-       [ui/link {:href "/accounts/sign-up"
-                 :target "_self"} "Sign Up"]]
-      (if (= sign-in-as-type "parent")
-        [:div.sign-up-link
-         [ui/link {:href "/accounts/sign-in/admin"
-                   :target "_self"} "Sign In As Admin"]]
-        [:div.sign-up-link
-         [ui/link {:href "/accounts/sign-in/parent"
-                   :target "_self"} "Sign In As Parent"]])]])
-  )
+       "Log In"]]]))

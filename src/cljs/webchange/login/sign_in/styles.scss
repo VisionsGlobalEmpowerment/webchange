@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 64px;
+    gap: 36px;
 
     width: 50%;
     max-width: 500px;
@@ -35,34 +35,48 @@
 	}
     }
 
-    .forgot-password-link {
+    .forgot-password {
 	display: flex;
-	justify-content: end;
+	gap: 10px;
 
-	.bbs--link {
-	    color: #fff;
+	padding: 36px 10px;
 
-	    font-style: normal;
-	    font-weight: 400;
-	    font-size: 13px;
-	}
-    }
+	color: #fff;
 
-    .sign-up-link {
-	display: flex;
-	justify-content: end;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 13px;
 
-	padding: 10px;
-	.bbs--link {
-	    color: #fff;
-
-	    font-style: normal;
-	    font-weight: 600;
-	    font-size: 16px;
+	.forgot-password-link {
+	    margin-top: -4px;
+	    .bbs--link {
+		color: #F5A36C;
+	    }
 	}
     }
 
     .login-button {
         margin-top: 16px;
+    }
+
+    .login-as {
+    	display: flex;
+	gap: 20px;
+
+	.log-in-as-button {
+	    background-color: transparent;
+	    border: 1px solid #FFFFFF;
+	    padding: 0 35px;
+	    cursor: pointer;
+	    
+	    &.log-in-as-button-active {
+		color: #F5A36C;
+		border: 1px solid #F5A36C; //$color-orange;
+	    }
+	}
+    }
+
+    .sign-in-logo {
+	@include bbs--icon-size(234px, 41px);
     }
 }
