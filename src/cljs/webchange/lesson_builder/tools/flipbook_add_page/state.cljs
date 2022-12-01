@@ -237,7 +237,7 @@
   :<- [::layout-type]
   (fn [[db layout-type]]
     (if (and (= layout-type "spread") (not (:can-add-spread? db)))
-      "Can't add spread because you have add number of pages.")))
+      "Can't add spread because you have odd number of pages.")))
 
 (comment
   (-> @(re-frame/subscribe [path-to-db])
