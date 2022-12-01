@@ -21,7 +21,9 @@
       "." (apply get right-expression)
       "dec" (-> right-expression first dec)
       ">" (apply > right-expression)
-      "<" (apply < right-expression))))
+      "<" (apply < right-expression)
+      "str" (apply str right-expression)
+      "first" (apply first right-expression))))
 
 (defn- expression->value
   [db action expression]

@@ -255,13 +255,12 @@
   (fn [{:keys [activity-info]} [_ {:keys [action data common-action?]
                                    :or   {common-action? false}}
                                 {:keys [on-success on-failure]}]]
-    (let [{:keys [slug course-slug]} activity-info]
-      {:dispatch [::warehouse/update-activity
-                  {:course-slug course-slug
-                   :scene-slug  slug
-                   :data        {:common-action? common-action?
-                                 :action         action
-                                 :data           data}}
+    (let [{:keys [id]} activity-info]
+      {:dispatch [::warehouse/activity-template-action
+                  {:activity-id id
+                   :common-action? common-action?
+                   :action         action
+                   :data           data}
                   {:on-success [::call-activity-action-success on-success]
                    :on-failure [::call-activity-action-failure on-failure]}]})))
 

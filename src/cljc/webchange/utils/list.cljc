@@ -105,7 +105,7 @@
 (defn update-by-predicate
   [list predicate & args]
   (let [idx (find-item-position list predicate)]
-    (->> (concat [list idx] args)
+    (->> (concat [(into [] list) idx] args)
          (apply update-nth))))
 
 (defn update-first

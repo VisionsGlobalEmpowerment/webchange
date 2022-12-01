@@ -1331,12 +1331,11 @@
 (re-frame/reg-event-fx
   ::set-teacher-status
   (fn [{:keys [_]} [_ {:keys [teacher-id active]} handlers]]
-    (create-fake-request {:key    :set-teacher-status
-                          :method :put
-                          :uri    (str "/api/teachers/" teacher-id "/status")
-                          :params {:active active}}
-                         handlers
-                         {:delay 2000})))
+    (create-request {:key    :set-teacher-status
+                     :method :put
+                     :uri    (str "/api/teachers/" teacher-id "/status")
+                     :params {:status (if active "active" "inactive")}}
+                    handlers)))
 
 (re-frame/reg-event-fx
   ::load-overall-statistics

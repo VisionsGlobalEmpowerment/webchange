@@ -24,7 +24,22 @@
                    :text  (:text option-text-data)
                    :value (str "option-" option-number)})))
          (reduce (fn [result {:keys [idx text value]}]
-                   (let [option-dialog-name (str action-name "-voice-over-" value)]
+                   (let [option-dialog-name (str action-name "-voice-over-" value)
+                         option-correct-dialog-name (str action-name "-correct-" value)
+                         with-on-correct (fn [result]
+                                           (if (utils/has-correct-answer? form-data)
+                                             result
+                                             (-> result
+                                                 (assoc-in [:actions (keyword option-correct-dialog-name)] {:type               "sequence-data",
+                                                                                                            :data               [{:type "sequence-data"
+                                                                                                                                  :data [{:type "empty" :duration 0}
+                                                                                                                                         {:phrase-text text
+                                                                                                                                          :audio       nil
+                                                                                                                                          :type "animation-sequence"}]}]
+                                                                                                            :phrase-description (str "Response to \"" text "\"")
+                                                                                                            :editor-type        "dialog"})
+                                                 (update-in [:track :nodes] conj {:type      "dialog"
+                                                                                  :action-id option-correct-dialog-name}))))]
                      (-> result
                          (assoc-in [:actions (keyword option-dialog-name)] {:type               "sequence-data",
                                                                             :data               [{:type "sequence-data"
@@ -42,7 +57,8 @@
                                                                             :editor-type        "dialog"})
                          (assoc-in [:actions (keyword action-name) :data 1 :options (keyword value)] {:type "action" :id option-dialog-name})
                          (update-in [:track :nodes] conj {:type      "dialog"
-                                                          :action-id (keyword option-dialog-name)}))))
+                                                          :action-id (keyword option-dialog-name)})
+                         (with-on-correct))))
                  {:actions {(keyword action-name) {:type "sequence-data"
                                                    :data [{:type        "parallel-by-tag"
                                                            :from-params [{:template        activate-tag-template
@@ -58,7 +74,7 @@
                   :track   {:nodes []}}))))
 
 (defn- add-check-correct-answer
-  [{:keys [action-name correct-answers hide-question-name question-id]} form-data data-names]
+  [{:keys [action-name correct-answers hide-question-name question-id option-voice-over-name]} form-data data-names]
   (let [submit (str action-name "-submit")
         on-correct (str action-name "-correct-answer")
         on-correct-dialog (str action-name "-correct-answer-dialog")
@@ -91,8 +107,11 @@
                                                                       :fail    on-wrong}])
 
                                                             (-> form-data utils/has-correct-answer? not)
-                                                            (conj {:type "action"
-                                                                   :id   on-correct})
+                                                            (concat [{:type "action"
+                                                                      :from-expression [{:expression ["str" option-voice-over-name "-correct-" [:first (str "@" question-id)]]
+                                                                                         :action-property "id"}]}
+                                                                     {:type "action"
+                                                                      :id   on-correct}])
 
                                                             :always (concat [{:type    "question-highlight"
                                                                               :id      question-id
@@ -358,7 +377,8 @@
                                       :always (merge-data (add-check-correct-answer {:action-name        check-answers
                                                                                      :correct-answers    correct-answers
                                                                                      :hide-question-name hide-question-name
-                                                                                     :question-id        question-id}
+                                                                                     :question-id        question-id
+                                                                                     :option-voice-over-name option-voice-over-name}
                                                                                     form-data
                                                                                     data-names))
                                       (utils/options-have-voice-over? form-data) (merge-data (create-voice-over-handlers form-data
