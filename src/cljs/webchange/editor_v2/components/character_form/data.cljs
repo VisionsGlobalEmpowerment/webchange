@@ -70,23 +70,27 @@
                  {:name       "Teacher"
                   :value      "teacher"
                   :background (get-background-color {:character "teacher"})
-                  :defaults   {:skin "vaca"}}
+                  :defaults   {:skin "default"
+                               :scale {:x 0.5 :y 0.5}}}
                  {:name       "Student"
                   :value      "student"
                   :background (get-background-color {:character "student"})
-                  :defaults   {:skin "01 Vera_1"}}
+                  :defaults   {:skin "default"
+                               :scale {:x 0.5 :y 0.5}}}
                  {:name       "Guide"
                   :value      "guide"
                   :background (get-background-color {:character "guide"})
-                  :defaults   {:skin "01 mari"}}
+                  :defaults   {:skin "default"
+                               :scale {:x 0.5 :y 0.5}}}
                  {:name       "Sitting character"
                   :value      "vera-sitting"
                   :background (get-background-color {:character "vera-sitting"})
-                  :defaults   {:skin "default"}}])
+                  :defaults   {:skin "default"
+                               :scale {:x 0.5 :y 0.5}}}])
 
-(def single-skin-characters {"teacher" "senoravaca"
-                             "student" "vera"
-                             "guide"   "mari"
+(def single-skin-characters {"teacher" "teacher"
+                             "student" "student"
+                             "guide"   "guide"
                              "vera-sitting" "vera-sitting"
                              "boy-sitting" "boy-sitting"
                              "girl-sitting" "girl-sitting"})

@@ -30,7 +30,7 @@
                (merge initial-data))})))
 
 (defn- form-data->skin-params
-  [{:keys [change-skeleton? character clothes head skin]
+  [{:keys [change-skeleton? character clothes head skin scale]
     :or   {change-skeleton? false}}]
   (let [character-str (str/capitalize character)]
     (-> (cond
@@ -49,14 +49,16 @@
           (data/single-skin-character? character)
           {:name        (data/character->skeleton character)
            :skin-params skin})
-        (assoc :change-skeleton? change-skeleton?))))
+        (assoc :change-skeleton? change-skeleton?
+               :scale scale))))
 
 (defn- character->object-state
-  [{:keys [change-skeleton? name skin-params]}]
+  [{:keys [change-skeleton? name skin-params scale]}]
   (cond-> {}
           change-skeleton? (assoc :name name)
           (string? skin-params) (assoc :skin skin-params)
-          (map? skin-params) (assoc :skin-names skin-params)))
+          (map? skin-params) (assoc :skin-names skin-params)
+          (some? scale) (assoc :scale scale)))
 
 (defn- form-changed!
   [db data]
