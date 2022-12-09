@@ -96,10 +96,6 @@
   [{:keys [answers-number]}]
   (= answers-number "many"))
 
-(defn options-have-voice-over?
-  [{:keys [question-type]}]
-  (not= question-type "thumbs-up-n-down"))
-
 (defn show-check-button?
   [form-data]
   (or (one-correct-answer? form-data)

@@ -12,19 +12,33 @@
                      "arrange-images"        arrange-images/create
                      "thumbs-up-n-down"      thumbs-up-n-down/create})
 
+(defn- option-number->option
+  [option-number {:keys [question-type] :as form-data}]
+  (if (= question-type "thumbs-up-n-down")
+    (let [option-value (-> (get form-data :mark-options)
+                           (get option-number))
+          option-text-name (-> option-value
+                               (str "-text")
+                               (keyword))
+          option-text-data (get form-data option-text-name)]
+      {:idx   (inc option-number)
+       :text  (:text option-text-data)
+       :value option-value})
+    (let [option-number (inc option-number)
+          option-text-name (-> (str "option-" option-number "-text")
+                               (keyword))
+          option-text-data (get form-data option-text-name)]
+      {:idx   option-number
+       :text  (:text option-text-data)
+       :value (str "option-" option-number)})))
+
 (defn- create-voice-over-handlers
   [{:keys [options-number] :as form-data}
    {:keys [action-name text-animation? text-objects-names question-id]}]
   (let [{activate-tag-template   :activate-template
          inactivate-tag-template :inactivate-template} (get-voice-over-tag {:question-id question-id})]
-    (->> (range 1 (inc options-number))
-         (map (fn [option-number]
-                (let [option-text-name (-> (str "option-" option-number "-text")
-                                           (keyword))
-                      option-text-data (get form-data option-text-name)]
-                  {:idx   option-number
-                   :text  (:text option-text-data)
-                   :value (str "option-" option-number)})))
+    (->> (range 0 options-number)
+         (map #(option-number->option % form-data))
          (reduce (fn [result {:keys [idx text value]}]
                    (let [option-dialog-name (str action-name "-voice-over-" value)
                          option-correct-dialog-name (str action-name "-correct-" value)
@@ -54,7 +68,8 @@
                                                                                                                    :animation "color"
                                                                                                                    :fill      45823
                                                                                                                    :data      []}
-                                                                                                                  {:type "animation-sequence"}))]}]
+                                                                                                                  {:type "animation-sequence"
+                                                                                                                   :phrase-placeholder "Enter phrase text"}))]}]
                                                                             :phrase-description (str "Option \"" text "\" voice-over")
                                                                             :editor-type        "dialog"})
                          (assoc-in [:actions (keyword action-name) :data 1 :options (keyword value)] {:type "action" :id option-dialog-name})
@@ -259,7 +274,7 @@
                                                                (utils/one-correct-answer? form-data) (conj {:type "action" :id pick-one-option})
                                                                (utils/many-correct-answers? form-data) (conj {:type "action" :id pick-several-option})
                                                                (utils/show-check-button? form-data) (conj {:type "action" :id update-check-button})
-                                                               (utils/options-have-voice-over? form-data) (conj {:type "action" :id voice-over}))}
+                                                               :always (conj {:type "action" :id voice-over}))}
                (keyword pick-one-option)        {:type "sequence-data"
                                                  :data [{:type "parallel-by-tag"
                                                          :tag  (str "inactivate-options-" question-id)}
@@ -418,11 +433,11 @@
                                                                                      :option-voice-over-name option-voice-over-name}
                                                                                     form-data
                                                                                     data-names))
-                                      (utils/options-have-voice-over? form-data) (merge-data (create-voice-over-handlers form-data
-                                                                                                                         {:action-name        option-voice-over-name
-                                                                                                                          :text-objects-names text-objects-names
-                                                                                                                          :text-animation?    (= question-type "multiple-choice-text")
-                                                                                                                          :question-id        question-id}))
+                                      :always (merge-data (create-voice-over-handlers form-data
+                                                                                      {:action-name        option-voice-over-name
+                                                                                       :text-objects-names text-objects-names
+                                                                                       :text-animation?    (= question-type "multiple-choice-text")
+                                                                                       :question-id        question-id}))
                                       :always (merge-data (create-question form-data
                                                                            data-names
                                                                            (merge {:question-id        question-id
