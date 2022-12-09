@@ -75,11 +75,13 @@
   []
   (let [value @(re-frame/subscribe [::state/answers-number])
         options @(re-frame/subscribe [::state/answers-number-options])
+        show? @(re-frame/subscribe [::state/show-answers-number?])
         handle-change #(re-frame/dispatch [::state/set-answers-number %])]
-    [control-group {:label "How Many Correct Answers?"}
-     [ui/select {:value     value
-                 :on-change handle-change
-                 :options   options}]]))
+    (when show?
+      [control-group {:label "How Many Correct Answers?"}
+       [ui/select {:value     value
+                   :on-change handle-change
+                   :options   options}]])))
 
 (defn correct-answers-one
   []
@@ -114,3 +116,18 @@
         "one" [correct-answers-one]
         "many" [correct-answers-many]
         nil))))
+
+(defn correct-sequence
+  []
+  (let [show? @(re-frame/subscribe [::state/show-correct-sequence?])
+        answer-sequence @(re-frame/subscribe [::state/answers-sequence])
+        handle-change #(re-frame/dispatch [::state/set-answer-sequence-item %1 %2])]
+    (when show?
+      [control-group {:label "Correct Sequence"}
+       [:div.correct-sequence
+        (for [{:keys [idx value options]} answer-sequence]
+          ^{:key idx}
+          [ui/select {:value value
+                      :options options
+                      :on-change (partial handle-change idx)
+                      :placeholder "Choose option"}])]])))

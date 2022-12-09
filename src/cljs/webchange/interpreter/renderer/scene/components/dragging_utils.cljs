@@ -23,7 +23,7 @@
   ([object handler-name]
    (call-handler object handler-name []))
   ([object handler-name event-params]
-   (if-let [handler-data (get-prop object handler-name)]
+   (when-let [handler-data (get-prop object handler-name)]
      (.apply (.-fn handler-data)
              (.-context handler-data)
              event-params))))

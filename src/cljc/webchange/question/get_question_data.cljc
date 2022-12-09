@@ -16,7 +16,7 @@
   {:alias             "New question"
    :question-type     "multiple-choice-image"               ; "multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"
    :layout            "vertical"
-   :answers-number    "many"                                ; "one" "many" "any"
+   :answers-number    "many"                                ; "one" "many" "any" "sequence"
    :correct-answers   ["option-1"]
 
    :task-type         "text"                                ; "text" "image" "text-image" "voice-over"
@@ -67,9 +67,11 @@
         current-data))))
 
 (defn- fix-data
-  [{:keys [mark-options question-type] :as data}]
+  [{:keys [mark-options question-type answers-sequence] :as data}]
   (cond-> data
-          (= question-type "thumbs-up-n-down") (assoc :options-number (count mark-options))))
+          (= question-type "thumbs-up-n-down") (assoc :options-number (count mark-options))
+          (= question-type "arrange-images") (assoc :answers-number "sequence"
+                                                    :correct-answers (vals answers-sequence))))
 
 (defn form->question-data
   [form-data data-version]

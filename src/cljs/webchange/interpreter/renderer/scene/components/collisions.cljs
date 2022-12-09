@@ -24,6 +24,10 @@
 
     (logger/group-end "register collidable" (keyword transition-name))))
 
+(defn get-object
+  [object-name]
+  (-> @objects (get object-name) :object))
+
 (defn reset-objects!
   []
   (reset! objects {}))
@@ -73,7 +77,7 @@
   [target-name {:keys [object-name on-collide-enter on-collide-leave]}]
   (let [interested-names (concat (get on-collide-enter :test [])
                                  (get on-collide-leave :test []))]
-    (and (not (= object-name target-name))
+    (and (not (= (name object-name) target-name))
          (some (fn [name] (test-name name target-name)) interested-names))))
 
 (defn- call-event-handler

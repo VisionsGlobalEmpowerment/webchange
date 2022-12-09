@@ -8,6 +8,7 @@
     [webchange.state.lessons.subs :as lessons]
     [webchange.interpreter.variables.core :as core]
     [webchange.interpreter.variables.expressions :refer [eval-expression]]
+    [webchange.interpreter.renderer.state.scene :as scene]
     [webchange.logger.index :as logger]))
 
 (e/reg-simple-executor :lesson-var-provider ::execute-lesson-var-provider)
@@ -35,9 +36,9 @@
 (e/reg-simple-executor :question-check ::execute-question-check)
 (e/reg-simple-executor :question-pick ::execute-question-pick)
 (e/reg-simple-executor :question-reset ::execute-question-reset)
-(e/reg-simple-executor :question-test ::execute-question-test)
 (e/reg-simple-executor :question-highlight ::execute-question-highlight)
 (e/reg-simple-executor :question-count-answers ::execute-question-count-answers)
+(e/reg-simple-executor :question-arrange ::execute-question-arrange)
 
 
 (re-frame/reg-event-fx
@@ -557,26 +558,65 @@
       (core/set-variable! var-name result)
       {:dispatch (e/success-event action)})))
 
+(defn- remove-sequence-answer
+  [answers value]
+  (remove #(= (:value %) value) answers))
+
+(defn- add-sequence-answer
+  [answers value position old-position]
+  (cond->> answers
+           (and (some? old-position) (> position old-position))
+           (map #(if (and (> (:position %) old-position) (<= (:position %) position))
+                   (update % :position dec)
+                   %))
+
+           (and (some? old-position) (< position old-position))
+           (map #(if (and (< (:position %) old-position) (>= (:position %) position))
+                   (update % :position inc)
+                   %))
+
+           :always
+           (concat [{:value value
+                     :position position}])))
+
+(defn- option-value
+  [value]
+  (if (map? value)
+    (:value value)
+    value))
+
 (re-frame/reg-event-fx
   ::execute-question-pick
-  (fn [{:keys [db]} [_ {:keys [id value restrict-count] :as action}]]
-    (let [current-set (set (core/get-variable id))
-          set-action (if (contains? current-set value)
-                       :uncheck
-                       (if (and (number? restrict-count)
-                                (-> (count current-set) (>= restrict-count)))
-                         :none
-                         :check))
-          new-set (case set-action
-                    :check (conj current-set value)
-                    :uncheck (remove #{value} current-set)
-                    current-set)
-          action-with-params (assoc action :params {:value value})]
-      (core/set-variable! id new-set)
-      (case set-action
-        :check (e/cond-handler db action-with-params :on-check)
-        :uncheck (e/cond-handler db action-with-params :on-uncheck)
-        {:dispatch (e/success-event action)}))))
+  (fn [{:keys [db]} [_ {:keys [id value restrict-count position] :as action}]]
+    (if (some? position)
+      (let [answers (core/get-variable id)
+            current-position (or (->> answers
+                                      (filter #(= (:value %) value))
+                                      first
+                                      :position)
+                                 (count answers))
+            answers (-> answers
+                        (remove-sequence-answer value)
+                        (add-sequence-answer value position current-position))]
+        (core/set-variable! id answers)
+        {:dispatch (e/success-event action)})
+      (let [current-set (set (core/get-variable id))
+            set-action (if (contains? current-set value)
+                         :uncheck
+                         (if (and (number? restrict-count)
+                                  (-> (count current-set) (>= restrict-count)))
+                           :none
+                           :check))
+            new-set (case set-action
+                      :check (conj current-set value)
+                      :uncheck (remove #{value} current-set)
+                      current-set)
+            action-with-params (assoc action :params {:value value})]
+        (core/set-variable! id new-set)
+        (case set-action
+          :check (e/cond-handler db action-with-params :on-check)
+          :uncheck (e/cond-handler db action-with-params :on-uncheck)
+          {:dispatch (e/success-event action)})))))
 
 (re-frame/reg-event-fx
   ::execute-question-reset
@@ -600,15 +640,6 @@
         (e/cond-handler db action :fail)))))
 
 (re-frame/reg-event-fx
-  ::execute-question-test
-  [e/event-as-action e/with-vars]
-  (fn [{:keys [db]} {:keys [id value] :as action}]
-    (let [current-set (set (core/get-variable id))]
-      (if (contains? current-set value)
-        (e/cond-handler db action :success)
-        (e/cond-handler db action :fail)))))
-
-(re-frame/reg-event-fx
   ::execute-question-highlight
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
@@ -618,11 +649,11 @@
           incorrect-values (clojure.set/difference current-value answer-value)]
       {:dispatch-n (concat (map (fn [correct-value]
                                   [::e/execute-action (-> (e/get-action success db)
-                                                          (assoc :params {:value correct-value}))])
+                                                          (assoc :params {:value (option-value correct-value)}))])
                                 correct-values)
                            (map (fn [incorrect-value]
                                   [::e/execute-action (-> (e/get-action fail db)
-                                                          (assoc :params {:value incorrect-value}))])
+                                                          (assoc :params {:value (option-value incorrect-value)}))])
                                 incorrect-values)
                            [(e/success-event action)])})))
 
@@ -637,4 +668,21 @@
         (= current-count answer-count) (e/cond-handler db action :full)
         (< current-count answer-count) (e/cond-handler db action :partial)
         (> current-count answer-count) (e/cond-handler db action :overfull)
-        :default {:dispatch (e/success-event action)}))))
+        :else {:dispatch (e/success-event action)}))))
+
+(re-frame/reg-event-fx
+  ::execute-question-arrange
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [_db]} {:keys [id options placeholders] :as action}]
+    (let [positions (core/get-variable id)
+          answer->point (fn [{:keys [value position]}]
+                          (let [option-name (get options (keyword value))
+                                point (-> (get placeholders position)
+                                          (get :offset))]
+                            {:option-name option-name
+                             :point point}))
+          events (->> positions
+                      (map answer->point)
+                      (map (fn [{:keys [option-name point]}]
+                             [::scene/set-scene-object-state (keyword option-name) {:position point}])))]
+      {:dispatch-n (concat events [(e/success-event action)])})))

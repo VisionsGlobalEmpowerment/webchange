@@ -19,7 +19,7 @@
 
      :elements-gap              56
      :elements-gap-big          128
-     :footer-margin             128
+     :footer-margin             64
      :mark-options-list-height  200
 
      :content-width             content-width
@@ -53,6 +53,74 @@
                            (* 0.5))
         list-margin-y (->> (- container-height item-height)
                            (* 0.5))]
+    (->> (range options-number)
+         (map (fn [idx]
+                [(inc idx)
+                 {:x      (->> (+ item-width item-margin) (* idx) (+ list-margin-x))
+                  :y      list-margin-y
+                  :width  item-width
+                  :height item-height}]))
+         (into {}))))
+
+(defn- get-options-layout--arrange-image
+  [{container-width :width container-height :height} {:keys [options-number]}]
+  (let [item-sides-ratio 1.3958
+        item-margin-ratio 0.2
+        item-max-width 384
+        item-max-height 268
+
+        item-width-calculated (->> (+ options-number
+                                      (* options-number item-margin-ratio)
+                                      (- item-margin-ratio))
+                                   (/ container-width)
+                                   (min item-max-width))
+        item-height-calculated (* item-width-calculated item-sides-ratio)
+        item-height-fixed (min item-height-calculated item-max-height container-height)
+
+        [item-width item-height] (if (< item-height-fixed item-height-calculated)
+                                   [(/ item-height-fixed item-sides-ratio) item-height-fixed]
+                                   [item-width-calculated item-height-calculated])
+        item-margin (* item-width item-margin-ratio)
+
+        list-margin-x (->> (+ (* item-width options-number)
+                              (* item-margin (dec options-number)))
+                           (- container-width)
+                           (* 0.5))
+        list-margin-y (- container-height item-height)]
+    (->> (range options-number)
+         (map (fn [idx]
+                [(inc idx)
+                 {:x      (->> (+ item-width item-margin) (* idx) (+ list-margin-x))
+                  :y      list-margin-y
+                  :width  item-width
+                  :height item-height}]))
+         (into {}))))
+
+(defn- get-placeholders-layout--arrange-image
+  [{container-width :width container-height :height} {:keys [options-number]}]
+  (let [item-sides-ratio 1.3958
+        item-margin-ratio 0.4
+        item-max-width 384
+        item-max-height 268
+
+        item-width-calculated (->> (+ options-number
+                                      (* options-number item-margin-ratio)
+                                      (- item-margin-ratio))
+                                   (/ container-width)
+                                   (min item-max-width))
+        item-height-calculated (* item-width-calculated item-sides-ratio)
+        item-height-fixed (min item-height-calculated item-max-height container-height)
+
+        [item-width item-height] (if (< item-height-fixed item-height-calculated)
+                                   [(/ item-height-fixed item-sides-ratio) item-height-fixed]
+                                   [item-width-calculated item-height-calculated])
+        item-margin (* item-width item-margin-ratio)
+
+        list-margin-x (->> (+ (* item-width options-number)
+                              (* item-margin (dec options-number)))
+                           (- container-width)
+                           (* 0.5))
+        list-margin-y 0]
     (->> (range options-number)
          (map (fn [idx]
                 [(inc idx)
@@ -380,6 +448,16 @@
                                               (merge layout
                                                      {:options-items (get-options-layout--text options-container form-data)}))
                                nil)
+      "arrange-images" (case task-type
+                         "text" (let [{:keys [options-container] :as layout} (get-task-layout--text form-data layout-params)]
+                                  (merge layout
+                                         {:options-items (get-options-layout--arrange-image options-container form-data)
+                                          :placeholder-items (get-placeholders-layout--arrange-image options-container form-data)}))
+                         "voice-over" (let [{:keys [options-container] :as layout} (get-task-layout--voice-over form-data layout-params)]
+                                        (merge layout
+                                               {:options-items (get-options-layout--arrange-image options-container form-data)
+                                                :placeholder-items (get-placeholders-layout--arrange-image options-container form-data)}))
+                         nil)
       "thumbs-up-n-down" (case task-type
                            "text" (let [{:keys [options-container] :as layout} (get-task-layout--thumbs-up-n-down--text form-data layout-params)]
                                     (merge layout

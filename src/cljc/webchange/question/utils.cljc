@@ -79,9 +79,13 @@
   [{:keys [task-type]}]
   (some #{task-type} ["text" "text-image"]))
 
+(defn sequence-correct-answer?
+  [{:keys [answers-number]}]
+  (some #{answers-number} ["sequence"]))
+
 (defn has-correct-answer?
   [{:keys [answers-number]}]
-  (some #{answers-number} ["one" "many"]))
+  (some #{answers-number} ["one" "many" "sequence"]))
 
 (defn one-correct-answer?
   [{:keys [answers-number]}]

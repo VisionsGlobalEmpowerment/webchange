@@ -2,12 +2,14 @@
   (:require
     [webchange.question.create-multiple-choice-image :as multiple-choice-image]
     [webchange.question.create-multiple-choice-text :as multiple-choice-text]
+    [webchange.question.create-arrange-images :as arrange-images]
     [webchange.question.create-thumbs-up-n-down :as thumbs-up-n-down]
     [webchange.question.get-question-data :refer [param-name->object-name]]
     [webchange.question.utils :refer [get-voice-over-tag merge-data] :as utils]))
 
 (def question-types {"multiple-choice-image" multiple-choice-image/create
                      "multiple-choice-text"  multiple-choice-text/create
+                     "arrange-images"        arrange-images/create
                      "thumbs-up-n-down"      thumbs-up-n-down/create})
 
 (defn- create-voice-over-handlers
@@ -113,15 +115,23 @@
                                                                      {:type "action"
                                                                       :id   on-correct}])
 
-                                                            :always (concat [{:type    "question-highlight"
-                                                                              :id      question-id
-                                                                              :answer  correct-answers
-                                                                              :success highlight-correct
-                                                                              :fail    highlight-default}
-                                                                             {:type            "question-reset"
-                                                                              :id              question-id
-                                                                              :incorrect-only? true
-                                                                              :answer          correct-answers}]))}
+                                                            (-> form-data utils/sequence-correct-answer? not)
+                                                            (concat [{:type    "question-highlight"
+                                                                      :id      question-id
+                                                                      :answer  correct-answers
+                                                                      :success highlight-correct
+                                                                      :fail    highlight-default}
+                                                                     {:type            "question-reset"
+                                                                      :id              question-id
+                                                                      :incorrect-only? true
+                                                                      :answer          correct-answers}])
+
+                                                            (-> form-data utils/sequence-correct-answer?)
+                                                            (concat [{:type    "question-highlight"
+                                                                      :id      question-id
+                                                                      :answer  correct-answers
+                                                                      :success highlight-default
+                                                                      :fail    highlight-default}]))}
 
                (keyword on-correct)          {:type "sequence-data"
                                               :data [{:type "action" :id on-correct-sound}
@@ -226,9 +236,16 @@
      :track   {:nodes [{:type      "dialog"
                         :action-id (keyword dialog-name)}]}}))
 
+(defn- option-names->values
+  [options]
+  (->> options 
+       (map (fn [[idx name]]
+              [(str "option-" idx) name]))
+       (into {})))
+
 (defn- create-option-click-handler
-  [question-id {:keys [correct-answers] :as form-data} data-names]
-  (let [{:keys [click-handler voice-over]} (get-in data-names [:options :actions])
+  [question-id {:keys [correct-answers] :as form-data} data-names option-objects-names]
+  (let [{:keys [click-handler drop-handler voice-over]} (get-in data-names [:options :actions])
 
         pick-one-option (str click-handler "--pick-one-option")
         pick-several-option (str click-handler "--pick-several-option")
@@ -259,6 +276,18 @@
                                                          :from-params    [{:action-property "value" :param-property "value"}]
                                                          :on-check       highlight-option
                                                          :on-uncheck     unhighlight-option}]}
+               (keyword drop-handler)            {:type "sequence-data"
+                                                  :data [{:type "question-pick"
+                                                          :id question-id
+                                                          :from-expression [{:expression ["." "#placeholder" ":position"]
+                                                                             :action-property "position"}
+                                                                            {:expression "#value"
+                                                                             :action-property "value"}]}
+                                                         {:type "question-arrange"
+                                                          :id question-id
+                                                          :options (option-names->values option-objects-names)
+                                                          :from-expression [{:expression "#placeholders" :action-property "placeholders"}]}
+                                                         {:type "action" :id update-check-button}]}
                (keyword update-check-button)    {:type "sequence-data"
                                                  :data [{:type "set-variable" :var-name "check-button-enabled" :var-value false}
                                                         (if (utils/has-correct-answer? form-data)
@@ -312,6 +341,7 @@
                                               :set-ready     (str object-name "-check-button-set-ready")
                                               :set-submitted (str object-name "-check-button-set-submitted")}}
                      :options      {:actions {:click-handler (str action-name "-option-click-handler")
+                                              :drop-handler  (str action-name "-option-drop-handler")
                                               :voice-over    option-voice-over-name}}
                      :dialogs      {:finish finish-dialog}}
 
@@ -325,6 +355,13 @@
                                         [option-idx (-> (str "options-option-" (dec option-idx) "-text")
                                                         (param-name->object-name question-id))]))
                                  (into {}))
+
+         option-objects-names (->> (range options-number)
+                                   (map inc)
+                                   (map (fn [option-idx]
+                                          [option-idx (-> (str "options-option-" option-idx)
+                                                          (param-name->object-name question-id))]))
+                                   (into {}))
 
          question-data (merge {:alias       alias
                                :action-name action-name
@@ -373,7 +410,7 @@
                                                           :action-id (keyword task-dialog-name)}]}
                                        :objects {}
                                        :assets  []}
-                                      :always (merge-data (create-option-click-handler question-id form-data data-names))
+                                      :always (merge-data (create-option-click-handler question-id form-data data-names option-objects-names))
                                       :always (merge-data (add-check-correct-answer {:action-name        check-answers
                                                                                      :correct-answers    correct-answers
                                                                                      :hide-question-name hide-question-name

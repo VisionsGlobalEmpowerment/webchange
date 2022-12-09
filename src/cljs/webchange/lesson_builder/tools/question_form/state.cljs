@@ -22,7 +22,7 @@
 
 (def form-data-key :form-data)
 
-(defn- get-form-data
+(defn get-form-data
   [db]
   (get db form-data-key))
 

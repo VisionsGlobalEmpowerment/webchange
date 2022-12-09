@@ -15,4 +15,5 @@
       [q/answers-number]
       [q/options-number]
       [q/mark-options]
-      [q/correct-answers]]]))
+      [q/correct-answers]
+      [q/correct-sequence]]]))

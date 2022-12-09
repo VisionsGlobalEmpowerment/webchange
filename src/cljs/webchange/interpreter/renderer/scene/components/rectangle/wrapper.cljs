@@ -38,6 +38,12 @@
   (create-wrapper {:name                 name
                    :type                 type
                    :object               object
+                   :set-highlight           (fn [highlight]
+                                              (let [highlight-filter-set (f/has-filter-by-name object "glow")]
+                                                (when (and (not highlight) highlight-filter-set)
+                                                  (f/set-filter object "" {}))
+                                                (when (and highlight (not highlight-filter-set))
+                                                  (f/set-filter object "glow" {}))))
                    :set-fill             (fn [color]
                                            (aset sprite "tint" color))
                    :get-fill             (fn []

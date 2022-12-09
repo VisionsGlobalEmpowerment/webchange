@@ -1,8 +1,7 @@
 (ns webchange.question.common.option-item
   (:require
     [webchange.question.common.params :as common-params]
-    [webchange.question.utils :refer [merge-data round]]
-    [webchange.question.utils :as utils]))
+    [webchange.question.utils :refer [merge-data round] :as utils]))
 
 (defn- create-substrate
   [{:keys [object-name x y width height actions border-radius use-state]
@@ -110,14 +109,16 @@
 
 (defn create
   [{:keys [image-name text-name value] :as option}
-   {:keys [object-name x y width height question-id question-type correct-option?] :as props}
+   {:keys [object-name x y width height question-id question-type correct-option? placeholders] :as props}
    data-names
    {:keys [highlight-correct-options?]
     :or   {highlight-correct-options? false}}]
   (let [image-option? (or (= question-type "multiple-choice-image")
-                          (= question-type "thumbs-up-n-down"))
+                          (= question-type "thumbs-up-n-down")
+                          (= question-type "arrange-images"))
         text-option? (= question-type "multiple-choice-text")
         mark-option? (= question-type "thumbs-up-n-down")
+        sequence-option? (= question-type "arrange-images")
 
         substrate-name (str object-name "-substrate")
         image-name (str object-name "-" image-name "-group")
@@ -126,16 +127,23 @@
         get-action-name (fn [action-name]
                           (-> object-name (str "-" action-name) (keyword)))
 
-        item-actions {:click (cond-> {:type       "action"
+        item-actions (cond-> {:click {:type       "action"
                                       :on         "click"
                                       :id         (get-in data-names [:options :actions :click-handler])
                                       :params     {:value value}
-                                      :unique-tag common-params/question-action-tag})}]
+                                      :unique-tag common-params/question-action-tag}}
+                             sequence-option? (assoc :drop {:type "action"
+                                                            :on "drop"
+                                                            :id (get-in data-names [:options :actions :drop-handler])
+                                                            :pick-event-param ["placeholder" "object-name"]
+                                                            :params {:value value
+                                                                     :placeholders placeholders}}))]
     (cond-> (merge-data {:objects {(keyword object-name) {:type       "group"
                                                           :x          x
                                                           :y          y
                                                           :pivot      {:x 0.5 :y 0.5}
                                                           :transition object-name
+                                                          :actions    item-actions
                                                           :children   (cond-> [substrate-name]
                                                                               image-option? (conj image-name)
                                                                               text-option? (conj text-name)
@@ -196,4 +204,6 @@
             text-option? (merge-data (create-text option
                                                   (merge {:object-name text-name
                                                           :actions     item-actions}
-                                                         (get-content-dimensions props {:h 40 :v 16})))))))
+                                                         (get-content-dimensions props {:h 40 :v 16}))))
+            sequence-option? (assoc-in [:objects (keyword object-name) :drag-n-drop] {:placeholders placeholders
+                                                                                      :params {:value value}}))))

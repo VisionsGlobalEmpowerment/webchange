@@ -8,6 +8,7 @@
 
 (def answers-number-key :answers-number)
 (def correct-answers-key :correct-answers)
+(def answers-sequence-key :answers-sequence)
 (def mark-options-key :mark-options)
 (def options-number-key :options-number)
 (def task-type-key :task-type)
@@ -41,6 +42,8 @@
       :value "multiple-choice-image"}
      {:text  "Multiple choice text"
       :value "multiple-choice-text"}
+     {:text  "Arrange Images"
+      :value "arrange-images"}
      {:text  "Thumbs up & thumbs down"
       :value "thumbs-up-n-down"}]))
 
@@ -73,7 +76,7 @@
   (fn [question-type]
     (let [task-types [{:text           "Text"
                        :value          "text"
-                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]}
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down" "arrange-images"]}
                       {:text           "Image"
                        :value          "image"
                        :question-types ["multiple-choice-text" "thumbs-up-n-down"]}
@@ -82,7 +85,7 @@
                        :question-types ["multiple-choice-text" "thumbs-up-n-down"]}
                       {:text           "Voice-over only"
                        :value          "voice-over"
-                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down"]}]]
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down" "arrange-images"]}]]
       (->> task-types
            (filter (fn [{:keys [question-types]}]
                      (some #{question-type} question-types)))
@@ -130,9 +133,12 @@
 
 (re-frame/reg-sub
   ::show-correct-answers?
+  :<- [::question-type]
   :<- [::answers-number]
-  (fn [answers-number]
-    (not= answers-number "any")))
+  (fn [[question-type answers-number]]
+    (and
+     (not= question-type "arrange-images")
+     (not= answers-number "any"))))
 
 (defn- get-mark-option-text
   [form-data mark-option]
@@ -237,6 +243,12 @@
      {:text  "Any"
       :value "any"}]))
 
+(re-frame/reg-sub
+  ::show-answers-number?
+  :<- [::question-type]
+  (fn [question-type]
+    (not= question-type "arrange-images")))
+
 ;; mark options
 
 (re-frame/reg-sub
@@ -273,3 +285,42 @@
                         (toggle-list-item value checked?))]
       (cond-> {:db (state/update-form-data db mark-options-key new-value)}
               (false? checked?) (assoc :dispatch [::set-correct-answers-many checked? value])))))
+
+;; correct-sequence
+
+(re-frame/reg-sub
+  ::show-correct-sequence?
+  :<- [::question-type]
+  (fn [question-type]
+    (= question-type "arrange-images")))
+
+(re-frame/reg-sub
+  ::answers-sequence
+  :<- [::state/form-data]
+  :<- [::options-number]
+  (fn [[form-data options-number]]
+    (let [options (->> (range options-number)
+                       (map inc)
+                       (map (fn [number]
+                              (let [value-key (-> (str "option-" number "-value") (keyword))
+                                    value (get form-data value-key)]
+                                {:text  (str "Option " number)
+                                 :value value}))))]
+      (->> (range options-number)
+           (map (fn [number]
+                  (let [value-key (-> (str "sequence-" number "-value") (keyword))
+                        value (get-in form-data [answers-sequence-key value-key])]
+                    {:idx number
+                     :value (:value value)
+                     :options options})))))))
+
+(re-frame/reg-event-fx
+  ::set-answer-sequence-item
+  [(i/path state/path-to-db)]
+  (fn [{:keys [db]} [_ idx value]]
+    (let [value-key (-> (str "sequence-" idx "-value") (keyword))
+          new-value (-> (state/get-form-data db)
+                        (get answers-sequence-key {})
+                        (assoc value-key {:value value
+                                          :position idx}))]
+      {:db (state/update-form-data db answers-sequence-key new-value)})))
