@@ -93,8 +93,8 @@ WHERE user_id = :user_id
 -- :name create-activity-stat! :<!
 -- :doc creates a new activity stat record
 INSERT INTO activity_stats
-(user_id, course_id, unique_id, activity_id, data)
-VALUES (:user_id, :course_id, :unique_id, :activity_id, :data)
+(user_id, course_id, unique_id, data)
+VALUES (:user_id, :course_id, :unique_id, :data)
 RETURNING id
 
 -- :name get-user-activity-stats :? :*

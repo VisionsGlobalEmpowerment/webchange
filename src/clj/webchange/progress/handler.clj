@@ -29,12 +29,6 @@
     (-> (core/get-class-profile course-slug (Integer/parseInt class-id))
         handle)))
 
-(defn handle-get-individual-progress
-  [student-id course-id request]
-  (let [user-id (current-user request)]
-    (-> (core/get-individual-progress (Integer/parseInt course-id) (Integer/parseInt student-id))
-        handle)))
-
 (defn handle-complete-progress
   [student-id course-slug request]
   (let [user-id (current-user request)
@@ -56,8 +50,6 @@
 (defroutes progress-routes
   (GET "/api/class-profile/:class-id/course/:course-slug" [class-id course-slug :as request]
        (handle-get-class-profile class-id course-slug request))
-  (GET "/api/individual-profile/:student-id/course/:course-slug" [student-id course-slug :as request]
-       (handle-get-individual-progress student-id course-slug request))
   (GET "/api/courses/:course-slug/current-progress" [course-slug :as request]
        (handle-get-current-progress course-slug request))
   (POST "/api/courses/:course-slug/current-progress" [course-slug :as request]

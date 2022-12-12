@@ -33,8 +33,8 @@
 (defn course-stat-created
   ([] (course-stat-created {}))
   ([options]
-   (let [{student-id :id user-id :user-id class-id :class-id} (f/student-created)
-         {course-id :id course-slug :slug} (f/course-created)
+   (let [{course-id :id course-slug :slug} (f/course-created)
+         {student-id :id user-id :user-id class-id :class-id} (f/student-created {:course-id course-id})
          defaults {:user-id user-id :class-id class-id :course-id course-id :data {:test "test"}}
          data (->> options
                    (merge defaults)
@@ -46,8 +46,9 @@
 (defn activity-stat-created
   ([] (activity-stat-created {}))
   ([options]
-   (let [{student-id :id user-id :user-id} (f/student-created)
-         {course-id :id course-slug :slug} (f/course-created)
+   (let [{course-id :id course-slug :slug} (f/course-created)
+         {student-id :id user-id :user-id} (f/student-created {:course-id course-id})
+         
          defaults {:user-id user-id :course-id course-id :unique-id 11 :activity-id "1-1-1-test" :data {:activity-name "test" :activity 1 :lesson 1 :level 1 :test "test"}}
          data (->> options
                    (merge defaults)
@@ -81,9 +82,9 @@
                     f/teacher-logged-in)]
     (handler/dev-handler request)))
 
-(defn get-individual-profile
-  [user-id course-id]
-  (let [url (str "/api/individual-profile/" user-id "/course/" course-id)
+(defn get-class-student-progress
+  [student-id]
+  (let [url (str "/api/class-student/" student-id "/progress")
         request (-> (mock/request :get url)
                     f/teacher-logged-in)]
     (handler/dev-handler request)))

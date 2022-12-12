@@ -70,109 +70,6 @@
      :course-stats course-stats
      :activity-stats activity-stats}))
 
-(defn workflow->grid
-  [levels f]
-  (let [->lesson (fn [idx lesson level] {:name   (str "L" idx)
-                                         :values (map-indexed #(f %1 %2 level idx) (:activities lesson))})
-        ->level (fn [idx level] [idx (map-indexed #(->lesson %1 %2 idx) (:lessons level))])]
-    (->> levels
-         (map-indexed ->level)
-         (into {}))))
-
-(defn- with-lesson-info
-  [stat]
-  (let [[level lesson activity] (str/split (:activity-id stat) #"-")]
-    (-> stat
-        (assoc-in [:data :level] (if (empty? level) 0 (Integer/parseInt level)))
-        (assoc-in [:data :lesson] (if (empty? lesson) 0 (Integer/parseInt lesson)))
-        (assoc-in [:data :activity] (if (empty? activity) 0 (Integer/parseInt activity))))))
-
-(defn- stats->hash
-  [stats]
-  (let [->activity (fn [activity] [(:activity activity) activity])
-        ->lesson (fn [[lesson-id activities]] [lesson-id (->> activities
-                                                              (map ->activity)
-                                                              (into {}))])
-        ->level (fn [[level-id lessons]] [level-id (->> lessons
-                                                        (group-by :lesson)
-                                                        (map ->lesson)
-                                                        (into {}))])]
-    (->> stats
-         (map with-lesson-info)
-         (map :data)
-         (group-by :level)
-         (map ->level)
-         (into {}))))
-
-(defn ->percentage [value] (-> value (* 100) float Math/round))
-
-(defn score->value [score is-scored]
-  (let [correct (-> (:correct score) (or 1))
-        incorrect (-> (:incorrect score) (or 0))]
-    (cond
-      (and score is-scored) (-> correct
-                                (- incorrect)
-                                (/ correct)
-                                ->percentage)
-      (and score) 100
-      :else nil)))
-
-(defn activity->score
-  [stats]
-  (let [hash (stats->hash stats)
-        get-stat (fn [level lesson activity] (-> hash
-                                                 (get level)
-                                                 (get lesson)
-                                                 (get activity)))]
-    (fn [activity-idx {:keys [activity scored]} level lesson]
-      (let [data (get-stat level lesson activity-idx)]
-        {:label      activity
-         :started    (boolean data)
-         :finished   (-> data :score boolean)
-         :percentage (score->value (-> data :score) scored)
-         :value      (score->value (-> data :score) scored)}))))
-
-(defn time->percentage
-  [time expected]
-  (if time
-    (let [default-expected 300
-          expected (or expected default-expected)
-          elapsed (-> time (/ 1000) float Math/round)]
-      (if (> elapsed expected)
-        (-> (/ expected elapsed) ->percentage)
-        100))))
-
-(defn time->value
-  [time]
-  (let [elapsed (-> time (/ 1000) float Math/round)
-        minutes (int (/ elapsed 60))
-        seconds (int (- elapsed (* minutes 60)))]
-    (str minutes "m " seconds "s")))
-
-(defn activity->time
-  [stats]
-  (let [hash (stats->hash stats)
-        get-stat (fn [level lesson activity] (-> hash
-                                                 (get level)
-                                                 (get lesson)
-                                                 (get activity)))]
-    (fn [activity-idx {:keys [activity time-expected]} level lesson]
-      (let [data (get-stat level lesson activity-idx)]
-        {:label      activity
-         :started    (boolean data)
-         :finished   (-> data :score boolean)
-         :percentage (time->percentage (-> data :time-spent) time-expected)
-         :value      (time->value (-> data (:time-spent 0)))}))))
-
-(defn get-individual-progress [course-id student-id]
-  (let [{user-id :user-id} (db/get-student {:id student-id})
-        course-data (-> (db/get-latest-course-version {:course_id course-id})
-                        :data)
-        stats (db/get-user-activity-stats {:user_id user-id :course_id course-id})]
-    [true {:stats  stats
-           :scores (workflow->grid (:levels course-data) (activity->score stats))
-           :times  (workflow->grid (:levels course-data) (activity->time stats))}]))
-
 (defn save-events! [owner-id course-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]
@@ -224,6 +121,15 @@
                      :data
                      (assoc :finished finished)
                      (assoc :next next)
-                     (assoc :user-mode (if navigation "game-with-nav")))]
+                     (assoc :user-mode (when navigation "game-with-nav")))]
     (save-progress! user-id course-slug {:progress progress})
+    (reduce #(do (log/debug "finished" %2)
+                 (events/dispatch {:user-id user-id
+                                   :course-id course-id
+                                   :created-at    (jt/format (jt/offset-date-time))
+                                   :type "activity-finished"
+                                   :unique-id %2
+                                   :time-spent 0})) nil (->> finished
+                                                             (mapcat second)
+                                                             (mapcat second)))
     progress))
