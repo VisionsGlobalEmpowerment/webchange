@@ -44,6 +44,14 @@ $ docker run \
  webchange/webchange-voice-recognition-dev
 ```
 
+```
+docker run --network=host \
+ --mount type=bind,source="$(pwd)",target=/usr/src/app \
+ --mount type=bind,source="$HOME/.m2",target=/root/.m2 \
+ --mount type=bind,source="$HOME/google-cred.json",target=/root/google-cred.json \
+ webchange-voice-recognition-dev
+```
+
 
 
 ### Usefull commands

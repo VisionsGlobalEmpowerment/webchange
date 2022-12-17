@@ -55,7 +55,8 @@
                  [io.djy/ezzmq "0.8.2"]
                  [com.taoensso/tempura "1.2.1"]
                  [com.draines/postal "2.0.5"]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [com.google.cloud/google-cloud-speech "4.2.0"]]
 
   :plugins [[lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]

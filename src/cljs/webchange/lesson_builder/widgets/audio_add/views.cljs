@@ -3,13 +3,8 @@
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.widgets.audio-add.state :as state]
     [webchange.ui.index :as ui]
-    [webchange.ui.widgets.index :as widgets]))
-
-(defn- recording-button
-  []
-  (let [handle-stop-recording #(re-frame/dispatch [::state/stop-recording])]
-    [ui/button {:on-click handle-stop-recording}
-     "Stop Recording"]))
+    [webchange.ui.widgets.index :as widgets]
+    [webchange.utils.languages :refer [language-options]]))
 
 (defn- record-panel
   []
@@ -27,10 +22,12 @@
 
 (defn- upload-file-button
   []
-  (let [handle-change #(re-frame/dispatch [::state/add-audio-asset %])]
+  (let [current-language @(re-frame/subscribe [::state/current-language])
+        handle-change #(re-frame/dispatch [::state/add-audio-asset %])]
+    ^{:key current-language}
     [widgets/file {:type              "audio"
                    :text              "Upload Audio"
-                   :language          "english"
+                   :language          current-language
                    :class-name-button "audio-add--upload-button"
                    :on-change         handle-change}]))
 
@@ -46,10 +43,21 @@
       "Record Voice"]
      [upload-file-button]]))
 
+(defn- language-selector
+  []
+  (let [current-language @(re-frame/subscribe [::state/current-language])
+        handle-select-language #(re-frame/dispatch [::state/select-language %])]
+    [ui/select {:label      "Language"
+                :value      current-language
+                :options    language-options
+                :on-change  handle-select-language
+                :class-name "language-selector" }]))
+
 (defn audio-add
   []
   (let [current-panel @(re-frame/subscribe [::state/current-panel])]
     [:div.widget--audio-add
+     [language-selector]
      (case current-panel
        "recording" [record-panel]
        [index])]))

@@ -2,7 +2,8 @@
   (:require [clojure.string :refer [join]]
             [clojure.java.io :as io]
             [webchange.mq.zero-mq :as mq]
-            [webchange.common.voice-recognition.worker :as vr]
+            [webchange.common.voice-recognition.worker :as vr-old]
+            [webchange.voice-recognizer.worker :as vr]
             [webchange.common.files :as files]
             [config.core :refer [env]]))
 
@@ -25,9 +26,10 @@
     (io/delete-file tmp-dir)))
 
 (defn recognition-worker
-  []
-  (vr/init-models!)
-  (mq/receive :voice-recognition vr/worker))
+  ([] (recognition-worker :google))
+  ([model]
+   (vr/init-recognizer! (keyword model))
+   (mq/receive :voice-recognition vr/worker)))
 
 (def commands
   {"add-model"

@@ -25,4 +25,10 @@
     .record-panel--message {
         @include bbs--noto-14-r;
     }
+    
+    .language-selector {
+	padding-bottom: 8px;
+	flex-direction: row;
+	gap: 16px;
+    }
 }

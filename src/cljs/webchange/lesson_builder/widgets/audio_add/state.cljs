@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.stage-actions :as stage-actions]
+    [webchange.lesson-builder.state :as state]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.audio-recorder-state :as recorder]))
 
@@ -72,7 +73,7 @@
   ::stop-recording-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ file]]
-    (let [language "english"
+    (let [language (:current-language db)
           asset-data {:alias "New record"
                       :date  (.now js/Date)
                       :lang  language}]
@@ -89,7 +90,6 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ asset-data response]]
     (let [asset-data (merge response asset-data)]
-      (print "asset-data" asset-data)
       {:db       (-> db
                      (set-loading false)
                      (set-current-panel "index"))
@@ -101,3 +101,20 @@
   ::add-audio-asset
   (fn [{:keys [_]} [_ data]]
     {:dispatch [::stage-actions/add-asset data]}))
+
+;; language
+
+(re-frame/reg-sub
+  ::current-language
+  :<- [path-to-db]
+  :<- [::state/activity-info]
+  (fn [[db activity-info]]
+    (let [default (:lang activity-info)]
+      (get db :current-language default))))
+
+(re-frame/reg-event-fx
+  ::select-language
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ language]]
+    {:db (-> db
+             (assoc :current-language language))}))

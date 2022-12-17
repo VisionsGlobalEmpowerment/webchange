@@ -7,9 +7,11 @@
 
 (defn init
   []
-    (zero-mq/init-ventilator (get-in zero-mq/queues [:voice-recognition :vent-url]) (get-in zero-mq/queues [:voice-recognition :vent]))
-    (clojure.core.async/thread (zero-mq/sink-receive :voice-recognition vr/sink-callback)))
+  (reset! zero-mq/active true)
+  (zero-mq/init-ventilator (get-in zero-mq/queues [:voice-recognition :vent-url]) (get-in zero-mq/queues [:voice-recognition :vent]))
+  (clojure.core.async/thread (zero-mq/sink-receive :voice-recognition vr/sink-callback)))
 
 
 (defstate zero-mq-init
-          :start (init))
+  :start (init)
+  :stop (reset! zero-mq/active false))

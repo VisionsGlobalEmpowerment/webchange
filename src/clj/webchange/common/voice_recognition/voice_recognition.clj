@@ -3,11 +3,8 @@
     [clojure.data.json :as json]
     [webchange.common.files :as f]
     [webchange.mq.zero-mq :as mq]
-    [clojure.java.shell :refer [sh]]
-    [webchange.common.audio-parser.animation :as animation]
-    [config.core :refer [env]]
-    [clojure.java.io :as io]
-    [webchange.common.audio-parser.converter :refer [get-changed-extension convert-to-wav]]))
+    [clojure.tools.logging :as log]
+    [clojure.java.io :as io]))
 
 (defn get-result-filename
   [file-path]
@@ -18,11 +15,12 @@
 (defn sink-callback
   [result]
   (with-open [wrtr (io/writer (get-result-filename (:file-path result)))]
+    (log/debug "Received recult for " (:file-path result))
     (.write wrtr (json/write-str result))))
 
 (defn try-voice-recognition-audio
   [file-path model]
-  (let [model (or (some #{model} ["english" "spanish"]) "english")]
+  (let [model (or (some #{model} ["english" "spanish" "tamil"]) "english")]
     (mq/send :voice-recognition {:file-path file-path :model model})))
 
 (defn get-subtitles

@@ -6,5 +6,5 @@ java -Djava.library.path=/usr/src/app/ -jar target/webchange.jar add-model engli
 
 java -Djava.library.path=/usr/src/app/ -jar target/webchange.jar add-model spanish https://alphacephei.com/vosk/models/vosk-model-small-es-0.3.zip
 
-wget http://host.webchange.com/dev-gems/libvosk_jni.so
+wget https://host.bluebrickschool.org/dev-gems/libvosk_jni.so
 mv libvosk_jni.so /usr/src/

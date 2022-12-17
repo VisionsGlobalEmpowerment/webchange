@@ -1,4 +1,5 @@
 {:voice-recognition-worker-vent-socket "tcp://host.docker.internal:9090"
  :voice-recognition-worker-sink-socket "tcp://host.docker.internal:9191"
- :core-http-url "http://host.docker.internal:3000/"                 
+ :core-http-url "http://host.docker.internal:3000/"
+ :google-application-credentials       "/root/google-cred.json"
  :voice-recognition-models-dir "/tmp/model"}

@@ -73,8 +73,14 @@
     (core/save-dataset-on-create! course-id scene-slug metadata)))
 
 (comment
-  "define new test course"
-  (def test-course-slug (-> (create-test-course) :slug))
+  (let [scene-id 2009
+        user-id 1]
+    (core/update-activity-template! scene-id user-id))
+
+  (let [scene-id 2009]
+    (-> (core/get-activity-current-version scene-id)
+        
+        ))
   )
 
 

@@ -39,4 +39,13 @@
 
   (-> (core/get-scene-latest-version course-slug-copied scene-slug-origin)
       (get-in [:objects])
-      (select-keys [:page-image-6 :page-47-image-2])))
+      (select-keys [:page-image-6 :page-47-image-2]))
+
+  (let [scene-id 2006]
+    (core/update-activity-template! scene-id t/user-id))
+
+  (let [scene-id 2006]
+    (-> (core/get-activity-current-version 2006)
+        :objects
+        ))
+  )
