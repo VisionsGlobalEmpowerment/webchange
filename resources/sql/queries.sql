@@ -55,7 +55,7 @@ WHERE id = :id
 -- :name find-user-by-email :? :1
 -- :doc retrieves a user record given the email
 SELECT * FROM users
-WHERE email = :email
+WHERE LOWER(email) = LOWER(:email)
 
 -- :name find-user-by-website-id :? :1
 -- :doc retrieves a user record given the website id
