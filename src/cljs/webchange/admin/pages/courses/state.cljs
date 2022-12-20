@@ -114,21 +114,6 @@
     {:dispatch [::routes/redirect :courses]}))
 
 (re-frame/reg-event-fx
-  ::duplicate-course
-  [(i/path path-to-db)]
-  (fn [{:keys [_]} [_ course-id]]
-    {:dispatch [::warehouse/duplicate-course {:course-id course-id} {:on-success [::duplicate-course-success]}]}))
-
-(re-frame/reg-event-fx
-  ::duplicate-course-success
-  [(i/path path-to-db)]
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::warehouse/load-available-courses
-                   {:on-success [::load-courses-success]}]
-                  [::warehouse/load-my-courses
-                   {:on-success [::load-my-courses-success]}]]}))
-
-(re-frame/reg-event-fx
   ::add-course
   (fn [{:keys [_]} [_]]
     {:dispatch [::routes/redirect :course-add]}))
@@ -144,3 +129,53 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db :show-my-global? value)}))
+
+;;duplicate window
+(re-frame/reg-sub
+  ::duplicate-window-state
+  :<- [path-to-db]
+  (fn [db]
+    (get db :duplicate-window-state {:open? false :in-progress false})))
+
+(re-frame/reg-sub
+  ::duplicate-window-selected-language
+  :<- [path-to-db]
+  (fn [db]
+    (get db :duplicate-window-selected-language)))
+
+(re-frame/reg-event-fx
+  ::duplicate-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ course-id lang]]
+    {:db (-> db
+             (assoc :duplicate-window-selected-course course-id)
+             (assoc :duplicate-window-selected-language lang)
+             (assoc :duplicate-window-state {:open? true}))}))
+
+(re-frame/reg-event-fx
+  ::duplicate-window-select-language
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ lang]]
+    {:db (-> db
+             (assoc :duplicate-window-selected-language lang))}))
+
+(re-frame/reg-event-fx
+  ::duplicate-selected-course
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [course-id (:duplicate-window-selected-course db)
+          lang (:duplicate-window-selected-language db)]
+      {:db (assoc-in db [:duplicate-window-state :in-progress] true)
+       :dispatch [::warehouse/duplicate-course {:course-id course-id :data {:lang lang}}
+                  {:on-success [::duplicate-course-success]}]})))
+
+(re-frame/reg-event-fx
+  ::duplicate-course-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (dissoc db :duplicate-window-state)
+     :dispatch-n [[::warehouse/load-available-courses
+                   {:on-success [::load-courses-success]}]
+                  [::warehouse/load-my-courses
+                   {:on-success [::load-my-courses-success]}]]}))
+

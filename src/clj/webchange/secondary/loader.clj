@@ -6,8 +6,7 @@
             [webchange.school.core :as school-core]
             [config.core :refer [env]]
             [webchange.assets.loader :as assets-loader]
-            [clj-http.client :as client]
-            ))
+            [clj-http.client :as client]))
 
 (defn init-secondary!
   [config school-id email password]

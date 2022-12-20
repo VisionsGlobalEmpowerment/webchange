@@ -4,7 +4,8 @@
     [webchange.admin.pages.courses.state :as state]
     [webchange.admin.widgets.page.views :as page]
     [webchange.auth.state :as auth]
-    [webchange.ui.index :as ui]))
+    [webchange.ui.index :as ui]
+    [webchange.utils.languages :refer [language-options]]))
 
 (defn- type-selector
   []
@@ -23,11 +24,30 @@
       "My Courses"
       [ui/chip {:counter (:my courses-counter)}]]]))
 
+(defn- duplicate-window
+  []
+  (let [{:keys [open? in-progress?]} @(re-frame/subscribe [::state/duplicate-window-state])
+        current-language @(re-frame/subscribe [::state/duplicate-window-selected-language])
+        handle-select-language #(re-frame/dispatch [::state/duplicate-window-select-language %])
+        duplicate #(re-frame/dispatch [::state/duplicate-selected-course])
+        close-window #(re-frame/dispatch [::state/close-duplicate-window])]
+    [ui/confirm {:title "Duplicate course?"
+                 :open?        open?
+                 :loading?     in-progress?
+                 :confirm-text "Duplicate course"
+                 :on-confirm   duplicate
+                 :on-cancel    close-window}
+     [ui/select {:label      "Language"
+                 :value      current-language
+                 :options    language-options
+                 :on-change  handle-select-language
+                 :class-name "language-selector"}]]))
+
 (defn- courses-list-item
   [{:keys [id name slug lang metadata]}]
   (let [handle-click #(re-frame/dispatch [::state/open-course slug])
         handle-edit-click #(re-frame/dispatch [::state/edit-course slug])
-        handle-duplicate-click #(re-frame/dispatch [::state/duplicate-course id])
+        handle-duplicate-click #(re-frame/dispatch [::state/duplicate-course id lang])
         course-locked? (get metadata :locked false)
         super-admin? @(re-frame/subscribe [::auth/super-admin?])]
     [ui/list-item {:name     name
@@ -74,4 +94,5 @@
                                       :actions    [{:text     "Add Course"
                                                     :icon     "plus"
                                                     :on-click handle-add-click}]}}
-       [courses-list]])))
+       [courses-list]
+       [duplicate-window]])))

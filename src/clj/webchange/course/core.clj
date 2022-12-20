@@ -1052,7 +1052,9 @@
         [{new-course-id :id}] (db/create-course! localized-course-data)
         original-scenes (db/get-scenes-by-course-id {:course_id course-id})
         new-scenes (->> original-scenes
-                        (map #(duplicate-activity (:id %) % owner-id))
+                        (map #(duplicate-activity (:id %) (assoc %
+                                                                 :lang lang
+                                                                 :status "invisible") owner-id))
                         (map :id))
         scenes-map (zipmap (map :id original-scenes) new-scenes)
         course-data (-> (db/get-latest-course-version {:course_id course-id})
