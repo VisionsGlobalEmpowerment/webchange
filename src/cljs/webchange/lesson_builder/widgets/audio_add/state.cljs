@@ -71,9 +71,10 @@
 
 (re-frame/reg-event-fx
   ::stop-recording-success
-  [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ file]]
-    (let [language (:current-language db)
+  [(re-frame/inject-cofx :activity-info)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-info db]} [_ file]]
+    (let [language (or (:current-language db) (:lang activity-info))
           asset-data {:alias "New record"
                       :date  (.now js/Date)
                       :lang  language}]
@@ -109,8 +110,7 @@
   :<- [path-to-db]
   :<- [::state/activity-info]
   (fn [[db activity-info]]
-    (let [default (:lang activity-info)]
-      (get db :current-language default))))
+    (or (:current-language db) (:lang activity-info))))
 
 (re-frame/reg-event-fx
   ::select-language
