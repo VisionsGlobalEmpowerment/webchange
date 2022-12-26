@@ -19,6 +19,8 @@
   (fn [db]
     (get db path-to-db)))
 
+(comment
+  (-> @(re-frame/subscribe [path-to-db])))
 ;; loading?
 
 (def loading-key :loading?)
@@ -79,12 +81,19 @@
     (get action-data :audio)))
 
 (re-frame/reg-sub
-  ::audio-region
-  (fn [[_ action-path]]
-    (re-frame/subscribe [::action-data action-path]))
-  (fn [action-data]
-    (select-keys action-data [:start :end])))
+  ::initial-region
+  :<- [path-to-db]
+  (fn [db [_ id]]
+    (get-in db [id :initial-region])))
 
+(re-frame/reg-event-fx
+  ::init-region
+  [(re-frame/inject-cofx :activity-data)
+   (i/path path-to-db)]
+  (fn [{:keys [activity-data db]} [_ id action-path]]
+    (let [action-data (get-action-data activity-data action-path)]
+      {:db (-> db
+               (assoc-in [id :initial-region] (select-keys action-data [:start :end])))})))
 ;; volume
 
 (def current-volume-key :volume)
@@ -138,7 +147,7 @@
   ::start-playing
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ id wave]]
-    (call-method wave :play)
+    (call-method wave :play-first)
     {:db (set-play-button db id "play")}))
 
 (re-frame/reg-event-fx
@@ -194,12 +203,13 @@
   ::load-audio-script
   [(re-frame/inject-cofx :activity-data)
    (i/path path-to-db)]
-  (fn [{:keys [activity-data]} [_ id {:keys [action-path audio-url]} {:keys [on-success on-failure]}]]
+  (fn [{:keys [activity-data db]} [_ id {:keys [action-path audio-url]} {:keys [on-success on-failure]}]]
     (let [audio-url (or audio-url
                         (->> action-path
                              (get-action-data activity-data)
                              (get-audio-url)))]
-      {:dispatch [::warehouse/load-audio-script-polled
+      {:db (set-script-data db id nil)
+       :dispatch [::warehouse/load-audio-script-polled
                   {:file audio-url}
                   (cond-> {:on-success [::load-audio-script-success id on-success]}
                           (some? on-failure) (assoc :on-failure on-failure))]})))
@@ -280,7 +290,9 @@
         (let [text (get-action-text action-data)
               region-data (-> (audio-analyzer/get-region-data text audio-script)
                               (with-animation-data action-data text audio-script))]
-          {:db       (set-auto-select-loading db id false)
+          {:db       (-> db
+                         (set-auto-select-loading id false)
+                         (assoc-in [id :initial-region] region-data))
            :dispatch [::set-action-region action-path region-data]})
 
         retry?
@@ -349,7 +361,8 @@
                            :end      end
                            :duration (-> (- end start) (to-precision 2))}
                           (with-animation-data action-data text audio-script))]
-      {:dispatch [::set-action-region action-path region-data]})))
+      {:db (assoc-in db [id :initial-region] region-data)
+       :dispatch [::set-action-region action-path region-data]})))
 
 ;; events
 
@@ -360,7 +373,9 @@
   (fn [{:keys [activity-data db]} [_ id {:keys [action-path]}]]
     (let [action-data (get-action-data activity-data action-path)
           volume (get action-data :volume 1)]
-      {:db (-> db (set-current-volume id volume))})))
+      {:db (-> db
+               (assoc :action-path action-path)
+               (set-current-volume id volume))})))
 
 (re-frame/reg-event-fx
   ::reset

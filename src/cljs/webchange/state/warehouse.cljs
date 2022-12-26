@@ -1363,3 +1363,12 @@
                      :uri    (str "/api/accounts/reset-password-by-email")
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::save-subtitles
+  (fn [{:keys [_]} [_ data handlers]]
+    (create-request {:key    :save-subtitles
+                     :method :put
+                     :uri    (str "/api/assets/subtitles")
+                     :params data}
+                    handlers)))

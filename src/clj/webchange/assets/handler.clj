@@ -1,23 +1,24 @@
 (ns webchange.assets.handler
   (:require
-   [buddy.auth :refer [throw-unauthorized]]
-   [clojure.tools.logging :as log]
-   [clojure.edn :as edn]
-   [clojure.java.io :as io]
-   [compojure.core :refer [GET POST PUT defroutes]]
-   [config.core :refer [env]]
-   [ring.middleware.multipart-params :refer [wrap-multipart-params]]
-   [ring.middleware.params :refer [wrap-params]]
-   [ring.util.response :refer [response]]
-   [webchange.assets.core :as core]
-   [webchange.auth.roles :refer [is-admin?]]
-   [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
-   [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
-   [webchange.common.files :as f]
-   [webchange.common.handler :refer [current-user handle]]
-   [webchange.common.hmac-sha256 :as sign]
-   [webchange.common.image-manipulation :as im]
-   [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles try-voice-recognition-audio]]))
+    [buddy.auth :refer [throw-unauthorized]]
+    [clojure.tools.logging :as log]
+    [clojure.edn :as edn]
+    [clojure.java.io :as io]
+    [compojure.api.sweet :refer [GET POST PUT defroutes]]
+    [config.core :refer [env]]
+    [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+    [ring.middleware.params :refer [wrap-params]]
+    [ring.util.response :refer [response]]
+    [webchange.assets.core :as core]
+    [webchange.auth.roles :refer [is-admin?]]
+    [webchange.common.audio-parser.converter :refer [convert-to-mp3]]
+    [webchange.common.audio-parser.recognizer :refer [try-recognize-audio]]
+    [webchange.common.files :as f]
+    [webchange.common.handler :refer [current-user handle]]
+    [webchange.common.hmac-sha256 :as sign]
+    [webchange.common.image-manipulation :as im]
+    [webchange.common.voice-recognition.voice-recognition :refer [get-subtitles save-subtitles try-voice-recognition-audio]]
+    [webchange.validation.specs.assets :as asset-spec]))
 
 (def types
   {"image" ["jpg" "jpeg" "png"]
@@ -87,7 +88,7 @@
     (try
       (-> [true (get-subtitles file)]
           handle)
-      (catch java.io.FileNotFoundException e
+      (catch java.io.FileNotFoundException _e
         (-> [false {:message "File not found"}]
             handle)))))
 
@@ -104,10 +105,10 @@
       (process-asset type relative-path params)
       (core/store-asset-hash! path)
       (merge
-        {:url  relative-path
-         :type type
-         :size (normalize-size size)}
-        (get-additional-params type path)))))
+       {:url  relative-path
+        :type type
+        :size (normalize-size size)}
+       (get-additional-params type path)))))
 
 (defn upload-asset-by-path [{{:keys [tempfile]} "file" target-path "target-path" :as request}]
   (let [full-path (f/relative->absolute-path target-path)]
@@ -129,16 +130,26 @@
     (handle [true {:message "ok"}])))
 
 (defroutes asset-routes
-           (POST "/api/assets/" request
-             (wrap-multipart-params
-               (fn [request]
-                 (-> request :multipart-params upload-asset response))))
+  (POST "/api/assets/" request
+        (wrap-multipart-params
+         (fn [request]
+           (-> request :multipart-params upload-asset response))))
   (GET "/api/actions/get-subtitles" _ (->> handle-parse-audio-subtitles wrap-params))
   (PUT "/api/assets/retry-voice-recognition" request (handle-retry-voice-recognition request)))
 
+(defroutes asset-api-routes
+  (PUT "/api/assets/subtitles" request
+       :coercion :spec
+       :body [data ::asset-spec/save-subtitles]
+       (let [user-id (current-user request)]
+         (when-not (is-admin? user-id)
+           (throw-unauthorized {:role :educator}))
+         (save-subtitles data)
+         (response {:message "ok"}))))
+
 (defroutes asset-maintainer-routes
-           (POST "/api/assets/by-path/" request
-             (-> (fn [request]
-                   (-> request :multipart-params upload-asset-by-path response))
-                 (wrap-multipart-params)
-                 (sign/wrap-api-with-signature true))))
+  (POST "/api/assets/by-path/" request
+    (-> (fn [request]
+          (-> request :multipart-params upload-asset-by-path response))
+        (wrap-multipart-params)
+        (sign/wrap-api-with-signature true))))

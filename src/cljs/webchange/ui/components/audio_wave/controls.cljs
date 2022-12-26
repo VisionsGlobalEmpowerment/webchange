@@ -4,21 +4,27 @@
     [webchange.ui.components.audio-wave.region-utils :as r]
     [webchange.ui.components.audio-wave.wave-utils :as w]))
 
+(defn- play-first
+  [{:keys [regions wave-surfer]}]
+  (let [first-region (-> @regions first)]
+    (cond
+      (some? first-region) (r/play first-region)
+      (some? @wave-surfer) (w/play @wave-surfer))))
+
 (defn- play
-  [{:keys [region wave-surfer]}]
-  (cond
-    (some? @region) (r/play @region)
-    (some? @wave-surfer) (w/play @wave-surfer)))
+  [{:keys [wave-surfer]}]
+  (some? @wave-surfer) (w/play @wave-surfer))
 
 (defn- stop
   [{:keys [wave-surfer]}]
   (w/stop @wave-surfer))
 
 (defn- rewind
-  [{:keys [region wave-surfer]} direction]
-  (let [time (case direction
-               :start (r/get-start @region)
-               :end (r/get-end @region))]
+  [{:keys [regions wave-surfer]} direction]
+  (let [region (-> @regions first)
+        time (case direction
+               :start (r/get-start region)
+               :end (r/get-end region))]
     (w/scroll-to-time @wave-surfer time)))
 
 (defn- zoom
@@ -29,6 +35,7 @@
 (defn get-controls
   [instances]
   {:play            (partial play instances)
+   :play-first      (partial play-first instances)
    :stop            (partial stop instances)
    :rewind-to-start (partial rewind instances :start)
    :rewind-to-end   (partial rewind instances :end)

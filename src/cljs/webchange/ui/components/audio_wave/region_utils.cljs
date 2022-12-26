@@ -7,6 +7,9 @@
 (def get-start core/get-start)
 (def play core/play)
 (def remove core/remove)
+(def get-id core/get-id)
+(def get-data core/get-data)
+(def set-data core/set-data)
 
 (defn set-prop
   [region prop-name prop-value]
@@ -31,3 +34,24 @@
   (core/set-start region start)
   (core/set-end region end)
   (core/update-render region))
+
+(defn compare-regions
+  [one another]
+  (compare (get-start one) (get-start another)))
+
+(defn get-duration
+  [region]
+  (- (get-end region) (get-start region)))
+
+(defn set-changed
+  [region value]
+  (let [data (-> region
+                 get-data
+                 (assoc :changed value))]
+    (set-data region data)))
+
+(defn is-changed?
+  [region]
+  (-> region
+      get-data
+      (get :changed false)))

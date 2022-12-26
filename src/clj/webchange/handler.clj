@@ -18,7 +18,7 @@
     [ring.middleware.session.memory :as mem]
     [ring.util.response :refer [bad-request header redirect resource-response
                                 response status]]
-    [webchange.assets.handler :refer [asset-maintainer-routes asset-routes]]
+    [webchange.assets.handler :refer [asset-maintainer-routes asset-routes asset-api-routes]]
     [webchange.auth.handler :refer [auth-routes]]
     [webchange.auth.roles :as roles]
     [webchange.auth.website :as website]
@@ -204,20 +204,21 @@
 
 (defroutes app
   (api
-    :exceptions {:handlers {::ex/request-validation request-validation-handler}}
-    (swagger-routes {:ui   "/api-docs"
-                     :data {:info {:title "TabSchools API"}
-                            :tags [{:name "dataset", :description "Dataset APIs"}
-                                   {:name "course", :description "Courses APIs"}]}})
-    website-api-routes
-    editor-api-routes
-    courses-api-routes
-    dataset-api-routes
-    templates-api-routes
-    class-routes
-    accounts-routes
-    course-routes
-    accounts-pages-routes)
+   :exceptions {:handlers {::ex/request-validation request-validation-handler}}
+   (swagger-routes {:ui   "/api-docs"
+                    :data {:info {:title "TabSchools API"}
+                           :tags [{:name "dataset", :description "Dataset APIs"}
+                                  {:name "course", :description "Courses APIs"}]}})
+   website-api-routes
+   editor-api-routes
+   courses-api-routes
+   dataset-api-routes
+   templates-api-routes
+   class-routes
+   accounts-routes
+   course-routes
+   accounts-pages-routes
+   asset-api-routes)
   pages-routes
   animation-routes
   auth-routes

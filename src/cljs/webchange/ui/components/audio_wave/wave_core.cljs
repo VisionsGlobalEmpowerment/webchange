@@ -54,7 +54,7 @@
 
 (defn stop
   [ws]
-  (.stop ^js ws))
+  (.pause ^js ws))
 
 (defn subscribe
   [ws event handler]

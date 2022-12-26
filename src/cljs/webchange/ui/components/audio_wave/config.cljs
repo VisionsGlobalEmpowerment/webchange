@@ -32,14 +32,14 @@
                                                     :right region-handle-style} ;; A set of CSS properties used to style the left and right handle.
                              :prevent-context-menu false    ;; Determines whether the context menu is prevented from being opened.
                              :show-tooltip         true     ;; Enable/disable tooltip displaying start and end times when hovering over region.
-                             ;:channelIdx                    ;; Select channel to draw the region on (if there are multiple channel waveforms).
+                                        ;:channelIdx                    ;; Select channel to draw the region on (if there are multiple channel waveforms).
                              }
 
              ;; https://github.com/katspaugh/wavesurfer.js/blob/master/src/plugin/regions/index.js#L4
              ;; https://wavesurfer-js.org/plugins/regions.html
              :region-plugin {:drag-selection true           ;; Enable creating regions by dragging with the mouse
                              :slop           5              ;; The sensitivity of the mouse dragging
-                             :max-regions    15             ;; Maximum number of regions that may be created by the user at one time.
+                             :max-regions    nil            ;; Maximum number of regions that may be created by the user at one time.
                              }
              ;; https://github.com/katspaugh/wavesurfer.js/blob/master/src/plugin/timeline/index.js#L2
              :time-line     {:height                   10

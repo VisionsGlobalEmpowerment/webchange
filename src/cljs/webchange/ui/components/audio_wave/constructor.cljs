@@ -28,7 +28,7 @@
         wavesurfer (create WaveSurfer (merge (get-config :wave-surfer)
                                              {:container    ws-div
                                               :height       64
-                                              :minPxPerSec  75
+                                              :minPxPerSec  250
                                               :scrollParent true
                                               :plugins      [(create RegionsPlugin
                                                                      (get-config :region-plugin))

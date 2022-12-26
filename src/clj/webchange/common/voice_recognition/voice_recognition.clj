@@ -31,3 +31,35 @@
       (json/read-json)
       :result))
 
+(defn save-subtitles
+  [{:keys [filename result]}]
+  (let [current-transcription (-> filename
+                                  (get-result-filename)
+                                  (slurp)
+                                  (json/read-json)
+                                  (update :history #(or % [])))
+        current-result (:result current-transcription)
+        transcription (-> current-transcription
+                          (update :history concat [current-result])
+                          (assoc :result result))]
+    (-> filename
+        (get-result-filename)
+        (spit (json/write-str transcription)))))
+
+(defn restore-subtitles
+  [filename]
+  (let [current-transcription (-> filename
+                                  (get-result-filename)
+                                  (slurp)
+                                  (json/read-json))
+        result (-> current-transcription :history last)
+        transcription (-> current-transcription
+                          (update :history drop-last)
+                          (assoc :result result))]
+    (-> filename
+        (get-result-filename)
+        (spit (json/write-str transcription)))))
+
+(comment
+  (let [filename "/upload/RBERDYAHTXVEQKUD.mp3"]
+    (restore-subtitles filename)))

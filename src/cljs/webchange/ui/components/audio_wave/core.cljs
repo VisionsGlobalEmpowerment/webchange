@@ -7,58 +7,66 @@
     [webchange.utils.numbers :refer [to-precision]]))
 
 (defn create-region
-  [{:keys [start end]}]
+  [{:keys [start end data]}]
   (->> {:start start
-        :end   end}
+        :end   end
+        :data  data}
        (merge (get-config :region))))
 
-(defn scroll-to-region
-  [{:keys [region wave-surfer]}]
+(defn scroll-to
+  [{:keys [wave-surfer]} {:keys [start]}]
   (cond
-    (nil? @region) (logger/error "Scroll to region: region is not defined")
     (nil? @wave-surfer) (logger/error "Scroll to region: wavesurfer is not defined")
-    :default (->> (r/get-start @region)
-                  (w/scroll-to-time @wave-surfer))))
+    :else (w/scroll-to-time @wave-surfer start)))
 
 (defn add-region
-  [wave-surfer {:keys [start end]}]
+  [wave-surfer {:keys [start end data]}]
   (try
     (if (some? wave-surfer)
       (->> (create-region {:start start
-                           :end   end})
+                           :end   end
+                           :data  data})
            (w/add-region wave-surfer))
       (logger/error "Add region: wavesurfer is not defined"))    
     (catch js/Error e
       (logger/error e))))
 
-(defn remove-current-region
-  [{:keys [region]}]
-  (when (some? @region)
-    (r/remove @region)))
+(defn remove-current-regions
+  [{:keys [regions]}]
+  (when (seq @regions)
+    (doseq [region @regions]
+      (r/remove region))))
 
 (defn region->data
   [region]
   (let [round #(to-precision % 2)
         start (-> (r/get-start region) (round))
         end (-> (r/get-end region) (round))]
-    {:start    start
+    {:id (r/get-id region)
+     :start    start
      :end      end
-     :duration (-> (- end start) (round))}))
+     :duration (-> (- end start) (round))
+     :data     (r/get-data region)}))
 
 (defn update-audio-script
   [{:keys [wave-surfer]} script-data]
   (if (some? @wave-surfer)
-    (let [fixed-script-data (remove #(= "[unk]" (:word %)) script-data)]
+    (let [fixed-script-data (->> script-data
+                                 (remove #(= "[unk]" (:word %)))
+                                 (map #(if (nil? (:word %))
+                                         (assoc % :word "")
+                                         %)))]
       (->> #(w/set-audio-script @wave-surfer fixed-script-data)
            (w/when-ready @wave-surfer)))
     (logger/error "Update audio script: wavesurfer is not defined")))
 
-(defn update-region
-  [{:keys [region] :as instances} region-data]
-  (if (some? @region)
-    (do (r/set-bounds @region region-data)
-        (scroll-to-region instances))
-    (logger/error "Update region: region is not defined")))
+(defn update-regions
+  [{:keys [wave-surfer initial-regions] :as instances} regions-data]
+  (reset! initial-regions regions-data)
+  (remove-current-regions instances)
+  (doseq [region regions-data]
+    (add-region @wave-surfer region))
+  (scroll-to instances (first regions-data)))
 
 (defn handle-paused
   [on-pause]
@@ -66,24 +74,53 @@
     (on-pause)))
 
 (defn handle-region-created
-  [{:keys [region] :as instances} new-region]
-  (remove-current-region instances)
+  [{:keys [regions] :as instances} on-create single-region? new-region]
+  (when single-region?
+    (remove-current-regions instances)
+    (scroll-to instances new-region))
   (r/set-default-style new-region)
-  (reset! region new-region)
-  (scroll-to-region instances))
+  (swap! regions conj new-region)
+  (when (fn? on-create)
+    (-> (region->data new-region)
+        (on-create))))
 
 (defn handle-region-updated
-  [_ on-change region]
+  [{:keys [regions]} _region]
+  (when true
+    (->> @regions
+         (sort r/compare-regions)
+         (reduce (fn [pos current-region]
+                   (when (> pos (r/get-start current-region))
+                     (r/set-bounds current-region {:start pos
+                                                   :end (+ pos (r/get-duration current-region))})
+                     (r/set-changed current-region true))
+                   (r/get-end current-region))))))
+
+(defn handle-region-update-end
+  [{:keys [regions]} on-change region]
   (when (fn? on-change)
     (-> (region->data region)
-        (on-change))))
+        (on-change))
+    (doseq [region @regions]
+      (when (r/is-changed? region)
+        (-> (region->data region)
+            (on-change))
+        (r/set-changed region false)))))
+
+(defn handle-region-click
+  [_ on-select region]
+  (when (fn? on-select)
+    (-> (region->data region)
+        (on-select))))
 
 (defn subscribe-to-events
-  [{:keys [wave-surfer] :as instances} {:keys [on-change on-pause]}]
+  [{:keys [wave-surfer] :as instances} {:keys [on-create on-change on-pause on-select single-region?]}]
   (if (some? @wave-surfer)
     (do (w/subscribe @wave-surfer "pause" (partial handle-paused on-pause))
-        (w/subscribe @wave-surfer "region-created" (partial handle-region-created instances))
-        (w/subscribe @wave-surfer "region-update-end" (partial handle-region-updated instances on-change)))
+        (w/subscribe @wave-surfer "region-created" (partial handle-region-created instances on-create single-region?))
+        (w/subscribe @wave-surfer "region-updated" (partial handle-region-updated instances on-change))
+        (w/subscribe @wave-surfer "region-update-end" (partial handle-region-update-end instances on-change))
+        (w/subscribe @wave-surfer "region-click" (partial handle-region-click instances on-select)))
     (logger/error "Subscribe to events: wavesurfer is not defined")))
 
 (defn destroy

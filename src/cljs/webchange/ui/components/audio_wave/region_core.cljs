@@ -27,3 +27,16 @@
 (defn update-render
   [region]
   (.updateRender ^js region))
+
+(defn get-id
+  [region]
+  (.-id ^js region))
+
+(defn get-data
+  [region]
+  (-> (.-data ^js region)
+      (js->clj)))
+
+(defn set-data
+  [region value]
+  (aset region "data" value))

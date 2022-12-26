@@ -65,17 +65,19 @@
 (defn wave
   [{:keys [id action-path class-name ref]}]
   (let [audio-url @(re-frame/subscribe [::state/audio-url action-path])
-        audio-region @(re-frame/subscribe [::state/audio-region action-path])
+        audio-region @(re-frame/subscribe [::state/initial-region id])
         script-data @(re-frame/subscribe [::state/script-data id])
         handle-change #(re-frame/dispatch [::state/set-action-region action-path %])
         handle-ready #(do (re-frame/dispatch [::state/set-loading id false])
+                          (re-frame/dispatch [::state/init-region id action-path])
                           (re-frame/dispatch [::state/load-audio-script id {:action-path action-path}]))
         handle-ref #(reset! ref %)
         handle-stop-playing #(re-frame/dispatch [::state/stop-playing id ref])]
     (when (some? audio-url)
       ^{:key (str action-path "--" audio-url)}
       [ui/audio-wave {:url         audio-url
-                      :region      audio-region
+                      :initial-regions [audio-region]
+                      :single-region? true
                       :script-data script-data
                       :on-change   handle-change
                       :on-pause    handle-stop-playing
@@ -105,39 +107,39 @@
   [{:keys [id]}]
   (let [audio-wave-control (atom nil)]
     (r/create-class
-      {:component-did-mount
-       (fn [this]
-         (re-frame/dispatch [::state/init id (r/props this)]))
+     {:component-did-mount
+      (fn [this]
+        (re-frame/dispatch [::state/init id (r/props this)]))
 
-       :component-will-unmount
-       (fn []
-         (re-frame/dispatch [::state/reset id]))
+      :component-will-unmount
+      (fn []
+        (re-frame/dispatch [::state/reset id]))
 
-       :reagent-render
-       (fn [{:keys [action-path]}]
-         (let [loading? @(re-frame/subscribe [::state/loading? id])]
-           [:div {:class-name (ui/get-class-name {"widget--audio-editor" true})}
-            [wave {:id          id
-                   :action-path action-path
-                   :class-name  "audio-editor--wave"
-                   :ref         audio-wave-control}]
-            (if-not loading?
-              [:<>
-               [zoom {:wave       audio-wave-control
-                      :class-name "audio-editor--zoom"}]
-               [volume {:id          id
-                        :action-path action-path
-                        :class-name  "audio-editor--volume"}]
+      :reagent-render
+      (fn [{:keys [action-path]}]
+        (let [loading? @(re-frame/subscribe [::state/loading? id])]
+          [:div {:class-name (ui/get-class-name {"widget--audio-editor" true})}
+           [wave {:id          id
+                  :action-path action-path
+                  :class-name  "audio-editor--wave"
+                  :ref         audio-wave-control}]
+           (if-not loading?
+             [:<>
+              [zoom {:wave       audio-wave-control
+                     :class-name "audio-editor--zoom"}]
+              [volume {:id          id
+                       :action-path action-path
+                       :class-name  "audio-editor--volume"}]
 
-               [rewind-buttons {:wave       audio-wave-control
-                                :class-name "audio-editor--rewind"}]
-               [play-button {:id         id
-                             :wave       audio-wave-control
-                             :class-name "audio-editor--play"}]
-               [selection-options {:id          id
-                                   :action-path action-path
-                                   :class-name  "audio-editor--options"}]]
-              [ui/loading-overlay])]))})))
+              [rewind-buttons {:wave       audio-wave-control
+                               :class-name "audio-editor--rewind"}]
+              [play-button {:id         id
+                            :wave       audio-wave-control
+                            :class-name "audio-editor--play"}]
+              [selection-options {:id          id
+                                  :action-path action-path
+                                  :class-name  "audio-editor--options"}]]
+             [ui/loading-overlay])]))})))
 
 (defn auto-select-button
   [{:keys [id action-path]}]

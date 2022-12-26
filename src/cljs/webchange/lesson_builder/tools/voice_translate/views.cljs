@@ -5,6 +5,8 @@
     [webchange.lesson-builder.components.block.views :refer [block]]
     [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.tools.voice-translate.state :as state]
+    [webchange.lesson-builder.tools.voice-translate.transcription.views :as transcription]
+    [webchange.lesson-builder.tools.voice-translate.transcription.state :as transcription-state]
     [webchange.lesson-builder.widgets.action-audio-editor.views :refer [action-audio-editor auto-select-button]]
     [webchange.lesson-builder.widgets.audio-add.views :refer [audio-add]]
     [webchange.lesson-builder.widgets.audio-list.views :refer [audio-list]]
@@ -36,18 +38,28 @@
                  :on-click   handle-apply}
       "Apply"]]))
 
+
+
 (defn audio-editor
   []
   (r/with-let [id (get-uid)]
     (let [file-name @(re-frame/subscribe [::state/file-name])
           show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])
-          selected-action @(re-frame/subscribe [::state/selected-action])]
+          selected-action @(re-frame/subscribe [::state/selected-action])
+          audio-url @(re-frame/subscribe [::state/selected-audio])
+          edit-transcription #(re-frame/dispatch [::transcription-state/open-edit-window audio-url])]
       (if show-audio-editor?
         [toolbox {:title   "Audio Editor"
                   :icon    "translate"
                   :text    file-name
-                  :actions [auto-select-button {:id          id
-                                                :action-path selected-action}]}
+                  :class-name "tool--voice-translate--audio-editor"
+                  :actions [:<>
+                            [ui/button {:class-name "edit-transcription-button"
+                                        :shape "rounded"
+                                        :on-click edit-transcription} "Edit"]
+                            [auto-select-button {:id          id
+                                                 :action-path selected-action}]]}
          [action-audio-editor {:id          id
-                               :action-path selected-action}]]
+                               :action-path selected-action}]
+         [transcription/edit-transcription-window]]
         [welcome-translate]))))
