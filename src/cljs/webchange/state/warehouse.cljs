@@ -185,7 +185,7 @@
 
 (defn- with-poll
   [event {:keys [timeout attempts] :or {timeout  (if config/debug? 3000 1000)
-                                        attempts (if config/debug? 3 400)}}]
+                                        attempts (if config/debug? 3 120)}}]
   (re-frame/dispatch (vec (concat [::poll-attempt] event [{:timeout timeout :attempts (dec attempts)}]))))
 
 (re-frame/reg-event-fx
@@ -847,7 +847,7 @@
 
                                      (some? tag) (str "?tag=" tag)
                                      (some? type) (str "?type=" type)
-                                     (not (empty? tags)) (str "?tags=" (clojure.string/join "," tags)))}
+                                     (seq tags) (str "?tags=" (clojure.string/join "," tags)))}
                     handlers)))
 
 (re-frame/reg-event-fx
