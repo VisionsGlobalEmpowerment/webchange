@@ -17,7 +17,8 @@
 (def languages (-> (map #(assoc % :metadata {:primary? true})
                         [{:name "English" :value "english"}
                          {:name "Spanish" :value "spanish"}
-                         {:name "Tamil" :value "tamil"}])
+                         {:name "Tamil" :value "tamil"}
+                         {:name "Sepedi" :value "sepedi"}])
                    #_(concat [{:name "Alur" :value "alur"}
                               {:name "Afrikaans" :value "afrikaans"}
                               {:name "Amharic" :value "amharic"}
@@ -76,7 +77,6 @@
                               {:name "Runyoro" :value "runyoro"}
                               {:name "Runyoro-Rutooro" :value "runyoro-rutooro"}
                               {:name "Rutooro" :value "rutooro"}
-                              {:name "Sepedi" :value "sepedi"}
                               {:name "Sesotho" :value "sesotho"}
                               {:name "Setswana" :value "setswana"}
                               {:name "SiLozi" :value "si-lozi"}
