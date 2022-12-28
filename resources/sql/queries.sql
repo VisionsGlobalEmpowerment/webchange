@@ -2,7 +2,7 @@
 -- :doc creates a new user record
 INSERT INTO users
 (first_name, last_name, email, password, active, created_at, last_login, website_id, type)
-VALUES (:first_name, :last_name, :email, :password, :active, :created_at, :last_login, :website_id, :type)
+VALUES (:first_name, :last_name, LOWER(:email), :password, :active, :created_at, :last_login, :website_id, :type)
 RETURNING id
 
 -- :name update-student-user! :! :n
@@ -14,7 +14,7 @@ WHERE id = :id
 -- :name update-website-user! :! :n
 -- :doc updates an existing user record
 UPDATE users
-SET first_name = :first_name, last_name = :last_name, email = :email
+SET first_name = :first_name, last_name = :last_name, email = LOWER(:email)
 WHERE website_id = :website_id
 
 -- :name set-account-status! :! :n
