@@ -115,42 +115,6 @@
       (assert (= course-events-old course-events-new))
       )))
 
-(deftest can-import-dataset
-  (let [dataset (f/datasets-created)
-        dataset-old (map #(dissoc % :id) (db/get-datasets-by-course  {:course_id (:course-id dataset)}))
-        dump (f/get-school-dump f/default-school-id)]
-    (f/clear-db-fixture #())
-    (f/with-default-school #())
-    (core/process-data dump)
-    (let [dataset-new (map #(dissoc % :id) (db/get-datasets-by-course {:course_id (:course-id dataset)}))]
-      (assert (not (nil? dataset-old)))
-      (assert (= dataset-old dataset-new))
-      )))
-
-(deftest can-import-dataset-item
-  (let [dataset-item (f/dataset-item-created)
-        dataset-item-old (db/get-dataset-item {:id (:id dataset-item)})
-        dump (f/get-school-dump f/default-school-id)]
-    (f/clear-db-fixture #())
-    (f/with-default-school #())
-    (core/process-data dump)
-    (let [dataset-item-new (db/get-dataset-item {:id (:id dataset-item)})]
-      (assert (not (nil? dataset-item-old)))
-      (assert (= dataset-item-old dataset-item-new))
-      )))
-
-(deftest can-import-lesson-set
-  (let [lesson-set (f/lesson-set-created)
-        lesson-set-old (db/get-lesson-set-by-name {:dataset_id (:dataset-id lesson-set) :name (:name lesson-set)})
-        dump (f/get-school-dump f/default-school-id)]
-    (f/clear-db-fixture #())
-    (f/with-default-school #())
-    (core/process-data dump)
-    (let [lesson-set-new (db/get-lesson-set-by-name  {:dataset_id (:dataset-id lesson-set) :name (:name lesson-set)})]
-      (assert (not (nil? lesson-set-old)))
-      (assert (= lesson-set-old lesson-set-new))
-      )))
-
 (deftest can-import-scenes-and-version
   (let [scene-data (f/scene-created)
         scene-old (db/get-scene {:course_id (:course-id scene-data) :name (:name scene-data)})

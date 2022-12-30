@@ -1,11 +1,13 @@
 (ns webchange.server
   (:require [webchange.handler :refer [handler dev-handler]]
+            [clojure.tools.logging :as log]
             [config.core :refer [env]]
             [ring.adapter.jetty :refer [run-jetty]]
             [mount.core :as mount]
             [luminus-migrations.core :as migrations]
             [webchange.dataset.loader :as datasets]
             [webchange.secondary.loader :as secondary]
+            [webchange.secondary.updater :as updater]
             [webchange.assets.loader :as assets]
             [webchange.templates.loader :as templates]
             [webchange.voice-recognizer.loader :as voice-recognizer]
@@ -55,7 +57,8 @@
     (let [port (Integer/parseInt (or (env :port) "3000"))]
       (mount/start)
       (migrations/migrate ["migrate"] (select-keys env [:database-url]))
-      (run-jetty handler {:port port :join? false}))))
+      (let [server (run-jetty handler {:port port :join? false})]
+        (reset! updater/server-instance server)))))
 
 (defn dev [& args]
   (mount/start)

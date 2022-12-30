@@ -23,8 +23,8 @@ active=:active, created_at=:created_at, last_login=:last_login WHERE users.guid=
 -- :name create-or-update-teacher! :! :n
 -- :doc creates a new teacher record
 INSERT INTO teachers
-(user_id, school_id, type, status)
-VALUES (:user_id, :school_id, :type, :status)
+(user_id, school_id, type, status, archived)
+VALUES (:user_id, :school_id, :type, :status, :archived)
 ON CONFLICT ON CONSTRAINT teacher_unique
 DO NOTHING;
 
@@ -35,19 +35,19 @@ DELETE from teachers;
 -- :name create-or-update-student! :! :n
 -- :doc creates a new student record
 INSERT INTO students
-(class_id, user_id, school_id, access_code, gender, date_of_birth)
-VALUES (:class_id, :user_id, :school_id, :access_code, :gender, :date_of_birth)
+(class_id, user_id, school_id, access_code, gender, date_of_birth, archived)
+VALUES (:class_id, :user_id, :school_id, :access_code, :gender, :date_of_birth, :archived)
 ON CONFLICT ON CONSTRAINT student_unique
 DO UPDATE SET school_id=:school_id, access_code=:access_code,
-gender=:gender, date_of_birth=:date_of_birth, class_id=:class_id WHERE students.user_id=:user_id
+gender=:gender, date_of_birth=:date_of_birth, class_id=:class_id, archived=:archived WHERE students.user_id=:user_id
 
 -- :name create-or-update-class! :! :n
 -- :doc creates a new student record
 INSERT INTO classes
-(id, name, school_id, guid)
-VALUES (:id, :name, :school_id, :guid)
+(id, name, school_id, guid, course_id, created_at, archived)
+VALUES (:id, :name, :school_id, :guid, :course_id, :created_at, :archived)
 ON CONFLICT ON CONSTRAINT classes_pkey
-DO UPDATE SET name=:name, school_id=:school_id WHERE classes.id=:id
+DO UPDATE SET name=:name, school_id=:school_id, course_id=:course_id, archived=:archived WHERE classes.id=:id
 
 -- :name reset-classes-seq! :? :1
 SELECT pg_catalog.setval('public.classes_id_seq', (SELECT MAX(id) FROM public.classes), true);
@@ -55,18 +55,18 @@ SELECT pg_catalog.setval('public.classes_id_seq', (SELECT MAX(id) FROM public.cl
 -- :name create-or-update-class-by-guid! :! :n
 -- :doc creates a new student record
 INSERT INTO classes
-(guid, name, school_id)
-VALUES (:guid, :name, :school_id)
+(guid, name, school_id, course_id, archived)
+VALUES (:guid, :name, :school_id, :course_id, :archived)
 ON CONFLICT ON CONSTRAINT class_unique
-DO UPDATE SET name=:name, school_id=:school_id WHERE classes.guid=:guid
+DO UPDATE SET name=:name, school_id=:school_id, course_id=:course_id, archived=:archived WHERE classes.guid=:guid
 
 -- :name create-or-update-courses! :! :n
 -- :doc creates a new course record
-INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id, type)
-VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id, :type)
+INSERT INTO courses (id, name, slug, lang, image_src, status, owner_id, website_user_id, type, metadata)
+VALUES (:id, :name, :slug, :lang, :image_src, :status, :owner_id, :website_user_id, :type, :metadata)
 ON CONFLICT ON CONSTRAINT courses_pkey
 DO UPDATE SET name=:name, slug=:slug, lang=:lang, image_src=:image_src, status=:status,
-owner_id=:owner_id, website_user_id=:website_user_id, type=:type
+owner_id=:owner_id, website_user_id=:website_user_id, type=:type, metadata=:metadata
 WHERE courses.id=:id
 
 -- :name reset-courses-seq! :? :1
@@ -76,6 +76,12 @@ SELECT pg_catalog.setval('public.courses_id_seq', (SELECT MAX(id) FROM public.co
 INSERT INTO scene_skills (scene_id, skill_id)
 VALUES (:scene_id, :skill_id)
 ON CONFLICT ON CONSTRAINT scene_skill_pkey
+DO NOTHING;
+
+-- :name create-or-update-school-course!  :! :n
+INSERT INTO school_courses (school_id, course_id)
+VALUES (:school_id, :course_id)
+ON CONFLICT ON CONSTRAINT school_course_pkey
 DO NOTHING;
 
 -- :name create-or-update-course-versions! :! :n
@@ -130,48 +136,12 @@ DO UPDATE SET data=:data WHERE course_events.guid=:guid;
 SELECT * FROM course_events
 WHERE id = :id
 
--- :name create-or-update-dataset! :! :n
--- :doc creates a new dataset record
-INSERT INTO datasets (id, course_id, name, scheme) VALUES (:id, :course_id, :name, :scheme)
-ON CONFLICT ON CONSTRAINT datasets_pkey
-DO UPDATE SET course_id=:course_id, name=:name, scheme=:scheme
-WHERE datasets.id=:id
-
--- :name reset-dataset-seq! :? :1
--- :doc retrieves a user record given the id
-SELECT pg_catalog.setval('public.datasets_id_seq', (SELECT MAX(id) FROM public.datasets), true);
-
--- :name clear-dataset-items! :! :<!
--- :doc truncate table
-TRUNCATE TABLE dataset_items;
-
--- :name create-or-update-dataset-item-with-id! :! :n
--- :doc creates a new dataset item record
-INSERT INTO dataset_items (id, dataset_id, name, data) VALUES (:id, :dataset_id, :name, :data)
-ON CONFLICT ON CONSTRAINT dataset_items_pkey
-DO UPDATE SET dataset_id=:dataset_id, name=:name, data=:data
-WHERE dataset_items.id=:id
-
--- :name reset-dataset-items-seq! :? :1
-SELECT pg_catalog.setval('public.dataset_items_id_seq', (SELECT MAX(id) FROM public.dataset_items), true);
-
--- :name create-or-update-lesson-set! :! :n
--- :doc creates a new lesson set item record
-INSERT INTO lesson_sets
-(id, name, dataset_id, data)
-VALUES (:id, :name, :dataset_id, :data)
-ON CONFLICT ON CONSTRAINT lesson_sets_pkey
-DO UPDATE SET dataset_id=:dataset_id, name=:name, data=:data
-WHERE lesson_sets.id=:id
-
--- :name reset-lesson-sets-seq! :? :1
-SELECT pg_catalog.setval('public.lesson_sets_id_seq', (SELECT MAX(id) FROM public.lesson_sets), true);
-
 -- :name create-or-update-scene! :! :n
 -- :doc creates a new scene record
-INSERT INTO scenes (id, course_id, name) VALUES (:id, :course_id, :name)
+INSERT INTO scenes (id, course_id, name, slug, lang, image_src, status, owner_id, created_at, updated_at, type, metadata)
+VALUES (:id, :course_id, :name, :slug, :lang, :image_src, :status, :owner_id, :created_at, :updated_at, :type, :metadata)
 ON CONFLICT ON CONSTRAINT scenes_pkey
-DO UPDATE SET course_id=:course_id, name=:name
+DO UPDATE SET course_id=:course_id, name=:name, slug=:slug, lang=:lang, image_src=:image_src, owner_id=:owner_id, created_at=:created_at, updated_at=:updated_at, type=:type, metadata=:metadata
 WHERE scenes.id=:id
 
 -- :name reset-scenes-seq! :? :1
@@ -180,10 +150,10 @@ SELECT pg_catalog.setval('public.scenes_id_seq', (SELECT MAX(id) FROM public.sce
 -- :name create-or-update-scene-version! :! :n
 -- :doc creates a new course version record
 INSERT INTO scene_versions
-(id, scene_id, data, owner_id, created_at)
-VALUES (:id, :scene_id, :data, :owner_id, :created_at)
+(id, scene_id, data, owner_id, created_at, description)
+VALUES (:id, :scene_id, :data, :owner_id, :created_at, :description)
 ON CONFLICT ON CONSTRAINT scene_versions_pkey
-DO UPDATE SET scene_id=:scene_id, data=:data, owner_id=:owner_id, created_at=:created_at
+DO UPDATE SET scene_id=:scene_id, data=:data, owner_id=:owner_id, created_at=:created_at, description=:description
 WHERE scene_versions.id=:id
 
 -- :name reset-scene-versions-seq! :? :1
@@ -323,3 +293,23 @@ DELETE from scene_versions WHERE scene_id=:scene_id;
 -- :doc deletes all scene skills
 DELETE FROM scene_skills
 WHERE scene_id = :scene_id and skill_id = :skill_id;
+
+-- :name create-school-course! :! :n
+-- :doc creates a new school_courses record
+INSERT INTO school_courses
+(school_id, course_id)
+VALUES (:school_id, :course_id)
+
+-- :name clear-school-courses!  :! :<!
+-- :doc removes all school_courses records
+TRUNCATE TABLE school_courses;
+
+-- :name create-course-scene! :! :n
+-- :doc creates a new course_scenes record
+INSERT INTO course_scenes
+(course_id, scene_id)
+VALUES (:course_id, :scene_id)
+
+-- :name clear-course-scenes!  :! :<!
+-- :doc removes all course_scenes records
+TRUNCATE TABLE course_scenes;

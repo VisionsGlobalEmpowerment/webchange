@@ -49,13 +49,13 @@
          user (f/student-created)
          class (db/get-class {:id (:class-id user)})
          update (core/get-stat f/default-school-id)
-         update-new (assoc update :classes [
-                                            {:id (:id class)
+         update-new (assoc update :classes [{:id (:id class)
                                              :guid (.toString (:guid class))
                                              :name name
                                              :school-id (:school-id class)
-                                             }])
-         ]
+                                             :created-at (-> class :created-at (dt/date2str))
+                                             :course-id (:course_id class)
+                                             :archived false}])]
     (core/import-secondary-data! f/default-school-id update-new)
     (let [class-updates (db/get-class {:id (:id class)})]
       (assert (= name (:name class-updates))))))
@@ -173,18 +173,17 @@
                       (assoc upd :course-events (map (fn [stat] (assoc stat :data data)) (:course-events upd))))]
     (core/import-secondary-data! f/default-school-id update)
     (let [updated-course-events (db/find-course-events-by-id  course-events)]
-      (assert (= data (:data updated-course-events))))))
+      (is (= data (:data updated-course-events))))))
 
 (deftest can-remove-course-events
   (let  [course (f/course-created)
          student-user (f/student-created)
          course-events (f/course-events-created {:course-id (:id course) :user-id (:user-id student-user)})
          update (as-> (core/get-stat f/default-school-id) upd
-                      (assoc upd :course-events [])
-                      )]
+                      (assoc upd :course-events []))]
     (core/import-secondary-data! f/default-school-id update)
     (let [updated-course-events (db/find-course-events-by-id  course-events)]
-      (assert (= nil updated-course-events)))))
+      (is (= nil updated-course-events)))))
 
 (deftest can-update-activity-stats
   (let  [data {:hello "data"}

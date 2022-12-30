@@ -26,7 +26,8 @@
     (core/import-secondary-data! (Integer/parseInt id) data)
     response {}))
 
-(defn handle-load-school-sync [id request]
+(defn handle-load-school-sync
+  [id request]
   (if (env :secondary)
     (let [school (db/get-school {:id (Integer/parseInt id)})
           data (-> request :body)]
