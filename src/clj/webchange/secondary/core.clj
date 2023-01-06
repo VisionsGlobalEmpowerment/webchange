@@ -130,11 +130,17 @@
 (defn update-scene!
   [scenes]
   (doseq [scene scenes]
-    (as-> scene s
-          (assoc s :created-at (dt/iso-str2date-time (:created-at s)))
-          (assoc s :updated-at (dt/iso-str2date-time (:updated-at s)))
-          (db/transform-keys-one-level ->snake_case_keyword s)
-          (db/create-or-update-scene! s)))
+    (let [created-at (if (seq (:created-at scene))
+                       (dt/iso-str2date-time (:created-at scene))
+                       (:created-at scene))
+          updated-at (if (seq (:updated-at scene))
+                       (dt/iso-str2date-time (:updated-at scene))
+                       (:updated-at scene))]
+      (as-> scene s
+            (assoc s :created-at created-at)
+            (assoc s :updated-at updated-at)
+            (db/transform-keys-one-level ->snake_case_keyword s)
+            (db/create-or-update-scene! s))))
   (db/reset-scenes-seq!))
 
 (defn update-scene-versions!
@@ -302,6 +308,8 @@
                     (mapcat #(db/get-scenes-by-course-id {:course_id (:id %)}))
                     (concat books)
                     (map #(assoc % :course-id nil))
+                    (map #(update % :created-at (fn [value] (or value (jt/local-date-time)))))
+                    (map #(update % :updated-at (fn [value] (or value (jt/local-date-time)))))
                     (map #(update % :created-at dt/date-time2iso-str))
                     (map #(update % :updated-at dt/date-time2iso-str)))
 

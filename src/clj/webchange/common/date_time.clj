@@ -4,7 +4,10 @@
     [java-time :as jt]))
 
 (defn date-time2iso-str [date]
-  (jt/format "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" date))
+  (try
+    (jt/format "yyyy-MM-dd'T'HH:mm:ss.SSSSSS" date)
+    (catch Exception e
+      (log/warn e))))
 
 (defn date2str [date]
   (jt/format "yyyy-MM-dd" date))
