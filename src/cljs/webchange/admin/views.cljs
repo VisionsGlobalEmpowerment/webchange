@@ -13,24 +13,24 @@
 (defn index
   []
   (r/create-class
-    {:display-name "Admin App Index"
-     :component-did-mount
-     (fn [this]
-       (let [{:keys [route]} (r/props this)]
-         (re-frame/dispatch [::current-user/check-current-user])
-         (routes/init! (:path route))))
+   {:display-name "Admin App Index"
+    :component-did-mount
+    (fn [this]
+      (let [{:keys [route]} (r/props this)]
+        (re-frame/dispatch [::current-user/check-current-user])
+        (routes/init! (:path route))))
 
-     :reagent-render
-     (fn []
-       (let [authenticating? @(re-frame/subscribe [::current-user/in-progress?])
-             {:keys [handler props] :as page-params} @(re-frame/subscribe [::state/current-page])
-             page-component (get pages handler (:404 pages))]
-         (routes/set-title! page-params)
-         [:div#tabschool-admin
-          (if (= handler :login)
-            [page-component props]
-            (if authenticating?
-              [ui/loading-overlay]
-              [layout {:no-padding? (= handler :lesson-builder)}
-               [page-component props]
-               [block-confirm]]))]))}))
+    :reagent-render
+    (fn []
+      (let [authenticating? @(re-frame/subscribe [::current-user/in-progress?])
+            {:keys [handler props] :as page-params} @(re-frame/subscribe [::state/current-page])
+            page-component (get pages handler (:404 pages))]
+        (routes/set-title! page-params)
+        [:div#tabschool-admin
+         (cond
+           (= handler :login) [page-component props]
+           (= handler :update-status) [page-component props]
+           authenticating? [ui/loading-overlay]
+           :else [layout {:no-padding? (= handler :lesson-builder)}
+                  [page-component props]
+                  [block-confirm]])]))}))

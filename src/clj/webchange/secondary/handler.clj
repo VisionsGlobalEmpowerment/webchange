@@ -2,12 +2,15 @@
   (:require [compojure.core :refer [GET POST PUT DELETE defroutes routes]]
             [ring.util.response :refer [file-response bad-request response]]
             [webchange.secondary.core :as core]
+            [webchange.common.handler :refer [current-user]]
+            [webchange.auth.roles :refer [is-admin?]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [clojure.tools.logging :as log]
             [webchange.db.core :refer [*db*] :as db]
             [clojure.data.json :as json]
             [config.core :refer [env]]
             [webchange.secondary.updater :as updater]
+            [webchange.school.core :as school]
             [webchange.common.hmac-sha256 :as sign]))
 
 (defn teacher? [request]
@@ -24,20 +27,16 @@
 (defn handle-load-school-update [id request]
   (let [data (-> request :body slurp (json/read-str :key-fn keyword))]
     (core/import-secondary-data! (Integer/parseInt id) data)
-    response {}))
+    (response {})))
 
 (defn handle-load-school-sync
   [id request]
   (if (env :secondary)
-    (let [school (db/get-school {:id (Integer/parseInt id)})
-          data (-> request :body)]
-      (when-not (teacher? request)
-        (throw-unauthorized {:role :teacher}))
-      (core/upload-stat (:id school))
-      (core/update-course-data! (:id school) (env :requested-courses))
-      (core/update-assets! (:id school) (env :requested-courses) true)
-      (when (:update-and-restart data)
-        (updater/update-local-instance!))
+    (let [school-id (Integer/parseInt id)
+          owner-id (current-user request)]
+      (when-not (or (is-admin? owner-id) (school/school-admin? school-id owner-id))
+        (throw-unauthorized {:role :educator}))
+      (updater/start-sync! school-id)
       (response {:result "Ok"}))
     (bad-request "not a secondary school")))
 
@@ -63,8 +62,14 @@
     (updater/update-local-instance!)
     (bad-request "not a secondary school")))
 
+(defn handle-sync-status
+  [request]
+  (-> (updater/get-sync-status)
+      (response)))
+
 (defroutes local-sync-routes
   (POST "/api/school/sync/:id" [id :as request] (handle-load-school-sync id request))
+  (GET "/api/school/sync-status" request (handle-sync-status request))
   (POST "/api/software/update" request (handle-software-update request)))
 
 (defroutes global-sync-routes

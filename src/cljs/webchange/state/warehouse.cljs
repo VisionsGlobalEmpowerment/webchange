@@ -1372,3 +1372,20 @@
                      :uri    (str "/api/assets/subtitles")
                      :params data}
                     handlers)))
+
+(re-frame/reg-event-fx
+  ::sync-school
+  (fn [{:keys [_]} [_ id data handlers]]
+    (create-request {:key    :sync-school
+                     :method :post
+                     :uri    (str "/api/school/sync/" id)
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::sync-status
+  (fn [{:keys [_]} [_ handlers]]
+    (create-request {:key    :sync-status
+                     :method :get
+                     :uri    (str "/api/school/sync-status")}
+                    handlers)))

@@ -58,6 +58,10 @@
       (mount/start)
       (migrations/migrate ["migrate"] (select-keys env [:database-url]))
       (let [server (run-jetty handler {:port port :join? false})]
+        (try 
+          (updater/resume-sync!)
+          (catch Exception e
+            (log/debug e)))
         (reset! updater/server-instance server)))))
 
 (defn dev [& args]

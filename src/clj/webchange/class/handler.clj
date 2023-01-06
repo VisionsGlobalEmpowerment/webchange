@@ -53,13 +53,15 @@
   ([school-id data request]
    (let [owner-id (current-user request)
          data (assoc data
-                :school-id school-id
-                :type "student")
-         [{user-id :id}] (accounts/create-user! data)]
-     (-> data
-         (assoc :user-id user-id)
-         core/create-student!
-         handle))))
+                     :school-id school-id
+                     :type "student")]
+     (when-not (or (is-admin? owner-id) (school/school-admin? school-id owner-id))
+       (throw-unauthorized {:role :educator}))
+     (let [[{user-id :id}] (accounts/create-user! data)]
+       (-> data
+           (assoc :user-id user-id)
+           core/create-student!
+           handle)))))
 
 (defn handle-update-student
   [id request]

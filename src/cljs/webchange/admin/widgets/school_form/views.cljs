@@ -13,6 +13,10 @@
   []
   (re-frame/dispatch [::state/open-archive-window]))
 
+(defn- show-sync-window
+  []
+  (re-frame/dispatch [::state/open-sync-window]))
+
 (def edit-school-model {:name       {:label "School Name"
                                      :type  :text}
                         :location   {:label   "Location"
@@ -23,6 +27,10 @@
                                      :text  "Copy Link"}
                         :about      {:label "About"
                                      :type  :text-multiline}
+                        :sync    {:label    "Sync School"
+                                  :type     :action
+                                  :icon     "archive"
+                                  :on-click show-sync-window}
                         :archive    {:label    "Archive School"
                                      :type     :action
                                      :icon     "archive"
@@ -51,43 +59,55 @@
        "School successfully sent to archive!"
        "Are you sure you want to archive school?")]))
 
+(defn- sync-window
+  [{:keys [school-id]}]
+  (let [{:keys [open?]} @(re-frame/subscribe [::state/sync-window-state])
+        sync #(re-frame/dispatch [::state/sync-school school-id])
+        close-window #(re-frame/dispatch [::state/close-sync-window])]
+    [ui/confirm {:open?      open?
+                 :confirm-text "Yes"
+                 :on-confirm sync
+                 :on-cancel  close-window}
+     "Are you sure you want to sync school?"]))
+
 (defn edit-school-form
   []
   (r/create-class
-    {:display-name "Edit School Form"
+   {:display-name "Edit School Form"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init (r/props this)]))
+    :component-did-mount
+    (fn [this]
+      (re-frame/dispatch [::state/init (r/props this)]))
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset-form (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset-form (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [class-name editable? on-cancel on-save school-id]}]
-       (let [loading? @(re-frame/subscribe [::state/data-loading?])
-             saving? @(re-frame/subscribe [::state/data-saving?])
-             school-data @(re-frame/subscribe [::state/form-data])
-             login-link @(re-frame/subscribe [::state/login-link])
-             model edit-school-model
-             handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
-         [:<>
-          [ui/form {:form-id    (-> (str "school-" school-id)
-                                    (keyword))
-                    :data       (assoc school-data
-                                  :archive school-id
-                                  :login-link login-link)
-                    :model      model
-                    :spec       ::school-spec/edit-school
-                    :on-save    handle-save
-                    :on-cancel  on-cancel
-                    :disabled?  (not editable?)
-                    :loading?   loading?
-                    :saving?    saving?
-                    :class-name (get-class-name {"widget--school-form" true
-                                                 class-name            (some? class-name)})}]
-          [archive-window {:school-id school-id}]]))}))
+    :reagent-render
+    (fn [{:keys [class-name editable? on-cancel on-save school-id]}]
+      (let [loading? @(re-frame/subscribe [::state/data-loading?])
+            saving? @(re-frame/subscribe [::state/data-saving?])
+            school-data @(re-frame/subscribe [::state/form-data])
+            login-link @(re-frame/subscribe [::state/login-link])
+            model edit-school-model
+            handle-save #(re-frame/dispatch [::state/save % {:on-success on-save}])]
+        [:<>
+         [ui/form {:form-id    (-> (str "school-" school-id)
+                                   (keyword))
+                   :data       (assoc school-data
+                                      :archive school-id
+                                      :login-link login-link)
+                   :model      model
+                   :spec       ::school-spec/edit-school
+                   :on-save    handle-save
+                   :on-cancel  on-cancel
+                   :disabled?  (not editable?)
+                   :loading?   loading?
+                   :saving?    saving?
+                   :class-name (get-class-name {"widget--school-form" true
+                                                class-name            (some? class-name)})}]
+         [archive-window {:school-id school-id}]
+         [sync-window {:school-id school-id}]]))}))
 
 (defn add-school-form
   []

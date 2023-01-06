@@ -12,6 +12,8 @@
 
 (def restart-exit-code 42)
 
+(defonce server-status (atom :initializing))
+
 (defonce server-instance (atom nil))
 
 (defn stop-server
@@ -40,5 +42,28 @@
     (log/debug "About to restart service...")
     (stop-server)))
 
+(defn start-sync!
+  [school-id]
+  (reset! server-status :update-app)
+  (spit "update-content.lock" school-id)
+  (update-local-instance!))
 
+(defn resume-sync!
+  []
+  (if-let [update-content (slurp "update-content.lock")]
+    (try
+      (reset! server-status :update-content)
+      (let [school-id (Integer/parseInt update-content)]
+        (core/upload-stat school-id)
+        (core/update-course-data! school-id (env :requested-courses))
+        (core/update-assets! school-id (env :requested-courses) false)
+        (io/delete-file "update-content.lock" true))
+      (reset! server-status :ready)
+      (catch Exception e
+        (log/debug e)
+        (reset! server-status :error)))
+    (reset! server-status :ready)))
 
+(defn get-sync-status
+  []
+  {:status @server-status})

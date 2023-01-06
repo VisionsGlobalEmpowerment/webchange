@@ -196,6 +196,13 @@
                      (handler request))]
       response)))
 
+(defn wrap-log
+  [handler]
+  (fn [request]
+    (log/debug "Request: " (str "Uri: " (:uri request) " " (:request-method
+                                                            request)))
+    (handler request)))
+
 (defn request-validation-handler
   [e data req]
   (if-let [problems (-> data :problems :clojure.spec.alpha/problems)]
@@ -269,6 +276,7 @@
       wrap-cookies
       wrap-body-as-string
       wrap-connection-close
+      wrap-log
       (middleware/wrap-params)
       (middleware/wrap-format)
       (middleware/wrap-exception)

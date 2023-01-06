@@ -2,6 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
+    [webchange.admin.routes :as routes]
     [webchange.ui.components.form.data :refer [init]]
     [webchange.state.warehouse :as warehouse]))
 
@@ -206,6 +207,40 @@
     (let [success-handler (get-callback db :on-archive)]
       {:dispatch  [::close-archive-window]
        ::callback [success-handler]})))
+
+;; Sync
+(re-frame/reg-sub
+  ::sync-window-state
+  :<- [path-to-db]
+  #(get % :sync-window-state {:open? false}))
+
+(re-frame/reg-event-fx
+  ::open-sync-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :sync-window-state {:open? true})}))
+
+(re-frame/reg-event-fx
+  ::close-sync-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :sync-window-state {:open? false})}))
+
+(re-frame/reg-event-fx
+  ::sync-school
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ school-id]]
+    {:dispatch [::warehouse/sync-school
+                school-id
+                {:update-and-restart true}
+                {:on-success [::sync-school-proceed school-id]
+                 :on-failure [::sync-school-proceed school-id]}]}))
+
+(re-frame/reg-event-fx
+  ::sync-school-proceed
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_]]
+    {:dispatch [::routes/redirect :update-status]}))
 
 ;; Login link
 

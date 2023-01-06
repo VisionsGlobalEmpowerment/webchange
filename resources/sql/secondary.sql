@@ -269,13 +269,13 @@ DELETE from course_versions WHERE id=:id;
 -- :doc deletes dataset by id
 DELETE from datasets WHERE id=:id;
 
--- :name delete-dataset-item-by-id! :! :n
--- :doc deletes dataset-item by id
-DELETE from dataset_items WHERE id=:id;
+-- :name delete-dataset-items-by-dataset-id! :! :n
+-- :doc deletes dataset-items
+DELETE from dataset_items WHERE dataset_id=:dataset_id;
 
--- :name delete-lesson-set-by-id! :! :n
--- :doc deletes lesson-set by id
-DELETE from lesson_sets WHERE id=:id;
+-- :name delete-lesson-sets-by-dataset-id! :! :n
+-- :doc deletes lesson-sets
+DELETE from lesson_sets WHERE dataset_id=:dataset_id;
 
 -- :name delete-scene-by-id! :! :n
 -- :doc deletes scene by id

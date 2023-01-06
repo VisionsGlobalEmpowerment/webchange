@@ -5,10 +5,10 @@
             [webchange.common.files :as f]
             [config.core :refer [env]]
             [mikera.image.core :as imagez]
-            [clojure.tools.logging :as log]))
-
-(import 'java.security.MessageDigest
-        'java.math.BigInteger)
+            [clojure.tools.logging :as log])
+  (:import [java.security MessageDigest]
+           [java.math BigInteger]
+           [java.util.zip CRC32]))
 
 (defn directories
   [config]
@@ -30,7 +30,7 @@
 
 (defn crc32
   [^String string]
-  (let [crc (java.util.zip.CRC32.)
+  (let [crc (CRC32.)
         _ (. crc update (. string getBytes))
         result (str (Long/toHexString (. crc getValue)))
         pad-length (- 8 (count result))]

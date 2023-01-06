@@ -133,7 +133,7 @@
                          (map? data))) %)]}
   (let [course-scenes-slugs (->> courses
                                  (map (fn [course]
-                                        (let [scene-slugs (-> (course/get-course-data course)
+                                        (let [scene-slugs (-> (course/get-course-latest-version course)
                                                               (get :scene-list [])
                                                               (keys))]
                                           (map (fn [scene-slug]
@@ -159,8 +159,8 @@
 (defn migrate-up
   [_]
   (mount/start)
-  (doseq [data (get-scenes-to-update old-template-id courses)]
-    (migrate-scene! data default-page-data new-template-id user-id)))
+  #_(doseq [data (get-scenes-to-update old-template-id courses)]
+      (migrate-scene! data default-page-data new-template-id user-id)))
 
 (defn migrate-down
   [_]

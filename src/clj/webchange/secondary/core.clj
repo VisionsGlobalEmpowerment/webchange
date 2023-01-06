@@ -31,22 +31,20 @@
 
 (defn prepare-users
   [users]
-  (mapv #(let [last-login (dt/iso-str2date-time (:last-login %))
-               created-at (dt/iso-str2date-time (:created-at %))
-               guid (java.util.UUID/fromString (:guid %))]
-           (-> %
-               (assoc :last-login last-login)
-               (assoc :created-at created-at)
-               (assoc :guid guid)))
+  (mapv #(let [guid (java.util.UUID/fromString (:guid %))]
+           (cond-> %
+                   :always (assoc :guid guid)
+                   (seq (:last-login %)) (assoc :last-login (dt/iso-str2date-time (:last-login %)))
+                   (seq (:created-at %)) (assoc :created-at (dt/iso-str2date-time (:created-at %)))))
         users))
 
 (defn prepare-classes
   [classes]
-  (mapv #(let [guid (java.util.UUID/fromString (:guid %))
-               created-at (dt/str2date (:created-at %))]
-           (-> %
-               (assoc :guid guid)
-               (assoc :created_at created-at))) classes))
+  (mapv #(let [guid (java.util.UUID/fromString (:guid %))]
+           (cond-> %
+                   :always (assoc :guid guid)
+                   (seq (:created-at %)) (assoc :created_at (dt/str2date (:created-at %)))))
+        classes))
 
 (defn update-users!
   [users]
@@ -132,7 +130,11 @@
 (defn update-scene!
   [scenes]
   (doseq [scene scenes]
-    (db/create-or-update-scene! (db/transform-keys-one-level ->snake_case_keyword scene)))
+    (as-> scene s
+          (assoc s :created-at (dt/iso-str2date-time (:created-at s)))
+          (assoc s :updated-at (dt/iso-str2date-time (:updated-at s)))
+          (db/transform-keys-one-level ->snake_case_keyword s)
+          (db/create-or-update-scene! s)))
   (db/reset-scenes-seq!))
 
 (defn update-scene-versions!
@@ -298,7 +300,10 @@
         
         scenes (->> courses
                     (mapcat #(db/get-scenes-by-course-id {:course_id (:id %)}))
-                    (concat books))
+                    (concat books)
+                    (map #(assoc % :course-id nil))
+                    (map #(update % :created-at dt/date-time2iso-str))
+                    (map #(update % :updated-at dt/date-time2iso-str)))
 
         scene-versions (->> scenes
                             (map #(db/get-latest-scene-version {:scene_id (:id %)}))
@@ -470,8 +475,7 @@
             course-stats-guid (guid/guids-from-entries (:course-stats data-processed) guid/guid-from-course-stats)
             course-progresses-guid (guid/guids-from-entries (:course-progresses data-processed) guid/guid-from-course-progresses)
             course-events-guid (guid/guids-from-entries (:course-events data-processed) guid/guid-from-course-events)
-            activity-stats-guid (guid/guids-from-entries (:activity-stats data-processed) guid/guid-from-activity-stats)
-            ]
+            activity-stats-guid (guid/guids-from-entries (:activity-stats data-processed) guid/guid-from-activity-stats)]
         (delete-not-in-guid-list users-guid users :guid delete-user)
         (delete-not-in-guid-list classes-guid classes guid/guid-from-class delete-class)
         (delete-not-in-guid-list teachers-guid teachers guid/guid-from-teacher delete-teacher)
@@ -479,8 +483,14 @@
         (delete-not-in-guid-list course-stats-guid course-stats guid/guid-from-course-stats delete-course-stats)
         (delete-not-in-guid-list course-progresses-guid course-progresses guid/guid-from-course-progresses delete-course-progresses)
         (delete-not-in-guid-list course-events-guid course-events guid/guid-from-course-events delete-course-events)
-        (delete-not-in-guid-list activity-stats-guid activity-stats guid/guid-from-activity-stats delete-activity-stats)
-        ))))
+        (delete-not-in-guid-list activity-stats-guid activity-stats guid/guid-from-activity-stats delete-activity-stats)))))
+
+(defn- delete-datasets-by-course-id!
+  [course-id]
+  (doseq [dataset (db/get-datasets-by-course {:course_id course-id})]
+    (db/delete-dataset-items-by-dataset-id! {:dataset_id (:id dataset)})
+    (db/delete-lesson-sets-by-dataset-id! {:dataset_id (:id dataset)})
+    (db/delete-dataset-by-id! {:id (:id dataset)})))
 
 (defn delete-course-by-id!
   [{:keys [id]}]
@@ -490,6 +500,7 @@
   (db/delete-course-progresses-by-course-id! {:course_id id})
   (db/delete-course-events-by-course-id! {:course_id id})
   (db/delete-course-version-by-course-id! {:course_id id})
+  (delete-datasets-by-course-id! id)
   (db/delete-course-by-id! {:id id}))
 
 (defn delete-scene-by-id!
@@ -513,6 +524,8 @@
     (update-scene-skills! scene-skills))
   (when-let [school-courses (:school-courses data)]
     (update-school-courses! school-courses))
+  (when-let [course-scenes (:course-scenes data)]
+    (update-course-scenes! course-scenes))
   (let [courses (db/get-courses)
         scenes (db/get-scenes)
         scene-skills (db/get-scene-skills)
@@ -551,6 +564,13 @@
            file-hash))
        update))
 
+(defn- asset->url
+  [asset]
+  (cond
+    (map? asset) (:url asset)
+    (string? asset) asset
+    :else asset))
+
 (defn- published-upload-assets
   [school-id requested-courses]
   (let [published-course-ids (->> (available-courses school-id requested-courses)
@@ -559,13 +579,19 @@
                            (map #(db/get-course-by-id {:id %}))
                            (map :image-src)
                            (remove empty?))
-        scene-assets (->> published-course-ids
-                          (mapcat #(db/get-scenes-by-course-id {:course_id %}))
+        scenes (->> published-course-ids
+                    (mapcat #(db/get-scenes-by-course-id {:course_id %}))
+                    (concat (db/find-scenes {:type "book" :status "visible"})))
+        
+        scene-previews (->> scenes
+                            (map :image-src)
+                            (remove empty?))
+        scene-assets (->> scenes
                           (map #(db/get-latest-scene-version {:scene_id (:id %)}))
                           (mapcat #(-> % :data :assets))
-                          (map :url)
+                          (map asset->url)
                           (remove nil?))]
-    (->> (concat course-assets scene-assets)
+    (->> (concat course-assets scene-previews scene-assets)
          (filter #(str/starts-with? % "/upload/"))
          (set))))
 
