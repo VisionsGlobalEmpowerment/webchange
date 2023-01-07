@@ -46,14 +46,16 @@
                  :on-change handle-change}]]))
 
 (defn image-form
-  [{:keys [class-name data on-change] :as props}]
+  [{:keys [class-name data on-change add-asset] :as props}]
   (let [{:keys [editable? src]} data
         options (get editable? :edit-form {:scale      true
                                            :flip       true
                                            :image-size false
                                            :visible    false})
 
-        handle-change #(when (fn? on-change) (on-change %))
+        handle-change #(when (fn? on-change)
+                         (on-change %)
+                         (add-asset {:url (:src %) :type "image" :size 1}))
         component-props (merge props
                                {:on-change handle-change})]
     [:div {:class-name (ui/get-class-name {"image-form" true

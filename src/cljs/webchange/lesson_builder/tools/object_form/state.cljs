@@ -73,6 +73,11 @@
       {:db       (update-in db [:objects object-name] merge data-patch)
        :dispatch [::state-renderer/set-scene-object-state object-name data-patch]})))
 
+(re-frame/reg-event-fx
+  ::add-asset
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ asset]]
+    {:db (update db :assets conj asset)}))
 
 (re-frame/reg-event-fx
   ::change-activity-data-object
@@ -129,7 +134,8 @@
   (fn [{:keys [db]} [_ target]]
     {:db       (-> db
                    (assoc :target target)
-                   (assoc :objects {}))
+                   (assoc :objects {})
+                   (assoc :assets []))
      :dispatch-n [[::menu-state/open-component :object-form]
                   [::init-object target]]}))
 
@@ -139,8 +145,9 @@
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_]]
     (let [objects (:objects db)
+          assets (:assets db)
           flipbook? (flipbook-utils/flipbook-activity? activity-data)]
-      {:dispatch-n [[::stage/update-objects {:objects objects}]
+      {:dispatch-n [[::stage/update-objects {:objects objects :assets assets}]
                     [::editor-state/deselect-object]
                     [::menu-state/history-back]
                     (when flipbook?
@@ -153,7 +160,9 @@
   (fn [{:keys [db activity-data]} [_]]
     (let [objects (:objects db)
           has-changes? (-> activity-data :objects (#(select-keys % (keys objects))) (not= objects))]
-      {:db       (assoc db :objects {})
+      {:db       (assoc db
+                        :objects {}
+                        :assets [])
        :dispatch-n [(when has-changes?
                       [::stage-state/reset])]})))
 

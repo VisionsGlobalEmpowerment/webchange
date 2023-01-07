@@ -10,10 +10,12 @@
   [{:keys [class-name target]}]
   (let [object-data @(re-frame/subscribe [::state/object-data target])
         handle-change #(re-frame/dispatch [::state/change-object target %])
+        add-asset #(re-frame/dispatch [::state/add-asset %])
         handle-apply-to-all #(re-frame/dispatch [::state/apply-to-all target])]
     [o/object-form {:data            object-data
                     :class-name      class-name
                     :on-change       handle-change
+                    :add-asset       add-asset
                     :on-apply-to-all handle-apply-to-all}]))
 
 (defn- group-panel

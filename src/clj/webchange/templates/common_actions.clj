@@ -247,6 +247,18 @@
     (-> activity-data
         (assoc-in [:metadata :tracks] updated-tracks))))
 
+(defn- merge-assets
+  [activity-data {:keys [assets]}]
+  (let [existing? (->> activity-data
+                       :assets
+                       (map :url)
+                       (remove nil?)
+                       (set))
+        new (->> assets
+                 (remove #(existing? (:url %))))]
+    (-> activity-data
+        (update :assets concat new))))
+
 (defn update-available-action
   [activity-data {:keys [action-name]} {:keys [alias]}]
   (update-in activity-data [:metadata :available-actions] update-by-predicate #(= (:action %) action-name) assoc :name alias))
@@ -256,12 +268,13 @@
   (let [question-params (get-question-params question-index)
         current-question-data (get-in activity-data [:objects (keyword (:object-name question-params))])
         new-question-data (question-object/create
-                            (form->question-data question-page-object data-version)
-                            question-params)]
+                           (form->question-data question-page-object data-version)
+                           question-params)]
     (-> activity-data
         (merge-objects current-question-data new-question-data)
         (merge-actions current-question-data new-question-data)
         (merge-tracks new-question-data question-params)
+        (merge-assets new-question-data)
         (update-available-action question-params question-page-object))))
 
 (defn- set-animation-settings

@@ -74,17 +74,15 @@
 
 (deftest can-update-file
   (let [filename "test-file"]
-  (mockery/with-mocks
-    [io-copy {:target :webchange.common.files/save-file-from-uri}]
+    (mockery/with-mocks [io-copy {:target :webchange.common.files/save-file-from-uri}]
       (with-global-fake-routes-in-isolation
         {(resources/secondary-asset-difference-resource f/default-school-id)
-        (fn [request] {:status 200 :headers {} :body (json/write-str {:update [{:path filename
-                                                                                :path-hash (assets/md5 filename)}]
-                                                                      :remove []})})}
+         (fn [request] {:status 200 :headers {} :body (json/write-str {:update [{:path filename
+                                                                                 :path-hash (assets/md5 filename)}]
+                                                                       :remove []})})}
 
         (core/update-assets!)
         (is @io-copy {:called? true
                       :call-count 1
                       :call-args [(files/relative->absolute-primary-uri filename)
-                                  (files/relative->absolute-path filename)]})
-      ))))
+                                  (files/relative->absolute-path filename)]})))))

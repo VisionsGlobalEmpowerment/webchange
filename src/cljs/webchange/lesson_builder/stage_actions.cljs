@@ -217,8 +217,10 @@
 (re-frame/reg-event-fx
   ::update-objects
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [objects]}]]
-    (let [updated-activity-data (update activity-data :objects merge objects)]
+  (fn [{:keys [activity-data]} [_ {:keys [objects assets]}]]
+    (let [updated-activity-data (-> activity-data
+                                    (update :objects merge objects)
+                                    (update :assets concat assets))]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 ;; Apply Template Options

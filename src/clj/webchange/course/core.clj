@@ -1120,6 +1120,39 @@
                      :description "Apply Template Options"})
     {:data scene-data}))
 
+(defn- restore-image-assets
+  [activity-data]
+  (let [existing? (->> activity-data
+                       :assets
+                       (map :url)
+                       (remove nil?)
+                       (set))
+        object-images (->> activity-data
+                           :objects
+                           (filter #(= "image" (:type %)))
+                           (map :src)
+                           (remove empty?)
+                           (remove existing?))
+        new-assets (->> object-images
+                        (map (fn [src] {:url src :type "image" :size 1})))]
+    (update activity-data :assets concat new-assets)))
+
+(defn- prepare-assets
+  [assets]
+  (let [prepare-asset (fn [asset] (if (string? asset)
+                                    {:url asset :size 1 :type "image"}
+                                    asset))]
+    (loop [result []
+           processed #{}
+           current (first assets)
+           tail (rest assets)]
+      (if (empty? tail)
+        result
+        (let [{:keys [url] :as prepared} (prepare-asset current)]
+          (if (processed url)
+            (recur result processed (first tail) (rest tail))
+            (recur (conj result prepared) (conj processed url) (first tail) (rest tail))))))))
+
 (defn update-activity-template!
   [activity-id user-id]
   (let [scene-data (get-activity-current-version activity-id)
@@ -1132,8 +1165,9 @@
                      (update :actions merge preserved-actions)
                      (update-preserved-objects scene-data)
                      (update :assets #(->> (concat original-assets %)
-                                           (flatten)
-                                           (distinct))))
+                                           (remove nil?)
+                                           (prepare-assets)))
+                     (restore-image-assets))
         created-at (jt/local-date-time)]
     (db/save-scene! {:scene_id    activity-id
                      :data        activity

@@ -80,9 +80,11 @@
                             (let [current-pages-count (-> activity-data
                                                           (get-in [:objects book-object-name :pages] [])
                                                           (count))]
-                              (- current-pages-count shift-from-end)))]
+                              (- current-pages-count shift-from-end)))
+        assets (->> resources
+                    (map (fn [r] {:url r :type "image" :size 1})))]
     (cond-> (-> activity-data
-                (update :assets concat resources)
+                (update :assets concat assets)
                 (update :objects merge objects)
                 (update-in [:objects book-object-name :pages]
                            insert-at-position
