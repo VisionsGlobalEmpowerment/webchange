@@ -46,6 +46,10 @@
   (core/update-assets! false)
   (core/update-course-previews! (env :requested-courses)))
 
+(defn download-missing-assets! [config]
+  (println "Update assets....")
+  (core/update-missing-assets! config))
+
 (defn upload-local-files!
   [config path]
   (print "Do you want to update asset hashes. (Y) ")
@@ -88,6 +92,9 @@
    "download-assets"
    (fn [config args]
      (apply download-assets! config args))
+   "download-missing-assets"
+   (fn [config args]
+     (apply download-missing-assets! config args))
    "upload-local-files"
    (fn [config args]
      (apply upload-local-files! env args))

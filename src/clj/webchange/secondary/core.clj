@@ -656,6 +656,19 @@
                            (assets/remove-file-with-hash! item)))
      (download-files download))))
 
+(defn update-missing-assets!
+  [_config]
+  (let [asset-hashes (->> (db/get-all-asset-hash)
+                          (map :path))
+        scene-assets (->> (db/get-scenes)
+                          (map #(db/get-latest-scene-version {:scene_id (:id %)}))
+                          (mapcat #(-> % :data :assets))
+                          (map asset->url)
+                          (remove nil?))
+        download (->> (set/difference (set scene-assets) (set asset-hashes))
+                      (map (fn [url] {:path url})))]
+    (download-files download)))
+
 (defn update-course-previews!
   [requested-courses]
   (doall
