@@ -1149,7 +1149,7 @@
       (if (empty? tail)
         result
         (let [{:keys [url] :as prepared} (prepare-asset current)]
-          (if (processed url)
+          (if (or (processed url) (nil? url))
             (recur result processed (first tail) (rest tail))
             (recur (conj result prepared) (conj processed url) (first tail) (rest tail))))))))
 

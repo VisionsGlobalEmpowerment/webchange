@@ -20,8 +20,11 @@
   []
   (async/go
     (<! (async/timeout 5000))
+    (log/debug "Trying to stop web server...")
     (.stop @server-instance)
+    (log/debug "Web server stopped")
     (mount/stop)
+    (log/debug "Components stopped")
     (System/exit restart-exit-code)))
 
 (defn get-latest-binary

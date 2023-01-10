@@ -629,12 +629,13 @@
 
 (defn get-difference-data
   [school-id requested-courses]
-  (let [asset-hashes (db/get-all-asset-hash)
-        hashes (map (fn [item] {:path-hash (:path-hash item)
-                                :file-hash (:file-hash item)}) asset-hashes)
+  (let [persistent? (fn [hash] (str/starts-with? (:path hash) "/images/"))
+        asset-hashes (->> (db/get-all-asset-hash)
+                          (remove persistent?)
+                          (map #(select-keys % [:path-hash :file-hash])))
         url (make-url-absolute "api/school/asset/difference/")
         response (client/post url {:body          (json/json-str {:school-id school-id
-                                                                  :hashes hashes
+                                                                  :hashes asset-hashes
                                                                   :requested-courses requested-courses})
                                    :body-encoding "UTF-8"
                                    :content-type  "application/json"

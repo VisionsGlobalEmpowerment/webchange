@@ -62,7 +62,8 @@
           (updater/resume-sync!)
           (catch Exception e
             (log/debug e)))
-        (reset! updater/server-instance server)))))
+        (reset! updater/server-instance server)
+        (log/debug "Server started and initialized")))))
 
 (defn dev [& args]
   (mount/start)
