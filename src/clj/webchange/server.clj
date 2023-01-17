@@ -57,12 +57,13 @@
     (let [port (Integer/parseInt (or (env :port) "3000"))]
       (mount/start)
       (migrations/migrate ["migrate"] (select-keys env [:database-url]))
-      (let [server (run-jetty handler {:port port :join? false})]
+      (let [configurator (fn [s]
+                           (.setStopAtShutdown s true))]
+        (run-jetty handler {:port port :join? false :configurator configurator})
         (try 
           (updater/resume-sync!)
           (catch Exception e
             (log/debug e)))
-        (reset! updater/server-instance server)
         (log/debug "Server started and initialized")))))
 
 (defn dev [& args]

@@ -14,18 +14,10 @@
 
 (defonce server-status (atom :initializing))
 
-(defonce server-instance (atom nil))
-
 (defn stop-server
   []
-  (async/go
-    (<! (async/timeout 5000))
-    (log/debug "Trying to stop web server...")
-    (.stop @server-instance)
-    (log/debug "Web server stopped")
-    (mount/stop)
-    (log/debug "Components stopped")
-    (System/exit restart-exit-code)))
+  (log/debug "Exit app")
+  (System/exit restart-exit-code))
 
 (defn get-latest-binary
   []
@@ -37,13 +29,18 @@
 
 (defn update-local-instance!
   []
-  (when-let [local-binary-path (env :local-binary-path)]
-    (sh/sh "cp" local-binary-path (str local-binary-path "." (System/currentTimeMillis) ".bak"))
-    (with-open [latest-binary-in (get-latest-binary)
-                local-binary-out (io/output-stream local-binary-path)]
-      (io/copy latest-binary-in local-binary-out))
-    (log/debug "About to restart service...")
-    (stop-server)))
+  (async/go
+    (log/debug "Update local instance")
+    (when-let [local-binary-path (env :local-binary-path)]
+      (log/debug "Update local instance: has local-binary-path")
+      (sh/sh "cp" local-binary-path (str local-binary-path "." (System/currentTimeMillis) ".bak"))
+      (log/debug "Update local instance: backup created")
+      (with-open [latest-binary-in (get-latest-binary)
+                  local-binary-out (io/output-stream local-binary-path)]
+        (log/debug "Update local instance: copying...")
+        (io/copy latest-binary-in local-binary-out))
+      (log/debug "About to restart service...")
+      (stop-server))))
 
 (defn start-sync!
   [school-id]

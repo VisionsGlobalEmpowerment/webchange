@@ -1,6 +1,6 @@
 (ns webchange.handler
   (:require
-    [buddy.auth :refer [authenticated? throw-unauthorized]]
+    [buddy.auth :refer [authenticated? throw-unauthorized] :as ba]
     [buddy.auth.backends.session :refer [session-backend]]
     [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
     [clojure.edn :as edn]
@@ -209,9 +209,17 @@
     (bad-request {:errors (phrase-problems problems)})
     (bad-request {:errors (:errors data)})))
 
+(defn request-auth-handler
+  [e data req]
+  (log/debug "request auth handler" data (= (::ba/type data) ::ba/unauthorized) (::ba/type data)) 
+  (if (= (::ba/type data) ::ba/unauthorized)
+    (unauthorized-handler req data)
+    (ex/safe-handler e data req)))
+
 (defroutes app
   (api
-   :exceptions {:handlers {::ex/request-validation request-validation-handler}}
+   :exceptions {:handlers {::ex/request-validation request-validation-handler
+                           ::ex/default request-auth-handler}}
    (swagger-routes {:ui   "/api-docs"
                     :data {:info {:title "TabSchools API"}
                            :tags [{:name "dataset", :description "Dataset APIs"}

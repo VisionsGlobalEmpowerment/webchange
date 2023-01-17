@@ -14,6 +14,7 @@
         prepared-user-type (case user-type
                              "admin" "admin"
                              "bbs-admin" "admin"
+                             "teacher" "admin"
                              "parent")]
     (cond
       (= prepared-type prepared-user-type) prepared-type

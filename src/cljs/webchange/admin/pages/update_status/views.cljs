@@ -8,5 +8,6 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [status @(re-frame/subscribe [::state/status])]
-      [:div {:class-name "page--update-status"}
-       [:div (str "Update status:" status) ]])))
+      [:div#page--update-status
+       [:div.status
+        (str "Update status: " status) ]])))
