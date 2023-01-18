@@ -93,13 +93,13 @@
       [:div.activity-settings-field
        [ui/input-label "Activity Name"]
        [ui/input {:value     activity-name-value
-                  :on-change #(re-frame/dispatch [::state/set-activity-name])}]]
+                  :on-change #(re-frame/dispatch [::state/set-activity-name %])}]]
       [:div.activity-settings-field
        [ui/input-label "Language"]
        [ui/select {:value     language-value
                    :required? true
                    :options   language-options
-                   :on-change #(re-frame/dispatch [::state/set-language])}]]]]))
+                   :on-change #(re-frame/dispatch [::state/set-language %])}]]]]))
 
 (defn- book-settings-panel
   []
