@@ -38,7 +38,7 @@
 (def midline-offset 76)
 (def baseline-offset 162)
 
-(def base-width 225)
+(def base-width 375)
 (def line-height 10)
 (def letter-offset-y -26)
 

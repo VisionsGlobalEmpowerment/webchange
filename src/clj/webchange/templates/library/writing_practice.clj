@@ -37,7 +37,7 @@
          :letter-tutorial-path
          {:type         "animated-svg-path",
           :y            -37,
-          :width        225,
+          :width        375,
           :height       300,
           :duration     5000,
           :fill         "transparent",
@@ -52,7 +52,7 @@
          :letter-tutorial-trace
          {:type         "svg-path",
           :y            -37,
-          :width        225,
+          :width        375,
           :height       300,
           :scene-name   "letter-tutorial-trace",
           :dash         [7 7],
@@ -152,11 +152,11 @@
                                               {:type       "test-expression"
                                                :expression ["eq" ["len" "@current-concept"] 1]
                                                :success    {:type "sequence-data"
-                                                            :data [{:type "set-variable" :var-name "hand-offset" :var-value 610}
+                                                            :data [{:type "set-variable" :var-name "hand-offset" :var-value 460}
                                                                    {:type "set-attribute"
                                                                     :target "letter-tutorial-trace"
                                                                     :attr-name "x"
-                                                                    :attr-value 750}
+                                                                    :attr-value 600}
                                                                    {:type "set-attribute"
                                                                     :target "letter-tutorial-trace"
                                                                     :attr-name "visible"
@@ -164,7 +164,7 @@
                                                                    {:type "set-attribute"
                                                                     :target "letter-tutorial-path"
                                                                     :attr-name "x"
-                                                                    :attr-value 750}
+                                                                    :attr-value 600}
                                                                    {:type "set-attribute"
                                                                     :target "letter-tutorial-path"
                                                                     :attr-name "visible"

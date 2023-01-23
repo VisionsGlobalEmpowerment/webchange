@@ -70,9 +70,11 @@
         [(->precision {:x x :y y1})])
       ("C")
       (let [[x1 y1 x2 y2 x3 y3] coordinates]
-        [{:bezier [(->precision {:x x1 :y y1})
-                   (->precision {:x x2 :y y2})
-                   (->precision {:x x3 :y y3})]}])
+        [{:bezier {:type "cubic"
+                   :values [(->precision {:x x :y y})
+                            (->precision {:x x1 :y y1})
+                            (->precision {:x x2 :y y2})
+                            (->precision {:x x3 :y y3})]}}])
       ("S")
       (let [[x2 y2 x3 y3] coordinates
             prev-path-type (first prev-path)]
@@ -80,16 +82,22 @@
           (let [[x01 y01 x02 y02] (take-last 4 prev-path)
                 x1 (- (* 2 x02) x01)
                 y1 (- (* 2 y02) y01)]
-            [{:bezier [(->precision {:x x1 :y y1})
-                       (->precision {:x x2 :y y2})
-                       (->precision {:x x3 :y y3})]}])
-          [{:bezier [(->precision {:x x2 :y y2})
-                     (->precision {:x x2 :y y2})
-                     (->precision {:x x3 :y y3})]}]))
+            [{:bezier {:type "cubic"
+                       :values [(->precision {:x x :y y})
+                                (->precision {:x x1 :y y1})
+                                (->precision {:x x2 :y y2})
+                                (->precision {:x x3 :y y3})]}}])
+          [{:bezier {:type "cubic"
+                     :values [(->precision {:x x :y y})
+                              (->precision {:x x2 :y y2})
+                              (->precision {:x x2 :y y2})
+                              (->precision {:x x3 :y y3})]}}]))
       ("Q")
       (let [[x1 y1 x2 y2] coordinates]
-        [{:bezier [(->precision {:x x1 :y y1})
-                   (->precision {:x x2 :y y2})]}])
+        [{:bezier {:type "quadratic"
+                   :values [(->precision {:x x :y y})
+                            (->precision {:x x1 :y y1})
+                            (->precision {:x x2 :y y2})]}}])
       ("T")
       (let [[x2 y2] coordinates
             prev-path-type (first prev-path)]
@@ -97,8 +105,10 @@
           (let [[x01 y01 x02 y02] (take-last 4 prev-path)
                 x1 (- (* 2 x02) x01)
                 y1 (- (* 2 y02) y01)]
-            [{:bezier [(->precision {:x x1 :y y1})
-                       (->precision {:x x2 :y y2})]}])
+            [{:bezier {:type "quadratic"
+                       :values [(->precision {:x x :y y})
+                                (->precision {:x x1 :y y1})
+                                (->precision {:x x2 :y y2})]}}])
           [(->precision {:x x2 :y y2})]))
       ("A")
       (let [[rx ry x-axis-rotation large-arc-flag sweep-flag current-x current-y] coordinates
@@ -135,25 +145,30 @@
 
 (defn- transition->path
   [transition]
-  (let [c-curve? #(= 3 (count (:bezier %)))
-        q-curve? #(= 2 (count (:bezier %)))
-        flat-curve #(flatten (map (fn [{:keys [x y]}] [x y]) (:bezier %)))]
+  (let [thru-bezier? (and (some? (:bezier transition))
+                          (empty? (-> transition :bezier :type)))
+        c-curve? (or (= "cubic" (-> transition :bezier :type))
+                     (and thru-bezier? (= 3 (:bezier transition))))
+        q-curve? (or (= "quadratic" (-> transition :bezier :type))
+                     (and thru-bezier? (= 3 (:bezier transition))))
+        
+        flat-curve #(flatten (map (fn [{:keys [x y]}] [x y]) (or (-> % :bezier :values rest) (:bezier %))))]
     (cond
-      (c-curve? transition) (concat ["C"] (flat-curve transition))
-      (q-curve? transition) (concat ["Q"] (flat-curve transition))
+      c-curve? (concat ["C"] (flat-curve transition))
+      q-curve? (concat ["Q"] (flat-curve transition))
       :else ["L" (:x transition) (:y transition)])))
 
 (defn- get-transitions-durations
   [transitions total-duration origin precision]
   (let [lengths (->> transitions
                      (reduce
-                       (fn [[{:keys [x y] :as last-point} result] transition]
-                         (let [transition-path (transition->path transition)
-                               new-point (apply-path-to-point last-point transition-path)
-                               path (concat ["M" x y] transition-path)
-                               length (length (s/join " " path))]
-                           [new-point (conj result length)]))
-                       [origin []])
+                      (fn [[{:keys [x y] :as last-point} result] transition]
+                        (let [transition-path (transition->path transition)
+                              new-point (apply-path-to-point last-point transition-path)
+                              path (concat ["M" x y] transition-path)
+                              calculated-length (length (s/join " " path))]
+                          [new-point (conj result calculated-length)]))
+                      [origin []])
                      (last))
         total-length (reduce + 0 lengths)]
     (map #(-> (/ % total-length)

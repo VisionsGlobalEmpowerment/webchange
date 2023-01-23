@@ -152,11 +152,12 @@
   [component {:keys [x y bezier]} {:keys [duration speed]}]
   (let [position (w/get-position component)
         cx (:x position)
-        cy (:y position)]
+        cy (:y position)
+        bezier-values (or (:values bezier) bezier)]
     (cond
       (> duration 0) duration
-      (> speed 0) (if (some? bezier)
-                    (/ (apply bezier-length (concat [{:x cx :y cy}] bezier)) speed)
+      (> speed 0) (if (some? bezier-values)
+                    (/ (apply bezier-length (concat [{:x cx :y cy}] bezier-values)) speed)
                     (/ (length {:x cx :y cy} {:x x :y y}) speed))
       :else (/ (length {:x cx :y cy} {:x x :y y}) 100))))
 
