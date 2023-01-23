@@ -29,17 +29,35 @@
     (is (= (get-transition {:x 10 :y 20} nil ["H" 50]) [{:x 50 :y 20}]))
     (is (= (get-transition {:x 10 :y 20} nil ["V" 50]) [{:x 10 :y 50}]))
     (is (= (get-transition {:x 10 :y 20} nil ["C" 30 40 50 40 60 30])
-           [{:bezier [{:x 30 :y 40} {:x 50 :y 40} {:x 60 :y 30}]}]))
+           [{:bezier {:type "cubic",
+                      :values [{:x 10, :y 20}
+                               {:x 30, :y 40}
+                               {:x 50, :y 40}
+                               {:x 60, :y 30}]}}]))
     (is (= (get-transition {:x 10 :y 20} nil ["Q" 30 40 50 40])
-           [{:bezier [{:x 30 :y 40} {:x 50 :y 40}]}]))
+           [{:bezier {:type "quadratic",
+                      :values [{:x 10, :y 20} {:x 30, :y 40} {:x 50, :y 40}]}}]))
     (is (= (get-transition {:x 95 :y 80} ["C" 40 10 65 10 95 80] ["S" 150 150 180 80])
-           [{:bezier [{:x 125 :y 150} {:x 150 :y 150} {:x 180 :y 80}]}]))
+           [{:bezier {:type "cubic",
+                      :values [{:x 95, :y 80}
+                               {:x 125, :y 150}
+                               {:x 150, :y 150}
+                               {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 40 :y 10} ["M" 40 10] ["S" 150 150 180 80])
-           [{:bezier [{:x 150 :y 150} {:x 150 :y 150} {:x 180 :y 80}]}]))
+           [{:bezier {:type "cubic",
+                      :values [{:x 40, :y 10}
+                               {:x 150, :y 150}
+                               {:x 150, :y 150}
+                               {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 40 :y 10} ["S" 65 10 95 80] ["S" 150 150 180 80])
-           [{:bezier [{:x 125 :y 150} {:x 150 :y 150} {:x 180 :y 80}]}]))
+           [{:bezier {:type "cubic",
+                      :values [{:x 40, :y 10}
+                               {:x 125, :y 150}
+                               {:x 150, :y 150}
+                               {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 95 :y 80} ["Q" 40 10 65 10] ["T" 150 150])
-           [{:bezier [{:x 90 :y 10} {:x 150 :y 150}]}]))
+           [{:bezier {:type "quadratic",
+                      :values [{:x 95, :y 80} {:x 90, :y 10} {:x 150, :y 150}]}}]))
     (is (= (get-transition {:x 40 :y 10} ["M" 40 10] ["T" 150 150])
            [{:x 150 :y 150}]))
     (is (= (get-transition {:x 40 :y 10} ["T" 150 150] ["T" 150 150])
@@ -53,34 +71,55 @@
 (deftest test-get-transitions
   (let [get-transitions #'ptt/get-transitions]
     (is (= (get-transitions
-             [["M" 80 25] ["L" 90 40] ["H" 95] ["V" 50]]
-             {:duration 100})
+            [["M" 80 25] ["L" 90 40] ["H" 95] ["V" 50]]
+            {:duration 100})
            [{:x 80 :y 25 :duration 100}
             {:x 90 :y 40 :duration 100}
             {:x 95 :y 40 :duration 100}
             {:x 95 :y 50 :duration 100}]))
     (is (= (get-transitions
-             [["M" 80 25] ["C" 30 40 50 40 60 30]]
-             {:duration 100})
+            [["M" 80 25] ["C" 30 40 50 40 60 30]]
+            {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier [{:x 30 :y 40} {:x 50 :y 40} {:x 60 :y 30}] :duration 100}]))
+            {:bezier {:type "cubic",
+                      :values [{:x 80, :y 25}
+                               {:x 30, :y 40}
+                               {:x 50, :y 40}
+                               {:x 60, :y 30}]}
+             :duration 100}]))
     (is (= (get-transitions
-             [["M" 80 25] ["Q" 30 40 50 40]]
-             {:duration 100})
+            [["M" 80 25] ["Q" 30 40 50 40]]
+            {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier [{:x 30 :y 40} {:x 50 :y 40}] :duration 100}]))
+            {:bezier {:type "quadratic",
+                      :values [{:x 80, :y 25} {:x 30, :y 40} {:x 50, :y 40}]}
+             :duration 100}]))
     (is (= (get-transitions
-             [["M" 80 25] ["C" 40 10 65 10 95 80] ["S" 150 150 180 80]]
-             {:duration 100})
+            [["M" 80 25] ["C" 40 10 65 10 95 80] ["S" 150 150 180 80]]
+            {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier [{:x 40 :y 10} {:x 65 :y 10} {:x 95 :y 80}] :duration 100}
-            {:bezier [{:x 125 :y 150} {:x 150 :y 150} {:x 180 :y 80}] :duration 100}]))
+            {:bezier {:type "cubic",
+                      :values [{:x 80, :y 25}
+                               {:x 40, :y 10}
+                               {:x 65, :y 10}
+                               {:x 95, :y 80}]}
+             :duration 100}
+            {:bezier {:type "cubic",
+                      :values [{:x 95, :y 80}
+                               {:x 125, :y 150}
+                               {:x 150, :y 150}
+                               {:x 180, :y 80}]}
+             :duration 100}]))
     (is (= (get-transitions
-             [["M" 80 25] ["Q" 40 10 65 10] ["T" 180 80]]
-             {:duration 100})
+            [["M" 80 25] ["Q" 40 10 65 10] ["T" 180 80]]
+            {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier [{:x 40 :y 10} {:x 65 :y 10}] :duration 100}
-            {:bezier [{:x 90 :y 10} {:x 180 :y 80}] :duration 100}]))))
+            {:bezier {:type "quadratic",
+                      :values [{:x 80, :y 25} {:x 40, :y 10} {:x 65, :y 10}]}
+             :duration 100}
+            {:bezier {:type "quadratic",
+                      :values [{:x 65, :y 10} {:x 90, :y 10} {:x 180, :y 80}]}
+             :duration 100}]))))
 
 (deftest test-transition->path
   (let [transition->path #'ptt/transition->path]

@@ -148,11 +148,14 @@
   (let [thru-bezier? (and (some? (:bezier transition))
                           (empty? (-> transition :bezier :type)))
         c-curve? (or (= "cubic" (-> transition :bezier :type))
-                     (and thru-bezier? (= 3 (:bezier transition))))
+                     (and thru-bezier? (= 3 (-> transition :bezier count))))
         q-curve? (or (= "quadratic" (-> transition :bezier :type))
-                     (and thru-bezier? (= 3 (:bezier transition))))
+                     (and thru-bezier? (= 2 (-> transition :bezier count))))
         
-        flat-curve #(flatten (map (fn [{:keys [x y]}] [x y]) (or (-> % :bezier :values rest) (:bezier %))))]
+        flat-curve #(let [bezier-values (if (-> % :bezier :values)
+                                          (-> % :bezier :values rest)
+                                          (:bezier %))]
+                      (flatten (map (fn [{:keys [x y]}] [x y]) bezier-values)))]
     (cond
       c-curve? (concat ["C"] (flat-curve transition))
       q-curve? (concat ["Q"] (flat-curve transition))
