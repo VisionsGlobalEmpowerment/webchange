@@ -59,8 +59,15 @@
     (get-action-data activity-data action-path)))
 
 (defn- get-action-text
-  [action-data]
-  (get action-data :phrase-text))
+  [activity-data action-data]
+  (cond
+    (action-utils/text-animation-action? action-data)
+    (->> (get action-data :target)
+         (utils/get-scene-object activity-data)
+         (:text))
+    
+    (action-utils/animation-sequence-action? action-data)
+    (get action-data :phrase-text)))
 
 (defn- get-audio-url
   [action-data]
@@ -68,10 +75,10 @@
 
 (re-frame/reg-sub
   ::action-text
-  (fn [[_ action-path]]
-    (re-frame/subscribe [::action-data action-path]))
-  (fn [action-data]
-    (get-action-text action-data)))
+  :<- [::state/activity-data]
+  (fn [activity-data [_ action-path]]
+    (let [action-data (get-action-data activity-data action-path)]
+      (get-action-text activity-data action-data))))
 
 (re-frame/reg-sub
   ::audio-url
@@ -287,7 +294,7 @@
           audio-url (get-audio-url action-data)]
       (cond
         (some? audio-script)
-        (let [text (get-action-text action-data)
+        (let [text (get-action-text activity-data action-data)
               region-data (-> (audio-analyzer/get-region-data text audio-script)
                               (with-animation-data action-data text audio-script))]
           {:db       (-> db
@@ -354,7 +361,7 @@
   (fn [{:keys [activity-data db]} [_ id action-path value]]
     (let [action-data (get-action-data activity-data action-path)
           audio-script (get-script-data db id)
-          text (get-action-text action-data)
+          text (get-action-text activity-data action-data)
           [start end] (->> (s/split value "-")
                            (map try-parse-number))
           region-data (-> {:start    start

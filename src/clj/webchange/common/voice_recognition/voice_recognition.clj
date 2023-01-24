@@ -33,18 +33,22 @@
 
 (defn save-subtitles
   [{:keys [filename result]}]
-  (let [current-transcription (-> filename
-                                  (get-result-filename)
-                                  (slurp)
-                                  (json/read-json)
-                                  (update :history #(or % [])))
-        current-result (:result current-transcription)
-        transcription (-> current-transcription
-                          (update :history concat [current-result])
-                          (assoc :result result))]
+  (if (-> filename get-result-filename io/file .exists)
+    (let [current-transcription (-> filename
+                                    (get-result-filename)
+                                    (slurp)
+                                    (json/read-json)
+                                    (update :history #(or % [])))
+          current-result (:result current-transcription)
+          transcription (-> current-transcription
+                            (update :history concat [current-result])
+                            (assoc :result result))]
+      (-> filename
+          (get-result-filename)
+          (spit (json/write-str transcription))))
     (-> filename
         (get-result-filename)
-        (spit (json/write-str transcription)))))
+        (spit (json/write-str {:result result})))))
 
 (defn restore-subtitles
   [filename]
