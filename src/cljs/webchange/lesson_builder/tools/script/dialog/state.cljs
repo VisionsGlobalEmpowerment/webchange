@@ -45,3 +45,10 @@
     (if flipbook?
       :expanded
       nil)))
+
+(re-frame/reg-event-fx
+  ::add-default-phrase
+  (fn [_ [_ action-path]]
+    {:dispatch [::stage-actions/insert-action {:action-data      (action-data-utils/create-dialog-animation-sequence-action)
+                                               :parent-data-path (concat action-path [:data])
+                                               :position         0}]}))

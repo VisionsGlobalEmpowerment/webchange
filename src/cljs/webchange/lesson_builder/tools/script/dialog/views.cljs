@@ -23,6 +23,8 @@
         dialog-items @(re-frame/subscribe [::state/dialog-items action-path])
         handle-click #(re-frame/dispatch [::script-state/set-selected-action nil])
         collapse-state @(re-frame/subscribe [::state/collapse-state])]
+    (when (empty? dialog-items)
+      (re-frame/dispatch [::state/add-default-phrase action-path]))
     [block {:collapse-state collapse-state
             :title               dialog-name
             :class-name--content "component--dialog"
