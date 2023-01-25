@@ -77,8 +77,7 @@
 (defn handle-region-created
   [{:keys [regions] :as instances} on-create single-region? new-region]
   (when single-region?
-    (remove-current-regions instances)
-    (scroll-to instances new-region))
+    (remove-current-regions instances))
   (r/set-default-style new-region)
   (swap! regions conj new-region)
   (when (fn? on-create)
