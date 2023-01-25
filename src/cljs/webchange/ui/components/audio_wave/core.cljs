@@ -35,7 +35,8 @@
   [{:keys [regions]}]
   (when (seq @regions)
     (doseq [region @regions]
-      (r/remove region))))
+      (r/remove region))
+    (reset! regions [])))
 
 (defn region->data
   [region]
@@ -94,7 +95,8 @@
                      (r/set-bounds current-region {:start pos
                                                    :end (+ pos (r/get-duration current-region))})
                      (r/set-changed current-region true))
-                   (r/get-end current-region))))))
+                   (r/get-end current-region))
+                 0))))
 
 (defn handle-region-update-end
   [{:keys [regions]} on-change region]

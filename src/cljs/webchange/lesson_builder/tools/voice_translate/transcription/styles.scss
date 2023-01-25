@@ -102,4 +102,15 @@
             }
 	}
     }
+
+    .reset-transcription-dialog {
+	width: 90%;
+	max-width: 90%;
+
+	.text-component {
+	    textarea {
+		height: 200px;
+	    }
+	}
+    }
 }

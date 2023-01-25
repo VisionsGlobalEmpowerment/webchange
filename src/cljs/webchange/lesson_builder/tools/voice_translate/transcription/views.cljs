@@ -100,18 +100,45 @@
               [word]]
              [ui/loading-overlay])]))})))
 
+(defn- reset-transcription-window
+  []
+  (let [open? @(re-frame/subscribe [::state/reset-transcription-window-open?])
+        close-window #(re-frame/dispatch [::state/close-reset-transcription-window])
+        handle-change #(re-frame/dispatch [::state/change-reset-transcription-value %])
+        value @(re-frame/subscribe [::state/reset-transcription-value])
+        reset-transcription #(re-frame/dispatch [::state/reset-transcription])]
+    (when open?
+      [ui/dialog {:title "Reset transcription text"
+                  :class-name "reset-transcription-dialog"
+                  :actions [:<>
+                            [ui/button {:color    "blue-1"
+                                        :on-click close-window}
+                             "Cancel"]
+                            [ui/button {:on-click reset-transcription}
+                             "Save"]]}
+       [:div {:class-name "transcription-text"}
+        [ui/text-area {:on-change  handle-change
+                       :value value
+                       :placeholder "Enter transcription text"
+                       :class-name  "text-component"}]]])))
+
 (defn edit-transcription-window
   []
   (let [{:keys [open?]} @(re-frame/subscribe [::state/window-state])
         close-window #(re-frame/dispatch [::state/close-window])
-        save-script #(re-frame/dispatch [::state/save-script])]
+        save-script #(re-frame/dispatch [::state/save-script])
+        reset-transcription #(re-frame/dispatch [::state/open-reset-transcription-window])]
     (when open?
       [ui/dialog {:title "Edit transcription"
                   :class-name "edit-transcription-dialog"
                   :actions [:<>
                             [ui/button {:color    "blue-1"
+                                        :on-click reset-transcription}
+                             "Reset Transcription"]
+                            [ui/button {:color    "blue-1"
                                         :on-click close-window}
                              "Cancel"]
                             [ui/button {:on-click save-script}
                              "Save"]]}
-       [transcription-editor]])))
+       [transcription-editor]
+       [reset-transcription-window]])))

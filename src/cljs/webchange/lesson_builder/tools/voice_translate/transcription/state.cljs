@@ -1,5 +1,6 @@
 (ns webchange.lesson-builder.tools.voice-translate.transcription.state
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.state.warehouse :as warehouse]))
@@ -219,6 +220,67 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db [:window-state :in-progress] false)}))
 
+;;reset transcription
+(re-frame/reg-sub
+  ::reset-transcription-window-open?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :reset-transcription-window-open?)))
+
+(re-frame/reg-event-fx
+  ::open-reset-transcription-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :reset-transcription-window-open? true)}))
+
+(re-frame/reg-event-fx
+  ::close-reset-transcription-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :reset-transcription-window-open? false)}))
+
+(re-frame/reg-event-fx
+  ::change-reset-transcription-value
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :reset-transcription-value value)}))
+
+(re-frame/reg-sub
+  ::reset-transcription-value
+  :<- [path-to-db]
+  (fn [db]
+    (get db :reset-transcription-value)))
+
+(re-frame/reg-event-fx
+  ::reset-transcription
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [words (-> (get db :reset-transcription-value)
+                    (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
+                    (s/replace #" +" " ")
+                    (s/split #"\s"))
+          regions (->> words
+                       (reduce (fn [acc word]
+                                 (let [start (:start acc)
+                                       end (+ start 0.3)]
+                                   (-> acc
+                                       (update :regions conj {:start start
+                                                              :end end
+                                                              :data {"word" word}})
+                                       (assoc :start end))))
+                               {:start 0
+                                :regions []})
+                       :regions)]
+      {:db (-> db
+               (assoc :regions [])
+               (assoc :script (regions->script regions))
+               (assoc :reset-transcription-window-open? false))})))
+
 (comment
   (-> @(re-frame/subscribe [path-to-db]))
-  (-> @(re-frame/subscribe [::initial-regions])))
+  (-> @(re-frame/subscribe [::initial-regions]))
+  (-> @(re-frame/subscribe [::script-data]))
+  (-> @(re-frame/subscribe [::reset-transcription-value])
+      (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
+      (s/replace #" +" " ")
+      (s/split #"\s")))
