@@ -7,7 +7,9 @@
                 {:name "Nicaragua"
                  :iso  "ni"}
                 {:name "USA"
-                 :iso  "us"}])
+                 :iso  "us"}
+                {:name "South Africa"
+                 :iso  "za"}])
 
 (def location-options (->> locations
                            (map (fn [{:keys [name iso]}]
