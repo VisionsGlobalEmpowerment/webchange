@@ -217,12 +217,12 @@
 (re-frame/reg-event-fx
   ::save-script
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ on-save]]
     (let [script (-> db (get :regions) (regions->script))
           audio-url (:audio-url db)]
       {:dispatch [::warehouse/save-subtitles
                   {:filename audio-url :result script}
-                  {:on-success [::save-subtitles-success]
+                  {:on-success [::save-subtitles-success on-save]
                    :on-failure [::save-subtitles-failure]
                    :suppress-api-error? true}]
        :db (assoc-in db [:window-state :in-progress] true)})))
@@ -230,7 +230,9 @@
 (re-frame/reg-event-fx
   ::save-subtitles-success
   [(i/path path-to-db)]
-  (fn [{:keys [_]} [_]]
+  (fn [{:keys [_]} [_ on-save]]
+    (when (fn? on-save)
+      (on-save))
     {:dispatch [::close-window]}))
 
 (re-frame/reg-event-fx

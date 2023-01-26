@@ -42,7 +42,7 @@
 
 (defn audio-editor
   []
-  (r/with-let [id (get-uid)]
+  (r/with-let [id (r/atom (get-uid))]
     (let [file-name @(re-frame/subscribe [::state/file-name])
           show-audio-editor? @(re-frame/subscribe [::state/show-audio-editor?])
           selected-action @(re-frame/subscribe [::state/selected-action])
@@ -57,9 +57,10 @@
                             [ui/button {:class-name "edit-transcription-button"
                                         :shape "rounded"
                                         :on-click edit-transcription} "Edit"]
-                            [auto-select-button {:id          id
+                            [auto-select-button {:id          @id
                                                  :action-path selected-action}]]}
-         [action-audio-editor {:id          id
+         ^{:key @id}
+         [action-audio-editor {:id          @id
                                :action-path selected-action}]
-         [transcription/edit-transcription-window]]
+         [transcription/edit-transcription-window {:on-save #(reset! id new-id)}]]
         [welcome-translate]))))

@@ -3,9 +3,6 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.lesson-builder.tools.voice-translate.transcription.state :as state]
-    [webchange.lesson-builder.widgets.action-audio-editor.views :refer [action-audio-editor auto-select-button]]
-    [webchange.lesson-builder.widgets.audio-add.views :refer [audio-add]]
-    [webchange.lesson-builder.widgets.audio-list.views :refer [audio-list]]
     [webchange.ui.index :as ui]))
 
 (defn play-button
@@ -119,7 +116,7 @@
         (let [{:keys [in-progress]} @(re-frame/subscribe [::state/window-state])]
           [:div {:class-name (ui/get-class-name {"widget--transcription-editor" true})
                  :ref #(when (some? %) (reset! ref %))
-                 :tabindex 0}
+                 :tab-index 0}
            [wave {:action-path action-path
                   :class-name  "audio-editor--wave"
                   :ref         audio-wave-control}]
@@ -158,10 +155,10 @@
                        :class-name  "text-component"}]]])))
 
 (defn edit-transcription-window
-  []
+  [{:keys [on-save]}]
   (let [{:keys [open?]} @(re-frame/subscribe [::state/window-state])
         close-window #(re-frame/dispatch [::state/close-window])
-        save-script #(re-frame/dispatch [::state/save-script])
+        save-script #(re-frame/dispatch [::state/save-script on-save])
         reset-transcription #(re-frame/dispatch [::state/open-reset-transcription-window])]
     (when open?
       [ui/dialog {:title "Edit transcription"
