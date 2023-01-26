@@ -32,6 +32,17 @@
   (->> (* direction delta-zoom)
        (w/inc-zoom @wave-surfer)))
 
+(defn- remove-region
+  [{:keys [regions]} region-id]
+  (let [region (->> @regions
+                    (filter #(= region-id (r/get-id %)))
+                    (first))]
+    (r/remove region)
+    (swap! regions (fn [r]
+                     (->> r
+                          (remove #(= region-id (r/get-id %)))
+                          (into []))))))
+
 (defn get-controls
   [instances]
   {:play            (partial play instances)
@@ -40,4 +51,5 @@
    :rewind-to-start (partial rewind instances :start)
    :rewind-to-end   (partial rewind instances :end)
    :zoom-in         (partial zoom instances 1)
-   :zoom-out        (partial zoom instances -1)})
+   :zoom-out        (partial zoom instances -1)
+   :remove-region   (partial remove-region instances)})

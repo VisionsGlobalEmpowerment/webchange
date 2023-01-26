@@ -18,6 +18,8 @@
 	row-gap: 16px;
 	position: relative;
 
+	outline: none;
+		     
 	.audio-editor--wave {
             grid-area: 2 / 2 / 3 / 3;
             align-self: center;
@@ -69,6 +71,11 @@
 
 	.zoom-button {
             @include bbs--icon-thickness(1.5px);
+	}
+
+	.transcription-word {
+	    display: flex;
+	    gap: 20px;
 	}
     }
 

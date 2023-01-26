@@ -81,30 +81,45 @@
                  :class-name "zoom-button"}]]))
 
 (defn word
-  []
+  [{:keys [wave]}]
   (let [handle-change #(re-frame/dispatch [::state/change-selected-word %])
-        value (-> @(re-frame/subscribe [::state/selected-region]) :data (get "word") (or ""))]
+        value (-> @(re-frame/subscribe [::state/selected-region]) :data (get "word") (or ""))
+
+        remove-word #(re-frame/dispatch [::state/remove-selected-word wave])]
     [:div {:class-name "transcription-word"}
      [ui/input {:on-change  handle-change
                 :placeholder "Enter word"
-                :value value}]]))
+                :value value}]
+     [ui/button {:on-click remove-word} "Remove"]]))
 
 (defn- transcription-editor
   []
-  (let [audio-wave-control (atom nil)]
+  (let [audio-wave-control (atom nil)
+        ref (atom nil)
+        handle-key-down (fn [e]
+                          (when (and (.-ctrlKey e) (= (.-code e) "Space"))
+                            (.preventDefault e)
+                            (re-frame/dispatch [::state/start-selected-playing audio-wave-control]))
+                          (when (and (.-ctrlKey e) (= (.-code e) "Backspace"))
+                            (.preventDefault e)
+                            (re-frame/dispatch [::state/remove-selected-word audio-wave-control])))]
     (r/create-class
      {:component-did-mount
       (fn [this]
-        (re-frame/dispatch [::state/init (r/props this)]))
+        (re-frame/dispatch [::state/init (r/props this)])
+        (.addEventListener @ref "keydown" handle-key-down false))
 
       :component-will-unmount
       (fn []
-        (re-frame/dispatch [::state/reset]))
+        (re-frame/dispatch [::state/reset])
+        (.removeEventListener @ref "keydown" handle-key-down))
 
       :reagent-render
       (fn [{:keys [action-path]}]
         (let [{:keys [in-progress]} @(re-frame/subscribe [::state/window-state])]
-          [:div {:class-name (ui/get-class-name {"widget--transcription-editor" true})}
+          [:div {:class-name (ui/get-class-name {"widget--transcription-editor" true})
+                 :ref #(when (some? %) (reset! ref %))
+                 :tabindex 0}
            [wave {:action-path action-path
                   :class-name  "audio-editor--wave"
                   :ref         audio-wave-control}]
@@ -117,7 +132,7 @@
                [play-selected-button {:wave audio-wave-control}]
                [:div "Audio"]
                [play-button {:wave audio-wave-control}]]
-              [word]]
+              [word {:wave audio-wave-control}]]
              [ui/loading-overlay])]))})))
 
 (defn- reset-transcription-window

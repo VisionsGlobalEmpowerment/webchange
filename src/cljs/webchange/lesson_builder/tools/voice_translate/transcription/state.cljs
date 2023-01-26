@@ -204,6 +204,17 @@
       {:db (assoc db :regions (conj regions region))})))
 
 (re-frame/reg-event-fx
+  ::remove-selected-word
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ wave]]
+    (let [id (:selected-region db)
+          regions (->> (get db :regions)
+                       (remove #(= id (:id %)))
+                       (into []))]
+      (call-method wave :remove-region id)
+      {:db (assoc db :regions regions)})))
+
+(re-frame/reg-event-fx
   ::save-script
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
@@ -259,14 +270,19 @@
   (fn [db]
     (get db :reset-transcription-value)))
 
+(defn- text->words
+  [text]
+  (-> text
+      (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@“”]" " ")
+      (s/replace #"\s+" " ")
+      (s/split #"\s")))
+
 (re-frame/reg-event-fx
   ::reset-transcription
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [words (-> (get db :reset-transcription-value)
-                    (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
-                    (s/replace #" +" " ")
-                    (s/split #"\s"))
+                    (text->words))
           regions (->> words
                        (reduce (fn [acc word]
                                  (let [start (:start acc)
@@ -285,11 +301,24 @@
                (assoc :reset-transcription-window-open? false))})))
 
 (comment
+  (text->words "Katse ya Kimi
+Karse ya Kimi e dula diropeng tša Koko.  Prrrrrrrrr.
+“Dumela, ,katse ya go thaba.”
+Katsa ya Kimi e patlama mmeteng wa yona mo letšatšing.
+Prrrrrr!
+“Dumela, ,katse ya go otsela.”
+Katsa ya Kimi e nwa maswi ka khitšhing. Prrrrrrrl
+“Dumela, ,katse ya go swarwa ke lenyora.”
+Katse ya Kimi e lebeletse nonyana.  Prrrrrr.
+“Dumela, ,katse ya go seleka.”
+Mpša ya lešata e goba Katse ya Kimi. HAUU! HAUU!
+Ngauu! “O ile Kae, katse ya go timelala?”
+Kimi o lebelela dirope tša Koko.")
   (-> @(re-frame/subscribe [path-to-db]))
   (-> @(re-frame/subscribe [::initial-regions]))
   (-> @(re-frame/subscribe [::script-data]))
   (-> @(re-frame/subscribe [::selected-region]))
   (-> @(re-frame/subscribe [::reset-transcription-value])
       (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
-      (s/replace #" +" " ")
+      (s/replace #"[ ]+" " ")
       (s/split #"\s")))
