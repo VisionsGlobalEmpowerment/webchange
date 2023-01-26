@@ -42,6 +42,12 @@
 	}
 
 	.audio-editor--play {
+	    display: flex;
+	    flex-direction: column;
+	    gap: 4px;
+
+	    font-size: 10px;
+	    
             grid-area: 2 / 1 / 4 / 2;
             justify-self: center;
 	}

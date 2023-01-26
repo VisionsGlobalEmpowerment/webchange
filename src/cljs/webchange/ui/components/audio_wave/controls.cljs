@@ -12,8 +12,8 @@
       (some? @wave-surfer) (w/play @wave-surfer))))
 
 (defn- play
-  [{:keys [wave-surfer]}]
-  (some? @wave-surfer) (w/play @wave-surfer))
+  [{:keys [wave-surfer]} start end]
+  (some? @wave-surfer) (w/play @wave-surfer start end))
 
 (defn- stop
   [{:keys [wave-surfer]}]

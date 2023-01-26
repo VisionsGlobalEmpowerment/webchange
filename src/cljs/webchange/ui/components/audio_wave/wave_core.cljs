@@ -37,8 +37,8 @@
   (.loadBlob ^js ws blob))
 
 (defn play
-  [ws]
-  (.play ^js ws))
+  [ws start end]
+  (.play ^js ws start end))
 
 (defn recenter-drawer
   [drawer progress]

@@ -24,6 +24,22 @@
                 :class-name class-name
                 :variant    "filled"}]))
 
+(defn play-selected-button
+  [{:keys [class-name wave]}]
+  (let [state @(re-frame/subscribe [::state/play-button-state])
+        handle-start-playing #(re-frame/dispatch [::state/start-selected-playing wave])
+        handle-stop-playing #(re-frame/dispatch [::state/stop-playing wave])
+        handle-click #(case state
+                        "play" (handle-stop-playing)
+                        "stop" (handle-start-playing))]
+    [ui/button {:icon       (case state
+                              "play" "stop"
+                              "stop" "play")
+                :shape      "rounded"
+                :on-click   handle-click
+                :class-name class-name
+                :variant    "filled"}]))
+
 (defn wave
   [{:keys [action-path class-name ref]}]
   (let [audio-url @(re-frame/subscribe [::state/audio-url])
@@ -67,9 +83,10 @@
 (defn word
   []
   (let [handle-change #(re-frame/dispatch [::state/change-selected-word %])
-        value (-> @(re-frame/subscribe [::state/selected-region]) :data (get "word"))]
+        value (-> @(re-frame/subscribe [::state/selected-region]) :data (get "word") (or ""))]
     [:div {:class-name "transcription-word"}
      [ui/input {:on-change  handle-change
+                :placeholder "Enter word"
                 :value value}]]))
 
 (defn- transcription-editor
@@ -95,8 +112,11 @@
              [:<>
               [zoom {:wave       audio-wave-control
                      :class-name "audio-editor--zoom"}]
-              [play-button {:wave       audio-wave-control
-                            :class-name "audio-editor--play"}]
+              [:div.audio-editor--play
+               [:div "Region"]
+               [play-selected-button {:wave audio-wave-control}]
+               [:div "Audio"]
+               [play-button {:wave audio-wave-control}]]
               [word]]
              [ui/loading-overlay])]))})))
 

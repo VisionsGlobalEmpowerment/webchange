@@ -12,6 +12,14 @@
   (fn [db]
     (get db path-to-db)))
 
+(defn- selected-region
+  [db]
+  (let [id (:selected-region db)]
+    (->> db
+         :regions
+         (filter #(= (:id %) id))
+         first)))
+
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
@@ -113,6 +121,14 @@
     {:db (assoc db :play-button-state "play")}))
 
 (re-frame/reg-event-fx
+  ::start-selected-playing
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ wave]]
+    (let [{:keys [start end]} (selected-region db)]
+      (call-method wave :play start end)
+      {:db (assoc db :play-button-state "play")})))
+
+(re-frame/reg-event-fx
   ::stop-playing
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ wave]]
@@ -169,14 +185,6 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ region]]
     {:db (assoc db :selected-region (:id region))}))
-
-(defn- selected-region
-  [db]
-  (let [id (:selected-region db)]
-    (->> db
-         :regions
-         (filter #(= (:id %) id))
-         first)))
 
 (re-frame/reg-sub
   ::selected-region
@@ -280,6 +288,7 @@
   (-> @(re-frame/subscribe [path-to-db]))
   (-> @(re-frame/subscribe [::initial-regions]))
   (-> @(re-frame/subscribe [::script-data]))
+  (-> @(re-frame/subscribe [::selected-region]))
   (-> @(re-frame/subscribe [::reset-transcription-value])
       (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
       (s/replace #" +" " ")
