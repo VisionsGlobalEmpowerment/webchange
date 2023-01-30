@@ -14,7 +14,7 @@
     (.collapseToEnd selection)))
 
 (defn- text-control
-  [{:keys [class-name on-change on-enter-press on-ctrl-enter-press placeholder on-parent-focus]}]
+  [{:keys [class-name on-change on-input on-enter-press on-ctrl-enter-press placeholder on-parent-focus]}]
   (let [ref (atom nil)
         current-value (atom nil)
         empty-value? (r/atom false)
@@ -38,48 +38,48 @@
                             (when @ref
                               (try-empty!)
                               (select-content-editable-text! @ref)))
-        handle-blur (fn [] (try-placeholder!))]
+        handle-blur (fn []
+                      (try-placeholder!)
+                      (on-change @current-value))]
     (when on-parent-focus
       (swap! on-parent-focus conj check-and-select!))
     (r/create-class
-      {:display-name "text-control"
+     {:display-name "text-control"
 
-       :should-component-update
-       (constantly false)
+      :component-did-mount
+      (fn [this]
+        (let [{:keys [editable? value]} (r/props this)]
+          (reset! current-value value)
+          (try-placeholder!)
+          (when editable?
+            (.addEventListener @ref "keydown" handle-key-down false))))
 
-       :component-did-mount
-       (fn [this]
-         (let [{:keys [editable? value]} (r/props this)]
-           (reset! current-value value)
-           (try-placeholder!)
-           (when editable?
-             (.addEventListener @ref "keydown" handle-key-down false))))
+      :component-will-unmount
+      (fn []
+        (.removeEventListener @ref "keydown" handle-key-down))
 
-       :component-will-unmount
-       (fn []
-         (.removeEventListener @ref "keydown" handle-key-down))
-
-       :reagent-render
-       (fn [{:keys [value editable? placeholder]
-             :or   {editable? true}}]
-         (let [show-placeholder? (nil? value)
-               handle-change (fn [event]
-                               (let [new-value (.. event -target -innerText)]
-                                 (reset! current-value new-value)
-                                 (on-change new-value)))]
-           [:span (cond-> {:class-name (ui/get-class-name {"text"          true
-                                                           "text-disabled" (not editable?)
-                                                           "placeholder"   @empty-value?
-                                                           class-name      (some? class-name)})
-                           :ref        #(when (some? %) (reset! ref %))
-                           :on-click   try-empty!
-                           :on-blur    handle-blur}
-                          editable? (merge {:on-input                          handle-change
-                                            :content-editable                  true
-                                            :suppress-content-editable-warning true}))
-            (if show-placeholder?
-              placeholder
-              value)]))})))
+      :reagent-render
+      (fn [{:keys [value editable? placeholder]
+            :or   {editable? true}}]
+        (let [show-placeholder? (nil? value)
+              handle-change (fn [event]
+                              (let [new-value (.. event -target -innerText)]
+                                (reset! current-value new-value)
+                                (when (fn? on-input)
+                                  (on-input new-value))))]
+          [:span (cond-> {:class-name (ui/get-class-name {"text"          true
+                                                          "text-disabled" (not editable?)
+                                                          "placeholder"   @empty-value?
+                                                          class-name      (some? class-name)})
+                          :ref        #(when (some? %) (reset! ref %))
+                          :on-click   try-empty!
+                          :on-blur    handle-blur}
+                         editable? (merge {:on-input                          handle-change
+                                           :content-editable                  true
+                                           :suppress-content-editable-warning true}))
+           (if show-placeholder?
+             placeholder
+             value)]))})))
 
 (defn text-editor
   [{:keys [class-name on-change type value]

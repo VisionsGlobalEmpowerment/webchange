@@ -6,6 +6,7 @@
     [webchange.lesson-builder.tools.script.state :as script-state]
     [webchange.lesson-builder.stage-actions :as stage-actions]
     [webchange.lesson-builder.widgets.confirm.state :as confirm-state]
+    [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.utils.scene-action-data :as action-utils]
     [webchange.utils.scene-data :as activity-utils]))
 
@@ -43,8 +44,9 @@
   (fn [{:keys [activity-data]} [_ action-path text]]
     (let [{:keys [target]} (-> (activity-utils/get-action activity-data action-path)
                                (action-utils/get-inner-action))]
-      {:dispatch [::stage-actions/set-object-text {:object-name target
-                                                   :text        text}]})))
+      {:dispatch-n [[::stage-actions/set-object-text {:object-name target
+                                                      :text        text}]
+                    [::state-renderer/set-scene-object-state (keyword target) {:text text}]]})))
 
 ;; remove
 
