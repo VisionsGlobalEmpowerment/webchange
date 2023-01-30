@@ -77,19 +77,19 @@
      (throw-unauthorized metadata)
      (resource-response "index.html" {:root "public"}))))
 
-(defn public-student-route [] (resource-response "student.html" {:root "public"}))
+(defn public-student-route [] (resource-response "index.html" {:root "public"}))
 
 (defn student-route
   [request]
   (if-not (authenticated? request)
     (throw-unauthorized {:role :student})
-    (resource-response "student.html" {:root "public"})))
+    (resource-response "index.html" {:root "public"})))
 
 (defn parent-route
   [request]
   (if-not (authenticated? request)
     (throw-unauthorized {:role :parent})
-    (resource-response "student.html" {:root "public"})))
+    (resource-response "index.html" {:root "public"})))
 
 (defn teacher? [request]
   (and (authenticated? request)

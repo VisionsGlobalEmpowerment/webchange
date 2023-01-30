@@ -7,6 +7,10 @@
     <title>Blue Brick School</title>
     <link rel="shortcut icon" href="/images/app/bluebrickschool_icon.png"/>
     <link href="/fonts/luckiest_guy_regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-100.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-400.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-900.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-italic-900.woff2" rel="preload" as="font" crossorigin />
     <link href="/fonts/lexend_deca_regular.woff2" rel="preload" as="font" crossorigin />
     <link href="/fonts/lexend_deca_regular2.woff2" rel="preload" as="font" crossorigin />
     <link href="/fonts/lexend_deca_regular3.woff2" rel="preload" as="font" crossorigin />
@@ -19,12 +23,14 @@
     <link rel="manifest" href="/manifest.json">
     <script>
         var global = global || window;
+        // Hide re-frame-10x panel by default. Open panel pressing Ctrl + H
+        localStorage.setItem("day8.re-frame-10x.show-panel","\"false\"")
     </script>
     <script src="/js/fix-wheel-event.js"></script>
   </head>
   <body>
     <div id="app"></div>
-    <script src="/js/compiled/app.js?v=9"></script>
-    <script>webchange.core.init(true);</script>
+    <script src="/js/compiled/app.js"></script>
+    <script>webchange.core.init(false);</script>
   </body>
 </html>

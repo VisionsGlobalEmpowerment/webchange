@@ -6,6 +6,7 @@
 !/resources/public/css/fonts.css
 /resources/public/raw/
 /resources/public/js/compiled
+/resources/public/index.html
 /.idea
 /.sass-cache
 /.calva

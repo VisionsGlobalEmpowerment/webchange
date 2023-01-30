@@ -27,8 +27,9 @@ node {
     if (env.BRANCH_NAME == 'master') {
         stage('Build') {
             sh 'lein clean'
-	    sh 'shadow-cljs release app'
-	    sh 'shadow-cljs release service-worker'
+	    sh 'shadow-cljs release app --config-merge \'{:release-version "${currentBuild.id}"}\''
+	    sh 'cp -f ./resources/public/index.html.source ./resources/public/index.html'
+	    sh 'sed -i 's/\/js\/compiled\/app.js/\/js\/compiled\/app.${currentBuild.id}.js/' ./resources/public/index.html'
 	    sh 'sass ./src/cljs/webchange/ui_framework/styles/index/:./resources/public/css/'
             sh 'lein uberjar'
     	}
