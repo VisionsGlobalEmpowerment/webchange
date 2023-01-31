@@ -19,6 +19,10 @@
         gap: 10px;
 
         @include bbs--scrollable;
+
+	.bbs--note {
+	    flex-shrink: 0;
+	}
     }
 
     .group {
