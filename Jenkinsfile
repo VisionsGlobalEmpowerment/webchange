@@ -33,7 +33,7 @@ node {
 	    sh 'sass ./src/cljs/webchange/ui_framework/styles/index/:./resources/public/css/'
             sh 'lein uberjar'
     	}
-    
+/*    
         stage('Deploy') {
             sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
             sh "ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar"
@@ -44,13 +44,13 @@ node {
 	        sh 'java -jar /srv/www/webchange/current.jar migrate'
             }
         }
-/*
+
         stage('Sync') {
 	    withEnv(['config=/srv/www/webchange/config.edn']) {
 	        sh 'java -jar /srv/www/webchange/current.jar download-course-data'
 	    }
         }
-*/	
+	
         stage('Update Templates') {
 	    withEnv(['config=/srv/www/webchange/config.edn']) {
 	        sh 'java -jar /srv/www/webchange/current.jar update-templates'
@@ -60,5 +60,6 @@ node {
         stage('Restart') {
             sh 'sudo systemctl restart webchange'
         }
+*/	
     }
 }
