@@ -33,6 +33,7 @@ node {
 	    sh 'sass ./src/cljs/webchange/ui_framework/styles/index/:./resources/public/css/'
             sh 'lein uberjar'
     	}
+	
 /*    
         stage('Deploy') {
             sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
