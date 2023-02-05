@@ -7,6 +7,4 @@ createdb --owner=webchange webchange
 psql webchange --command='CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
 psql webchange < $DIR/dump-secondary.sql
 EOF
-source config.sh
-#java -jar webchange.jar migrate
-#java -jar webchange.jar init-secondary $SCHOOL_ID $EMAIL $PASSWORD
+

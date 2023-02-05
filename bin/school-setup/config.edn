@@ -1,6 +1,6 @@
 {:database-url "jdbc:postgresql://localhost/webchange?user=webchange&password=webchange"
  :public-dir "/srv/www/webchange/public"
  :upload-dir "/srv/www/webchange/public/upload"
- :secondary {:host-url "http://localhost:3000/"}
+ :secondary {:host-url "https://host.bluebrickschool.org/"}
  :local-binary-path "/srv/www/webchange/webchange.jar"}
 
