@@ -17,7 +17,7 @@
                  [metosin/compojure-api "2.0.0-alpha31"]
                  [metosin/ring-swagger "0.26.2"]
                  [metosin/scjsv "0.6.2" :exclusions [com.github.java-json-tools/json-schema-validator]]
-                 [yogthos/config "0.8"]
+                 [yogthos/config "1.2.0"]
                  [ring "1.8.0"]
                  [ring/ring-core "1.8.0"]
                  [ring/ring-json "0.5.0"]
