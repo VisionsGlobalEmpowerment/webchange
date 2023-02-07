@@ -37,7 +37,7 @@ node {
         stage('Deploy') {
 	    sh "scp ./target/webchange.jar deploy@stage-env:/srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
 	    sh "ssh deploy@stage-env 'ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar'"
-            sh "ssh deploy@stage-env 'sudo systemctl stop webchange'"
+            sh "ssh deploy@stage-env 'sudo systemctl stop webchange.service'"
         }
 
         stage('Migrate') {
@@ -49,7 +49,7 @@ node {
         }
 
         stage('Restart') {
-       	    sh "ssh deploy@stage-env 'sudo systemctl start webchange'"
+       	    sh "ssh deploy@stage-env 'sudo systemctl start webchange.service'"
         }
     }
 }
