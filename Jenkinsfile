@@ -33,33 +33,23 @@ node {
 	    sh 'sass ./src/cljs/webchange/ui_framework/styles/index/:./resources/public/css/'
             sh 'lein uberjar'
     	}
-/*    
+    
         stage('Deploy') {
-            sh "cp ./target/webchange.jar /srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
-            sh "ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar"
+	    sh "scp ./target/webchange.jar deploy@stage-env:/srv/www/webchange/releases/${currentBuild.id}-webchange.jar"
+	    sh "ssh deploy@stage-env 'ln -nsf /srv/www/webchange/releases/${currentBuild.id}-webchange.jar /srv/www/webchange/current.jar'"
+            sh "ssh deploy@stage-env 'sudo systemctl stop webchange'"
         }
 
         stage('Migrate') {
-	    withEnv(['config=/srv/www/webchange/config.edn']) {
-	        sh 'java -jar /srv/www/webchange/current.jar migrate'
-            }
+	    sh "ssh deploy@stage-env 'java -Dconfig=/srv/www/webchange/config.edn -jar /srv/www/webchange/current.jar migrate'"
         }
 
-        stage('Sync') {
-	    withEnv(['config=/srv/www/webchange/config.edn']) {
-	        sh 'java -jar /srv/www/webchange/current.jar download-course-data'
-	    }
-        }
-	
         stage('Update Templates') {
-	    withEnv(['config=/srv/www/webchange/config.edn']) {
-	        sh 'java -jar /srv/www/webchange/current.jar update-templates'
-	    }
+	    sh "ssh deploy@stage-env 'java -Dconfig=/srv/www/webchange/config.edn -jar /srv/www/webchange/current.jar update-templates'"
         }
 
         stage('Restart') {
-            sh 'sudo systemctl restart webchange'
+       	    sh "ssh deploy@stage-env 'sudo systemctl start webchange'"
         }
-*/	
     }
 }
