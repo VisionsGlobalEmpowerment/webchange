@@ -3,12 +3,10 @@
     [cljsjs.material-ui]
     [reagent.core :as reagent]
     [re-frame.core :as re-frame]
-    [webchange.error-message.state :as error]
     [webchange.events :as events]
     [webchange.views :as views]
     [webchange.config :as config]
     [webchange.routes :as routes]
-    [webchange.sw-utils.register :as sw]
     [webchange.ui-deprecated.theme :refer [with-mui-theme]]
     [webchange.utils.browser-history :as history]
     [webchange.state.warehouse :as warehouse]))

@@ -9,7 +9,7 @@
     [webchange.common.handler :refer [handle current-user]]
     [webchange.school.statistics :as stats]
     [webchange.validation.specs.school-spec :as school-spec]
-    [webchange.auth.roles :refer [is-admin?]]
+    [webchange.auth.roles :refer [is-admin? is-at-least-teacher?]]
     [clojure.spec.alpha :as s]))
 
 (defn handle-current-school [request]
@@ -55,35 +55,42 @@
 
 (defroutes school-routes
   (context "/api/schools" []
-           :coercion :spec
-           :tags ["school"]
-           (GET "/current" request
-                :return ::school-spec/school
-                (handle-current-school request))
-           (POST "/" request
-                 :return ::school-spec/new-school
-                 :body [data ::school-spec/create-school]
-                 (handle-create-school data request))
-           (GET "/:id" request
-                :path-params [id :- ::school-spec/id]
-                :return (s/keys :req-un [::school-spec/school])
-                (if-let [item (core/get-school id)]
-                  (response {:school item})
-                  (not-found "not found")))
-           (GET "/" request
-                :return (s/keys :req-un [::school-spec/schools])
-                (handle-list-schools request))
-           (PUT "/:id" request
-                :path-params [id :- ::school-spec/id]
-                :return ::school-spec/new-school
-                :body [data ::school-spec/edit-school]
-                (handle-update-school id data request))
-           (DELETE "/:id" request
-                   :path-params [id :- ::school-spec/id]
-                   (handle-delete-school id request))
-           (PUT "/:id/archive" request
-                :path-params [id :- ::school-spec/id]
-                (handle-archive-school id request)))
+    :coercion :spec
+    :tags ["school"]
+    (GET "/current" request
+      :return ::school-spec/school
+      (handle-current-school request))
+    (POST "/" request
+      :return ::school-spec/new-school
+      :body [data ::school-spec/create-school]
+      (handle-create-school data request))
+    (GET "/:id" request
+      :path-params [id :- ::school-spec/id]
+      :return (s/keys :req-un [::school-spec/school])
+      (let [user-id (current-user request)]
+        (when-not (or (is-admin? user-id)
+                      (core/school-teacher? id user-id))
+          (throw-unauthorized {:role :educator}))
+        (if-let [item (core/get-school id)]
+          (response {:school item})
+          (not-found "not found"))))
+    (GET "/" request
+      :return (s/keys :req-un [::school-spec/schools])
+      (let [user-id (current-user request)]
+        (when-not (is-at-leaset-teacher? user-id)
+          (throw-unauthorized {:role :educator}))
+        (handle-list-schools request)))
+    (PUT "/:id" request
+      :path-params [id :- ::school-spec/id]
+      :return ::school-spec/new-school
+      :body [data ::school-spec/edit-school]
+      (handle-update-school id data request))
+    (DELETE "/:id" request
+      :path-params [id :- ::school-spec/id]
+      (handle-delete-school id request))
+    (PUT "/:id/archive" request
+      :path-params [id :- ::school-spec/id]
+      (handle-archive-school id request)))
   (GET "/api/overall-statistics" request
-       (-> (stats/get-overall-statistics)
-           response)))
+    (-> (stats/get-overall-statistics)
+        response)))

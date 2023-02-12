@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
+    [webchange.auth.state :as auth]
     [webchange.state.warehouse :as warehouse]))
 
 (def path-to-db :page/dashboard)
@@ -25,8 +26,16 @@
   :<- [path-to-db]
   #(get % statistics-key {}))
 
+(re-frame/reg-sub
+  ::current-role
+  :<- [::auth/current-user]
+  (fn [{:keys [type]}]
+    (case type
+      "bbs-admin" "admin"
+      type)))
+
 (re-frame/reg-event-fx
-  ::init
+  ::init-admin
   [(i/path path-to-db)]
   (fn [{:keys []} [_]]
     {:dispatch-n [[::warehouse/load-overall-statistics

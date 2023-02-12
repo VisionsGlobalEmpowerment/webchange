@@ -112,12 +112,30 @@
                :countries ["us" "ni" "in" "gt"]}]
    [quick-links]])
 
+(defn page-admin
+  []
+  (re-frame/dispatch [::state/init-admin])
+  (fn []
+    [:div.page--dashboard
+     [overview]
+     [statistics]
+     [countries]]))
+
+(defn page-live
+  []
+  [:div.page--dashboard
+   [:div "Page for live users"]])
+
+(defn page-teacher
+  []
+  [:div.page--dashboard
+   [:div "Under construction"]])
+
 (defn page
   []
-  (re-frame/dispatch [::state/init])
-  (fn []
-    (let []
-      [:div.page--dashboard
-       [overview]
-       [statistics]
-       [countries]])))
+  (let [current-role @(re-frame/subscribe [::state/current-role])]
+    (case current-role
+      "admin" [page-admin]
+      "teacher" [page-teacher]
+      "live" [page-live]
+      [ui/loading-overlay])))

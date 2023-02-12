@@ -17,21 +17,15 @@
             [webchange.class.statistics]
             [webchange.school.core :as school]))
 
-(defn handle-list-classes [request]
-  (let [school-id (current-school request)]
-    (-> (core/get-classes school-id)
-        response)))
-
 (defn handle-create-class
-  ([data request]
-   (let [school-id (current-school request)]
-     (handle-create-class school-id data request)))
-  ([school-id data request]
-   (let [owner-id (current-user request)]
-     (-> data
-         (assoc :school-id school-id)
-         (core/create-class!)
-         handle))))
+  [school-id data request]
+  (let [owner-id (current-user request)]
+    (when-not (or (is-admin? owner-id) (school/school-admin? school-id owner-id))
+      (throw-unauthorized {:role :educator}))
+    (-> data
+        (assoc :school-id school-id)
+        (core/create-class!)
+        handle)))
 
 (defn handle-update-class
   [id request]
@@ -157,19 +151,34 @@
     (or (is-admin? user-id)
         (school/school-admin? (:school-id class) user-id))))
 
+(defn- can-view-class?
+  [class-id request]
+  (let [user-id (current-user request)
+        class (core/get-class class-id)]
+    (or (is-admin? user-id)
+        (school/school-teacher? (:school-id class) user-id))))
+
+(defn- can-view-school?
+  [school-id request]
+  (let [user-id (current-user request)]
+    (or (is-admin? user-id)
+        (school/school-teacher? school-id user-id))))
+
 (defroutes class-routes
-  (GET "/api/classes" request (handle-list-classes request))
-  (GET "/api/classes/:id" [id]
-    (if-let [item (-> id Integer/parseInt core/get-class)]
-      (response {:class item})
-      (not-found "not found")))
-  (POST "/api/classes" request
-    (handle-create-class (:body request) request))
+  (GET "/api/classes/:class-id" [class-id :as request]
+    :coercion :spec
+    :path-params [class-id :- ::class-spec/id]
+    (if (can-view-class? class-id request)
+      (-> (core/get-class class-id)
+          response)
+      (throw-unauthorized {:role :educator})))
   (GET "/api/schools/:school-id/classes" request
     :coercion :spec
     :path-params [school-id :- ::school-spec/id]
-    (-> (core/get-classes school-id)
-        response))
+    (if (can-view-school? school-id request)
+      (-> (core/get-classes school-id)
+          response)
+      (throw-unauthorized {:role :educator})))
   (POST "/api/schools/:school-id/classes" request
     :coercion :spec
     :path-params [school-id :- ::school-spec/id]

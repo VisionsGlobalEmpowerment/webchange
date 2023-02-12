@@ -1,6 +1,11 @@
-(ns webchange.error-pages.page-404
-  (:require
-    [webchange.ui-deprecated.theme :refer [w-colors]]))
+(ns webchange.error-pages.page-404)
+
+(def w-colors
+  {:primary        "#222342"
+   :primary-darken "#191a31"
+   :default        "#ffffff"
+   :secondary      "#fd4142"
+   :disabled       "#bababa"})
 
 (defn page-404
   []

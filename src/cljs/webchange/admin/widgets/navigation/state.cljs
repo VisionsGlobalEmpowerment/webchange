@@ -1,4 +1,3 @@
-
 (ns webchange.admin.widgets.navigation.state
   (:require
     [re-frame.core :as re-frame]
@@ -19,7 +18,8 @@
          {:id    :school-management
           :text  "School Management"
           :icon  "school"
-          :route {:page :schools}}
+          :route {:page :schools}
+          :visible-for ["admin" "bbs-admin" "teacher"]}
          {:id   :lesson-builder
           :text "Create"
           :icon "create"

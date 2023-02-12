@@ -7,6 +7,11 @@
   (let [{admin? :result} (db/user-has-type? {:id user-id :types ["admin" "bbs-admin"]})]
     admin?))
 
+(defn is-at-least-teacher?
+  [user-id]
+  (let [{admin? :result} (db/user-has-type? {:id user-id :types  ["admin" "bbs-admin" "teacher"]})]
+    admin?))
+
 (defn is-super-admin?
   [user-id]
   (let [{admin? :result} (db/user-has-type? {:id user-id :types ["admin"]})]
