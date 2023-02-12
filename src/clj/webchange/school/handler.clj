@@ -77,7 +77,7 @@
     (GET "/" request
       :return (s/keys :req-un [::school-spec/schools])
       (let [user-id (current-user request)]
-        (when-not (is-at-leaset-teacher? user-id)
+        (when-not (is-at-least-teacher? user-id)
           (throw-unauthorized {:role :educator}))
         (handle-list-schools request)))
     (PUT "/:id" request

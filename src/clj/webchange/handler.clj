@@ -17,7 +17,7 @@
     [ring.middleware.session.cookie :refer [cookie-store]]
     [ring.middleware.session.memory :as mem]
     [ring.util.response :refer [bad-request header redirect resource-response
-                                response status]]
+                                response status] :as ring-response]
     [webchange.assets.handler :refer [asset-maintainer-routes asset-routes asset-api-routes]]
     [webchange.auth.handler :refer [auth-routes]]
     [webchange.auth.roles :as roles]
@@ -211,15 +211,19 @@
 
 (defn request-auth-handler
   [e data req]
-  (log/debug "request auth handler" data (= (::ba/type data) ::ba/unauthorized) (::ba/type data)) 
   (if (= (::ba/type data) ::ba/unauthorized)
     (unauthorized-handler req data)
     (ex/safe-handler e data req)))
 
+(defn request-not-found
+  [e data req]
+  (ring-response/not-found {:errors (:errors data)}))
+
 (defroutes app
   (api
    :exceptions {:handlers {::ex/request-validation request-validation-handler
-                           ::ex/default request-auth-handler}}
+                           ::ex/default request-auth-handler
+                           ::ex/not-found request-not-found}}
    (swagger-routes {:ui   "/api-docs"
                     :data {:info {:title "TabSchools API"}
                            :tags [{:name "dataset", :description "Dataset APIs"}

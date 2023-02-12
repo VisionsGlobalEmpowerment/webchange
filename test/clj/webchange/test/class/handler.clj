@@ -12,7 +12,7 @@
 
 (deftest classes-can-be-retrieved
   (let [_ (f/class-created)
-        retrieved (-> (f/get-classes) :body slurp (json/read-str :key-fn keyword) :classes)]
+        retrieved (-> (f/get-school-classes) :body slurp (json/read-str :key-fn keyword) :classes)]
     (is (= 1 (count retrieved)))))
 
 (deftest class-can-be-retrieved

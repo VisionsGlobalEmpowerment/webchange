@@ -1,8 +1,7 @@
 (ns webchange.class.handler
   (:require [buddy.auth :refer [throw-unauthorized]]
             [compojure.api.sweet :refer [GET POST PUT DELETE defroutes]]
-            [compojure.route :refer [not-found]]
-            [ring.util.response :refer [response]]
+            [ring.util.response :refer [response not-found]]
             [webchange.class.core :as core]
             [clojure.tools.logging :as log]
             [webchange.common.handler :refer [handle current-user current-school]]
@@ -169,8 +168,10 @@
     :coercion :spec
     :path-params [class-id :- ::class-spec/id]
     (if (can-view-class? class-id request)
-      (-> (core/get-class class-id)
-          response)
+      (if-let [class (core/get-class class-id)]
+        (-> {:class class}
+            response)
+        (not-found "not found"))
       (throw-unauthorized {:role :educator})))
   (GET "/api/schools/:school-id/classes" request
     :coercion :spec

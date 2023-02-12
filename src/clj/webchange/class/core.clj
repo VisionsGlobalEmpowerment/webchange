@@ -3,6 +3,7 @@
     [camel-snake-kebab.core :refer [->snake_case_keyword]]
     [clojure.tools.logging :as log]
     [java-time :as jt]
+    [compojure.api.exception :as ex]
     [webchange.accounts.core :as accounts]
     [webchange.course.core :as courses]
     [webchange.db.core :as db]
@@ -15,8 +16,11 @@
 (defn get-class [id]
   (let [{:keys [course-slug] :as class} (db/get-class {:id id})
         course-info (courses/get-course-info course-slug)]
-    (when (some? class)
-      (assoc class :course-info course-info))))
+    (when (nil? class)
+      (throw (ex-info "Class not found"
+                      {:type ::ex/not-found
+                       :errors {:class "Class not found"}})))
+    (assoc class :course-info course-info)))
 
 (defn with-user
   [{user-id :user-id :as item}]

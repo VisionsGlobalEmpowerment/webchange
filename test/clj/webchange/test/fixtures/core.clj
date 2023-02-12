@@ -609,9 +609,9 @@
                     teacher-logged-in)]
     (handler/dev-handler request)))
 
-(defn get-classes
+(defn get-school-classes
   []
-  (let [url (str "/api/classes")
+  (let [url (str "/api/schools/" default-school-id "/classes")
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
@@ -625,7 +625,7 @@
 
 (defn create-class!
   [data]
-  (let [url (str "/api/classes")
+  (let [url (str "/api/schools/" default-school-id "/classes")
         request (-> (mock/request :post url (json/write-str data))
                     (mock/header :content-type "application/json")
                     teacher-logged-in)]
@@ -730,7 +730,7 @@
   [id]
   (let [url (str "/api/schools/" id)
         request (-> (mock/request :get url)
-                    teacher-logged-in)]
+                    admin-logged-in)]
     (handler/dev-handler request)))
 
 (defn create-school!
