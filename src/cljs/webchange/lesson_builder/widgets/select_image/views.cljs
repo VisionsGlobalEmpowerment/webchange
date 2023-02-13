@@ -32,7 +32,7 @@
                      :class-name (ui/get-class-name {"select-image-preview" true
                                                      class-name-image       (some? class-name-image)})}])
         [:input {:type      "file"
-                 :accept    ["gif" "jpg" "jpeg" "png"]
+                 :accept    "image/png, image/jpeg"
                  :on-change #(-> % change-event->file handle-upload)
                  :ref       #(reset! file-input %)}]
         [:div.actions
