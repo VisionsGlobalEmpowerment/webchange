@@ -45,10 +45,11 @@
 
 (defn scroll-to-time
   [ws time]
-  (let [progress (->> (get-duration ws)
-                      (/ time))]
-    (core/seek-to ws progress)
-    (set-center ws progress)))
+  (let [duration (get-duration ws)
+        progress (/ time duration)]
+    (when (and (<= 0 progress) (>= 1 progress))
+      (core/seek-to ws progress)
+      (set-center ws progress))))
 
 (defn set-audio-script
   [ws script-data]
