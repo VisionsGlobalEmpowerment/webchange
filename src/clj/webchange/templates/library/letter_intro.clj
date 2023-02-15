@@ -197,28 +197,12 @@
                                      :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
                                      :attr-name "text"}
                                     {:id "hidden", :type "state", :target "word"}
-                                    {:id "update-word" :type "action"}
                                     {:id "init-position", :type "state", :target "image"}
                                     {:type      "set-attribute",
                                      :target    "image",
                                      :from-var  [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
                                      :attr-name "src"}
                                     ]},
-
-         :update-word        {:type "sequence-data"
-                              :data [{:type      "set-attribute",
-                                      :target    "word",
-                                      :from-var  [{:var-name "current-concept", :var-property "concept-name", :action-property "attr-value"}],
-                                      :attr-name "text"}
-                                     {:type   "component-action"
-                                      :target "word"
-                                      :action "update-chunks"
-                                      :params {:chunks [{:end 1}
-                                                        {:start 1}]}
-                                      :from-expression [{:expression ["len" ["." "@current-concept" ":letter"]]
-                                                         :action-property   "params.chunks.0.end"}
-                                                        {:expression ["len" ["." "@current-concept" ":letter"]]
-                                                         :action-property   "params.chunks.1.start"}]}]}
 
          :glow-big                {:type "state" :target "letter-big" :id "glow"}
          :stop-glow-big           {:type "state" :target "letter-big" :id "stop-glow"}
@@ -376,13 +360,31 @@
                              ]},
         :variables {:status nil}})
 
+(defn- word-chunks
+  [word letter]
+  (let [letter-position (str/index-of word letter)
+        letter-length (count letter)]
+    (if (= letter-position 0)
+      [{:start       0 :end letter-length
+        :fill        "#ef545c"
+        :font-weight "bold"
+        :actions     {:click {:id "word-click", :on "click", :type "action", :unique-tag "click"}},}
+       {:start letter-length :end "last"}]
+      [{:start 0 :end letter-position}
+       {:start letter-position :end (+ letter-position letter-length)
+        :fill        "#ef545c"
+        :font-weight "bold"
+        :actions     {:click {:id "word-click", :on "click", :type "action", :unique-tag "click"}},}
+       {:start (+ letter-position letter-length) :end "last"}])))
+
 (defn- init-concept
   [t {:keys [letter image word] :as template-options}]
   (-> t
+      (assoc-in [:objects :word :text] word)
+      (assoc-in [:objects :word :chunks] (word-chunks word letter))
       (assoc-in [:actions :init-concept :var-value] {:letter letter
                                                      :letter-big (str/upper-case letter)
-                                                     :image-src (:src image)
-                                                     :concept-name word})
+                                                     :image-src (:src image)})
       (update :assets concat [{:url (:src image) :type "image"}])
       (assoc-in [:metadata :saved-props :template-options] template-options)))
 
