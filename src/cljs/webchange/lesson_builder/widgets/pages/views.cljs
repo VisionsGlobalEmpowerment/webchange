@@ -63,6 +63,7 @@
       (let [current-page-over (re-frame/subscribe [::state/current-page-over])]
         (if-not (= id :add)
           [:div (cond-> {:class-name (ui/get-class-name {"page-item"              true
+
                                                          (str "page-item--" side) true
                                                          "page-item-drag-over" (= idx @current-page-over)})}
                         removable? (merge {:draggable true
@@ -87,7 +88,9 @@
                                            "stage-item--selected"      current-stage?
                                            "stage-item--no-left-page"  (nil? left-page)
                                            "stage-item--no-right-page" (nil? right-page)})
-           :on-click   handle-click}
+           :on-click   handle-click
+           :ref #(when (and (some? %) current-stage?)
+                   (.scrollIntoView %))}
      [:div {:class-name "stage-item--title"
             :title      title}
       title]

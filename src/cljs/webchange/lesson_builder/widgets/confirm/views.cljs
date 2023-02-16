@@ -6,7 +6,7 @@
 
 (defn- confirm-window
   [props]
-  (let [{:keys [open? message title]} @(re-frame/subscribe [::state/confirm-window])
+  (let [{:keys [open? message title confirm-text cancel-text]} @(re-frame/subscribe [::state/confirm-window])
         handle-confirm #(re-frame/dispatch [::state/handle-confirm-window])
         handle-cancel #(re-frame/dispatch [::state/close-confirm-window])]
     [ui/confirm (merge props
@@ -14,7 +14,9 @@
                                 :on-confirm handle-confirm
                                 :on-cancel  handle-cancel}
                                (and (some? title)
-                                    (some? message)) (assoc :title title)))
+                                    (some? message)) (assoc :title title)
+                               (some? confirm-text) (assoc :confirm-text confirm-text)
+                               (some? cancel-text) (assoc :cancel-text cancel-text)))
      (if (some? message)
        message
        [:h1 title])]))

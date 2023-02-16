@@ -19,8 +19,8 @@
                     :on-apply-to-all handle-apply-to-all}]))
 
 (defn- group-panel
-  [{:keys [group]}]
-  (re-frame/dispatch [::state/init-group group])
+  [{:keys [target group]}]
+  (re-frame/dispatch [::state/init-group target group])
   (fn [{:keys [class-name group]}]
     [:div {:class-name (ui/get-class-name {"group-panel" true
                                            class-name    (some? class-name)})}
@@ -29,22 +29,22 @@
 
 (defn- panels
   [target]
-  (r/with-let [_ (re-frame/dispatch [::state/init-object target])]
-    (let [target @(re-frame/subscribe [::state/target])
-          object @(re-frame/subscribe [::state/object-data target])
+  (r/with-let []
+    (let [object @(re-frame/subscribe [::state/object-data target])
           group? (= "group" (:type object))]
       [:div {:class-name "tool--object-form"}
        [:h1 "Edit"]
        (if group?
-         [group-panel {:group      object
+         [group-panel {:target     target
+                       :group      object
                        :class-name "object-form--form"}]
          [object-panel {:target     target
                         :class-name "object-form--form"}])
        [ui/button {:class-name "object-form--apply"
-                   :on-click   #(re-frame/dispatch [::state/apply])}
+                   :on-click   #(re-frame/dispatch [::state/apply target])}
         "Apply"]])
     (finally
-      (re-frame/dispatch [::state/reset]))))
+      (re-frame/dispatch [::state/confirm-close target]))))
 
 (defn object-form
   []

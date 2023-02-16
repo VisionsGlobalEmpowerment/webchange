@@ -26,11 +26,14 @@
 (re-frame/reg-event-fx
   ::show-confirm-window
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [message on-confirm title]}]]
+  (fn [{:keys [db]} [_ {:keys [message on-confirm on-cancel title confirm-text cancel-text]}]]
     {:db (assoc db confirm-window-key {:open?      true
                                        :message    message
                                        :title      title
-                                       :on-confirm on-confirm})}))
+                                       :on-confirm on-confirm
+                                       :on-cancel  on-cancel
+                                       :confirm-text confirm-text
+                                       :cancel-text  cancel-text})}))
 
 (re-frame/reg-event-fx
   ::handle-confirm-window
@@ -44,7 +47,9 @@
   ::close-confirm-window
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db (assoc db confirm-window-key {:open? false})}))
+    (let [{:keys [on-cancel]} (get-confirm-window db)]
+      (cond-> {:db (assoc db confirm-window-key {:open? false})}
+              (some? on-cancel) (assoc :dispatch on-cancel)))))
 
 ;; message window
 
