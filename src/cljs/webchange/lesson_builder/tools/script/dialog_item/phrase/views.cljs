@@ -21,6 +21,7 @@
                    :action-path action-path}
      [target-selector {:value     target
                        :on-change handle-target-change}]
+     ^{:key (apply str action-path)}
      [text-editor {:value phrase-text
                    :has-issue? has-issue?
                    :on-change handle-phrase-text-change}]]))
