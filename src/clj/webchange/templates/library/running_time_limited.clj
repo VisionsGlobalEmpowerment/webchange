@@ -631,7 +631,10 @@
       (init-incorrect args)
       (assoc-in [:objects :timer :time] (:time args))
       (set-speed 5)
-      (assoc-in [:metadata :saved-props :template-options] (assoc args :speed 5))))
+      (assoc-in [:metadata :saved-props :template-options] (assoc args :speed 5))
+      (common/add-available-action "highlight-target-letter" "Highlight letter")
+      (common/add-available-action "highlight-timer" "Highlight timer")
+      (common/add-available-action "highlight-counter" "Highlight counter")))
 
 (defn change-speed [data speed]
   (-> data
