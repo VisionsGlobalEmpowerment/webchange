@@ -48,6 +48,26 @@
                                                       :text        text}]
                     [::state-renderer/set-scene-object-state (keyword target) {:text text}]]})))
 
+(re-frame/reg-sub
+  ::has-issue?
+  (fn [[_ action-path]]
+    [(re-frame/subscribe [::lesson-builder/activity-data])
+     (re-frame/subscribe [::state/action-data action-path])])
+  (fn [[activity-data action-data]]
+    (let [{:keys [target] :as inner-action-data} (action-utils/get-inner-action action-data)
+          text-chunks (-> (activity-utils/get-scene-object activity-data target)
+                          (get :chunks))
+          action-chunks-numbers (->> inner-action-data
+                                     :data
+                                     (map :chunk))]
+      (->> (range 0 (count text-chunks))
+           (map (fn [idx]
+                  (->> action-chunks-numbers
+                       (some #{idx})
+                       (boolean))))
+           (reduce #(and %1 %2))
+           (not)))))
+
 ;; remove
 
 (re-frame/reg-event-fx

@@ -10,6 +10,7 @@
   [{:keys [action-path]}]
   (let [target @(re-frame/subscribe [::state/target action-path])
         text @(re-frame/subscribe [::state/text action-path])
+        has-issue? @(re-frame/subscribe [::state/has-issue? action-path])
         handle-phrase-text-change #(re-frame/dispatch [::state/set-text action-path %])
         handle-target-change #(re-frame/dispatch [::state/set-target action-path %])
         handle-remove-click #(re-frame/dispatch [::state/remove action-path])]
@@ -21,6 +22,7 @@
      [target-selector {:value     target
                        :type      :text-animation
                        :on-change handle-target-change}]
-     [text-editor {:value     text
+     [text-editor {:value text
+                   :has-issue? has-issue?
                    :on-change handle-phrase-text-change
-                   :type      :text-animation}]]))
+                   :type :text-animation}]]))

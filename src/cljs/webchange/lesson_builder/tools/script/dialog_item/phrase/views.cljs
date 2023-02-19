@@ -9,6 +9,7 @@
 (defn phrase
   [{:keys [action-path]}]
   (let [phrase-text @(re-frame/subscribe [::state/phrase-text action-path])
+        has-issue? @(re-frame/subscribe [::state/has-issue? action-path])
         target @(re-frame/subscribe [::state/target action-path])
         handle-phrase-text-change #(re-frame/dispatch [::state/set-phrase-text action-path %])
         handle-target-change #(re-frame/dispatch [::state/set-target action-path %])
@@ -20,5 +21,6 @@
                    :action-path action-path}
      [target-selector {:value     target
                        :on-change handle-target-change}]
-     [text-editor {:value     phrase-text
+     [text-editor {:value phrase-text
+                   :has-issue? has-issue?
                    :on-change handle-phrase-text-change}]]))

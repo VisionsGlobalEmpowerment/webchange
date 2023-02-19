@@ -82,14 +82,19 @@
              value)]))})))
 
 (defn text-editor
-  [{:keys [class-name on-change type value]
+  [{:keys [class-name on-change type value has-issue?]
     :or   {type :character}}]
   [:div {:class-name (ui/get-class-name {"component--text-editor" true
                                          class-name               (some? class-name)})}
-   [ui/icon {:icon       (case type
-                           :character "character"
-                           :text-animation "dialogue")
-             :class-name "text-editor--icon"}]
+   [:div.text-editor--icons
+    [ui/icon {:icon       (case type
+                            :character "character"
+                            :text-animation "dialogue")
+              :class-name "text-editor--icon"}]
+    (when has-issue?
+      [ui/icon {:icon       "info"
+                :color      "yellow-1"
+                :class-name "text-editor--icon-warning"}])]
    [text-control {:value       value
                   :on-change   on-change
                   :placeholder "Enter phrase text"

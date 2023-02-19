@@ -5,8 +5,14 @@
     align-items: flex-start;
     gap: 4px;
 
-    .text-editor--icon {
-        @include bbs--icon-size(18px);
+    .text-editor--icons {
+	.text-editor--icon {
+            @include bbs--icon-size(18px);
+	}
+
+	.text-editor--icon-warning {
+            @include bbs--icon-size(18px);
+	}
     }
 
     .text-editor--value {
