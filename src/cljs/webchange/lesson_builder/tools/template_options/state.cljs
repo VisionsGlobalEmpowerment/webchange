@@ -104,9 +104,10 @@
   (fn [{:keys [db]} [_]]
     (let [template-options (get-in db [:form])]
       {:db       (set-loading db true)
-       :dispatch [::stage-actions/apply-template-options
-                  template-options
-                  {:on-success [::apply-success]}]})))
+       :dispatch [::lesson-builder-state/save-activity
+                  {:on-success [::stage-actions/apply-template-options
+                                template-options
+                                {:on-success [::apply-success]}]}]})))
 
 (re-frame/reg-event-fx
   ::apply-success

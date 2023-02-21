@@ -285,7 +285,7 @@
   (fn [{:keys [_]} [_ {:keys [data]}]]
     {:dispatch-n [[::stage-state/set-stage-busy false]
                   [::stage-state/reset]                     ;; reset stage to update flipbook instance in interpreter
-                  [::state/set-activity-data data]
+                  [::state/reset-activity-data data]
                   [::update-current-flipbook-stage {:force? true}]]}))
 
 (re-frame/reg-event-fx
@@ -310,7 +310,7 @@
   ::add-page-success
   (fn [{:keys [_]} [_ on-success {:keys [data]}]]
     {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
-                          [::state/set-activity-data data]
+                          [::state/reset-activity-data data]
                           [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
                          (some? on-success) (conj on-success))}))
 
@@ -337,7 +337,7 @@
   ::move-page-success
   (fn [{:keys [_]} [_ on-success {:keys [data]}]]
     {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
-                          [::state/set-activity-data data]
+                          [::state/reset-activity-data data]
                           [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
                          (some? on-success) (conj on-success))}))
 
@@ -378,7 +378,7 @@
   ::add-text-success
   (fn [{:keys [_]} [_ on-success {:keys [data]}]]
     {:dispatch-n (cond-> [[::stage-state/set-stage-busy false]
-                          [::state/set-activity-data data]
+                          [::state/reset-activity-data data]
                           [::stage-state/reset]]            ;; reset stage to update flipbook instance in interpreter
                          (some? on-success) (conj on-success))}))
 

@@ -82,7 +82,7 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ version-id {:keys [data]}]]
     {:db         (set-restore-loading db version-id false)
-     :dispatch-n [[::state/set-activity-data data]
+     :dispatch-n [[::state/reset-activity-data data]
                   [::stage-state/reset]
                   [::close-window]]}))
 

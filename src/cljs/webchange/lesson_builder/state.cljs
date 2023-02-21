@@ -38,7 +38,15 @@
 
 (defn- set-activity-data
   [db value]
-  (assoc db activity-data-key value))
+  (-> db
+      (assoc activity-data-key value)
+      (assoc :has-activity-data-changes? true)))
+
+(defn- reset-activity-data
+  [db value]
+  (-> db
+      (assoc activity-data-key value)
+      (assoc :has-activity-data-changes? false)))
 
 (re-frame/reg-sub
   ::activity-data
@@ -49,17 +57,26 @@
   (-> @(re-frame/subscribe [::activity-data])
       :metadata
       (select-keys [:next-page-id :next-spread-id :flipbook-pages])))
+
 (re-frame/reg-cofx
-  :activity-data
-  (fn [{:keys [db] :as co-effects}]
-    (->> (get-activity-data db path-to-db)
-         (assoc co-effects :activity-data))))
+ :activity-data
+ (fn [{:keys [db] :as co-effects}]
+   (->> (get-activity-data db path-to-db)
+        (assoc co-effects :activity-data))))
+
+(re-frame/reg-event-fx
+  ::reset-activity-data
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-data]]
+    {:db (-> db
+             (reset-activity-data activity-data))}))
 
 (re-frame/reg-event-fx
   ::set-activity-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ activity-data]]
-    {:db (-> db (set-activity-data activity-data))}))
+    {:db (-> db
+             (set-activity-data activity-data))}))
 
 (re-frame/reg-sub
   ::flipbook?
@@ -189,7 +206,7 @@
   (fn [{:keys [db]} [_ activity-data]]
     {:db (-> db
              (set-activity-loading false)
-             (set-activity-data (set-actions-uid activity-data)))}))
+             (reset-activity-data (set-actions-uid activity-data)))}))
 
 (re-frame/reg-event-fx
   ::load-activity-failure
@@ -228,24 +245,26 @@
 (re-frame/reg-event-fx
   ::save-activity
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ {:keys [on-success]}]]
     (let [{:keys [id]} (get-activity-info db)
           data (get-activity-data db)]
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/save-activity-version
                   {:activity-id   id
                    :activity-data data}
-                  {:on-success [::save-activity-success]
+                  {:on-success [::save-activity-success on-success]
                    :on-failure [::save-activity-failure]}]})))
 
 (re-frame/reg-event-fx
   ::save-activity-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ on-success]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-versions-loading true))
-     :dispatch [::load-versions]}))
+                   (set-activity-versions-loading true)
+                   (assoc :has-activity-data-changes? false))
+     :dispatch-n [[::load-versions]
+                  on-success]}))
 
 (re-frame/reg-event-fx
   ::save-activity-failure
@@ -272,7 +291,7 @@
   (fn [{:keys [db]} [_ {:keys [data]}]]
     {:db (-> db
              (set-activity-saving false)
-             (set-activity-data data))}))
+             (reset-activity-data data))}))
 
 (re-frame/reg-event-fx
   ::update-template-failure
@@ -301,7 +320,7 @@
   (fn [{:keys [db]} [_ on-success {:keys [data]}]]
     {:db         (-> db
                      (set-activity-saving false)
-                     (set-activity-data data))
+                     (reset-activity-data data))
      :dispatch-n (cond-> [[:stage/reset]]
                          (some? on-success) (conj on-success))}))
 
@@ -331,7 +350,7 @@
   (fn [{:keys [db]} [_ {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-data data))
+                   (reset-activity-data data))
      :dispatch [:stage/reset]}))
 
 (re-frame/reg-event-fx
@@ -366,7 +385,7 @@
   (fn [{:keys [db]} [_ on-success {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-data data))
+                   (reset-activity-data data))
      :dispatch on-success}))
 
 (re-frame/reg-event-fx
@@ -403,7 +422,7 @@
   (fn [{:keys [db]} [_ on-success {:keys [data]}]]
     {:db       (-> db
                    (set-activity-saving false)
-                   (set-activity-data data))
+                   (reset-activity-data data))
      :dispatch on-success}))
 
 (re-frame/reg-event-fx

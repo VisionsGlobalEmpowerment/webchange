@@ -239,7 +239,7 @@
 (re-frame/reg-event-fx
   ::apply-template-options-success
   (fn [{:keys [_]} [_ on-success {:keys [data]}]]
-    {:dispatch-n (cond-> [[::state/set-activity-data data]
+    {:dispatch-n (cond-> [[::state/reset-activity-data data]
                           [::stage-state/reset]]
                          (some? on-success) (conj on-success))}))
 
@@ -269,7 +269,7 @@
 (re-frame/reg-event-fx
   ::call-activity-action-success
   (fn [{:keys [_]} [_ on-success {:keys [data]}]]
-    {:dispatch-n (cond-> [[::state/set-activity-data data]
+    {:dispatch-n (cond-> [[::state/reset-activity-data data]
                           [::stage-state/reset]]
                          (some? on-success) (conj on-success))}))
 
@@ -296,7 +296,7 @@
 (re-frame/reg-event-fx
   ::update-activity-settings-success
   (fn [{:keys [_]} [_ on-success {:keys [info data]}]]
-    {:dispatch-n (cond-> [[::state/set-activity-data data]
+    {:dispatch-n (cond-> [[::state/reset-activity-data data]
                           [::state/set-activity-info info]
                           [::stage-state/reset]]
                          (some? on-success) (conj on-success))}))
