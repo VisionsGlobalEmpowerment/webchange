@@ -30,7 +30,8 @@
 (defn- panels
   [target]
   (r/with-let []
-    (let [object @(re-frame/subscribe [::state/object-data target])
+    (let [object @(re-frame/subscribe [::state/object-data])
+          can-remove? @(re-frame/subscribe [::state/can-remove?])
           group? (= "group" (:type object))]
       [:div {:class-name "tool--object-form"}
        [:h1 "Edit"]
@@ -40,6 +41,12 @@
                        :class-name "object-form--form"}]
          [object-panel {:target     target
                         :class-name "object-form--form"}])
+       [:div.object-form-actions]
+       (when can-remove?
+         [ui/button {:class-name "object-form--apply"
+                     :color      "blue-1"
+                     :on-click   #(re-frame/dispatch [::state/remove target])}
+          "Remove"])
        [ui/button {:class-name "object-form--apply"
                    :on-click   #(re-frame/dispatch [::state/apply target])}
         "Apply"]])

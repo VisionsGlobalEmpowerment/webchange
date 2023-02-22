@@ -14,8 +14,14 @@
         flex-direction: column;
         gap: 32px;
     }
-    
-    .object-form--apply {
-        border-radius: 30px;
+
+    .object-form-actions {
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+	.object-form--apply {
+	    width: 100%;
+            border-radius: 30px;
+	}
     }
 }

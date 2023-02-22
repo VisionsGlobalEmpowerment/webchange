@@ -178,7 +178,7 @@
     "add-page" (add-page-handler activity-data props)
     "add-empty-page" (add-empty-page activity-data (merge props {:page-params page-params}))
     "add-text" (add-text activity-data (:page-number props) (merge props {:page-params page-params}))
-    "remove-text" (flipbook-utils/remove-text-object activity-data (:object-name props))
+    "remove-text" (flipbook-utils/remove-text-object activity-data (:name props))
     "add-image" (add-image activity-data (:page-number props) (merge props {:page-params page-params}))
     "remove-page" (remove-page activity-data props page-params)
     "move-page" (move-page activity-data props page-params)

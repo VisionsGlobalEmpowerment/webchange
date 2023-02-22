@@ -6,7 +6,8 @@
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.stage-actions :as stage]
-    [webchange.interpreter.renderer.state.editor :as editor-state]))
+    [webchange.interpreter.renderer.state.editor :as editor-state]
+    [webchange.utils.scene-data :as scene-data]))
 
 (def path-to-db :lesson-builder/scene-layers)
 
@@ -14,19 +15,6 @@
   path-to-db
   (fn [db]
     (get db path-to-db)))
-
-(defn- get-object-type
-  [object-data]
-  (cond
-    (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
-    (get-in object-data [:metadata :added-character?]) :added-character
-    (get-in object-data [:metadata :question?]) :question
-    :else (-> object-data :type keyword)))
-
-(defn- remove-available?
-  [object-data]
-  (some #{(get-object-type object-data)}
-        [:added-character :uploaded-image :question :anchor]))
 
 (defn- get-layers
   [activity-data]
@@ -42,12 +30,12 @@
                 (let [{:keys [display-name]} metadata
                       actions (or (get-in metadata [:objects-tree :actions])
                                   (cond-> ["visibility" "edit"]
-                                          (remove-available? object-data) (conj "remove")))]
+                                          (scene-data/remove-available? object-data) (conj "remove")))]
                   (when (some? alias)
                     (logger/warn "Property 'alias?' is deprecated. Use 'metadata.display-name instead.'"))
                   {:alias   (or display-name alias object-name)
                    :name    object-name
-                   :object-type (get-object-type object-data)
+                   :object-type (scene-data/get-object-type object-data)
                    :type    type
                    :actions actions
                    :visible (get object-data :visible true)})))
@@ -79,7 +67,7 @@
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_ object-name]]
     (let [object-type (-> (get-in activity-data [:objects object-name])
-                          (get-object-type))]
+                          (scene-data/get-object-type))]
       {:dispatch [::state/remove-object {:object-name (name object-name)
                                          :object-type object-type
                                          :on-success [::stage-state/reset]}]})))

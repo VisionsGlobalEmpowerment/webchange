@@ -370,11 +370,14 @@
                    :added-character :remove-character
                    :animation :remove-character
                    :question :remove-question
-                   :anchor :remove-anchor)]
+                   :anchor :remove-anchor
+                   :text :remove-text)
+          common-action? (not (= :text object-type))]
       {:db       (-> db (set-activity-saving true))
        :dispatch [::warehouse/activity-template-action
                   {:activity-id id
                    :action      action
+                   :common-action? common-action?
                    :data        {:name object-name}}
                   {:on-success [::remove-object-success on-success]
                    :on-failure [::remove-object-failure]}]})))

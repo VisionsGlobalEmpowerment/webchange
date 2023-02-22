@@ -5,11 +5,13 @@
     [webchange.interpreter.renderer.state.editor :as editor-state]
     [webchange.interpreter.renderer.state.scene :as state-renderer]
     [webchange.lesson-builder.stage-actions :as stage]
+    [webchange.lesson-builder.state :as lesson-builder-state]
     [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.layout.menu.state :as menu-state]
     [webchange.utils.flipbook :as flipbook-utils]
     [webchange.lesson-builder.state-flipbook-screenshot :as flipbook-screenshot]
-    [webchange.lesson-builder.widgets.confirm.state :as confirm]))
+    [webchange.lesson-builder.widgets.confirm.state :as confirm]
+    [webchange.utils.scene-data :as scene-data]))
 
 (def path-to-db :lesson-builder/object-form)
 
@@ -62,7 +64,13 @@
   :<- [path-to-db]
   (fn [db [_ object-name]]
     (let [target (:target db)]
-      (get-in db [:targets target :objects object-name]))))
+      (get-in db [:targets target :objects (or object-name target)]))))
+
+(re-frame/reg-sub
+  ::can-remove?
+  :<- [::object-data]
+  (fn [object]
+    (scene-data/remove-available? object)))
 
 (re-frame/reg-event-fx
   ::change-object
@@ -159,6 +167,27 @@
           assets (get-in db [:targets object-name :assets])
           flipbook? (flipbook-utils/flipbook-activity? activity-data)]
       {:dispatch-n [[::stage/update-objects {:objects objects :assets assets}]
+                    [::editor-state/deselect-object]
+                    [::menu-state/history-back]
+                    (when flipbook?
+                      [::flipbook-screenshot/take-current-stage-screenshot])]})))
+
+(re-frame/reg-event-fx
+  ::remove
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ object-name]]
+    (let [object (get-in db [:targets object-name :objects object-name])]
+      {:db (assoc-in db [:targets object-name :objects] {})
+       :dispatch-n [[::lesson-builder-state/remove-object {:object-type (scene-data/get-object-type object)
+                                                           :object-name object-name
+                                                           :on-success [::remove-success]}]]})))
+
+(re-frame/reg-event-fx
+  ::remove-success
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} _]
+    (let [flipbook? (flipbook-utils/flipbook-activity? activity-data)]
+      {:dispatch-n [[::stage-state/reset]
                     [::editor-state/deselect-object]
                     [::menu-state/history-back]
                     (when flipbook?

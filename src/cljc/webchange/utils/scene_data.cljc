@@ -144,7 +144,20 @@
              (update scene-data :objects dissoc object-name)
              children-to-remove))))
 
-; Scene objects
+(defn get-object-type
+  [object-data]
+  (cond
+    (get-in object-data [:metadata :uploaded-image?]) :uploaded-image
+    (get-in object-data [:metadata :added-character?]) :added-character
+    (get-in object-data [:metadata :question?]) :question
+    :else (-> object-data :type keyword)))
+
+(defn remove-available?
+  [object-data]
+  (some #{(get-object-type object-data)}
+        [:added-character :uploaded-image :question :anchor :text]))
+
+;; Scene objects
 
 (defn remove-scene-object
   [scene-data object-name]

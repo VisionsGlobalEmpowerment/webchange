@@ -199,8 +199,8 @@
 (defn wrap-log
   [handler]
   (fn [request]
-    (log/debug "Request: " (str "Uri: " (:uri request) " " (:request-method
-                                                            request)))
+    #_(log/debug "Request: " (str "Uri: " (:uri request) " " (:request-method
+                                                              request)))
     (handler request)))
 
 (defn request-validation-handler
