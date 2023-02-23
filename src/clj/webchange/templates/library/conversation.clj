@@ -28,7 +28,7 @@
         :triggers      {:back  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "script"}},
         :metadata      {:autostart         true
-                        :tracks            [{:title "Sequence"
+                        :tracks            [{:title "Main Script"
                                              :nodes [{:type      "dialog"
                                                       :action-id "dialog-main"}]}]
                         :next-action-index 0}})

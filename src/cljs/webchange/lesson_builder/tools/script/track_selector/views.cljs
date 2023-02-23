@@ -33,7 +33,8 @@
 
 (defn track-selector
   []
-  (r/with-let [open? (r/atom false)
+  (r/with-let [_ (re-frame/dispatch [::state/init])
+               open? (r/atom false)
                toggle-open #(swap! open? not)
                handle-option-click #(do (reset! open? false)
                                         (re-frame/dispatch [::state/set-current-track %]))]

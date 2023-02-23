@@ -514,7 +514,7 @@
                                             (dialog/default "Tap instructions")},
         :triggers      {:stop  {:on "back", :action "stop-activity"},
                         :start {:on "start", :action "start-scene"}},
-        :metadata      {:tracks [{:title "Activity Sequence"
+        :metadata      {:tracks [{:title "Main Script"
                                   :nodes [{:type      "dialog"
                                            :action-id :mari-voice-welcome}
                                           {:type "prompt"

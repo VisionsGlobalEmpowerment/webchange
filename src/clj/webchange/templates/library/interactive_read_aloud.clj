@@ -112,7 +112,7 @@
                                                         {:type "flipbook-init" :target "book" :read false}]}}
                :triggers
                               {:start {:on "start", :action "script"}}
-               :metadata      {:tracks            [{:title "Sequence"
+               :metadata      {:tracks            [{:title "Main Script"
                                                     :nodes [{:type      "dialog"
                                                              :action-id "dialog-intro"}
                                                             {:type "prompt"

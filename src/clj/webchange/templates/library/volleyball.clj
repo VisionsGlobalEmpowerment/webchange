@@ -621,7 +621,7 @@
                         :finish-activity-dialog    (-> (dialog/default "Finish activity"))},
         :triggers      {:back {:on "back", :action "stop-activity"}, :start {:on "start", :action "start-scene"}},
         :metadata      {:prev   "stadium", :autostart true
-                        :tracks [{:title "Sequence"
+                        :tracks [{:title "Main Script"
                                   :nodes [{:type      "dialog"
                                            :action-id :intro-dialog}
                                           {:type "prompt"

@@ -104,7 +104,8 @@
                                :dialog-main (dialog/default "Main")}
                :triggers
                {:start {:on "start", :action "script"}}
-               :metadata      {:tracks            [{:title "Sequence"
+               :metadata      {:tracks            [{:title "Main Script"
+                                                    :default true
                                                     :nodes [{:type      "dialog"
                                                              :action-id "dialog-main"}]}]
                                :next-action-index 0
