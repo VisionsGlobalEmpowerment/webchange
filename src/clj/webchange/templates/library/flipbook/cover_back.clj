@@ -34,7 +34,8 @@
                                 :width          "---"
                                 :fill           "---"
                                 :text           "---"
-                                :editable?      {:select true}
+                                :editable?      {:select true
+                                                 :drag   true}
                                 :placeholder    "Add attributions"
                                 :metadata       {:display-name (get-text-display-name :cover-back "License")
                                                  :removable?   true}}})
