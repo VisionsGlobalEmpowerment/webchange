@@ -10,6 +10,11 @@
    {:text "Medium" :value 5}
    {:text "Slow" :value 1}])
 
+(def available-scale
+  [{:text "1" :value 1}
+   {:text "0.8" :value 0.8}
+   {:text "0.5" :value 0.5}])
+
 (def template-options
   [{:type "note"
     :text "Character will run into boxes filled with letters. They must run through the correct letter to count as a correct answer."}
@@ -43,7 +48,12 @@
                 :key :speed
                 :label "Character Speed"
                 :placeholder "Choose"
-                :options available-speed}]}])
+                :options available-speed}
+               {:type "lookup"
+                :key :font-scale
+                :label "Font Scale"
+                :placeholder "Choose"
+                :options available-scale}]}])
 
 (def m {:id          34
         :name        "Running (time limited)"
@@ -461,8 +471,9 @@
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"
                                                                                                       :x           0
-                                                                                                      :y           0
+                                                                                                      :y           -60
                                                                                                       :align       "center"
+                                                                                                      :vertical-align "middle"
                                                                                                       :fill        0x000000
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
@@ -490,8 +501,9 @@
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"
                                                                                                       :x           0
-                                                                                                      :y           0
+                                                                                                      :y           -60
                                                                                                       :align       "center"
+                                                                                                      :vertical-align "middle"
                                                                                                       :fill        0x000000
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
@@ -519,8 +531,9 @@
                                                                                                       }
                                                                                  :target-letter-text {:type        "text"
                                                                                                       :x           0
-                                                                                                      :y           0
+                                                                                                      :y           -60
                                                                                                       :align       "center"
+                                                                                                      :vertical-align "middle"
                                                                                                       :fill        0x000000
                                                                                                       :font-family "Lexend Deca"
                                                                                                       :font-size   120
@@ -624,11 +637,23 @@
                                     {:type "set-variable" :var-name (str "item-" (inc idx)) :var-value letter})))]
     (assoc-in t [:actions :init-incorrect :data] actions)))
 
+(defn- init-font-size
+  [t {:keys [font-scale] :or {font-scale 1}}]
+  (let [scale (if (string? font-scale)
+                (Float/parseFloat font-scale)
+                font-scale)]
+    (-> t
+        (assoc-in [:objects :letter-target :font-size] (* scale 72))
+        (assoc-in [:actions :emit-object-line-1 :success :data :target-letter-text :font-size] (* scale 120))
+        (assoc-in [:actions :emit-object-line-2 :success :data :target-letter-text :font-size] (* scale 120))
+        (assoc-in [:actions :emit-object-line-3 :success :data :target-letter-text :font-size] (* scale 120)))))
+
 (defn f
   [args]
   (-> (common/init-metadata m t args)
       (init-correct args)
       (init-incorrect args)
+      (init-font-size args)
       (assoc-in [:objects :timer :time] (:time args))
       (set-speed 5)
       (assoc-in [:metadata :saved-props :template-options] (assoc args :speed 5))
@@ -647,6 +672,7 @@
   (-> activity-data
       (init-correct args)
       (init-incorrect args)
+      (init-font-size args)
       (assoc-in [:objects :timer :time] (:time args))
       (set-speed (:speed args))
       (assoc-in [:metadata :saved-props :template-options] args)))
