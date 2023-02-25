@@ -262,6 +262,7 @@
   ::save-activity-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ on-success]]
+    (reset-before-leave!)
     {:db       (-> db
                    (set-activity-saving false)
                    (set-activity-versions-loading true)

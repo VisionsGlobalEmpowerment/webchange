@@ -16,12 +16,8 @@
     (apply (:redirect-to router) route-params)))
 
 (defn navigation-link
-  []
-  (let []
-    (r/create-class
-      {:reagent-render
-       (fn [{:keys [class-name route router]}]
-         (let [href (get-href router route)
+  [{:keys [class-name route router]}]
+  (r/with-let [href (get-href router route)
                handle-click (fn [event]
                               (.preventDefault event)
                               (.stopPropagation event)
@@ -29,8 +25,8 @@
                handle-ref (fn [ref]
                             (when (some? ref)
                               (.addEventListener ref "click" handle-click)))]
-           (->> (r/current-component)
-                (r/children)
-                (into [:a (cond-> {:class-name (get-class-name {class-name (some? class-name)})
-                                   :ref        handle-ref}
-                                  (some? href) (assoc :href href))]))))})))
+    (->> (r/current-component)
+         (r/children)
+         (into [:a (cond-> {:class-name (get-class-name {class-name (some? class-name)})
+                            :ref        handle-ref}
+                           (some? href) (assoc :href href))]))))
