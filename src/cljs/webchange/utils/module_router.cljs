@@ -8,6 +8,23 @@
     [webchange.utils.numbers :refer [try-parse-int]]
     [webchange.utils.session-storage :as storage]))
 
+(def prompt-before-leave (atom false))
+(def text-before-leave "You have unsaved changes. Are you sure you want to leave the page?")
+
+(defn set-before-leave!
+  []
+  (reset! prompt-before-leave true)
+  (let [text text-before-leave 
+        event-handler (fn [event]
+                        (aset event "returnValue" text)
+                        text)]
+    (aset js/window "onbeforeunload" event-handler)))
+
+(defn reset-before-leave!
+  []
+  (reset! prompt-before-leave false)
+  (aset js/window "onbeforeunload" nil))
+
 (def locations {:profile "/user/profile"
                 :courses "/user/courses"
                 :login   "/user/login"
@@ -67,10 +84,12 @@
                           key)
                         (-> args redirect-args->params :url-params url-params->search-string)))
         redirect-to (fn [key & args]
-                      (if-let [params (-> args redirect-args->params :storage-params)]
-                        (storage/set-item key params))
-                      (let [path (apply get-path (concat [key] args))]
-                        (pushy/set-token! history path)))
+                      (when (or (not @prompt-before-leave) (js/window.confirm text-before-leave))
+                        (reset-before-leave!)
+                        (when-let [params (-> args redirect-args->params :storage-params)]
+                          (storage/set-item key params))
+                        (let [path (apply get-path (concat [key] args))]
+                          (pushy/set-token! history path))))
         location (fn [location-name]
                    (->> (get locations location-name)
                         (set! js/document.location)

@@ -6,7 +6,8 @@
     [webchange.utils.scene-action-data :refer [dialog-sequence-action?]]
     [webchange.utils.scene-data :refer [update-action]]
     [webchange.utils.uid :refer [get-uid]]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.module-router :refer [set-before-leave! reset-before-leave!]]))
 
 (def path-to-db :lesson-builder/index)
 
@@ -38,12 +39,14 @@
 
 (defn- set-activity-data
   [db value]
+  (set-before-leave!)
   (-> db
       (assoc activity-data-key value)
       (assoc :has-activity-data-changes? true)))
 
 (defn- reset-activity-data
   [db value]
+  (reset-before-leave!)
   (-> db
       (assoc activity-data-key value)
       (assoc :has-activity-data-changes? false)))
