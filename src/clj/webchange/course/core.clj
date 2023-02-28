@@ -1129,11 +1129,12 @@
                        (set))
         object-images (->> activity-data
                            :objects
+                           (vals)
                            (filter #(= "image" (:type %)))
                            (map :src)
-                           (remove empty?)
-                           (remove existing?))
+                           (remove empty?))
         new-assets (->> object-images
+                        (remove existing?)
                         (map (fn [src] {:url src :type "image" :size 1})))]
     (update activity-data :assets concat new-assets)))
 
