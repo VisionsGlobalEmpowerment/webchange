@@ -143,6 +143,13 @@
   (update-in scene-data [:metadata :available-actions] concat [{:action action-name
                                                                 :name   effect-name}]))
 
+(defn remove-available-action
+  [scene-data action-name]
+  (->> (get-in scene-data [:metadata :available-actions])
+       (remove #(= action-name (:action %)))
+       (into [])
+       (assoc-in scene-data [:metadata :available-actions])))
+
 (defn add-highlight
   [scene-data object-name effect-name]
   (let [action-name (str "highlight-" object-name)]

@@ -69,10 +69,7 @@
 
                                               (emit text-object "textChanged"))
                    :update-chunks           (fn [{:keys [callback params]}]
-                                              (->> (map merge
-                                                        (get-in @state [:props :chunks])
-                                                        (get params :chunks []))
-                                                   (update-chunks! state))
+                                              (update-chunks! state (get params :chunks []))
                                               (when (fn? callback)
                                                 (callback)))
                    :set-highlight           (fn [highlight]

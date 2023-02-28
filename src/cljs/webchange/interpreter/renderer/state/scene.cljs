@@ -113,7 +113,8 @@
    {:action :set-animation-skin :params [:skin]}
    {:action :set-combined-skin :params [:skin-names]}
    {:action :set-enable :params [:enable?]}
-   {:action :set-speed :params [:speed]}])
+   {:action :set-speed :params [:speed]}
+   {:action :set-chunks :params [:chunks]}])
 
 (defn- get-action-params
   [{:keys [params accompany-params]
@@ -365,9 +366,14 @@
     (apply-to-wrapper w/set-speed object-wrapper speed)))
 
 (re-frame/reg-fx
-  :set-skeleton
-  (fn [[object-wrapper params]]
-    (apply-to-wrapper w/set-skeleton object-wrapper params)))
+ :set-skeleton
+ (fn [[object-wrapper params]]
+   (apply-to-wrapper w/set-skeleton object-wrapper params)))
+
+(re-frame/reg-fx
+ :set-chunks
+ (fn [[{:keys [update-chunks]} params]]
+   (update-chunks {:params params})))
 
 (defn- generic-handler
   [[object-wrapper props _]]

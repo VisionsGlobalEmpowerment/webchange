@@ -25,6 +25,10 @@
                     :value (:text-left spread-data)
                     :required? true
                     :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-left %])}]
+         [ui/input {:label "Letter to highlight"
+                    :placeholder "Add Text"
+                    :value (:letter-left spread-data)
+                    :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :letter-left %])}]
          [select-image {:label "Image"
                         :value (get-in spread-data [:image-left :src])
                         :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-left {:src (:url %)}])}]])]
@@ -45,6 +49,10 @@
                     :value (:text-right spread-data)
                     :required? true
                     :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :text-right %])}]
+         [ui/input {:label "Letter to highlight"
+                    :placeholder "Add Text"
+                    :value (:letter-rigth spread-data)
+                    :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :letter-right %])}]
          [select-image {:label "Image"
                         :value (get-in spread-data [:image-right :src])
                         :on-change #(re-frame/dispatch [::state/change-spread-data spread-idx :image-right {:src (:url %)}])}]])]]))

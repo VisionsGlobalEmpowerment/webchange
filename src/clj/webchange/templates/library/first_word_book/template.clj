@@ -482,8 +482,8 @@
         (add-spreads spreads-to-add)
         (assoc-in [:actions :set-total-spreads-number :var-value] (+ title-spreads-number new-spreads-number)))))
 
-(defn- template-options
-  [activity-data {:keys [spreads delete-last] :as args}]
+(defn- apply-template-options
+  [activity-data args]
   (-> activity-data
       (set-data args)
       (process-spreads args)
@@ -518,7 +518,7 @@
     "remove-last" (-> old-data
                       (remove-last-spread)
                       (update-in [:metadata :saved-props :template-options] remove-spread-from-saved-props))
-    "template-options" (template-options old-data args)))
+    "template-options" (apply-template-options old-data args)))
 
 (core/register-template
   metadata create edit)

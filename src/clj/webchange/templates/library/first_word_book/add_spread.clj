@@ -1,7 +1,10 @@
 (ns webchange.templates.library.first-word-book.add-spread
   (:require
+    [clojure.string :as str]
+    [clojure.tools.logging :as log]
     [webchange.templates.library.first-word-book.timeout :as timeout]
-    [webchange.templates.utils.dialog :as dialog]))
+    [webchange.templates.utils.dialog :as dialog]
+    [webchange.templates.utils.common :as common]))
 
 (defn- spread-idx->spread-prefix
   ([spread-idx]
@@ -27,6 +30,16 @@
          :left "Left"
          :right "Right") " page"))
 
+(defn spread-idx->effect-name-highligh
+  [spread-idx side]
+  (-> (spread-idx->spread-prefix spread-idx side)
+      (str "-highligth")))
+
+(defn spread-idx->effect-name-unhighligh
+  [spread-idx side]
+  (-> (spread-idx->spread-prefix spread-idx side)
+      (str "-unhighlight")))
+
 (defn spread-idx->dialog-name
   [spread-idx side]
   (-> (spread-idx->spread-prefix spread-idx side)
@@ -41,6 +54,47 @@
   [spread-idx side]
   (-> (spread-idx->spread-prefix spread-idx side)
       (str "-image")))
+
+(defn- word-chunks
+  [word letter]
+  (let [letter-position (str/index-of word letter)
+        letter-length (count letter)]
+    (case letter-position
+      nil [{:start 0 :end (count word)}]
+      0 [{:start       0 :end letter-length
+          :fill        "#ef545c"
+          :font-weight "bold"}
+         {:start letter-length :end "last"}]
+      [{:start 0 :end letter-position}
+       {:start letter-position :end (+ letter-position letter-length)
+        :fill        "#ef545c"
+        :font-weight "bold"}
+       {:start (+ letter-position letter-length) :end "last"}])))
+
+(defn- add-effect
+  [activity-data spread-idx side text letter]
+  (let [text-highlight-name (spread-idx->effect-name-highligh spread-idx side)
+        text-unhighlight-name (spread-idx->effect-name-unhighligh spread-idx side)]
+    (if (seq letter)
+      (let [text-object-name (spread-idx->text-name spread-idx side)
+            highlight-action {:type        "set-attribute"
+                              :target      text-object-name
+                              :attr-name   "chunks"
+                              :attr-value  (word-chunks text letter)}
+            unhighlight-action {:type        "set-attribute"
+                                :target      text-object-name
+                                :attr-name   "chunks"
+                                :attr-value  [{:start 0 :end (count text)}]}]
+        (-> activity-data
+            (assoc-in [:actions text-highlight-name] highlight-action)
+            (assoc-in [:actions text-unhighlight-name] unhighlight-action)
+            (common/remove-available-action text-highlight-name)
+            (common/remove-available-action text-unhighlight-name)
+            (common/add-available-action text-highlight-name (str "Highlight " letter " in " text))
+            (common/add-available-action text-unhighlight-name (str "Unhighlight " letter " in " text))))
+      (-> activity-data
+          (common/remove-available-action text-highlight-name)
+          (common/remove-available-action text-unhighlight-name)))))
 
 (defn- add-dialog
   [activity-data spread-idx side text]
@@ -101,6 +155,12 @@
                     :image-size "contain"
                     :editable?  {:select true}}]
     (assoc-in activity-data [:objects image-name] image-data)))
+
+(defn- add-effects
+  [activity-data spread-idx {:keys [text-left text-right letter-left letter-right]}]
+  (-> activity-data
+      (add-effect spread-idx :left text-left letter-left)
+      (add-effect spread-idx :right text-right letter-right)))
 
 (defn- add-dialogs
   [activity-data spread-idx {:keys [text-left text-right]}]
@@ -169,13 +229,15 @@
       (add-spread-action id)
       (add-dialogs id args)
       (add-texts id args)
-      (add-images id args)))
+      (add-images id args)
+      (add-effects id args)))
 
 (defn edit-spread
   [activity-data {id :id :as args}]
   (-> activity-data
       (add-texts id args)
-      (add-images id args)))
+      (add-images id args)
+      (add-effects id args)))
 
 (defn add-spread
   [activity-data args]
