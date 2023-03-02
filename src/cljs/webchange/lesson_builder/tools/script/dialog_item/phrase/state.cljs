@@ -45,7 +45,7 @@
     (re-frame/subscribe [::state/action-data action-path]))
   (fn [action-data]
     (let [inner-action (action-utils/get-inner-action action-data)]
-      (validate-action "animation-sequence" inner-action))))
+      (-> (validate-action "animation-sequence" inner-action) :valid? not))))
 
 ;; remove
 

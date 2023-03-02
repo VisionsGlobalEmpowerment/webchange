@@ -91,10 +91,10 @@
                             :character "character"
                             :text-animation "dialogue")
               :class-name "text-editor--icon"}]
-    (when false ;has-issue?
-          [ui/icon {:icon       "info"
-                    :color      "yellow-1"
-                    :class-name "text-editor--icon-warning"}])]
+    (when has-issue?
+      [ui/icon {:icon       "info"
+                :color      "yellow-1"
+                :class-name "text-editor--icon-warning"}])]
    [text-control {:value       value
                   :on-change   on-change
                   :placeholder "Enter phrase text"
