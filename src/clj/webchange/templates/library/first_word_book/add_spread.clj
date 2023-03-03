@@ -60,16 +60,20 @@
   (let [letter-position (str/index-of word letter)
         letter-length (count letter)]
     (case letter-position
-      nil [{:start 0 :end (count word)}]
+      nil [{:start 0 :end (count word)
+            :fill "#00B2FF"}]
       0 [{:start       0 :end letter-length
           :fill        "#ef545c"
           :font-weight "bold"}
-         {:start letter-length :end "last"}]
-      [{:start 0 :end letter-position}
+         {:start letter-length :end "last"
+          :fill "#00B2FF"}]
+      [{:start 0 :end letter-position
+        :fill "#00B2FF"}
        {:start letter-position :end (+ letter-position letter-length)
         :fill        "#ef545c"
         :font-weight "bold"}
-       {:start (+ letter-position letter-length) :end "last"}])))
+       {:start (+ letter-position letter-length) :end "last"
+        :fill "#00B2FF"}])))
 
 (defn- add-effect
   [activity-data spread-idx side text letter]
