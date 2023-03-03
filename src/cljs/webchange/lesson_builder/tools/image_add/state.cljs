@@ -109,9 +109,11 @@
     (let [data (get db :form)]
       (cond
         (empty? (:name data)) {:db (set-name-error db "Name is required")}
-        (flipbook? db) {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]
-                                                                          :common-action? false}]}
-        :else {:dispatch [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}))))
+        (flipbook? db) {:dispatch [::lesson-builder-state/save-activity
+                                   {:on-success [::lesson-builder-state/add-image data {:on-success [::apply-success]
+                                                                                        :common-action? false}]}]}
+        :else {:dispatch [::lesson-builder-state/save-activity
+                          {:on-success [::lesson-builder-state/add-image data {:on-success [::apply-success]}]}]}))))
 
 (re-frame/reg-event-fx
   ::apply-success

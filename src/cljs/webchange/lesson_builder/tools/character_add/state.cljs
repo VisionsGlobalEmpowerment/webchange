@@ -23,5 +23,6 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [data (get db :form)]
-      {:dispatch-n [[::lesson-builder-state/add-character data]
+      {:dispatch-n [[::lesson-builder-state/save-activity
+                     {:on-success [::lesson-builder-state/add-character data]}]
                     [::menu-state/history-back]]})))

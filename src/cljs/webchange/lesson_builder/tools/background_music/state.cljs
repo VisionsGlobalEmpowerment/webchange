@@ -117,6 +117,7 @@
   (fn [{:keys [db]} [_]]
     (let [src (:src db)
           volume (:volume db)]
-      {:dispatch [::state/update-background-music {:src src
-                                                   :volume volume
-                                                   :on-success [::stage-state/reset]}]})))
+      {:dispatch [::state/save-activity
+                  {:on-success [::state/update-background-music {:src src
+                                                                 :volume volume
+                                                                 :on-success [::stage-state/reset]}]}]})))
