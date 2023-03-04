@@ -61,6 +61,7 @@
       :reagent-render
       (fn [{:keys [value editable? placeholder]
             :or   {editable? true}}]
+        (reset! current-value value)
         (let [show-placeholder? (nil? value)
               handle-change (fn [event]
                               (let [new-value (.. event -target -innerText)]
