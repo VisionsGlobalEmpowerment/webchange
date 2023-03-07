@@ -11,6 +11,7 @@
 (defn- school-counter
   []
   (let [{:keys [stats]} @(re-frame/subscribe [::state/school-data])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         add-button-props {:color      "blue-1"
                           :chip       "plus"
                           :chip-color "yellow-1"}]
@@ -19,25 +20,28 @@
                       :counter (:classes stats)
                       :actions [{:text     "Manage Classes"
                                  :on-click #(re-frame/dispatch [::state/open-classes])}
-                                (merge add-button-props
-                                       {:text     "Add Class"
-                                        :on-click #(re-frame/dispatch [::state/open-add-class])})]}
+                                (when-not readonly?
+                                  (merge add-button-props
+                                         {:text     "Add Class"
+                                          :on-click #(re-frame/dispatch [::state/open-add-class])}))]}
                      {:text    "Teachers"
                       :icon    "teachers"
                       :counter (:teachers stats)
                       :actions [{:text     "Manage Teachers"
                                  :on-click #(re-frame/dispatch [::state/open-teachers])}
-                                (merge add-button-props
-                                       {:text     "Add Teacher"
-                                        :on-click #(re-frame/dispatch [::state/open-add-teacher])})]}
+                                (when-not readonly?
+                                  (merge add-button-props
+                                         {:text     "Add Teacher"
+                                          :on-click #(re-frame/dispatch [::state/open-add-teacher])}))]}
                      {:text    "Students"
                       :icon    "students"
                       :counter (:students stats)
                       :actions [{:text     "Manage Students"
                                  :on-click #(re-frame/dispatch [::state/open-students])}
-                                (merge add-button-props
-                                       {:text     "Add Student"
-                                        :on-click #(re-frame/dispatch [::state/open-add-student])})]}
+                                (when-not readonly?
+                                  (merge add-button-props
+                                         {:text     "Add Student"
+                                          :on-click #(re-frame/dispatch [::state/open-add-student])}))]}
                      {:text       "Courses"
                       :icon       "courses"
                       :counter    (:courses stats)
@@ -54,6 +58,7 @@
 (defn- side-bar
   [{:keys [school-id]}]
   (let [school-form-editable? @(re-frame/subscribe [::state/school-form-editable?])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         handle-edit-click #(re-frame/dispatch [::state/set-school-form-editable (not school-form-editable?)])
         handle-data-save #(re-frame/dispatch [::state/handle-save %])
         handle-archive #(re-frame/dispatch [::state/open-schools-list])
@@ -61,11 +66,12 @@
     [page/side-bar {:title    "School Info"
                     :icon     "info"
                     :focused? school-form-editable?
-                    :actions  (cond-> []
-                                      school-form-editable? (conj {:icon     "close"
-                                                                   :on-click handle-cancel-click})
-                                      (not school-form-editable?) (conj {:icon     "edit"
-                                                                         :on-click handle-edit-click}))}
+                    :actions  (when-not readonly?
+                                (cond-> []
+                                        school-form-editable? (conj {:icon     "close"
+                                                                     :on-click handle-cancel-click})
+                                        (not school-form-editable?) (conj {:icon     "edit"
+                                                                           :on-click handle-edit-click})))}
      [edit-school-form {:school-id  school-id
                         :editable?  school-form-editable?
                         :on-save    handle-data-save

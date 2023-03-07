@@ -318,3 +318,9 @@ WHERE teacher_id = :teacher_id and class_id = :class_id
 UPDATE students
 SET class_id = null
 WHERE class_id = :class_id
+
+-- :name mark-school-read-only! :! :n
+-- :doc mark school record as read only
+UPDATE schools
+SET readonly = true
+WHERE id = :id

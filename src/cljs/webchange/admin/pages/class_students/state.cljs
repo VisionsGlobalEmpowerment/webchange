@@ -25,7 +25,9 @@
                      (assoc :loading-progress true))
      :dispatch-n [[::warehouse/load-class {:class-id class-id} {:on-success [::load-class-success]}]
                   [::warehouse/load-class-course {:class-id class-id} {:on-success [::load-course-success]}]
-                  [::warehouse/load-class-students-progress {:class-id class-id} {:on-success [::load-progress-success]}]]}))
+                  [::warehouse/load-class-students-progress {:class-id class-id} {:on-success [::load-progress-success]}]
+                  [::warehouse/load-school {:school-id school-id}
+                   {:on-success [::load-school-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-class-success
@@ -34,6 +36,17 @@
     {:db (-> db
              (assoc :loading-class false)
              (assoc :class class))}))
+
+(re-frame/reg-event-fx
+  ::load-school-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [school]}]]
+    {:db (assoc db :school-data school)}))
+
+(re-frame/reg-sub
+  ::readonly?
+  :<- [path-to-db]
+  #(get-in % [:school-data :readonly] false))
 
 ;; course data
 

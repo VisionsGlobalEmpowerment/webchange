@@ -456,6 +456,7 @@
   (db/delete-activity-stats-by-id! {:id (:id activity-stats)}))
 
 (defn import-secondary-data! [id data]
+  (db/mark-school-read-only! {:id id})
   (let [users-imported (:users data)
         classes-imported (:classes data)
         users-guid (process-users-imported! users-imported)]

@@ -10,6 +10,7 @@
   (let [handle-click #(re-frame/dispatch [::state/open-teacher-profile id])
         handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
         handle-active-click #(re-frame/dispatch [::state/set-teacher-status id (not active?)])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         determinate? (boolean? active?)
         loading? (= active? :loading)]
     [ui/list-item {:avatar   nil
@@ -18,22 +19,25 @@
                                :value email}
                               {:key   "Last Login"
                                :value last-login}]
-                   :on-click handle-click
-                   :controls [:div {:on-click  #(.stopPropagation %)}
-                              [ui/switch {:label          (cond
-                                                            loading? "Saving.."
-                                                            (not determinate?) "..."
-                                                            active? "Active"
-                                                            :else "Inactive")
+                   :on-click (when-not readonly?
+                               handle-click)
+                   :controls (when-not readonly?
+                               [:div {:on-click  #(.stopPropagation %)}
+                                [ui/switch {:label          (cond
+                                                              loading? "Saving.."
+                                                              (not determinate?) "..."
+                                                              active? "Active"
+                                                              :else "Inactive")
 
-                                          :checked?       active?
-                                          :indeterminate? (not determinate?)
-                                          :disabled?      loading?
-                                          :on-change      handle-active-click
-                                          :class-name     "active-switch"}]]
-                   :actions  [{:icon     "edit"
-                               :title    "Edit teacher"
-                               :on-click handle-edit-click}]}]))
+                                            :checked?       active?
+                                            :indeterminate? (not determinate?)
+                                            :disabled?      loading?
+                                            :on-change      handle-active-click
+                                            :class-name     "active-switch"}]])
+                   :actions  (when-not readonly?
+                               [{:icon     "edit"
+                                 :title    "Edit teacher"
+                                 :on-click handle-edit-click}])}]))
 
 (defn- teacher-list
   []
@@ -48,6 +52,7 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
+          readonly? @(re-frame/subscribe [::state/readonly?])
           teachers-number @(re-frame/subscribe [::state/teachers-number])
           handle-add-click #(re-frame/dispatch [::state/add-teacher])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
@@ -58,7 +63,8 @@
                                       :stats    [{:icon    "teachers"
                                                   :counter teachers-number
                                                   :label   "Teachers"}]
-                                      :actions  [{:text     "Add Teacher to School"
-                                                  :icon     "plus"
-                                                  :on-click handle-add-click}]}}
+                                      :actions  (when-not readonly?
+                                                  [{:text     "Add Teacher to School"
+                                                    :icon     "plus"
+                                                    :on-click handle-add-click}])}}
        [teacher-list]])))

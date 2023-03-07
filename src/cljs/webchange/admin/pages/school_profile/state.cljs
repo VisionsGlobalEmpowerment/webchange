@@ -79,6 +79,11 @@
   #(-> (get % :name "")
        (clojure.string/capitalize)))
 
+(re-frame/reg-sub
+  ::readonly?
+  :<- [::school-data]
+  #(-> (get % :readonly false)))
+
 ;; form handlers
 
 (re-frame/reg-event-fx

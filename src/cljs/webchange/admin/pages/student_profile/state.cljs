@@ -36,13 +36,13 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school-id student-id params]}]]
-    (print "profile params" params)
     (let [{:keys [action]} params]
       {:db         (-> db
                        (assoc :school-id school-id)
                        (assoc :student-id student-id)
                        (assoc :params params))
-       :dispatch-n (cond-> [[::load-student-progress]]
+       :dispatch-n (cond-> [[::load-student-progress]
+                            [::warehouse/load-school {:school-id school-id} {:on-success [::load-school-success]}]]
                            (= action "edit") (conj [::set-student-form-editable true]))})))
 
 ;; load progress
@@ -84,6 +84,17 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
     {:dispatch [::redirect-to-student-view]}))
+
+(re-frame/reg-event-fx
+  ::load-school-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [school]}]]
+    {:db (assoc db :school-data school)}))
+
+(re-frame/reg-sub
+  ::readonly?
+  :<- [path-to-db]
+  #(get-in % [:school-data :readonly] false))
 
 (re-frame/reg-event-fx
   ::redirect-to-student-view

@@ -80,6 +80,11 @@
   :<- [::school-data]
   #(get % :name))
 
+(re-frame/reg-sub
+  ::readonly?
+  :<- [::school-data]
+  #(get % :readonly false))
+
 (re-frame/reg-event-fx
   ::add-teacher
   [(i/path path-to-db)]

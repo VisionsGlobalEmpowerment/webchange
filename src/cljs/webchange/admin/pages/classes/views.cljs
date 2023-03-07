@@ -8,9 +8,10 @@
 (defn- list-item
   [{:keys [id name stats]}]
   (let [{:keys [students teachers]} stats
+        readonly? @(re-frame/subscribe [::state/readonly?])
         handle-click #(re-frame/dispatch [::state/open-class-profile id])
         handle-edit-click #(re-frame/dispatch [::state/edit-class id])
-        handle-students-click #(re-frame/dispatch [::state/edit-class-students id])
+        handle-students-click #(re-frame/dispatch [::state/show-class-students id])
         handle-teachers-click #(re-frame/dispatch [::state/edit-class-teachers id])]
     [ui/list-item {:name     name
                    :on-click handle-click
@@ -22,9 +23,10 @@
                                :icon     "teachers"
                                :text     "Teachers"
                                :on-click handle-teachers-click}]
-                   :actions  [{:icon     "edit"
-                               :title    "Edit teacher"
-                               :on-click handle-edit-click}]}]))
+                   :actions  (when-not readonly?
+                               [{:icon     "edit"
+                                 :title    "Edit class"
+                                 :on-click handle-edit-click}])}]))
 
 (defn- classes-list
   []
@@ -39,6 +41,7 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
+          readonly? @(re-frame/subscribe [::state/readonly?])
           classes-number @(re-frame/subscribe [::state/classes-number])
           handle-add-click #(re-frame/dispatch [::state/add-class])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
@@ -49,7 +52,8 @@
                                       :stats    [{:icon    "classes"
                                                   :counter classes-number
                                                   :label   "Classes"}]
-                                      :actions  [{:text     "Add New Class"
-                                                  :icon     "plus"
-                                                  :on-click handle-add-click}]}}
+                                      :actions  (when-not readonly?
+                                                  [{:text     "Add New Class"
+                                                    :icon     "plus"
+                                                    :on-click handle-add-click}])}}
        [classes-list]])))

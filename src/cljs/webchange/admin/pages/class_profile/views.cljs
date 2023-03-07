@@ -18,6 +18,7 @@
   (let [{:keys [students teachers]} @(re-frame/subscribe [::state/class-stats])
         courses @(re-frame/subscribe [::state/school-courses-number])
         class-course @(re-frame/subscribe [::state/class-course])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
         handle-manage-students-click #(re-frame/dispatch [::state/open-students-list])
         handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])
@@ -32,17 +33,19 @@
                       :counter teachers
                       :actions [{:text     "Manage Teachers"
                                  :on-click handle-manage-teachers-click}
-                                (merge add-button-props
-                                       {:text     "Add Teacher"
-                                        :on-click handle-add-teacher-click})]}
+                                (when-not readonly?
+                                  (merge add-button-props
+                                         {:text     "Add Teacher"
+                                          :on-click handle-add-teacher-click}))]}
                      {:text    "Students"
                       :icon    "students"
                       :counter students
                       :actions [{:text     "Manage Students"
                                  :on-click handle-manage-students-click}
-                                (merge add-button-props
-                                       {:text     "Add Student"
-                                        :on-click handle-add-student-click})]}
+                                (when-not readonly?
+                                  (merge add-button-props
+                                         {:text     "Add Student"
+                                          :on-click handle-add-student-click}))]}
                      {:text       "Students Activities"
                       :icon       "games"
                       :counter    students
@@ -53,8 +56,9 @@
                       :icon       "courses"
                       :background "green-2"
                       :counter    courses
-                      :actions    [{:text     "Manage Courses"
-                                    :on-click handle-manage-courses-click}]}]}]))
+                      :actions    (when-not readonly?
+                                    [{:text     "Manage Courses"
+                                      :on-click handle-manage-courses-click}])}]}]))
 
 (defn- statistics
   []
@@ -65,6 +69,7 @@
 (defn- side-bar-class-form
   [{:keys [class-id school-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/form-editable?])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         handle-edit-click #(re-frame/dispatch [::state/set-form-editable true])
         handle-cancel-click #(re-frame/dispatch [::state/handle-class-edit-cancel])
         handle-delete-click #(re-frame/dispatch [::state/handle-class-deleted])
@@ -72,11 +77,12 @@
     [page/side-bar {:title    "Class Info"
                     :icon     "info"
                     :focused? form-editable?
-                    :actions  (cond-> []
-                                      form-editable? (conj {:icon     "close"
-                                                            :on-click handle-cancel-click})
-                                      (not form-editable?) (conj {:icon     "edit"
-                                                                  :on-click handle-edit-click}))}
+                    :actions  (when-not readonly?
+                                (cond-> []
+                                        form-editable? (conj {:icon     "close"
+                                                              :on-click handle-cancel-click})
+                                        (not form-editable?) (conj {:icon     "edit"
+                                                                    :on-click handle-edit-click})))}
      [class-edit-form {:class-id  class-id
                        :school-id school-id
                        :editable? form-editable?

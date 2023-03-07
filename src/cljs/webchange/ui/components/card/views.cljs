@@ -62,7 +62,9 @@
   [{:keys [actions]}]
   (when-not (empty? actions)
     [:div {:class-name "bbs--card--actions"}
-     (for [[idx action-data] (map-indexed vector actions)]
+     (for [[idx action-data] (->> actions
+                                  (remove nil?)
+                                  (map-indexed vector))]
        ^{:key (str "action-" idx)}
        [card-action action-data])]))
 
@@ -90,8 +92,9 @@
          (or (nil? counter) (number? counter))
          (or (nil? text) (string? text))
          (some #{type} ["horizontal" "vertical"])
-         (or (nil? actions) (every? #(and (string? (:text %))
-                                          (fn? (:on-click %)))
+         (or (nil? actions) (every? #(or (nil? %)
+                                         (and (string? (:text %))
+                                              (fn? (:on-click %))))
                                     actions))]}
   [card-wrapper (merge props
                        {:class-name (get-class-name {"bbs--card"                               true

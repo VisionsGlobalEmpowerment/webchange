@@ -10,6 +10,7 @@
   (let [handle-click #(re-frame/dispatch [::state/open-student-profile id])
         handle-edit-click #(re-frame/dispatch [::state/edit-student id])
         handle-active-click #(re-frame/dispatch [::state/set-student-status id (not active?)])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         determinate? (boolean? active?)
         loading? (= active? :loading)]
     [ui/list-item {:avatar   nil
@@ -19,20 +20,22 @@
                               {:key   "Last Login"
                                :value last-login}]
                    :on-click handle-click
-                   :controls [ui/switch {:label          (cond
-                                                           loading? "Saving.."
-                                                           (not determinate?) "..."
-                                                           active? "Active"
-                                                           :else "Inactive")
+                   :controls (when-not readonly?
+                               [ui/switch {:label          (cond
+                                                             loading? "Saving.."
+                                                             (not determinate?) "..."
+                                                             active? "Active"
+                                                             :else "Inactive")
 
-                                         :checked?       active?
-                                         :indeterminate? (not determinate?)
-                                         :disabled?      loading?
-                                         :on-change      handle-active-click
-                                         :class-name     "active-switch"}]
-                   :actions  [{:icon     "edit"
-                               :title    "Edit teacher"
-                               :on-click handle-edit-click}]}]))
+                                           :checked?       active?
+                                           :indeterminate? (not determinate?)
+                                           :disabled?      loading?
+                                           :on-change      handle-active-click
+                                           :class-name     "active-switch"}])
+                   :actions  (when-not readonly?
+                               [{:icon     "edit"
+                                 :title    "Edit student"
+                                 :on-click handle-edit-click}])}]))
 
 (defn- students-list
   []
@@ -47,17 +50,20 @@
   (re-frame/dispatch [::state/init props])
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
+          readonly? @(re-frame/subscribe [::state/readonly?])
           students-number @(re-frame/subscribe [::state/students-number])
           handle-add-click #(re-frame/dispatch [::state/add-student])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
       [page/single-page {:class-name "page--students"
                          :header     {:title    school-name
                                       :icon     "school"
-                                      :on-click handle-school-click
+                                      :on-click (when-not readonly?
+                                                  handle-school-click)
                                       :stats    [{:icon    "students"
                                                   :counter students-number
                                                   :label   "Students"}]
-                                      :actions  [{:text     "Add Student to School"
-                                                  :icon     "plus"
-                                                  :on-click handle-add-click}]}}
+                                      :actions  (when-not readonly?
+                                                  [{:text     "Add Student to School"
+                                                    :icon     "plus"
+                                                    :on-click handle-add-click}])}}
        [students-list]])))

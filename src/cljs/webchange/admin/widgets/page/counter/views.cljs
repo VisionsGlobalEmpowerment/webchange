@@ -1,7 +1,6 @@
 (ns webchange.admin.widgets.page.counter.views
   (:require
-    [webchange.ui.index :as ui]
-    [webchange.ui.index :refer [get-class-name]]))
+    [webchange.ui.index :refer [get-class-name] :as ui]))
 
 (defn counter
   [{:keys [class-name data]}]

@@ -153,7 +153,9 @@
                        (assoc :handlers (select-keys params [:on-edit-finished])))
        :dispatch-n (cond-> [[::load-class]
                             [::warehouse/load-school-courses {:school-id school-id}
-                             {:on-success [::load-school-courses-success]}]]
+                             {:on-success [::load-school-courses-success]}]
+                            [::warehouse/load-school {:school-id school-id}
+                             {:on-success [::load-school-success]}]]
                            (= action "edit") (conj [::set-form-editable true])
                            (= action "manage-students") (conj [::open-students-list])
                            (= action "manage-teachers") (conj [::open-teachers-list]))})))
@@ -177,6 +179,17 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ courses]]
     {:db (set-school-courses db courses)}))
+
+(re-frame/reg-event-fx
+  ::load-school-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [school]}]]
+    {:db (assoc db :school-data school)}))
+
+(re-frame/reg-sub
+  ::readonly?
+  :<- [path-to-db]
+  #(get-in % [:school-data :readonly] false))
 
 (re-frame/reg-sub
   ::class-stats

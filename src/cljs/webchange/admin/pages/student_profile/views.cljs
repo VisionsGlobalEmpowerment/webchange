@@ -6,8 +6,7 @@
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.student-form.views :refer [edit-student-form]]
     [webchange.admin.widgets.student-progress-complete.views :refer [student-progress-complete]]
-    [webchange.ui.index :as ui]
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.ui.index :as ui]))
 
 (defn- header
   []
@@ -30,17 +29,6 @@
                             :icon       "play"
                             :icon-color "blue-2"}]}]))
 
-(defn- table-actions
-  []
-  (let [handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
-    [:div.table-actions
-     [c/icon-button {:icon       "trophy"
-                     :variant    "light"
-                     :direction  "revert"
-                     :class-name "complete-button"
-                     :on-click   handle-complete-click}
-      "Complete Class"]]))
-
 (defn- progress-list-item
   [{:keys [name progress]}]
   [ui/list-item {:name name}
@@ -61,6 +49,7 @@
   []
   (let [current-level @(re-frame/subscribe [::state/current-level])
         level-options @(re-frame/subscribe [::state/level-options])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         on-change #(re-frame/dispatch [::state/select-level %])
         handle-complete-click #(re-frame/dispatch [::state/open-complete-class])]
     [:div.progress-table
@@ -71,11 +60,12 @@
                   :on-change  on-change
                   :class-name "level-picker"}]
       [:div.title "Activities"]
-      [ui/button {:icon     "cup"
-                  :shape    "rounded"
-                  :color    "transparent"
-                  :on-click handle-complete-click}
-       "Complete Class"]]
+      (when-not readonly?
+        [ui/button {:icon     "cup"
+                    :shape    "rounded"
+                    :color    "transparent"
+                    :on-click handle-complete-click}
+         "Complete Class"])]
      [progress-list {:class-name "progress-table--list"}]]))
 
 (defn- content
@@ -113,6 +103,7 @@
 (defn- side-bar-student-profile
   [{:keys [school-id student-id]}]
   (let [form-editable? @(re-frame/subscribe [::state/student-form-editable?])
+        readonly? @(re-frame/subscribe [::state/readonly?])
         handle-edit-click #(re-frame/dispatch [::state/set-student-form-editable true])
         handle-cancel-click #(re-frame/dispatch [::state/handle-edit-canceled])
         handle-remove-from-class #(re-frame/dispatch [::state/open-class-profile-page])
@@ -120,11 +111,12 @@
     [page/side-bar {:title    "Student Account"
                     :icon     "teachers"
                     :focused? form-editable?
-                    :actions  (cond-> []
-                                      form-editable? (conj {:icon     "close"
-                                                            :on-click handle-cancel-click})
-                                      (not form-editable?) (conj {:icon     "edit"
-                                                                  :on-click handle-edit-click}))}
+                    :actions  (when-not readonly?
+                                (cond-> []
+                                        form-editable? (conj {:icon     "close"
+                                                              :on-click handle-cancel-click})
+                                        (not form-editable?) (conj {:icon     "edit"
+                                                                    :on-click handle-edit-click})))}
      [edit-student-form {:student-id           student-id
                          :school-id            school-id
                          :editable?            form-editable?

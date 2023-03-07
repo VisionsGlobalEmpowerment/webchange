@@ -53,6 +53,11 @@
   #(get % :name ""))
 
 (re-frame/reg-sub
+  ::readonly?
+  :<- [::school-data]
+  #(get % :readonly false))
+
+(re-frame/reg-sub
   ::classes
   :<- [path-to-db]
   (fn [data]
@@ -99,14 +104,11 @@
                                    :on-edit-finished [::edit-class-finished school-id]}]})))
 
 (re-frame/reg-event-fx
-  ::edit-class-students
+  ::show-class-students
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ class-id]]
     (let [school-id (:id (get-school-data db))]
-      {:dispatch [::routes/redirect :class-profile :school-id school-id :class-id class-id
-                  :storage-params {:action                    "manage-students"
-;                                   :on-edit-students-finished [::edit-class-finished school-id]
-                                   }]})))
+      {:dispatch [::routes/redirect :class-students :school-id school-id :class-id class-id]})))
 
 (re-frame/reg-event-fx
   ::edit-class-teachers

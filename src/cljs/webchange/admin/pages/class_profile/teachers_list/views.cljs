@@ -3,24 +3,27 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.pages.class-profile.teachers-list.state :as state]
+    [webchange.admin.pages.class-profile.state :as parent-state]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
 
 (defn- list-item
   [{:keys [id name]}]
   (let [removing? @(re-frame/subscribe [::state/teacher-removing? id])
+        readonly? @(re-frame/subscribe [::parent-state/readonly?])        
         handle-edit-click #(re-frame/dispatch [::state/edit-teacher id])
         handle-remove-click #(re-frame/dispatch [::state/remove-teacher id])]
     [ui/list-item {:avatar   nil
                    :name     name
                    :dense?   true
-                   :actions  [{:icon     "trash"
-                               :title    "Remove from class"
-                               :loading? removing?
-                               :on-click handle-remove-click}
-                              {:icon     "edit"
-                               :title    "Edit"
-                               :on-click handle-edit-click}]}]))
+                   :actions  (when-not readonly?
+                               [{:icon     "trash"
+                                 :title    "Remove from class"
+                                 :loading? removing?
+                                 :on-click handle-remove-click}
+                                {:icon     "edit"
+                                 :title    "Edit"
+                                 :on-click handle-edit-click}])}]))
 
 (defn- teacher-list
   []

@@ -6,7 +6,7 @@
     [webchange.ui.index :as ui]))
 
 (defn school-item
-  [{:keys [id name stats]}]
+  [{:keys [id name readonly stats]}]
   (let [{:keys [classes courses students teachers]} stats
         handle-row-click #(re-frame/dispatch [::state/open-school id])
         handle-edit-click #(re-frame/dispatch [::state/edit-school id])
@@ -31,10 +31,12 @@
                                :icon     "courses"
                                :text     "Courses"
                                :on-click handle-courses-click}]
-                   :on-click handle-row-click
-                   :actions  [{:icon     "edit"
-                               :title    "Edit school"
-                               :on-click handle-edit-click}]}]))
+                   :on-click (when-not readonly
+                               handle-row-click)
+                   :actions  [(when-not readonly
+                                {:icon     "edit"
+                                 :title    "Edit school"
+                                 :on-click handle-edit-click})]}]))
 
 (defn- schools-list
   []

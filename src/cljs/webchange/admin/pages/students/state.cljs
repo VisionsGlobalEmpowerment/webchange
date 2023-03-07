@@ -79,6 +79,11 @@
   :<- [::school-data]
   #(get % :name ""))
 
+(re-frame/reg-sub
+  ::readonly?
+  :<- [::school-data]
+  #(get % :readonly false))
+
 (re-frame/reg-event-fx
   ::add-student
   [(i/path path-to-db)]

@@ -78,6 +78,7 @@
   (fn []
     (let [{class-name :name stats :stats} @(re-frame/subscribe [::state/class])
           {course-name :name} @(re-frame/subscribe [::state/course-data])
+          readonly? @(re-frame/subscribe [::state/readonly?])
           handle-add-click #(re-frame/dispatch [::state/open-add-students-page])]
       [page/single-page {:class-name "page--class-students"
                          :header     {:title    class-name
@@ -89,8 +90,9 @@
                                                   :value (or course-name "")}]
                                       :controls [[level-picker]
                                                  [lesson-picker]]
-                                      :actions  [{:text     "Add Student"
-                                                  :icon     "plus"
-                                                  :on-click handle-add-click}]}}
+                                      :actions  (when-not readonly?
+                                                  [{:text     "Add Student"
+                                                    :icon     "plus"
+                                                    :on-click handle-add-click}])}}
        [activities-list]
        [progress-list]])))
