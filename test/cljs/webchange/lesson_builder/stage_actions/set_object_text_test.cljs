@@ -6,15 +6,19 @@
 
 (deftest set-object-text
   (rf-test/run-test-async
-    (testing "change object (keyword) text"
-      (dispatch-and-compare [::stage-actions/set-object-text {:object-name :text-object
-                                                              :text        "New Text"}]
-                            [{:objects {:text-object {:text "Letter"}}}
-                             {:objects {:text-object {:text "New Text"}}}])))
+   (testing "change object (keyword) text"
+     (dispatch-and-compare [::stage-actions/set-object-text {:object-name :text-object
+                                                             :text        "New Text"
+                                                             :chunks      []}]
+                           [{:objects {:text-object {:text "Letter"}}}
+                            {:objects {:text-object {:text "New Text"
+                                                     :chunks []}}}])))
 
   (rf-test/run-test-async
-    (testing "change object (text) text"
-      (dispatch-and-compare [::stage-actions/set-object-text {:object-name "text-object"
-                                                              :text        "New Text"}]
-                            [{:objects {:text-object {:text "Letter"}}}
-                             {:objects {:text-object {:text "New Text"}}}]))))
+   (testing "change object (text) text"
+     (dispatch-and-compare [::stage-actions/set-object-text {:object-name "text-object"
+                                                             :text        "New Text"
+                                                             :chunks      []}]
+                           [{:objects {:text-object {:text "Letter"}}}
+                            {:objects {:text-object {:text "New Text"
+                                                     :chunks []}}}]))))
