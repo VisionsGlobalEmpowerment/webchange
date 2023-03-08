@@ -127,23 +127,27 @@
         (#(db/transform-keys-one-level ->snake_case_keyword %))
         (db/create-or-update-event!))))
 
-(defn update-scene!
+(defn- update-scene!
+  [scene]
+  (let [created-at (if (seq (:created-at scene))
+                     (dt/iso-str2date-time (:created-at scene))
+                     (:created-at scene))
+        updated-at (if (seq (:updated-at scene))
+                     (dt/iso-str2date-time (:updated-at scene))
+                     (:updated-at scene))]
+    (as-> scene s
+          (assoc s :created-at created-at)
+          (assoc s :updated-at updated-at)
+          (db/transform-keys-one-level ->snake_case_keyword s)
+          (db/create-or-update-scene! s))))
+
+(defn- update-scenes!
   [scenes]
   (doseq [scene scenes]
-    (let [created-at (if (seq (:created-at scene))
-                       (dt/iso-str2date-time (:created-at scene))
-                       (:created-at scene))
-          updated-at (if (seq (:updated-at scene))
-                       (dt/iso-str2date-time (:updated-at scene))
-                       (:updated-at scene))]
-      (as-> scene s
-            (assoc s :created-at created-at)
-            (assoc s :updated-at updated-at)
-            (db/transform-keys-one-level ->snake_case_keyword s)
-            (db/create-or-update-scene! s))))
+    (update-scene! scene))
   (db/reset-scenes-seq!))
 
-(defn update-scene-versions!
+(defn- update-scene-versions!
   [scene-versions]
   (doseq [scene-version scene-versions]
     (let [current-latest (db/get-latest-scene-version {:scene_id (:scene-id scene-version)})
@@ -183,7 +187,7 @@
   (when-let [course-events (:course-events data)]
     (update-events! course-events))
   (when-let [scenes (:scenes data)]
-    (update-scene! scenes))
+    (update-scenes! scenes))
   (when-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
   (when-let [scene-skills (:scene-skills data)]
@@ -526,7 +530,7 @@
   (when-let [course-versions (:course-versions data)]
     (update-course-versions! course-versions))
   (when-let [scenes (:scenes data)]
-    (update-scene! scenes))
+    (update-scenes! scenes))
   (when-let [scene-versions (:scene-versions data)]
     (update-scene-versions! scene-versions))
   (when-let [scene-skills (:scene-skills data)]
@@ -671,17 +675,27 @@
                       (map (fn [url] {:path url})))]
     (download-files download)))
 
-(defn update-course-previews!
-  [requested-courses]
-  (doall
-   (for [course-slug requested-courses]
-     (let [course (course/get-course-latest-version course-slug)
-           files (->> course :scene-list
-                      (map second)
-                      (map :preview)
-                      (remove nil?)
-                      (map (fn [path] {:path path})))]
-       (download-files files)))))
+(defn update-activity-data!
+  [_config activity-id]
+  (let [owner-id 1
+        activity-info (-> (str "api/activities/" activity-id)
+                          (make-url-absolute)
+                          (client/get {:accept :json})
+                          :body
+                          (json/read-str :key-fn keyword))
+        data (-> (str "api/activities/" activity-id "/current-version")
+                 (make-url-absolute)
+                 (client/get {:accept :json})
+                 :body
+                 (json/read-str :key-fn keyword))]
+    (update-scene! (-> activity-info
+                       (assoc :image-src (:preview activity-info))))
+    (db/save-scene! {:scene_id (Integer/parseInt activity-id)
+                     :data data
+                     :owner_id owner-id
+                     :created_at (jt/local-date-time)
+                     :description "import"})
+    (db/reset-scenes-seq!)))
 
 (defn calc-upload-assets
   [school-id requested-courses]

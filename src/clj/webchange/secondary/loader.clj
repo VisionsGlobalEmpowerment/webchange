@@ -73,6 +73,10 @@
       (println "Done!")
       )))
 
+(defn download-activity!
+  [config activity-id]
+  (core/update-activity-data! config activity-id)
+  (core/update-missing-assets! config))
 
 (def commands
   {"init-secondary"
@@ -96,6 +100,9 @@
    "upload-local-files"
    (fn [config args]
      (apply upload-local-files! env args))
+   "download-activity"
+   (fn [config args]
+     (apply download-activity! env args))
    })
 
 (defn command? [[arg]]
