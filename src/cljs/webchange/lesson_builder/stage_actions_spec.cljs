@@ -35,3 +35,4 @@
 (s/def ::position number?)
 (s/def ::text string?)
 (s/def ::url string?)
+(s/def ::chunks sequential?)

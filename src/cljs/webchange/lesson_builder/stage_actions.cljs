@@ -197,11 +197,13 @@
 (re-frame/reg-event-fx
   ::set-object-text
   [(re-frame/inject-cofx :activity-data)]
-  (fn [{:keys [activity-data]} [_ {:keys [object-name text]}]]
+  (fn [{:keys [activity-data]} [_ {:keys [object-name text chunks]}]]
     {:pre [(s/valid? ::spec/object-name object-name)
-           (s/valid? ::spec/text text)]}
-    (let [update-path [:objects (keyword object-name) :text]
-          updated-activity-data (assoc-in activity-data update-path text)]
+           (s/valid? ::spec/text text)
+           (s/valid? ::spec/chunks chunks)]}
+    (let [update-path [:objects (keyword object-name)]
+          updated-activity-data (update-in activity-data update-path merge {:text text
+                                                                            :chunks chunks})]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 (re-frame/reg-event-fx

@@ -2,12 +2,14 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.state.state-fonts :as fonts]
+    [webchange.utils.text :refer [text->chunks]]
     [webchange.ui.index :as ui]))
 
 (defn- text-component
   [{:keys [data on-change]}]
   (let [value (get data :text "")
-        handle-change #(on-change {:text %})]
+        handle-change #(on-change {:text %
+                                   :chunks (text->chunks %)})]
     [ui/text-area {:value       value
                    :on-change   handle-change
                    :placeholder "Enter some text"

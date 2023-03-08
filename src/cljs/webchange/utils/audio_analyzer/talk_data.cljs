@@ -5,7 +5,7 @@
     [clojure.string :as str]
     [clojure.set :as set]))
 
-(defn get-chunks
+(defn- get-chunks
   [orig-text rec-text]
   (if (= (count orig-text) (count rec-text))
     rec-text
@@ -32,24 +32,24 @@
           processed-items (reduce (fn [result item]
                                     (if (:match item)
                                       (let
-                                        [stack-len (count (:stack result))
-                                         stacked-items (if (< 0 stack-len)
-                                                         (let
-                                                           [margins (cond
-                                                                      (> 0 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
-                                                                                                              :start (:start (get rec-text (:last result)))}
-                                                                      (= 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
-                                                                                                              :start (:start (get rec-text (:match item)))}
-                                                                      (< 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (inc (:last result))))
-                                                                                                              :start (:start (get rec-text (dec (:match item))))})
-                                                            duration (- (:end margins) (:start margins))
-                                                            item-duration (/ duration stack-len)]
-                                                           (vec (doall (map-indexed (fn [idx item]
-                                                                                      (-> item
-                                                                                          (assoc :start (* (+ 1 idx) (:start margins)))
-                                                                                          (assoc :end (+ item-duration (* (+ 1 idx) (:start margins)))))
-                                                                                      ) (:stack result)))))
-                                                         [])]
+                                          [stack-len (count (:stack result))
+                                           stacked-items (if (< 0 stack-len)
+                                                           (let
+                                                               [margins (cond
+                                                                          (> 0 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
+                                                                                                                  :start (:start (get rec-text (:last result)))}
+                                                                          (= 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
+                                                                                                                  :start (:start (get rec-text (:match item)))}
+                                                                          (< 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (inc (:last result))))
+                                                                                                                  :start (:start (get rec-text (dec (:match item))))})
+                                                                duration (- (:end margins) (:start margins))
+                                                                item-duration (/ duration stack-len)]
+                                                             (vec (doall (map-indexed (fn [idx item]
+                                                                                        (-> item
+                                                                                            (assoc :start (* (+ 1 idx) (:start margins)))
+                                                                                            (assoc :end (+ item-duration (* (+ 1 idx) (:start margins)))))
+                                                                                        ) (:stack result)))))
+                                                           [])]
                                         (-> result
                                             (update :items vec)
                                             (update :items concat stacked-items)
