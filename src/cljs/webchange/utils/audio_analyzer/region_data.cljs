@@ -1,8 +1,12 @@
 (ns webchange.utils.audio-analyzer.region-data
   (:require
+    [clojure.string :as s]
     [webchange.logger.index :as logger]
-    [webchange.utils.audio-analyzer.config :refer [analyze-string-length confidence-threshold end-search-distance]]
-    [webchange.utils.audio-analyzer.utils :refer [levenshtein-distance prepare-text]]))
+    [webchange.utils.audio-analyzer.config :refer [analyze-string-length
+                                                   confidence-threshold
+                                                   end-search-distance]]
+    [webchange.utils.audio-analyzer.utils :refer [levenshtein-distance
+                                                  prepare-text]]))
 
 (defn- prepare-result-items
   [data]
@@ -23,14 +27,14 @@
   ([data-text text-to-search start-from]
    (let [text-to-search-length (count text-to-search)
          data-text-length (count data-text)]
-     (->> (clojure.string/split data-text " ")
+     (->> (s/split data-text " ")
           (reduce (fn [result item]
                     (let [pos (+ (last result) 1 (count item))]
                       (conj result pos))) [0])
           (filter #(or (= % 0) (< % start-from) (<= % (- data-text-length text-to-search-length))))
           (mapcat (fn [i]
                     [(let [supposed-end (+ i text-to-search-length)
-                           end-subs (or (clojure.string/index-of data-text " " supposed-end)
+                           end-subs (or (s/index-of data-text " " supposed-end)
                                         supposed-end)
                            subs-to-compare (subs data-text i end-subs)
                            text-to-search-length (count subs-to-compare)
@@ -41,12 +45,12 @@
                         :start    i
                         :end      (+ i text-to-search-length)})
                      (let [supposed-end (+ i text-to-search-length)
-                           end-subs (or (clojure.string/index-of data-text " " supposed-end)
+                           end-subs (or (s/index-of data-text " " supposed-end)
                                         supposed-end)
-                           subs-to-compare (->> (clojure.string/split
-                                                  (subs data-text i end-subs) #"\s")
+                           subs-to-compare (->> (s/split
+                                                 (subs data-text i end-subs) #"\s")
                                                 (butlast)
-                                                (clojure.string/join " "))
+                                                (s/join " "))
                            text-to-search-length (count subs-to-compare)
                            distance (levenshtein-distance text-to-search subs-to-compare)]
                        {:distance distance
@@ -69,9 +73,9 @@
   (let [text-length (count text)
         text-to-search (subs text 0 analyze-string-length)]
     (if (> text-length (count text-to-search))
-      (->> (clojure.string/split text-to-search #"\s")
+      (->> (s/split text-to-search #"\s")
            (butlast)
-           (clojure.string/join " "))
+           (s/join " "))
       text-to-search)))
 
 (defn- text-to-search-end
@@ -79,9 +83,9 @@
   (let [text-length (count text)
         text-to-search (subs text (- text-length analyze-string-length) text-length)]
     (if (> text-length (count text-to-search))
-      (->> (clojure.string/split text-to-search #"\s")
+      (->> (s/split text-to-search #"\s")
            (drop 1)
-           (clojure.string/join " "))
+           (s/join " "))
       text-to-search)))
 
 (defn- compute-duration
@@ -94,7 +98,7 @@
        (filter #(>= (:start %) (:start region)))
        (filter #(<= (:end %) (:end region)))
        (map :word)
-       (clojure.string/join " ")))
+       (s/join " ")))
 
 (defn- prepare-candidate
   [text text-length data-text max-distance result-items candidate-start]
@@ -148,7 +152,10 @@
 
 (defn get-start-end-options-for-text
   [text data]
-  (let [data-text (clojure.string/join " " (map (fn [item] (:word item)) data))
+  (let [data-text (->> data
+                       (map :word)
+                       (map s/lower-case)
+                       (s/join " "))
         text (prepare-text text)
         text-length (count text)
         max-distance (* end-search-distance text-length)
