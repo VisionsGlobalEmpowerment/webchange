@@ -2,7 +2,7 @@
   (:require
     [webchange.ui.index :as ui]))
 
-(defn- search
+(defn search
   [{:keys [class-name on-change value]}]
   (let [handle-change #(when (fn? on-change) (on-change %))
         handle-reset #(handle-change "")]

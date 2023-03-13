@@ -413,11 +413,12 @@
                 :body [data SetActivityPreview]
                 :summary "Sets activity preview image url"
                 (handle-set-activity-preview course-slug scene-slug data request)))
-  (GET "/api/skills" []
+  (GET "/api/skills/:local" []
+       :path-params [local :- s/Str]
        :tags ["skill"]
        :return Skills
        :summary "Returns list of skills with strands and topics"
-       (-> (skills/get-skills) response)))
+       (-> (skills/get-skills local) response)))
 
 (defn collaborator-route
   [{{course-slug :course-slug} :route-params :as request}]

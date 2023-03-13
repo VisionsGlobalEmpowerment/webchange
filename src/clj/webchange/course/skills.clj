@@ -341,7 +341,7 @@
                  (flatten)))
 
 (defn get-skills
-  []
+  [local]
   {:levels   levels
    :subjects subjects
    :skills   skills

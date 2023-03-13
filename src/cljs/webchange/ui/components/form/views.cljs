@@ -104,10 +104,13 @@
                :on-change handle-change}]))
 
 (defn- select-control
-  [{:keys [disabled? id form-id label options options-type required?]}]
+  [{:keys [disabled? id form-id label options options-type required? multiple? on-change]}]
   (let [value @(re-frame/subscribe [::state/field-value form-id id])
         error @(re-frame/subscribe [::state/field-error form-id id])
-        handle-change #(re-frame/dispatch [::state/set-field-value form-id id %])]
+        handle-change #(do
+                         (when (fn? on-change)
+                           (on-change %))
+                         (re-frame/dispatch [::state/set-field-value form-id id %]))]
     [select {:id        id
              :value     value
              :options   options
@@ -115,6 +118,7 @@
              :label     label
              :disabled? disabled?
              :required? required?
+             :multiple? multiple?
              :on-change handle-change
              :type      options-type}]))
 

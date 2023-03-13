@@ -29,17 +29,27 @@
     (let [loading? @(re-frame/subscribe [::state/data-loading?])
           saving? @(re-frame/subscribe [::state/data-saving?])
           data @(re-frame/subscribe [::state/form-data])
+          level-options @(re-frame/subscribe [::state/level-options])
+          subject-options @(re-frame/subscribe [::state/subject-options])
           locked? (:locked data)
           model {:group-left   {:type       :group
                                 :class-name "group-left"
-                                :fields     {:about             {:label "About"
-                                                                 :type  :text-multiline}
-                                             :short-description {:label "Short Description"
-                                                                 :type  :text}
-                                             :remove            {:label    "Delete Activity"
-                                                                 :type     (if locked? :empty :action)
-                                                                 :icon     "trash"
-                                                                 :on-click #(re-frame/dispatch [::state/open-remove-window])}}}
+                                :fields     {:description  {:label "Skills Taught"
+                                                            :type  :text-multiline}
+                                             :attributions {:label "Attributions"
+                                                            :type  :text-multiline}
+                                             :skills       {:label "Skills"
+                                                            :type  :text}
+                                             :level        {:label "Level"
+                                                            :type  :select
+                                                            :options level-options}
+                                             :subject      {:label "Subject"
+                                                            :type  :select
+                                                            :options subject-options}
+                                             :remove       {:label    "Delete Activity"
+                                                            :type     (if locked? :empty :action)
+                                                            :icon     "trash"
+                                                            :on-click #(re-frame/dispatch [::state/open-remove-window])}}}
                  :group-filler {:type       :group
                                 :class-name "group-filler"}
                  :group-right  {:type       :group
@@ -48,7 +58,8 @@
                                                             :type  :text}
                                                      :lang {:label   "Language"
                                                             :type    :select
-                                                            :options language-options}}
+                                                            :options language-options
+                                                            :on-change #(re-frame/dispatch [::state/load-skills %])}}
                                                     (some? controls) (assoc :controls {:type    :custom
                                                                                        :label   (:label controls)
                                                                                        :control (:component controls)}))}}

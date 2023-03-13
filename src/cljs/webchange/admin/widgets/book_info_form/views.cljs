@@ -34,8 +34,8 @@
                                 :class-name "group-left"
                                 :fields     {:about             {:label "About"
                                                                  :type  :text-multiline}
-                                             :short-description {:label "Short Description"
-                                                                 :type  :text}
+                                             :attributions      {:label "Attributions"
+                                                                 :type  :text-multiline}
                                              :remove            {:label    "Delete Book"
                                                                  :type     (if locked? :empty :action)
                                                                  :icon     "trash"

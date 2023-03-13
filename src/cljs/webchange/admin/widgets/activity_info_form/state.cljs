@@ -87,7 +87,24 @@
                             (dissoc :metadata))]
       {:db (-> db
                (set-data-loading false)
-               (set-form-data prepared-data))})))
+               (set-form-data prepared-data))
+       :dispatch [::load-skills (:lang data)]})))
+
+(re-frame/reg-event-fx
+  ::load-skills
+  [(i/path path-to-db)]
+  (fn [{:keys [_]} [_ lang]]
+    {:dispatch [::warehouse/load-skills
+                {:local lang}
+                {:on-success [::load-skills-success]}]}))
+
+
+(re-frame/reg-event-fx
+  ::load-skills-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ {:keys [levels subjects]}]]
+    {:db (-> db
+             (assoc :levels levels :subjects subjects))}))
 
 (re-frame/reg-event-fx
   ::save
@@ -97,8 +114,11 @@
                           (get :id))
           prepared-data {:name (:name data)
                          :lang (:lang data)
-                         :metadata {:about (:about data)
-                                    :short-description (:short-description data)}}]
+                         :metadata {:description (:description data)
+                                    :attributions (:attributions data)
+                                    :skills (:skills data)
+                                    :subject (:subject data)
+                                    :level (:level data)}}]
       {:db       (set-data-saving db true)
        :dispatch [::warehouse/save-activity
                   {:activity-id activity-id :data prepared-data}
@@ -185,3 +205,24 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc db :activity-removing false)}))
 
+(re-frame/reg-sub
+  ::level-options
+  :<- [path-to-db]
+  (fn [db]
+    (let [levels (:levels db)]
+      (->> levels
+           (map (fn [[id name]]
+                  {:value id
+                   :text name}))
+           (concat [{:value nil :text ""}])))))
+
+(re-frame/reg-sub
+  ::subject-options
+  :<- [path-to-db]
+  (fn [db]
+    (let [subjects (:subjects db)]
+      (->> subjects
+           (map (fn [[id name]]
+                  {:value id
+                   :text name}))
+           (concat [{:value nil :text ""}])))))

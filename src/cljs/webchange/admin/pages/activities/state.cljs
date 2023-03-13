@@ -1,5 +1,6 @@
 (ns webchange.admin.pages.activities.state
   (:require
+    [clojure.string :as s]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
@@ -43,6 +44,14 @@
       is-global? (assoc activity :library-type "global")
       :else activity)))
 
+(defn- filter-by-search
+  [search-string activities]
+  (let [search-query (-> search-string (s/lower-case) (s/split #" "))]
+    (reduce (fn [activities search-word]
+              (filter #(s/includes? (:keywords %) search-word) activities))
+            activities
+            search-query)))
+
 (re-frame/reg-sub
   ::activities
   :<- [path-to-db]
@@ -60,12 +69,9 @@
                :always (filter (fn [{:keys [lang]}]
                                  (= lang current-language)))
                (not show-my-global) (remove #(and
-                                               (= (:status %) "visible")
-                                               (= (:owner-id %) current-user-id)))
-               (-> search-string empty? not) (filter (fn [{:keys [name]}]
-                                                       (clojure.string/includes?
-                                                         (clojure.string/lower-case name)
-                                                         (clojure.string/lower-case search-string))))
+                                              (= (:status %) "visible")
+                                              (= (:owner-id %) current-user-id)))
+               (-> search-string seq) (filter-by-search search-string)
                :always (sort-by :name)))))
 
 (re-frame/reg-sub
@@ -108,13 +114,19 @@
     {:db (-> db
              (assoc :current-user data))}))
 
+(defn- with-keywords
+  [activities]
+  (map (fn [{name :name {:keys [description attributions skills]} :metadata :as a}]
+         (assoc a :keywords (s/lower-case (str name " " description " " attributions " " skills))))
+       activities))
+
 (re-frame/reg-event-fx
   ::load-visible-activities-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ data]]
     {:db (-> db
              (assoc :visible-activities-loading false)
-             (assoc :visible-activities data))}))
+             (assoc :visible-activities (with-keywords data)))}))
 
 (re-frame/reg-event-fx
   ::load-my-activities-success
@@ -122,7 +134,7 @@
   (fn [{:keys [db]} [_ data]]
     {:db (-> db
              (assoc :my-activities-loading false)
-             (assoc :my-activities data))}))
+             (assoc :my-activities (with-keywords data)))}))
 
 (re-frame/reg-event-fx
   ::select-language

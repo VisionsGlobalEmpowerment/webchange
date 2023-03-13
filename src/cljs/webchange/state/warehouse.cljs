@@ -643,10 +643,10 @@
 
 (re-frame/reg-event-fx
   ::load-skills
-  (fn [{:keys [_]} [_ handlers]]
+  (fn [{:keys [_]} [_ {:keys [local]} handlers]]
     (create-request {:key    :load-skills
                      :method :get
-                     :uri    (str "/api/skills")} handlers)))
+                     :uri    (str "/api/skills/" local)} handlers)))
 
 ;; Scene
 

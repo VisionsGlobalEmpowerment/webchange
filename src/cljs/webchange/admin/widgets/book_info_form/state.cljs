@@ -103,7 +103,7 @@
           prepared-data {:name (:name data)
                          :lang (:lang data)
                          :metadata {:about (:about data)
-                                    :short-description (:short-description data)}}]
+                                    :attributions (:attributions data)}}]
       {:db       (set-data-saving db true)
        :dispatch [::warehouse/save-activity
                   {:activity-id activity-id :data prepared-data}

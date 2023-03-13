@@ -979,8 +979,8 @@
   (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         updated-at (jt/local-date-time)]
     (db/edit-scene! (assoc prepared-data
-                      :id activity-id
-                      :updated_at updated-at))
+                           :id activity-id
+                           :updated_at updated-at))
     {:id activity-id}))
 
 (defn archive-activity
