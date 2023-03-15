@@ -376,7 +376,7 @@
     (assert (= (count skins) 2))))
 
 (deftest skills-can-be-retrieved
-  (let [retrieved (-> (f/get-skills) :body slurp (json/read-str :key-fn keyword))]
+  (let [retrieved (-> (f/get-skills "en") :body slurp (json/read-str :key-fn keyword))]
     (is (not (empty? (:strands retrieved))))
     (is (not (empty? (:topics retrieved))))
     (is (not (empty? (:skills retrieved))))))

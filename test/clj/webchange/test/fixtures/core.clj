@@ -926,8 +926,8 @@
     (handler/dev-handler request)))
 
 (defn get-skills
-  []
-  (let [url (str "/api/skills")
+  [local]
+  (let [url (str "/api/skills/" local)
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))
