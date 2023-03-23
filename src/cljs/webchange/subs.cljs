@@ -15,7 +15,7 @@
 (re-frame/reg-sub
   ::scene-info
   (fn [db [_ scene-id]]
-    (get-in db [:course-data :scene-list (keyword scene-id)])))
+    (get-in db [:course-data :scene-list (-> scene-id str keyword)])))
 
 (re-frame/reg-sub
   ::current-scene-info
@@ -23,7 +23,7 @@
     [(re-frame/subscribe [::current-scene])
      (re-frame/subscribe [::scene-list])])
   (fn [[current-scene-id scene-list]]
-    (get scene-list (keyword current-scene-id))))
+    (get scene-list (-> current-scene-id str keyword))))
 
 (re-frame/reg-sub
   ::scene-list
@@ -52,34 +52,18 @@
      (re-frame/subscribe [::scene-placeholders])
      (re-frame/subscribe [::scene-list-filter])])
   (fn [[scene-list scene-placeholders filter-str]]
-    (->> scene-list
-         (remove #(-> % second :archived))
-         (map #(assoc (second %)
-                 :scene-id (first %)
-                 :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
-         (filter (fn [{:keys [name]}]
-                   (if-not (empty? filter-str)
-                     (clojure.string/includes? (clojure.string/lower-case name)
-                                               (clojure.string/lower-case filter-str))
-                     true)))
-         (sort-by :name))))
-
-(re-frame/reg-sub
-  ::navigation-mode
-  (fn [db]
-    (let [navigation-mode (get-in db [:course-data :navigation-mode])]
-      (if (= navigation-mode nil)
-        :activity
-        (keyword navigation-mode)))))
-
-(re-frame/reg-sub
-  ::course-scenes
-  (fn [db]
-    (->> db :course-data :scene-list
-         (remove #(-> % second :archived))
-         (map first)
-         (map name)
-         (into []))))
+    []
+    #_(->> scene-list
+           (remove #(-> % second :archived))
+           (map #(assoc (second %)
+                        :scene-id (first %)
+                        :is-placeholder (get scene-placeholders (-> % first name js/decodeURIComponent) false)))
+           (filter (fn [{:keys [name]}]
+                     (if-not (empty? filter-str)
+                       (clojure.string/includes? (clojure.string/lower-case name)
+                                                 (clojure.string/lower-case filter-str))
+                       true)))
+           (sort-by :name))))
 
 (re-frame/reg-sub
   ::course-levels

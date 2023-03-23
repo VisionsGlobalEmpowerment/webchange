@@ -14,8 +14,9 @@
 (re-frame/reg-event-fx
   ::save-scene-info
   (fn [{:keys [db]} [_ {:keys [scene-id data]}]]
-    (let [course-data (-> (get-in db [:course-data])
-                          (update-in [:scene-list (keyword scene-id)] merge data))
+    (let [scene-key (-> scene-id str keyword)
+          course-data (-> (get-in db [:course-data])
+                          (update-in [:scene-list scene-key] merge data))
           current-course (:current-course db)]
       {:db (assoc-in db [:course-data] course-data)
        :dispatch [::warehouse/save-course {:course-slug current-course

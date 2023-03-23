@@ -81,24 +81,6 @@
     (is (not (nil? (:slug saved-value))))
     (is (not (nil? (:scene-list retrieved-value))))))
 
-(deftest activity-can-be-created-from-template
-  (let [{user-id :id} (f/website-user-created)
-        course (f/course-created {:owner-id user-id})
-        name "Test Activity"
-        activity-data {:name name :template-id 1 :characters [{:skeleton "vera" :name "vera"}] :boxes 3 :skills [2]}
-        saved-response (f/create-activity! (:slug course) user-id activity-data)
-        saved-value (-> saved-response :body slurp (json/read-str :key-fn keyword))
-        retrieved-response (f/get-scene (:course-slug saved-value) (:scene-slug saved-value))
-        retrieved-value (-> retrieved-response :body slurp (json/read-str :key-fn keyword))]
-    (testing "Activity can be created from template"
-      (is (= 200 (:status saved-response)))
-      (is (= 200 (:status retrieved-response)))
-      (is (= name (:name saved-value)))
-      (is (not (nil? (:id saved-value))))
-      (is (not (nil? (:course-slug saved-value))))
-      (is (not (nil? (:scene-slug saved-value))))
-      (is (not (nil? (:objects retrieved-value)))))))
-
 (deftest create-activity-placeholder
   (let [{user-id :id} (f/website-user-created)
         course (f/course-created {:owner-id user-id})
@@ -137,8 +119,8 @@
 
 (deftest scene-can-be-saved
   (let [{user-id :id} (f/website-user-created)
-               course (f/course-created {:owner-id user-id})
-               scene (f/scene-created course)
+        course (f/course-created {:owner-id user-id})
+        scene (f/scene-created course)
         edited-value "test-edited"
         _ (f/save-scene! (:course-slug scene) (:name scene) user-id {:scene {:test edited-value}})
         retrieved-value (-> (f/get-scene (:course-slug scene) (:name scene))
@@ -148,26 +130,9 @@
                             :test)]
     (is (= edited-value retrieved-value))))
 
-(deftest set-scene-preview
-  (let [{user-id :id} (f/website-user-created)
-        course (f/course-created {:owner-id user-id})
-        scene (f/scene-created course)
-        edited-value "test-edited"
-        _ (f/save-activity-preview! (:course-slug scene) (:name scene) user-id {:preview edited-value})
-        retrieved-body (-> (f/get-course (:course-slug scene))
-                           :body
-                           slurp
-                           (json/read-str :key-fn keyword))
-        retrieved-value (-> retrieved-body
-                            :scene-list
-                            (get (keyword (:name scene)))
-                            :preview)]
-    (testing "Scene preview can be set"
-      (is (= edited-value retrieved-value)))))
-
 (deftest course-versions-can-be-retrieved
   (let [{user-id :id} (f/website-user-created)
-               course (f/course-created {:owner-id user-id})
+        course (f/course-created {:owner-id user-id})
         _ (f/save-course! (:slug course) user-id {:course {:initial-scene "edited-value"}})
         versions (-> (:slug course) f/get-course-versions :body slurp (json/read-str :key-fn keyword) :versions)]
     (is (= 2 (count versions)))))
@@ -230,48 +195,6 @@
     (is (= image-src (:image-src retrieved)))))
 
 (def website-user-id 123)
-(def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
-
-(deftest course-can-be-localized
-  (let [course (f/course-created)
-        new-language "new-language"]
-    (with-global-fake-routes-in-isolation
-      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-      (let [new-course (-> (f/localize-course! (:id course) {:language new-language :user-id website-user-id}) :body slurp (json/read-str :key-fn keyword))]
-        (is (= new-language (:lang new-course)))))))
-
-(deftest localized-course-can-be-retrieved
-  (let [course (f/course-created)
-        new-language "new-language"]
-    (with-global-fake-routes-in-isolation
-      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-      (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
-            my-courses (-> (f/get-courses-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
-        (is (= 1 (count my-courses)))))))
-
-#_(deftest localized-book-is-still-a-book
-    (let [course (f/course-created {:type "book"})
-          new-language "new-language"]
-      (with-global-fake-routes-in-isolation
-        {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-        (let [_ (f/localize-course! (:id course) {:language new-language :user-id website-user-id})
-              my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))
-              first-book-info (-> my-books first :slug (f/get-course-info) :body slurp (json/read-str :key-fn keyword))]
-          (is (= 1 (count my-books)))
-          (is (= "book" (:type first-book-info)))))))
-
-#_(deftest books-by-website-user
-    (f/course-created {:type "book" :status "archived" :name "Archived book" :website-user-id website-user-id})
-    (f/course-created {:type "book" :status "draft" :name "Draft book" :website-user-id website-user-id})
-    (f/course-created {:type "book" :status "in-review" :name "In review book" :website-user-id website-user-id})
-    (f/course-created {:type "book" :status "declined" :name "Declined book" :website-user-id website-user-id})
-    (f/course-created {:type "book" :status "published" :name "Published book" :website-user-id website-user-id})
-    (f/course-created {:type "course" :status "published" :name "Published course" :website-user-id website-user-id})
-    (with-global-fake-routes-in-isolation
-      {(website/website-user-resource) (fn [request] {:status 200 :headers {} :body (json/write-str {:status "success" :data website-user})})}
-      (let [my-books (-> (f/get-books-by-website-user website-user-id) :body slurp (json/read-str :key-fn keyword))]
-        (testing "Archived books and published courses are not returned"
-          (is (= 4 (count my-books)))))))
 
 (deftest available-courses-can-be-retrieved
   (let [course-name "available course"

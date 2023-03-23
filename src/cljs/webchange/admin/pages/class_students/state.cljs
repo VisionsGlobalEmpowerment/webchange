@@ -108,10 +108,10 @@
   :<- [::current-activities]
   (fn [[{:keys [progress students]} course-data activities]]
     (let [activities-data (->> activities
-                               (map (fn [{:keys [activity unique-id]}]
+                               (map (fn [{:keys [scene-id unique-id]}]
                                       [unique-id (merge {:unique-id unique-id
                                                          :category  "Foundational Literacy"}
-                                                        (get-in course-data [:data :scene-list (keyword activity)]))]))
+                                                        (get-in course-data [:data :scene-list (-> scene-id str keyword)]))]))
                                (into {}))
           activities-list (map :unique-id activities)
           students-data (->> students

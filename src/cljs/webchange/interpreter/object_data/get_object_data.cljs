@@ -4,7 +4,6 @@
     [webchange.interpreter.events-register :as ier]
     [webchange.subs :as subs]
     [webchange.interpreter.object-data.group-params :refer [with-group-params]]
-    [webchange.interpreter.object-data.navigation-param :refer [with-navigation-params]]
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]
     [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
     [webchange.interpreter.renderer.scene.components.flipbook.decorations :as flipbook-decorations]))
@@ -27,8 +26,7 @@
   ([name scene-id get-data]
    (prepare-object-data name scene-id get-data {}))
   ([name scene-id get-data metadata]
-   (let [object (->> (get-data name)
-                     (with-navigation-params scene-id name))
+   (let [object (get-data name)
          type (-> object :type keyword)
          object-data (case type
                        :anchor (-> (merge object

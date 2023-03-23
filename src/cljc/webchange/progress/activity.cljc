@@ -10,6 +10,7 @@
      :lesson        lesson
      :activity      activity
      :unique-id     (:unique-id data)
+     :scene-id      (:scene-id data)
      :activity-name (:activity data)}))
 
 (defn- indices

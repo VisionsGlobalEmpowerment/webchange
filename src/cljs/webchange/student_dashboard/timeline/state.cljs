@@ -14,10 +14,9 @@
     (let [course-slug (subs/current-course db)]
       {:dispatch [::state-course/load-course-info course-slug]})))
 
-(defn- scene-name->scene [scene-name scenes]
-  (let [{:keys [name preview type]} (get scenes (keyword scene-name))]
-    {:id    scene-name
-     :type  type
+(defn- scene-id->scene [scene-id scenes]
+  (let [{:keys [id name preview]} (get scenes (-> scene-id str keyword))]
+    {:id    id
      :name  name
      :image preview}))
 
@@ -38,8 +37,8 @@
       (->> activities
            (filter #(lessons-activity/finished? db % activities))
            (map #(activity-letter db %))
-           (map (fn [{:keys [activity activity-name level lesson letter] :as activity-data}]
-                  (let [{:keys [name preview]} (get scenes (keyword activity-name))]
+           (map (fn [{:keys [activity level lesson letter scene-id] :as activity-data}]
+                  (let [{:keys [name preview]} (get scenes (-> scene-id str keyword))]
                     {:id       (str level "-" lesson "-" activity)
                      :title    name
                      :activity activity-data
@@ -52,17 +51,16 @@
 (re-frame/reg-sub
   ::new-activities
   (fn [db]
-    (let [scenes (get-in db [:course-data :scene-list])
-          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
+    (let [activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
       (filter #(lessons-activity/new? db % activities) activities))))
 
 (defn get-next-activity
   [db]
   (let [scenes (get-in db [:course-data :scene-list])
         next (lessons-activity/get-progress-next db)
-        activity (-> (get-in db [:course-data :levels])
-                     (get-in [(:level next) :lessons (:lesson next) :activities (:activity next)]))]
-    (merge next (scene-name->scene (:activity activity) scenes))))
+        {:keys [scene-id]} (-> (get-in db [:course-data :levels])
+                               (get-in [(:level next) :lessons (:lesson next) :activities (:activity next)]))]
+    (merge next (scene-id->scene scene-id scenes))))
 
 
 (re-frame/reg-event-fx
@@ -75,9 +73,9 @@
   ::open-activity
   (fn [{:keys [db]} [_ activity]]
     (let [course (:current-course db)
-          activity (select-keys activity [:level :lesson :activity :activity-name :new? :unique-id])]
+          activity (select-keys activity [:level :lesson :activity :activity-name :new? :unique-id :scene-id])]
       {:db         (lessons-activity/add-loaded-activity db activity)
-       :dispatch-n (list [::ie/set-current-scene (:activity-name activity)]
+       :dispatch-n (list [::ie/set-current-scene (:scene-id activity)]
                          [::events/redirect (str "/courses/" course)])})))
 
 (re-frame/reg-sub

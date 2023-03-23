@@ -148,8 +148,8 @@
 
 (defn- ->progress-data
   [activity-data activity-progress course]
-  (let [{:keys [activity unique-id]} activity-data
-        {:keys [name]} (get-in course [:data :scene-list (keyword activity)])]
+  (let [{:keys [scene-id unique-id]} activity-data
+        {:keys [name]} (get-in course [:data :scene-list (-> scene-id str keyword)])]
     (merge (get activity-progress unique-id {:score 0})
            {:name      name
             :unique-id unique-id})))

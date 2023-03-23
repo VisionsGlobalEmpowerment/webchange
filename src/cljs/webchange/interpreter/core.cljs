@@ -67,8 +67,8 @@
     (get-url url)))
 
 (defn scene-url
-  [course-id scene-id]
-  (str host "/courses/" course-id "/scenes/" scene-id))
+  [_course-id scene-id]
+  (str host "/activities/" scene-id "/current-version"))
 
 (defn get-scene
   [course-id scene-id]

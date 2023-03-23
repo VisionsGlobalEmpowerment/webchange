@@ -14,10 +14,10 @@
     (-> data
         :levels))
 
-  (let [course-slug "english"
+  (let [course-slug "test-english-xuomidin"
         data (course/get-course-data course-slug)]
     (-> data
-        :scene-list))
+        ))
 
   (let [course-slug "english"
         scene-slug "first-words-book"
@@ -26,8 +26,12 @@
         :actions
         :open-page))
 
-  (let [activity-id 586]
+  (let [activity-id 691]
+    (course/update-activity-template! activity-id 1))
+  (let [activity-id 1786]
     (course/update-activity-template! activity-id 1))
   
-  (let [activity-id 691]
+  (let [activity-id 1786]
+    (course/get-activity-current-version activity-id))
+  (let [activity-id 1421]
     (course/get-activity-current-version activity-id)))

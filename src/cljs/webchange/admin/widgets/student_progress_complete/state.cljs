@@ -139,12 +139,14 @@
 
             activities (get-in course-data [:data :scene-list])]
         (->> (get current-lesson-data :activities [])
-             (map-indexed (fn [idx {:keys [activity]}]
+             (map-indexed (fn [idx {:keys [scene-id]}]
                             (let [number (inc idx)]
-                              {:text  (str number ". " (or (->> (keyword activity)
+                              {:text  (str number ". " (or (->> scene-id
+                                                                (str)
+                                                                (keyword)
                                                                 (get activities)
                                                                 (:name))
-                                                           activity))
+                                                           scene-id))
                                :value number})))))
       [])))
 

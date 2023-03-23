@@ -53,13 +53,12 @@
 
 (declare get-progress-next)
 
-;TODO: level what if scene is not available in current level/lesson?
-(defn name->activity-action
-  [db scene-name]
+(defn current-activity-action
+  [db]
   (let [default {:level 0 :lesson 0 :activity 0}
         current (get-in db [:loaded-activity])
         next (get-progress-next db)
-        activity-action (merge default next current {:activity-name scene-name})
+        activity-action (merge default next current)
         activity-idx (workflow-action-idx db activity-action)]
     (assoc activity-action :activity activity-idx)))
 

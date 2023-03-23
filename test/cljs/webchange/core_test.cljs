@@ -20,10 +20,10 @@
 
 (deftest course-can-be-loaded
   (rf-test/run-test-async
-    (testing "initial scene is set when course is loaded"
-      (re-frame/dispatch [::ie/start-course "test-course"])
-      (rf-test/wait-for [::ie/set-scene]
-                        (is (= "initial-scene" (get-in @re-frame.db/app-db [:current-scene])))))))
+   (testing "initial scene is set when course is loaded"
+     (re-frame/dispatch [::ie/start-course "test-course"])
+     (rf-test/wait-for [::ie/set-scene]
+                       (is (= 1 (get-in @re-frame.db/app-db [:current-scene])))))))
 
 (deftest scene-can-be-loaded
   (rf-test/run-test-async

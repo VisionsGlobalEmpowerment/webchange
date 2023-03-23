@@ -474,14 +474,6 @@
                     (teacher-logged-in user-id))]
     (handler/dev-handler request)))
 
-(defn save-activity-preview!
-  [course-slug scene-slug user-id data]
-  (let [url (str "/api/courses/" course-slug "/scenes/" scene-slug "/preview")
-        request (-> (mock/request :put url (json/write-str data))
-                    (mock/header :content-type "application/json")
-                    (teacher-logged-in user-id))]
-    (handler/dev-handler request)))
-
 (defn restore-scene-version!
   [version-id user-id]
   (let [url (str "/api/scene-versions/" version-id "/restore")

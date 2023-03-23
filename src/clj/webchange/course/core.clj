@@ -96,10 +96,9 @@
     (:data latest-version)))
 
 (defn- ->scene-list-item
-  [{:keys [id name slug image-src]}]
+  [{:keys [id name image-src]}]
   {:id      id
    :name    name
-   :slug    slug
    :preview image-src})
 
 (defn get-course-data
@@ -110,7 +109,7 @@
                  (get-course-latest-version course-slug))
         scene-list (->> (db/scene-list {:course_id course-id})
                         (map ->scene-list-item)
-                        (map (juxt :slug identity))
+                        (map (juxt :id identity))
                         (into {}))]
     (merge course {:scene-list scene-list})))
 
@@ -343,44 +342,6 @@
 (defn- scene-slug
   [original]
   (slug original))
-
-(defn localize
-  [course-id {:keys [lang owner-id website-user-id]}]
-  (let [current-time (jt/local-date-time)
-        {course-name :name image :image-src type :type} (db/get-course-by-id {:id course-id})
-        localized-course-data {:name            course-name
-                               :slug            (course-slug course-name lang)
-                               :lang            lang
-                               :owner_id        owner-id
-                               :image_src       image
-                               :website_user_id website-user-id
-                               :status          "draft"
-                               :type            type}
-        [{new-course-id :id}] (db/create-course! localized-course-data)
-        course-data (:data (db/get-latest-course-version {:course_id course-id}))
-        scenes (->> course-data
-                    :scene-list
-                    keys
-                    (map name)
-                    (map codec/url-decode))]
-    (db/save-course! {:course_id  new-course-id
-                      :data       course-data
-                      :owner_id   owner-id
-                      :created_at current-time})
-    (doseq [scene-name scenes]
-      (let [{scene-id :id} (db/get-scene {:course_id course-id :name scene-name})
-            scene-data (:data (db/get-latest-scene-version {:scene_id scene-id}))
-            scene-id (get-or-create-scene! new-course-id scene-name)]
-        (db/save-scene! {:scene_id    scene-id
-                         :data        scene-data
-                         :owner_id    owner-id
-                         :created_at  current-time
-                         :description "Start localize"})))
-    [true (-> (transform-keys ->kebab-case-keyword localized-course-data)
-              (assoc :id new-course-id)
-              (->website-course))]))
-
-
 
 (defn get-available-courses
   []
@@ -655,45 +616,6 @@
                                   :scheme (-> scheme
                                               (update :fields #(merge-fields % fields scene-slug)))})))))
 
-(defn- merge-lesson-sets
-  [original new]
-  (->> original
-       (concat new)
-       (distinct)
-       (into [])))
-
-(defn- save-course-on-create!
-  [course-id scene-slug {:keys [lesson-sets]} scene-name owner-id]
-  (let [created-at (jt/local-date-time)
-        {course-data :data} (db/get-latest-course-version {:course_id course-id})
-        lesson-required? (empty? (get-in course-data [:levels 0 :scheme :lesson :lesson-sets]))
-        lesson-sets-scheme (->> lesson-sets (map keyword) (into []))
-        lesson-sets-lessons (->> lesson-sets (map (juxt keyword default-lesson-name)) (into {}))
-        initial-scene-required? (nil? (get course-data :initial-scene))
-        data (cond-> course-data
-                     :always (assoc-in [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword)] {:name scene-name})
-                     :always (update-in [:levels 0 :lessons 0 :activities] conj {:activity scene-slug :time-expected 300})
-                     :always (update-in [:levels 0 :scheme :lesson :lesson-sets] merge-lesson-sets lesson-sets-scheme)
-                     lesson-required? (assoc-in [:levels 0 :lessons 0 :lesson-sets] lesson-sets-lessons)
-                     initial-scene-required? (assoc :initial-scene scene-slug))]
-    (db/save-course! {:course_id  course-id
-                      :data       data
-                      :owner_id   owner-id
-                      :created_at created-at})))
-
-(defn create-scene!
-  [scene-data metadata course-slug scene-name skills owner-id]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        scene-slug (scene-slug scene-name)
-        {scene-id :scene-id} (save-scene-on-create! course-id scene-slug scene-data owner-id)]
-    (reset-scene-skills! scene-id skills)
-    (save-dataset-on-create! course-id scene-slug metadata)
-    (save-course-on-create! course-id scene-slug metadata scene-name owner-id)
-    [true (->website-scene {:id          scene-id
-                            :name        scene-name
-                            :scene-slug  scene-slug
-                            :course-slug course-slug})]))
-
 (defn create-activity-placeholder!
   [course-slug scene-name]
   (let [{course-id :id} (db/get-course {:slug course-slug})
@@ -730,16 +652,6 @@
     [true {:id          scene-id
            :name        (get-in course-data [:scene-list (-> scene-slug codec/url-encode string/lower-case keyword) :name])
            :scene-slug  (codec/url-encode scene-slug)
-           :course-slug course-slug}]))
-
-(defn set-activity-preview!
-  [course-slug scene-slug {:keys [preview]} owner-id]
-  (let [{course-id :id} (db/get-course {:slug course-slug})
-        {scene-id :id scene-name :name} (db/get-course-scene {:course_id course-id :slug scene-slug})]
-    (db/update-scene-image! {:id scene-id :image_src preview})
-    [true {:id          scene-id
-           :name        scene-name
-           :scene-slug  scene-slug
            :course-slug course-slug}]))
 
 (defn- is-placeholder
@@ -1179,7 +1091,7 @@
      :data        activity}))
 
 (defn update-activity-settings!
-  [activity-id {:keys [activity-settings preview animation-settings guide-settings] :as data} owner-id]
+  [activity-id {:keys [activity-settings preview animation-settings guide-settings]} owner-id]
   (let [created-at (jt/local-date-time)
         activity-info (db/get-scene-by-id {:id activity-id})
         scene-data (-> (get-activity-current-version activity-id)
@@ -1194,7 +1106,7 @@
                      :name     (:name activity-settings)
                      :lang     (:lang activity-settings)})
     (db/update-scene-image! {:id        activity-id
-                             :image_src (:preview data)})
+                             :image_src preview})
     (db/save-scene! {:scene_id    activity-id
                      :data        scene-data
                      :owner_id    owner-id
