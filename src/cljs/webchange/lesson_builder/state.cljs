@@ -248,6 +248,12 @@
 (re-frame/reg-event-fx
   ::save-activity
   [(i/path path-to-db)]
+  (fn [{:keys [_db]} [_ {:keys [on-success]}]]
+    {:dispatch [::deferred-save-activity {:on-success on-success}]}))
+
+(re-frame/reg-event-fx
+  ::deferred-save-activity
+  [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [on-success]}]]
     (let [{:keys [id]} (get-activity-info db)
           data (get-activity-data db)]
