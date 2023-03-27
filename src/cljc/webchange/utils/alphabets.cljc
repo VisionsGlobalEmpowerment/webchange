@@ -4,12 +4,16 @@
 (def spanish (concat english
                      ["á" "ch" "é" "í" "ll" "ó" "ú" "ü" "ñ"]))
 (def tamil ["ௐ" "அ" "ஆ" "இ" "ஈ" "உ" "ஊ" "எ" "ஏ" "ஐ" "ஒ" "ஓ" "ஔ" "ஃ" "க" "ங" "ச" "ஞ" "ட" "ண" "த" "ந" "ப" "ம" "ய" "ர" "ல" "வ" "ழ" "ள" "ற" "ன" "ஜ" "ஷ" "ஸ" "ஹ"])
+(def sepedi (concat english
+                    []))
+
 (defn lang->alphabet
   [lang]
   (case lang
     "english" english
     "spanish" spanish
-    "tamil" tamil))
+    "tamil" tamil
+    "sepedi" sepedi))
 
 (defn options-for
   [lang]
