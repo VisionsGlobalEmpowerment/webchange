@@ -55,3 +55,8 @@
   ::update-scene-data
   (fn [{:keys [db]} [_ {:keys [scene-id data-path data-patch]}]]
     {:db (update-in db (concat [:scenes scene-id] data-path) merge data-patch)}))
+
+;; Current user
+(defn current-school-id
+  [db]
+  (get-in db [:user :school-id]))

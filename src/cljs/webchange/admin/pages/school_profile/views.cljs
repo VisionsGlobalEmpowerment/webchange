@@ -2,11 +2,11 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.admin.widgets.school-form.views :refer [edit-school-form]]
-    [webchange.admin.pages.school-profile.state :as state]))
+    [webchange.admin.pages.school-profile.state :as state]
+    [webchange.ui.index :as ui]))
 
 (defn- school-counter
   []
@@ -51,9 +51,26 @@
 
 (defn- statistics
   []
-  [page/block {:title "Statistics"
-               :icon  "statistics"}
-   [no-data]])
+  (let [{:keys [activities-played books-read time-spent]} @(re-frame/subscribe [::state/school-stats])]
+    [page/block {:title "Statistics"
+                 :icon  "statistics"
+                 :class-name "statistics-block"
+                 :class-name-content "statistics-block-content"}
+     [ui/card {:text            "Activities Played"
+               :icon            "games"
+               :icon-background "yellow-2"
+               :counter         activities-played
+               :background      "transparent"}]
+     [ui/card {:text            "Books Read"
+               :icon            "book"
+               :icon-background "yellow-2"
+               :counter         books-read
+               :background      "transparent"}]
+     [ui/card {:text            "Time Spent"
+               :icon            "students"
+               :icon-background "yellow-2"
+               :counter         time-spent
+               :background      "transparent"}]]))
 
 (defn- side-bar
   [{:keys [school-id]}]
@@ -84,7 +101,7 @@
   (fn [{:keys [school-id]}]
     (r/with-let []
       (let [school-name @(re-frame/subscribe [::state/school-name])]
-        [page/page
+        [page/page {:class-name "page--school-profile"}
          [page/content {:title school-name
                         :icon  "school"}
           [school-counter]

@@ -45,16 +45,16 @@
              "/update-status" :update-status})
 
 (def sitemap
-  {:dashboard {:schools    {:school-profile   {:classes        {:class-add     true
-                                                                :class-profile {:class-students     true
-                                                                                :class-students-add true}}
-                                               :students       {:student-add     true
-                                                                :student-profile true}
-                                               :teachers       {:teacher-add     true
-                                                                :teacher-profile true}
-                                               :school-courses true}
-                            :school-add       true
+  {:dashboard {:schools    {:school-add       true
                             :schools-archived true}
+               :school-profile   {:classes        {:class-add     true
+                                                   :class-profile {:class-students     true
+                                                                   :class-students-add true}}
+                                  :students       {:student-add     true
+                                                   :student-profile true}
+                                  :teachers       {:teacher-add     true
+                                                   :teacher-profile true}
+                                  :school-courses true}
                :courses    {:add-course     true
                             :course-profile true
                             :course-edit    true}

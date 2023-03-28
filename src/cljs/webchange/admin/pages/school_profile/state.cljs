@@ -24,7 +24,9 @@
                        (assoc :on-save on-save)
                        (dissoc :school-data))
        :dispatch-n (cond-> [[::warehouse/load-school {:school-id school-id}
-                             {:on-success [::load-school-success]}]]
+                             {:on-success [::load-school-success]}]
+                            [::warehouse/load-school-stats {:school-id school-id}
+                             {:on-success [::load-school-stats-success]}]]
                            edit? (conj [::set-school-form-editable true]))})))
 
 (re-frame/reg-event-fx
@@ -38,6 +40,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ {:keys [school]}]]
     {:dispatch [::set-school-data school]}))
+
+(re-frame/reg-event-fx
+  ::load-school-stats-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ school-stats]]
+    {:db (assoc db :school-stats school-stats)}))
 
 ;; School Form
 
@@ -83,6 +91,11 @@
   ::readonly?
   :<- [::school-data]
   #(-> (get % :readonly false)))
+
+(re-frame/reg-sub
+  ::school-stats
+  :<- [path-to-db]
+  #(get % :school-stats))
 
 ;; form handlers
 

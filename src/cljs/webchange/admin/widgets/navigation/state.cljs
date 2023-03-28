@@ -19,7 +19,7 @@
           :text  "School Management"
           :icon  "school"
           :route {:page :schools}
-          :visible-for ["admin" "bbs-admin" "teacher"]}
+          :visible-for ["admin" "bbs-admin"]}
          {:id   :lesson-builder
           :text "Create"
           :icon "create"

@@ -1003,6 +1003,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-school-stats
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
+    (create-request {:key    :load-school-stats
+                     :method :get
+                     :uri    (str "/api/schools/" school-id "/progress")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-school-classes
   (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
     (create-request {:key    :load-school-classes

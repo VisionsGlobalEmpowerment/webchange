@@ -40,6 +40,8 @@
   ::progress-data-changed
   (fn [{:keys [db]} [_ {:keys [on-failure]}]]
     (let [course-id (core/current-course-id db)
+          scene-id (core/current-scene-id db)
+          school-id (core/current-school-id db)
           progress (get-progress-data db)
           events (:pending-events db)
           loading? (warehouse/request-in-progress? db :save-progress-data)
@@ -49,9 +51,11 @@
           loading? {:db (assoc db :schedule-save-progress true)}
           (some? progress) {:db       (dissoc db :pending-events)
                             :dispatch [::warehouse/save-progress-data
-                                       {:course-slug   course-id
-                                        :progress-data {:progress progress
-                                                        :events   events}}
+                                       {:course-slug   course-id                                        
+                                        :progress-data {:scene-id scene-id
+                                                        :school-id school-id
+                                                        :progress progress
+                                                        :events events}}
                                        (cond-> {:on-success [::save-progress-success]}
                                                (some? on-failure) (assoc :on-failure on-failure))]}
           :else {})))))

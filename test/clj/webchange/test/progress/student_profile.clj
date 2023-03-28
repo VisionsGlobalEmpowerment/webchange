@@ -14,23 +14,19 @@
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (def progress  {:test "test"})
+(def scene-id 1)
 
-(defn course-started [] {:id         (.toString (java.util.UUID/randomUUID))
-                         :created-at (jt/format (jt/offset-date-time)) :type "course-started"})
-(defn activity-started [] {:id            (.toString (java.util.UUID/randomUUID))
-                           :created-at    (jt/format (jt/offset-date-time)) :type "activity-started"
-                           :activity-name "volleyball" :activity 1 :lesson 1 :level 1})
 (defn activity-stopped [] {:id            (.toString (java.util.UUID/randomUUID))
                            :created-at    (jt/format (jt/offset-date-time)) :type "activity-stopped"
                            :unique-id 12
+                           :scene-id scene-id
                            :activity-name "volleyball" :activity 1 :lesson 1 :level 1 :time-spent 50})
 (defn activity-finished [] {:id            (.toString (java.util.UUID/randomUUID))
                             :created-at    (jt/format (jt/offset-date-time)) :type "activity-finished"
                             :unique-id 12
+                            :scene-id scene-id
                             :activity-name "volleyball" :activity 1 :lesson 1 :level 1
                             :score         {:correct 10 :mistake 4 :incorrect 2} :time-spent 100})
-(defn activity-progress [] {:id         (.toString (java.util.UUID/randomUUID))
-                            :created-at (jt/format (jt/offset-date-time)) :type "activity-progress" :activity-progress 5})
 
 (defn stats-for
   [stats event]
@@ -38,7 +34,10 @@
        (filter #(= (:unique-id event) (:unique-id %)))
        first))
 
-(defn progress-with-event [event] {:events [event] :progress progress})
+(defn progress-with-event [event] {:school-id f/default-school-id
+                                   :scene-id 1
+                                   :events [event]
+                                   :progress progress})
 
 (deftest activity-stat-created-on-finish-activity
   (let [{:keys [course-slug user-id student-id]} (fp/course-stat-created)

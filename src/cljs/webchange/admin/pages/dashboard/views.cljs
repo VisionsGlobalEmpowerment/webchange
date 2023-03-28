@@ -6,6 +6,7 @@
     [webchange.admin.pages.dashboard.learners-chart :as learners-svg]
     [webchange.admin.pages.dashboard.organisations-chart :as ord-chart-svg]
     [webchange.admin.pages.dashboard.schools-chart :as schools-chart-svg]
+    [webchange.admin.pages.school-profile.views :as school-profile]
     [webchange.ui.index :as ui]))
 
 (defn- overview
@@ -128,8 +129,8 @@
 
 (defn page-teacher
   []
-  [:div.page--dashboard
-   [:div "Under construction"]])
+  (let [current-school @(re-frame/subscribe [::state/current-school])]
+    [school-profile/page {:school-id current-school}]))
 
 (defn page
   []

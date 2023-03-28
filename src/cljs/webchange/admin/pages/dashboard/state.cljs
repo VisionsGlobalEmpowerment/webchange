@@ -34,6 +34,12 @@
       "bbs-admin" "admin"
       type)))
 
+(re-frame/reg-sub
+  ::current-school
+  :<- [::auth/current-user]
+  (fn [{:keys [school-id]}]
+    school-id))
+
 (re-frame/reg-event-fx
   ::init-admin
   [(i/path path-to-db)]

@@ -7,8 +7,10 @@
     [webchange.common.handler :refer [handle current-user]]
     [webchange.progress.class-profile]
     [webchange.progress.student-profile]
+    [webchange.progress.school-profile]
     [webchange.validation.specs.class-spec :as class-spec]
-    [webchange.validation.specs.student :as student-spec]))
+    [webchange.validation.specs.student :as student-spec]
+    [webchange.validation.specs.school-spec :as school-spec]))
 
 (defn handle-get-current-progress
   [course-slug request]
@@ -47,6 +49,12 @@
     (-> (core/get-class-student-progress student-id)
         response)))
 
+(defn handle-get-school-progress
+  [school-id request]
+  (let [user-id (current-user request)]
+    (-> (core/get-school-progress school-id)
+        response)))
+
 (defroutes progress-routes
   (GET "/api/class-profile/:class-id/course/:course-slug" [class-id course-slug :as request]
        (handle-get-class-profile class-id course-slug request))
@@ -63,4 +71,8 @@
   (GET "/api/class-student/:student-id/progress" request
        :coercion :spec
        :path-params [student-id :- ::student-spec/id]
-       (handle-get-student-progress student-id request)))
+       (handle-get-student-progress student-id request))
+  (GET "/api/schools/:school-id/progress" request
+       :coercion :spec
+       :path-params [school-id :- ::school-spec/id]
+       (handle-get-school-progress school-id request)))

@@ -126,3 +126,20 @@ SELECT ast.* FROM activity_stats ast
 INNER JOIN users u ON (ast.user_id=u.id)
 INNER JOIN students s ON (s.user_id=u.id)
 WHERE s.class_id = :class_id
+
+-- :name get-school-stat :? :1
+-- :doc retrieves school stats records for given school id
+SELECT * FROM school_stats
+WHERE school_id = :school_id
+
+-- :name create-school-stat! :! :n
+-- :doc creates a new school stat record
+INSERT INTO school_stats
+(school_id, data)
+VALUES (:school_id, :data)
+
+-- :name save-school-stat! :! :n
+-- :doc updates an existing school stat record
+UPDATE school_stats
+SET data = :data
+WHERE school_id = :school_id

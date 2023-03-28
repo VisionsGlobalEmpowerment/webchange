@@ -70,20 +70,30 @@
      :course-stats course-stats
      :activity-stats activity-stats}))
 
-(defn save-events! [owner-id course-id events]
+(defn get-school-progress
+  [school-id]
+  (let [{:keys [data]} (db/get-school-stat {:school_id school-id})
+        {:keys [activities-played books-read time-spent]} data]
+    {:activities-played (or activities-played 0)
+     :books-read (or books-read 0)
+     :time-spent (or time-spent 0)}))
+
+(defn save-events! [owner-id course-id scene-id school-id events]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]
-      (db/create-event! {
-                         :user_id    owner-id
+      (db/create-event! {:user_id    owner-id
                          :course_id  course-id
+                         :scene_id   scene-id
+                         :school_id  school-id
                          :created_at created-at
                          :type       type
                          :guid       (java.util.UUID/fromString (:id data))
-                         :data       data
-                         })
+                         :data       data})
       (events/dispatch (-> data
                            (assoc :user-id owner-id)
-                           (assoc :course-id course-id))))))
+                           (assoc :course-id course-id)
+                           (assoc :scene-id scene-id)
+                           (assoc :school-id school-id))))))
 
 (defn create-progress! [owner-id course-id data]
   (let [[{id :id}] (db/create-progress! {:user_id owner-id :course_id course-id :data data})]
@@ -94,9 +104,9 @@
   [true {:id id}])
 
 (defn save-progress!
-  [owner-id course-slug {:keys [progress events]}]
+  [owner-id course-slug {:keys [scene-id school-id progress events]}]
   (let [{course-id :id} (db/get-course {:slug course-slug})]
-    (save-events! owner-id course-id events)
+    (save-events! owner-id course-id scene-id school-id events)
     (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
       (update-progress! id progress)
       (create-progress! owner-id course-id progress))))

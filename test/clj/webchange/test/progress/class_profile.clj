@@ -13,6 +13,7 @@
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
 
 (def progress {:test "test"})
+(def scene-id 1)
 
 (defn course-started [] {:id (.toString (java.util.UUID/randomUUID)) :created-at (jt/format (jt/offset-date-time)) :type "course-started"})
 (defn activity-started [] {:id (.toString (java.util.UUID/randomUUID))
@@ -24,7 +25,9 @@
 (defn activity-progress [] {:id (.toString (java.util.UUID/randomUUID))
                             :created-at (jt/format (jt/offset-date-time)) :type "activity-progress" :activity-progress 5})
 
-(defn progress-with-event [event] {:events [event] :progress progress})
+(defn progress-with-event [event] {:school-id f/default-school-id
+                                   :scene-id scene-id
+                                   :events [event] :progress progress})
 
 (deftest course-stat-created-on-start-course
   (let [{course-slug :slug} (f/course-created)
