@@ -293,7 +293,8 @@
                     (re-frame/dispatch [::sw-status/set-current-course course-id])
                     (re-frame/dispatch [::set-course-data course])
                     (re-frame/dispatch [::load-progress {:course-id course-id}])
-                    (re-frame/dispatch [::load-lessons course-id])))))
+                    (re-frame/dispatch [::load-lessons course-id])
+                    (re-frame/dispatch [::load-course-info course-id])))))
 
 (re-frame/reg-fx
  :load-course-data
@@ -363,14 +364,25 @@
     (w/set-skin state skin)))
 
 (re-frame/reg-fx
-  :animation-props
-  (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
-    (let [position {:x x
-                    :y y}
-          current-scale (w/get-scale component {:abs? true})]
-      (w/set-scale component {:x (* (:x current-scale) (or scaleX 1))
-                              :y (* (:y current-scale) (or scaleY 1))})
-      (w/set-position component position))))
+ :animation-props
+ (fn [{component :state {:keys [scaleX scaleY x y]} :props}]
+   (let [position {:x x
+                   :y y}
+         current-scale (w/get-scale component {:abs? true})]
+     (w/set-scale component {:x (* (:x current-scale) (or scaleX 1))
+                             :y (* (:y current-scale) (or scaleY 1))})
+     (w/set-position component position))))
+
+(re-frame/reg-event-fx
+  ::load-course-info
+  (fn [{:keys [_db]} [_ course-slug]]
+    {:dispatch-n [[::warehouse/load-course-info course-slug
+                   {:on-success [::load-course-info-success]}]]}))
+
+(re-frame/reg-event-fx
+  ::load-course-info-success
+  (fn [{:keys [db]} [_ course-info]]
+    {:db (assoc-in db [:course :course-info] course-info)}))
 
 (defn get-audio-key
   [db id]

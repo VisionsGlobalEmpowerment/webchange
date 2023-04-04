@@ -56,7 +56,33 @@
               :search-book-library "Buscar"
               :skip                "Omitir"
               :wait                "Espere por favor..."
-              :watch               "Mira"}})
+              :watch               "Mira"}
+   "sepedi"  {:book-library        "Bokgobapuku"
+              :categories          {:animals            "Diphoofolo"
+                                    :family-and-friends "Meloko le Metswalle" ;; <- non-breaking spaces
+                                    :science-stem       "saentshe"
+                                    :sports             "Dipapadi"
+                                    :vehicles           "Difatanaga"}
+              :continue            "tšwela pele"
+              :error-general       "Something went wrong... :("
+              :exit                "tšwa"
+              :favorite            "Tšeo di ratwago"
+              :favorite-books      "Dipuku tšeo ke di Ratago kudu"
+              :goodbye             "šala gabotse"
+              :great-work          "mošomo o mogolo"
+              :home-page           "Gae"
+              :loading             "Loading"
+              :next                "Ye e latelago"
+              :no-books            "Ga go na dipuku go fihla ga bjale"
+              :play                "Raloka"
+              :read                {:read      "Bala"
+                                    :to-me     "Mpalele"
+                                    :by-myself "Bala ke nnoši"}
+              :search              "Nyaka"
+              :search-book-library "Nyaka ka gare ga Bokgobapuku"
+              :skip                "Tshela"
+              :wait                "Ka kgopelo, ema..."
+              :watch               "Bogela"}})
 
 (defn- translate
   [language key]
@@ -65,7 +91,7 @@
 (re-frame/reg-sub
   ::t
   (fn []
-    (re-frame/subscribe [::state/current-course-id]))
+    (re-frame/subscribe [::state/current-course-lang]))
   (fn [language [_ key]]
     (if (map? key)
       (->> key

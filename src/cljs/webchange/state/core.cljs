@@ -60,3 +60,8 @@
 (defn current-school-id
   [db]
   (get-in db [:user :school-id]))
+
+(re-frame/reg-sub
+  ::current-course-lang
+  (fn [db]
+    (get-in db [:course :course-info :lang] "english")))

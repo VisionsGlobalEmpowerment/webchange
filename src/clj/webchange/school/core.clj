@@ -8,7 +8,8 @@
 
 (defn create-school!
   [data]
-  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
+  (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)
+                          (update :about #(or % "")))
         [{id :id}] (db/create-new-school! prepared-data)]
     (e/dispatch {:type :schools/created :school-id id})
     [true (-> data
