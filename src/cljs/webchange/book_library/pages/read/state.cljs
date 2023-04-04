@@ -5,7 +5,9 @@
     [webchange.book-library.state :as parent-state]
     [webchange.interpreter.events :as interpreter]
     [webchange.state.state :as state]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.state-progress :as progress-state]
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.numbers :refer [try-parse-int]]))
 
 (def path-to-db :book-library-read-book)
 
@@ -18,20 +20,21 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [book-id course-id]}]]
-    {:db (-> db
-             (assoc :book-id book-id)
-             (assoc :course-id course-id)
-             (assoc :page-state {:show-menu?           false
-                                 :book-loaded?         false
-                                 :stage-ready?         false
-                                 :reading-in-progress? false
-                                 :error                nil}))
-     :dispatch-n [[::parent-state/init {:course-id course-id}]
-                  [::state/set-current-scene-id book-id]
-                  [::warehouse/load-activity-current-version
-                   {:activity-id book-id}
-                   {:on-success [::init-scene-data]
-                    :on-failure [::load-book-failed]}]]}))
+    (let [book-id (try-parse-int book-id)]
+      {:db (-> db
+               (assoc :book-id book-id)
+               (assoc :course-id course-id)
+               (assoc :page-state {:show-menu?           false
+                                   :book-loaded?         false
+                                   :stage-ready?         false
+                                   :reading-in-progress? false
+                                   :error                nil}))
+       :dispatch-n [[::parent-state/init {:course-id course-id}]
+                    [::state/set-current-scene-id book-id]
+                    [::warehouse/load-activity-current-version
+                     {:activity-id book-id}
+                     {:on-success [::init-scene-data]
+                      :on-failure [::load-book-failed]}]]})))
 
 (re-frame/reg-event-fx
   ::init-scene-data
@@ -165,6 +168,7 @@
 
 (re-frame/reg-event-fx
   ::read
-  (fn [{:keys [_]} [_]]
-    {:dispatch-n [[::interpreter/start-scene]
+  (fn [{:keys [db]} [_]]
+    {:db (progress-state/set-course-in-progress db false)
+     :dispatch-n [[::interpreter/trigger :start]
                   [::set-reading-in-progress true]]}))

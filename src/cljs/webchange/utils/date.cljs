@@ -9,10 +9,10 @@
   (.toLocaleDateString date))
 
 (defn date-str->locale-date
+  " '2022-05-18T11:33:36.316428' -> '18/05/2022' "
   ([date-str]
    (date-str->locale-date date-str nil))
   ([date-str default-value]
-   " '2022-05-18T11:33:36.316428' -> '18/05/2022' "
    (if (some? date-str)
      (-> (new-date date-str)
          (->locale-date-string))

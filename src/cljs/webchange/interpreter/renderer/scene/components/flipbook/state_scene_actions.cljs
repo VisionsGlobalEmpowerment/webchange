@@ -28,16 +28,18 @@
 
 (re-frame/reg-event-fx
   ::execute-flipbook-init
-  (fn [{:keys [db]} [_ {:keys [target] :as action}]]
+  (fn [{:keys [db]} [_ {:keys [target on-finish] :as action}]]
     (let [scene-id (:current-scene db)
           component-wrapper @(get-in db [:transitions scene-id target])]
       {:flipbook-init {:component-wrapper component-wrapper
+                       :on-finish         on-finish
                        :on-end            #(ce/dispatch-success-fn action)}})))
 
 (re-frame/reg-fx
-  :flipbook-init
-  (fn [{:keys [component-wrapper on-end]}]
-    ((:init component-wrapper) {:on-end on-end})))
+ :flipbook-init
+ (fn [{:keys [component-wrapper on-end on-finish]}]
+   ((:init component-wrapper) {:on-end on-end
+                               :on-finish on-finish})))
 
 (re-frame/reg-event-fx
   ::execute-flipbook-read-cover

@@ -143,3 +143,20 @@ VALUES (:school_id, :data)
 UPDATE school_stats
 SET data = :data
 WHERE school_id = :school_id
+
+-- :name get-class-stat :? :1
+-- :doc retrieves class stats records for given class id
+SELECT * FROM class_stats
+WHERE class_id = :class_id
+
+-- :name create-class-stat! :! :n
+-- :doc creates a new class stat record
+INSERT INTO class_stats
+(class_id, data)
+VALUES (:class_id, :data)
+
+-- :name save-class-stat! :! :n
+-- :doc updates an existing class stat record
+UPDATE class_stats
+SET data = :data
+WHERE class_id = :class_id

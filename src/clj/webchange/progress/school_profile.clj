@@ -16,7 +16,7 @@
                                         (update-in [stat-type] (fnil + 0) 1)
                                         (update-in [:time-spent] (fnil + 0) time-spent))})
        (db/create-school-stat! {:school_id school-id
-                                :data {:activites-played 1
+                                :data {stat-type 1
                                        :time-spent time-spent}})))))
 
 (events/reg

@@ -6,6 +6,7 @@
     [webchange.interpreter.lessons.activity :as lessons-activity]
     [webchange.progress.activity :as common-activity]
     [webchange.state.state-course :as state-course]
+    [webchange.state.state-progress :as progress-state]
     [webchange.subs :as subs]))
 
 (re-frame/reg-event-fx
@@ -74,7 +75,9 @@
   (fn [{:keys [db]} [_ activity]]
     (let [course (:current-course db)
           activity (select-keys activity [:level :lesson :activity :activity-name :new? :unique-id :scene-id])]
-      {:db         (lessons-activity/add-loaded-activity db activity)
+      {:db         (-> db
+                       (lessons-activity/add-loaded-activity activity)
+                       (progress-state/set-course-in-progress true))
        :dispatch-n (list [::ie/set-current-scene (:scene-id activity)]
                          [::events/redirect (str "/courses/" course)])})))
 

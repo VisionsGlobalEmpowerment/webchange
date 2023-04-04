@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
-    [webchange.state.warehouse :as warehouse]))
+    [webchange.state.warehouse :as warehouse]
+    [webchange.utils.date :as date]))
 
 (def path-to-db :page/class-profile)
 
@@ -155,7 +156,9 @@
                             [::warehouse/load-school-courses {:school-id school-id}
                              {:on-success [::load-school-courses-success]}]
                             [::warehouse/load-school {:school-id school-id}
-                             {:on-success [::load-school-success]}]]
+                             {:on-success [::load-school-success]}]
+                            [::warehouse/load-class-stats {:class-id class-id}
+                             {:on-success [::load-class-stats-success]}]]
                            (= action "edit") (conj [::set-form-editable true])
                            (= action "manage-students") (conj [::open-students-list])
                            (= action "manage-teachers") (conj [::open-teachers-list]))})))
@@ -181,6 +184,13 @@
     {:db (set-school-courses db courses)}))
 
 (re-frame/reg-event-fx
+  ::load-class-stats-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ stats]]
+    (let [stats-data (update stats :time-spent date/ms->duration)]
+      {:db (assoc db :class-activities-stats stats-data)})))
+
+(re-frame/reg-event-fx
   ::load-school-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ {:keys [school]}]]
@@ -200,6 +210,11 @@
   ::class-course
   :<- [::class-data]
   #(get % :course-info))
+
+(re-frame/reg-sub
+  ::class-activities-stats
+  :<- [path-to-db]
+  #(get % :class-activities-stats))
 
 (re-frame/reg-event-fx
   ::handle-students-added

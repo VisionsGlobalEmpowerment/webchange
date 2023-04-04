@@ -1087,6 +1087,14 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::load-class-stats
+  (fn [{:keys [_]} [_ {:keys [class-id]} handlers]]
+    (create-request {:key    :load-class-stats
+                     :method :get
+                     :uri    (str "/api/classes/" class-id "/progress")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::load-class-profile
   (fn [{:keys [_]} [_ class-id course-slug handlers]]
     (create-request {:key    :load-class-profile

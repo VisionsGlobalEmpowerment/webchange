@@ -27,7 +27,8 @@
 
 (defn progress-with-event [event] {:school-id f/default-school-id
                                    :scene-id scene-id
-                                   :events [event] :progress progress})
+                                   :events [event] :progress progress
+                                   :course-in-progress true})
 
 (deftest course-stat-created-on-start-course
   (let [{course-slug :slug} (f/course-created)

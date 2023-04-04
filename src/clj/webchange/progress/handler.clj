@@ -55,6 +55,12 @@
     (-> (core/get-school-progress school-id)
         response)))
 
+(defn handle-get-class-progress
+  [class-id request]
+  (let [user-id (current-user request)]
+    (-> (core/get-class-progress class-id)
+        response)))
+
 (defroutes progress-routes
   (GET "/api/class-profile/:class-id/course/:course-slug" [class-id course-slug :as request]
        (handle-get-class-profile class-id course-slug request))
@@ -75,4 +81,8 @@
   (GET "/api/schools/:school-id/progress" request
        :coercion :spec
        :path-params [school-id :- ::school-spec/id]
-       (handle-get-school-progress school-id request)))
+       (handle-get-school-progress school-id request))
+  (GET "/api/classes/:class-id/progress" request
+       :coercion :spec
+       :path-params [class-id :- ::class-spec/id]
+       (handle-get-class-progress class-id request)))

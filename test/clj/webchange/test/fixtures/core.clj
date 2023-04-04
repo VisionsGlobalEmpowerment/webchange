@@ -35,6 +35,7 @@
   (db/clear-table :activity_stats)
   (db/clear-table :course_stats)
   (db/clear-table :school_stats)
+  (db/clear-table :class_stats)
   (db/clear-table :course_events)
   (db/clear-table :course_progresses)
   (db/clear-table :students)

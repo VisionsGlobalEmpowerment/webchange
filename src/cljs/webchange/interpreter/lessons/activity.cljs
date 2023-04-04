@@ -43,12 +43,12 @@
 (defn- workflow-action-idx
   "Return activity if its correct index
   otherwise find index in course workflow by activity-name"
-  [db {:keys [level lesson activity activity-name]}]
+  [db {:keys [level lesson activity scene-id]}]
   (let [activities (get-in db [:course-data :levels level :lessons lesson :activities])
         workflow-action (get activities activity)]
-    (if (= activity-name (:activity workflow-action))
+    (if (= scene-id (:scene-id workflow-action))
       activity
-      (-> (keep-indexed #(when (= (:activity %2) activity-name) %1) activities)
+      (-> (keep-indexed #(when (= (:scene-id %2) scene-id) %1) activities)
           first))))
 
 (declare get-progress-next)

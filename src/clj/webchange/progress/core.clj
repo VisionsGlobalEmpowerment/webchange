@@ -78,7 +78,15 @@
      :books-read (or books-read 0)
      :time-spent (or time-spent 0)}))
 
-(defn save-events! [owner-id course-id scene-id school-id events]
+(defn get-class-progress
+  [class-id]
+  (let [{:keys [data]} (db/get-class-stat {:class_id class-id})
+        {:keys [activities-played books-read time-spent]} data]
+    {:activities-played (or activities-played 0)
+     :books-read (or books-read 0)
+     :time-spent (or time-spent 0)}))
+
+(defn save-events! [owner-id course-id scene-id school-id events course-in-progress]
   (doseq [{created-at-string :created-at type :type :as data} events]
     (let [created-at (jt/offset-date-time created-at-string)]
       (db/create-event! {:user_id    owner-id
@@ -93,7 +101,8 @@
                            (assoc :user-id owner-id)
                            (assoc :course-id course-id)
                            (assoc :scene-id scene-id)
-                           (assoc :school-id school-id))))))
+                           (assoc :school-id school-id)
+                           (assoc :course-in-progress course-in-progress))))))
 
 (defn create-progress! [owner-id course-id data]
   (let [[{id :id}] (db/create-progress! {:user_id owner-id :course_id course-id :data data})]
@@ -104,12 +113,14 @@
   [true {:id id}])
 
 (defn save-progress!
-  [owner-id course-slug {:keys [scene-id school-id progress events]}]
+  [owner-id course-slug {:keys [scene-id school-id progress events course-in-progress]}]
   (let [{course-id :id} (db/get-course {:slug course-slug})]
-    (save-events! owner-id course-id scene-id school-id events)
-    (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
-      (update-progress! id progress)
-      (create-progress! owner-id course-id progress))))
+    (save-events! owner-id course-id scene-id school-id events course-in-progress)
+    (if course-in-progress
+      (if-let [{id :id} (db/get-progress {:user_id owner-id :course_id course-id})]
+        (update-progress! id progress)
+        (create-progress! owner-id course-id progress))
+      [true {:message "ok"}])))
 
 (defn complete-individual-progress!
   [course-slug student-id {lesson-val :lesson level-val :level activity-val :activity navigation :navigation}]

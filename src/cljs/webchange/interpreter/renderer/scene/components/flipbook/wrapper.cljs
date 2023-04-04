@@ -101,7 +101,8 @@
                                    :right (+ (get current-spread :right) 2)})
                       "backward" (when-not (first-spread? @state current-spread)
                                    {:left  (- (get current-spread :left) 2)
-                                    :right (- (get current-spread :right) 2)}))]
+                                    :right (- (get current-spread :right) 2)}))
+        on-finish (-> @state :on-finish)]
     (page-number-utils/hide-pages-numbers)
     (if (some? next-spread)
       (let [next-spread-objects (spread-numbers->object-names @state next-spread)]
@@ -125,7 +126,9 @@
                                                (let [{:keys [left right]} (spread-numbers->action-names @state next-spread)
                                                      action (sequence-for left right on-end)]
                                                  (utils/execute-action action))
-                                               (on-end)))}))
+                                               (on-end))
+                                             (when (and (last-spread? @state next-spread) on-finish)
+                                               (utils/execute-action {:type "action" :id on-finish})))}))
       (on-end))))
 
 (defn- show-spread
@@ -164,13 +167,15 @@
                    :type          type
                    :object        container
                    :container     container
-                   :init          (fn [{:keys [on-end]}]
+                   :init          (fn [{:keys [on-end on-finish]}]
                                     (let [first-page-index 0
                                           first-page (keyword (get-page-object-name @state first-page-index))
                                           prev-control (keyword (:prev-control @state))
                                           next-control (keyword (:next-control @state))]
-                                      (swap! state assoc :current-spread {:left  (dec first-page-index)
-                                                                          :right first-page-index})
+                                      (swap! state assoc
+                                             :current-spread {:left  (dec first-page-index)
+                                                              :right first-page-index}
+                                             :on-finish on-finish)
                                       (utils/set-position first-page (get-right-page-position @state))
                                       (utils/set-visibility first-page true)
                                       (utils/set-visibility prev-control false)

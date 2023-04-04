@@ -9,8 +9,8 @@
   (re-matches #"\d+(.\d+)?" str))
 
 (defn try-parse-int
-  [str]
   "Parse string to integer if string contains only digits. Return string otherwise."
+  [str]
   (if (and (string? str)
            (integer-str? str))
     #?(:clj  (.parseInt Integer str)
@@ -18,10 +18,10 @@
     str))
 
 (defn try-parse-number
+  "Parse string to integer if string contains only digits. Return string otherwise."
   ([str]
    (try-parse-number str false))
   ([str force?]
-   "Parse string to integer if string contains only digits. Return string otherwise."
    (if (or force?
            (and (string? str)
                 (number-str? str)))

@@ -29,7 +29,7 @@
 (deftest progress-can-be-created
   (let [{user-id :user-id} (f/student-created)
         {course-slug :slug} (f/course-created)
-        data {:actions [] :progress {:test "test"}}
+        data {:actions [] :progress {:test "test"} :course-in-progress true}
         _ (fp/save-current-progress! user-id course-slug data)
         retrieved (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress)]
     (is (= (get-in data [:progress :test]) (:test retrieved)))))
@@ -53,14 +53,14 @@
 (deftest check-default-tags-not-override-learning-tag
   (let [{user-id :user-id} (f/student-created)
         {course-slug :slug} (f/course-created)
-        data {:actions [] :progress {:test "check-default-tags-not-override-learning-tag" :current-tags [tags/beginner]}}
+        data {:actions [] :progress {:test "check-default-tags-not-override-learning-tag" :current-tags [tags/beginner]} :course-in-progress true}
         _ (fp/save-current-progress! user-id course-slug data)
         current-tags (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress :current-tags)]
     (is (= (sort [tags/beginner tags/age-less-4]) (sort current-tags)))))
 
 (deftest progress-can-be-updated
   (let [{user-id :user-id course-slug :course-slug} (fp/progress-created)
-        updated-data {:actions [] :progress {:test "updated-test"}}
+        updated-data {:actions [] :progress {:test "updated-test"} :course-in-progress true}
         _ (fp/save-current-progress! user-id course-slug updated-data)
         retrieved (-> (fp/get-current-progress user-id course-slug) :body slurp (json/read-str :key-fn keyword) :progress
                       (dissoc :current-tags))]

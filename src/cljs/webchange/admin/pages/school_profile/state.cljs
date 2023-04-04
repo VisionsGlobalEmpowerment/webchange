@@ -4,7 +4,8 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
-    [webchange.admin.widgets.breadcrumbs.state :as breadcrumbs]))
+    [webchange.admin.widgets.breadcrumbs.state :as breadcrumbs]
+    [webchange.utils.date :as date]))
 
 (def path-to-db :school-profile)
 
@@ -45,7 +46,8 @@
   ::load-school-stats-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ school-stats]]
-    {:db (assoc db :school-stats school-stats)}))
+    (let [stats-data (update school-stats :time-spent date/ms->duration)]
+      {:db (assoc db :school-stats stats-data)})))
 
 ;; School Form
 

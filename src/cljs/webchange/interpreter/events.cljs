@@ -1087,8 +1087,9 @@
         score-percentage (-> (lessons-activity/workflow-action db activity-action) :expected-score-percentage)
         score-passed? (if score-percentage
                         (> (activity-score-percentage db) score-percentage)
-                        true)]
-    (and current-activity? score-passed?)))
+                        true)
+        course-in-progress (progress-state/course-in-progress? db)]
+    (and current-activity? score-passed? course-in-progress)))
 
 
 (defn get-lesson-activity-tags
@@ -1199,8 +1200,9 @@
 (re-frame/reg-event-fx
   ::start-course
   (fn [{:keys [db]} [_ course-id]]
-    (when (not= course-id (:loaded-course db))
-      {:dispatch-n (list [::load-course course-id])})))
+    {:db (progress-state/set-course-in-progress db true)
+     :dispatch-n [(when (not= course-id (:loaded-course db))
+                    [::load-course course-id])]}))
 
 (re-frame/reg-event-fx
   ::load-course

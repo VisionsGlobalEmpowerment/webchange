@@ -37,7 +37,8 @@
 (defn progress-with-event [event] {:school-id f/default-school-id
                                    :scene-id 1
                                    :events [event]
-                                   :progress progress})
+                                   :progress progress
+                                   :course-in-progress true})
 
 (deftest activity-stat-created-on-finish-activity
   (let [{:keys [course-slug user-id student-id]} (fp/course-stat-created)

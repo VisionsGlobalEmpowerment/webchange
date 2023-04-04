@@ -1,17 +1,17 @@
 (ns webchange.admin.pages.class-profile.views
   (:require
     [re-frame.core :as re-frame]
-    [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.pages.class-profile.course-assign.views :refer [assign-class-course]]
+    [webchange.admin.pages.class-profile.state :as state]
     [webchange.admin.pages.class-profile.students-add.views :refer [class-students-add]]
     [webchange.admin.pages.class-profile.students-list.views :refer [class-students-list]]
     [webchange.admin.pages.class-profile.teacher-edit.views :refer [class-teacher-edit]]
     [webchange.admin.pages.class-profile.teachers-add.views :refer [class-teachers-add]]
     [webchange.admin.pages.class-profile.teachers-list.views :refer [class-teachers-list]]
     [webchange.admin.widgets.class-form.views :refer [class-edit-form]]
-    [webchange.admin.widgets.no-data.views :refer [no-data]]
     [webchange.admin.widgets.page.counter.views :refer [counter]]
-    [webchange.admin.widgets.page.views :as page]))
+    [webchange.admin.widgets.page.views :as page]
+    [webchange.ui.index :as ui]))
 
 (defn- class-counter
   []
@@ -62,9 +62,26 @@
 
 (defn- statistics
   []
-  [page/block {:title "Statistics"
-               :icon  "statistics"}
-   [no-data]])
+  (let [{:keys [activities-played books-read time-spent]} @(re-frame/subscribe [::state/class-activities-stats])]
+    [page/block {:title "Statistics"
+                 :icon  "statistics"
+                 :class-name "statistics-block"
+                 :class-name-content "statistics-block-content"}
+     [ui/card {:text            "Activities Played"
+               :icon            "games"
+               :icon-background "yellow-2"
+               :counter         activities-played
+               :background      "transparent"}]
+     [ui/card {:text            "Books Read"
+               :icon            "book"
+               :icon-background "yellow-2"
+               :counter         books-read
+               :background      "transparent"}]
+     [ui/card {:text            "Time Spent"
+               :icon            "students"
+               :icon-background "yellow-2"
+               :counter         time-spent
+               :background      "transparent"}]]))
 
 (defn- side-bar-class-form
   [{:keys [class-id school-id]}]
@@ -108,7 +125,7 @@
   [props]
   (re-frame/dispatch [::state/init props])
   (fn [props]
-    [page/page
+    [page/page {:class-name "page--class-profile"}
      [page/content {:title "Class Profile"
                     :icon  "classes"}
       [class-counter]

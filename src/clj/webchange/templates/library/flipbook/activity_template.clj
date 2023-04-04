@@ -77,10 +77,13 @@
                                :spine             {:type "group" :x "---" :y 0 :children []}}
                :scene-objects [["spine" "book"] ["prev-page" "next-page" "page-numbers"]]
                :actions       {:render-scene    {:type   "flipbook-init"
-                                                 :target "book"}
+                                                 :target "book"
+                                                 :on-finish "finish-scene"}
                                :start-scene     {:type "sequence-data"
-                                                 :data [{:type   "flipbook-read-cover"
+                                                 :data [{:type "start-activity"}
+                                                        {:type   "flipbook-read-cover"
                                                          :target "book"}]}
+                               :finish-scene    {:type "finish-activity"}
                                :prev-page-click {:type "sequence-data"
                                                  :data [{:type   "flipbook-flip-backward"
                                                          :target "book"}]}

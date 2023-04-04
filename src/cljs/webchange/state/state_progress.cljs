@@ -21,6 +21,7 @@
 (def current-activity-path (path-to-db [current-activity-key]))
 
 (defn get-current-activity
+  "In case student refreshes the page we want to show them previously played game"
   [db]
   (get-in db current-activity-path))
 
@@ -36,6 +37,14 @@
     {:db       (update-in db progress-data-path dissoc current-activity-key)
      :dispatch [::progress-data-changed]}))
 
+(defn set-course-in-progress
+  [db value]
+  (assoc db :course-in-progress value))
+
+(defn course-in-progress?
+  [db]
+  (get db :course-in-progress))
+
 (re-frame/reg-event-fx
   ::progress-data-changed
   (fn [{:keys [db]} [_ {:keys [on-failure]}]]
@@ -45,7 +54,8 @@
           progress (get-progress-data db)
           events (:pending-events db)
           loading? (warehouse/request-in-progress? db :save-progress-data)
-          sandbox? (-> db :sandbox :enabled)]
+          sandbox? (-> db :sandbox :enabled)
+          course-in-progress (course-in-progress? db)]
       (when-not sandbox?
         (cond
           loading? {:db (assoc db :schedule-save-progress true)}
@@ -55,7 +65,8 @@
                                         :progress-data {:scene-id scene-id
                                                         :school-id school-id
                                                         :progress progress
-                                                        :events events}}
+                                                        :events events
+                                                        :course-in-progress course-in-progress}}
                                        (cond-> {:on-success [::save-progress-success]}
                                                (some? on-failure) (assoc :on-failure on-failure))]}
           :else {})))))
