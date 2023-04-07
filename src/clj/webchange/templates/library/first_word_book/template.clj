@@ -113,7 +113,7 @@
                              :children ["spread-1-title-letters" "spread-1-title-text"]}
     :spread-0-title-letters {:type           "text",
                              :x              929,
-                             :y              244,
+                             :y              284,
                              :width          680,
                              :height         800,
                              :align          "center",
@@ -141,12 +141,14 @@
                              :fill           "white",
                              :font-family    "Tabschool",
                              :font-size      120,
+                             :line-height    120,
                              :shadow-blur    5,
                              :shadow-color   "#1a1a1a",
                              :shadow-offset  {:x 5, :y 5},
                              :shadow-opacity 0.5,
                              :text           ""
                              :vertical-align "middle"
+                             :word-wrap      true
                              :metadata       {:display-name "Cover title"
                                               :page-idx     0
                                               :text-idx     0}
