@@ -271,6 +271,15 @@
         (throw-unauthorized {:role :educator}))
       (-> (core/teachers-by-school school-id)
           response)))
+  (PUT "/api/schools/:school-id/transfer-teacher" request
+    :coercion :spec
+    :path-params [school-id :- ::school-spec/id]
+    :body [data ::teacher-spec/transfer-teacher]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/transfer-teacher school-id data)
+          response)))
   (GET "/api/classes/:class-id/teachers" request
     :coercion :spec
     :path-params [class-id :- ::class-spec/id]

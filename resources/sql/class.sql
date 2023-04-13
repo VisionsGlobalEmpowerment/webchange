@@ -292,6 +292,12 @@ UPDATE teachers
 SET archived = true
 WHERE school_id = :school_id
 
+-- :name archive-teachers-by-user! :! :n
+-- :doc mark teacher records as archived given user id
+UPDATE teachers
+SET archived = true
+WHERE user_id = :user_id
+
 -- :name archive-students-by-school! :! :n
 -- :doc mark student records as archived given school id
 UPDATE students

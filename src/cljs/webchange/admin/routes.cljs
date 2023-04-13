@@ -22,6 +22,7 @@
                                                                                                             "/profile" :student-profile}}
                                                                "/teachers" {""                             :teachers
                                                                             "/add"                         :teacher-add
+                                                                            "/transfer"                    :teacher-transfer
                                                                             ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                                "/courses"  {"" :school-courses}}}
              "/courses"        {""                              :courses

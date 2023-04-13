@@ -53,8 +53,10 @@
   (fn []
     (let [school-name @(re-frame/subscribe [::state/school-name])
           readonly? @(re-frame/subscribe [::state/readonly?])
+          can-transfer? @(re-frame/subscribe [::state/can-transfer?])
           teachers-number @(re-frame/subscribe [::state/teachers-number])
           handle-add-click #(re-frame/dispatch [::state/add-teacher])
+          handle-transfer-click #(re-frame/dispatch [::state/transfer-teacher])
           handle-school-click #(re-frame/dispatch [::state/open-school-profile])]
       [page/single-page {:class-name "page--teachers"
                          :header     {:title    school-name
@@ -64,7 +66,10 @@
                                                   :counter teachers-number
                                                   :label   "Teachers"}]
                                       :actions  (when-not readonly?
-                                                  [{:text     "Add Teacher to School"
-                                                    :icon     "plus"
-                                                    :on-click handle-add-click}])}}
+                                                  (cond->> [{:text     "Add Teacher to School"
+                                                             :icon     "plus"
+                                                             :on-click handle-add-click}]
+                                                           can-transfer? (concat [{:text     "Transfer Teacher"
+                                                                                   :icon     "plus"
+                                                                                   :on-click handle-transfer-click}])))}}
        [teacher-list]])))

@@ -21,3 +21,4 @@
                               :opt-un [::password]))
 
 (s/def ::edit-teacher-status (s/keys :req-un [::status]))
+(s/def ::transfer-teacher (s/keys :req-un [::email]))

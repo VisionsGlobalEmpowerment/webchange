@@ -5,7 +5,8 @@
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
     [webchange.utils.date :refer [date-str->locale-date]]
-    [webchange.utils.list :refer [update-by-predicate]]))
+    [webchange.utils.list :refer [update-by-predicate]]
+    [webchange.auth.state :as auth]))
 
 (def path-to-db :page/school-teachers)
 
@@ -136,3 +137,23 @@
   (fn [{:keys [db]} [_]]
     (let [school-id (:id (get-school-data db))]
       {:dispatch [::routes/redirect :school-profile :school-id school-id]})))
+
+(re-frame/reg-sub
+  ::can-transfer?
+  :<- [::auth/super-admin?]
+  (fn [super-admin?]
+    super-admin?))
+
+(re-frame/reg-event-fx
+  ::add-teacher
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :teacher-add :school-id school-id]})))
+
+(re-frame/reg-event-fx
+  ::transfer-teacher
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [school-id (:id (get-school-data db))]
+      {:dispatch [::routes/redirect :teacher-transfer :school-id school-id]})))

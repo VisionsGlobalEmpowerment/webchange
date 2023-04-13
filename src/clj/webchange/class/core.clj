@@ -258,3 +258,14 @@
   (db/archive-student! {:id student-id})
   (e/dispatch {:type :students/archived :student-id student-id})
   (db/get-student {:id student-id}))
+
+(defn transfer-teacher
+  "Finds user with given email, removes it from all schools as teacher.
+   Add as a teacher to given school"
+  [school-id {:keys [email]}]
+  (if-let [{:keys [id]} (db/find-user-by-email {:email email})]
+    (do (db/archive-teachers-by-user! {:user_id id})
+        (create-teacher! {:user-id id :school-id school-id :type "teacher" :status "active"}))
+    (throw (ex-info "Email not found"
+                    {:type ::ex/request-validation
+                     :errors {:email "Email not found"}}))))

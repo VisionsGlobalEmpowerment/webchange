@@ -1048,6 +1048,15 @@
                     admin-logged-in)]
     (handler/dev-handler request)))
 
+(defn transfer-teacher
+  [school-id data]
+  (let [url (str "/api/schools/" school-id "/transfer-teacher")
+        request (-> (mock/request :put url (json/write-str data))
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
 (defn get-class-teachers
   [class-id]
   (let [url (str "/api/classes/" class-id "/teachers")

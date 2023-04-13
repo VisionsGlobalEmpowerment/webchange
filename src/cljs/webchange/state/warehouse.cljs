@@ -1313,6 +1313,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::transfer-teacher
+  (fn [{:keys [_]} [_ {:keys [school-id data]} handlers]]
+    (create-request {:key    :create-teacher
+                     :method :put
+                     :uri    (str "/api/schools/" school-id "/transfer-teacher")
+                     :params data}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::remove-teacher-from-class
   (fn [{:keys [_]} [_ {:keys [class-id teacher-id]} handlers]]
     (create-request {:key    :remove-teacher-from-class

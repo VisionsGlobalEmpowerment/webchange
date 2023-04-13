@@ -135,9 +135,15 @@
             retrieved (-> class-id f/get-school-teachers :body slurp (json/read-str :key-fn keyword))]
         (is (= 0 (count retrieved)))))))
 
+(deftest teacher-transfer
+  (let [teacher-email "teacher-transfer@example.com"
+        _ (f/website-user-created {:email teacher-email})
+        _ (f/transfer-teacher f/default-school-id {:email teacher-email})
+        retrieved (-> f/default-school-id f/get-school-teachers :body slurp (json/read-str :key-fn keyword) first :user)]
+    (is (= teacher-email (:email retrieved)))))
 
 #_(deftest teacher-can-be-removed-from-class
-  (let [{id :id class-id :class-id} (f/student-created)
-        _ (f/unassigned-student! id)
-        students (-> class-id f/get-students :body slurp (json/read-str :key-fn keyword) :students)]
-    (is (= 0 (count students)))))
+(let [{id :id class-id :class-id} (f/student-created)
+      _ (f/unassigned-student! id)
+      students (-> class-id f/get-students :body slurp (json/read-str :key-fn keyword) :students)]
+  (is (= 0 (count students)))))
