@@ -7,7 +7,7 @@
             [webchange.common.warehouse :refer [mock-warehouse]]))
 
 (use-fixtures :once
-  {:before (fn [] (routes/init! "/admin/schools/add"))})
+  {:before (fn [] (routes/init! "/educators/schools/add"))})
 
 #_(deftest school-can-be-created
   (rf-test/run-test-async

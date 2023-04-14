@@ -7,6 +7,7 @@
     [webchange.admin.pages.dashboard.organisations-chart :as ord-chart-svg]
     [webchange.admin.pages.dashboard.schools-chart :as schools-chart-svg]
     [webchange.admin.pages.school-profile.views :as school-profile]
+    [webchange.admin.pages.activities.views :as activities]
     [webchange.ui.index :as ui]))
 
 (defn- overview
@@ -124,8 +125,7 @@
 
 (defn page-live
   []
-  [:div.page--dashboard
-   [:div "Page for live users"]])
+  [activities/page])
 
 (defn page-teacher
   []

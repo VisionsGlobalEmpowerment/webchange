@@ -53,7 +53,7 @@
                 :value      current-language
                 :options    language-options
                 :on-change  handle-select-language
-                :class-name "language-selector" }]))
+                :class-name "language-selector"}]))
 
 (defn page
   [props]

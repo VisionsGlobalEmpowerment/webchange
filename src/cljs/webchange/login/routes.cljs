@@ -4,7 +4,7 @@
     [webchange.login.state :as state]
     [webchange.utils.module-router :as module-router]))
 
-(def module-location {:admin  "/admin"
+(def module-location {:admin  "/educators"
                       :parent "/parents"})
 
 (def routes {""               :sign-in
@@ -33,13 +33,12 @@
                                :redirect-params args}}))
 
 (re-frame/reg-fx
-  :redirect-to-module
-  (fn [user-type]
-    (let [module (case user-type
-                   "admin" :admin
-                   "bbs-admin" :admin
-                   :parent)
-          {:keys [redirect-to]} @router]
-      (->> (get module-location module)
-           (set! (.-location js/document))
-           (redirect-to)))))
+ :redirect-to-module
+ (fn [login-type]
+   (let [module (case login-type
+                  "educator" :admin
+                  :parent)
+         {:keys [redirect-to]} @router]
+     (->> (get module-location module)
+          (set! (.-location js/document))
+          (redirect-to)))))

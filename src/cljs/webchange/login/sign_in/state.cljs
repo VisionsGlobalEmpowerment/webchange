@@ -6,21 +6,6 @@
 
 (def path-to-db :form/login)
 
-(defn- validated-type
-  [type user-type]
-  (let [prepared-type (case type
-                        "admin" "admin"
-                        "parent")
-        prepared-user-type (case user-type
-                             "admin" "admin"
-                             "bbs-admin" "admin"
-                             "teacher" "admin"
-                             "parent")]
-    (cond
-      (= prepared-type prepared-user-type) prepared-type
-      (= prepared-user-type "admin") prepared-type
-      :else "parent")))
-
 (re-frame/reg-sub
   path-to-db
   (fn [db]
@@ -88,15 +73,15 @@
   (fn [{:keys [db]} [_ type]]
     (let [data (get-form-data db)]
       {:db       (set-loading db true)
-       :dispatch [::warehouse/admin-login {:data data} {:on-success [::login-success type]
-                                                        :on-failure [::login-failure]}]})))
+       :dispatch [::warehouse/login-with-credentials {:data data} {:on-success [::login-success type]
+                                                                   :on-failure [::login-failure]}]})))
 
 (re-frame/reg-event-fx
   ::login-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ type {user-type :type}]]
+  (fn [{:keys [db]} [_ type]]
     {:db                 (set-loading db false)
-     :redirect-to-module (validated-type type user-type)}))
+     :redirect-to-module (or type "educator")}))
 
 (re-frame/reg-event-fx
   ::login-failure
@@ -107,4 +92,4 @@
 (re-frame/reg-sub
   ::sign-in-as-type
   (fn [_ [_ type]]
-    (validated-type type "admin")))
+    (or type "educator")))

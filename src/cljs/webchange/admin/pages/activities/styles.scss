@@ -58,6 +58,11 @@
 
     .language-selector {
         min-width: 180px;
+	select {
+	    option {
+		color: bbs--color(black);
+	    }
+	}
     }
 
     .activities-search-input {

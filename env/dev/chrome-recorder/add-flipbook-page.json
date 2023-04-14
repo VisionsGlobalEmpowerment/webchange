@@ -13,11 +13,11 @@
     },
     {
       "type": "navigate",
-      "url": "http://localhost:3000/admin/lesson-builder/1756",
+      "url": "http://localhost:3000/educators/lesson-builder/1756",
       "assertedEvents": [
         {
           "type": "navigation",
-          "url": "http://localhost:3000/admin/lesson-builder/1756",
+          "url": "http://localhost:3000/educators/lesson-builder/1756",
           "title": "Admin / Lesson builder"
         }
       ]

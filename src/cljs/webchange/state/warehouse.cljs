@@ -206,9 +206,9 @@
 ;; Auth
 
 (re-frame/reg-event-fx
-  ::admin-login
+  ::login-with-credentials
   (fn [{:keys [_]} [_ {:keys [data]} handlers]]
-    (create-request {:key    :admin-login
+    (create-request {:key    :login-with-credentials
                      :method :post
                      :params {:user data}
                      :uri    "/api/users/login"}

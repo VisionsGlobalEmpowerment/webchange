@@ -53,6 +53,15 @@
         min-width: 224px;
     }
 
+    .language-selector {
+        min-width: 180px;
+	select {
+	    option {
+		color: bbs--color(black);
+	    }
+	}
+    }
+
     .books-search-input {
         width: 320px;
     }

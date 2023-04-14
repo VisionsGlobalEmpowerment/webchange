@@ -19,7 +19,7 @@
                   "parents"           {[""]        :parent
                                        ["/" #".*"] :parent}
                   
-                  "admin"             {[""]        :admin
+                  "educators"         {[""]        :admin
                                        ["/" #".*"] :admin}
                   "teacher"           {[""]        :teacher
                                        ["/" #".*"] :teacher}

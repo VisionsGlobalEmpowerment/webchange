@@ -152,8 +152,8 @@
   (GET "/wizard" request (authenticated-route request {:role :educator}))
   (GET "/game-changer-beta" request (authenticated-route request {:role :educator}))
 
-  (GET "/admin" [] (public-route))
-  (GET "/admin/*" [] (public-route))
+  (GET "/educators" [] (public-route))
+  (GET "/educators/*" [] (public-route))
   (GET "/teacher" [] (public-route))
   (GET "/teacher/*" [] (public-route))
   (GET "/ui" [] (public-route))

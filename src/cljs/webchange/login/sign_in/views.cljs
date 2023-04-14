@@ -18,18 +18,18 @@
     [:div.sign-in-form
      [:div.login-as
       [:h1 "Log In As:"]
+      [ui/button {:href "/accounts/sign-in/educator"
+                  :shape "rounded"
+                  :target "_self"
+                  :class-name (ui/get-class-name {"log-in-as-button"        true
+                                                  "log-in-as-button-active" (= sign-in-as-type "educator")})}
+       "Educator"]
       [ui/button {:href "/accounts/sign-in/parent"
                   :shape "rounded"
                   :target "_self"
                   :class-name (ui/get-class-name {"log-in-as-button"        true
                                                   "log-in-as-button-active" (= sign-in-as-type "parent")})}
-       "Parent"]
-      [ui/button {:href "/accounts/sign-in/admin"
-                  :shape "rounded"
-                  :target "_self"
-                  :class-name (ui/get-class-name {"log-in-as-button"        true
-                                                  "log-in-as-button-active" (= sign-in-as-type "admin")})}
-       "Admin"]]
+       "Parent"]]
      [ui/logo-with-name {:class-name "sign-in-logo"}]
      [:div.form
       [:div.fields

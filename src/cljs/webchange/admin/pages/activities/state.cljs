@@ -88,24 +88,24 @@
 (re-frame/reg-sub
   ::current-language
   :<- [path-to-db]
-  #(get % :current-language))
+  #(get % :current-language default-language))
 
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db         (-> db
-                     (assoc :visible-activities-loading true)
-                     (assoc :my-activities-loading true)
-                     (assoc :current-language default-language))
-     :dispatch-n [[::warehouse/load-visible-activities
-                   {:lang default-language}
-                   {:on-success [::load-visible-activities-success]}]
-                  [::warehouse/load-my-activities
-                   {:lang default-language}
-                   {:on-success [::load-my-activities-success]}]
-                  [::warehouse/load-current-user
-                   {:on-success [::load-account-success]}]]}))
+    (let [current-language (get db :current-language default-language)]
+      {:db         (-> db
+                       (assoc :visible-activities-loading true)
+                       (assoc :my-activities-loading true))
+       :dispatch-n [[::warehouse/load-visible-activities
+                     {:lang current-language}
+                     {:on-success [::load-visible-activities-success]}]
+                    [::warehouse/load-my-activities
+                     {:lang current-language}
+                     {:on-success [::load-my-activities-success]}]
+                    [::warehouse/load-current-user
+                     {:on-success [::load-account-success]}]]})))
 
 (re-frame/reg-event-fx
   ::load-account-success
