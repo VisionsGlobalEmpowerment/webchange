@@ -5,76 +5,118 @@
     [clojure.string :as str]
     [clojure.set :as set]))
 
+(defn- find-word-matches
+  "Finds all word matches in transcription"
+  [word transcription-items]
+  (let [word-len (count word)]
+    (->> transcription-items
+         (keep-indexed (fn [idx rec-item]
+                         (let [distance (levenshtein-distance word (:word rec-item))
+                               conf (/ (- word-len distance) word-len)]
+                           (when (> conf confidence-chunk-threshold)
+                             idx)))))))
+
+(defn- has-conflicts?
+  [items]
+  (->> items
+       (reduce (fn [{:keys [max]} {:keys [match]}]
+                 (cond
+                   (nil? match) {:max max}
+                   (>= match max) {:max match}
+                   :else (reduced {:conflict true})))
+               {:max 0})
+       (:conflict)))
+
+(defn- eliminate-worst
+  [items]
+  (let [match-to-remove (->> items
+                             (reduce (fn [{:keys [max conflicts] :as result} {:keys [match]}]
+                                       (cond
+                                         (nil? match)
+                                         result
+                                         (< match max)
+                                         (let [conflicting (->> conflicts
+                                                                keys
+                                                                (filter #(< match %))
+                                                                (concat [match]))]
+                                           (reduce (fn [result match]
+                                                     (update-in result [:conflicts match] inc))
+                                                   result
+                                                   conflicting))
+                                         :else
+                                         (-> result
+                                             (assoc :max match)
+                                             (assoc-in [:conflicts match] 0))))
+                                     {:max 0 :conflicts {}})
+                             :conflicts
+                             (sort-by second)
+                             last
+                             first)]
+    (map (fn [item] (if (= (:match item) match-to-remove)
+                      (dissoc item :match)
+                      item))
+         items)))
+
+
+(defn fix-order
+  "Recursevely eliminate most conflicting matches. 
+  e.g. 1 2 3 6 4 5 - should eliminate 6
+       1 2 3 5 6 4 - should eliminate 4
+
+  item {:text str 
+        :match int}"
+  [items]
+  (loop [items items]
+    (let [continue? (has-conflicts? items)]
+      (if continue?
+        (recur (eliminate-worst items))
+        items))))
+
+(defn- place-items-between
+  [start end items]
+  (let [duration (- end start)
+        item-duration (/ duration (count items))]
+    (map-indexed (fn [idx item]
+                   (-> item
+                       (assoc :start (+ start (* idx item-duration)))
+                       (assoc :end (+ start (* (inc idx) item-duration))))
+                   ) items)))
+
 (defn- get-chunks
-  [orig-text rec-text]
-  (if (= (count orig-text) (count rec-text))
-    rec-text
-    (let [orig-items (doall (map (fn [item]
-                                   {:text  item
-                                    :match (remove nil? (map-indexed (fn [idx rec-item]
-                                                                       (let [distance (levenshtein-distance item (:word rec-item))
-                                                                             len (count item)
-                                                                             conf (/ (- len distance) len)]
-                                                                         (if (> conf confidence-chunk-threshold)
-                                                                           idx
-                                                                           nil)))
-                                                                     rec-text))}
-                                   ) orig-text))
-          orig-items (reduce (fn [result item]
-                               (let [used (:used result)
-                                     match (:match item)
-                                     num (apply min (vec (set/difference (set match) (set used))))]
-                                 (-> result
-                                     (update :items conj (-> item
-                                                             (assoc :match num)))
-                                     (update :used conj num)))
-                               ) {:items [] :used []} orig-items)
-          processed-items (reduce (fn [result item]
-                                    (if (:match item)
-                                      (let
-                                          [stack-len (count (:stack result))
-                                           stacked-items (if (< 0 stack-len)
-                                                           (let
-                                                               [margins (cond
-                                                                          (> 0 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
-                                                                                                                  :start (:start (get rec-text (:last result)))}
-                                                                          (= 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (:last result)))
-                                                                                                                  :start (:start (get rec-text (:match item)))}
-                                                                          (< 1 (- (:match item) (:last result))) {:end   (:end (get rec-text (inc (:last result))))
-                                                                                                                  :start (:start (get rec-text (dec (:match item))))})
-                                                                duration (- (:end margins) (:start margins))
-                                                                item-duration (/ duration stack-len)]
-                                                             (vec (doall (map-indexed (fn [idx item]
-                                                                                        (-> item
-                                                                                            (assoc :start (* (+ 1 idx) (:start margins)))
-                                                                                            (assoc :end (+ item-duration (* (+ 1 idx) (:start margins)))))
-                                                                                        ) (:stack result)))))
-                                                           [])]
-                                        (-> result
-                                            (update :items vec)
-                                            (update :items concat stacked-items)
-                                            (update :items vec)
-                                            (update :items conj (get rec-text (:match item)))
-                                            (assoc :last (:match item))
-                                            (update :idx inc)
-                                            (assoc :stack [])))
+  "Get chunks with start and end marks for each chunk."
+  [words transcription-items]
+  (if (= (count words) (count transcription-items))
+    transcription-items
+    (let [orig-items (->> words
+                          (map (fn [item]
+                                 {:text item
+                                  :matches (find-word-matches item transcription-items)}))
+                          (reduce (fn [{:keys [used] :as result} {:keys [text matches]}]
+                                    (let [idx (apply min (set/difference (set matches) (set used)))]
                                       (-> result
-                                          (update :idx inc)
-                                          (update :stack conj item))))
-                                  {:items [] :stack [] :last 0 :idx 0} (:items orig-items))
-          stack-len (count (:stack processed-items))
-          end-fragment (:end (last rec-text))
-          next-unprocessed (get rec-text (inc (:last processed-items)))
-          start-stack (if next-unprocessed (:start next-unprocessed) (:end (last (:items processed-items))))
-          time-duration (max 0.5 (- end-fragment start-stack))
-          step-duration (if (> stack-len 0) (/ time-duration stack-len) 0)
-          processed-items (-> processed-items
-                              (update :items concat (map-indexed (fn [idx item]
-                                                                   (-> item
-                                                                       (assoc :start (+ (* step-duration idx) start-stack))
-                                                                       (assoc :end (+ start-stack (* (+ 1 idx) step-duration))))
-                                                                   ) (:stack processed-items))))]
-      (:items processed-items))))
+                                          (update :items conj {:text text :match-idx idx})
+                                          (update :used conj idx))))
+                                  {:items [] :used []})
+                          (:items)
+                          (fix-order))
+          {:keys [items stack last-idx]} (reduce (fn [{:keys [stack last-idx] :as result} {:keys [match-idx] :as item}]
+                                                   (if match-idx
+                                                     (let [stacked-items (if (seq stack)
+                                                                           (let [start (:end (get transcription-items last-idx))
+                                                                                 end (:start (get transcription-items match-idx))]
+                                                                             (place-items-between start end stack))
+                                                                           [])]
+                                                       (-> result
+                                                           (update :items concat stacked-items)
+                                                           (update :items concat [(get transcription-items match-idx)])
+                                                           (assoc :last-idx match-idx)
+                                                           (assoc :stack [])))
+                                                     (-> result
+                                                         (update :stack conj item))))
+                                                 {:items [] :stack [] :last-idx 0} orig-items)
+          start (or (:start (get transcription-items (inc last-idx))) (:start (get transcription-items last-idx)))
+          end (:end (last transcription-items))]
+      (-> items (concat (place-items-between start end stack))))))
 
 (defn- pack-talk-data
   [items]

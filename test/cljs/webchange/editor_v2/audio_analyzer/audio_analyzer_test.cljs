@@ -3,7 +3,7 @@
     [cljs.test :refer [deftest testing is]]
     [webchange.editor-v2.audio-analyzer.data :refer [script-data]]
     [webchange.utils.audio-analyzer.region-data :refer [get-start-end-for-text get-start-end-options-for-text]]
-    [webchange.utils.audio-analyzer.talk-data :refer [get-chunks-for-text]]))
+    [webchange.utils.audio-analyzer.talk-data :refer [get-chunks-for-text fix-order]]))
 
 (deftest test-get-action-audio-data-region
   (let [text "This branch looks lovely! It seems perfect for me. What do you think? Do you agree?"
@@ -104,3 +104,19 @@
     (is (= 49.98 (:at (first chunks))))
     (is (= 55.32 (:at (last chunks))))
     (is (= 16 (count chunks)))))
+
+(deftest test-chunks-processing
+  (let [text "This branch looks lovely!"
+        script-data [{:start 1 :end 5, :word "This branch looks lovely!"}]
+        chunks (get-chunks-for-text text script-data {:start 1 :end 5})]
+    (is (= 4 (count chunks)))
+    (is (= 1 (:at (first chunks))))
+    (is (= 5 (:end (last chunks))))))
+
+(deftest test-fix-matching-order
+  (let [items [{:text "lovely" :match 3}
+               {:text "this" :match 0}
+               {:text "branch" :match 1}
+               {:text "looks" :match 2}]
+        fixed (fix-order items)]
+    (is (nil? (-> fixed first :match)))))
