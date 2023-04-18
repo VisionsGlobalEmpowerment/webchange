@@ -13,7 +13,7 @@
     .widget--transcription-editor {
 	display: grid;
 	grid-template-columns: 60px auto;
-	grid-template-rows: 20px min-content auto;
+	grid-template-rows: 40px min-content auto;
 	column-gap: 16px;
 	row-gap: 16px;
 	position: relative;
@@ -74,6 +74,8 @@
 	}
 
 	.transcription-word {
+	    grid-area: 1 / 2 / 2 / 3;
+	    
 	    display: flex;
 	    gap: 20px;
 	}

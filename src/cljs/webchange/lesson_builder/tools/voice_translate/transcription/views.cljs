@@ -81,12 +81,13 @@
   [{:keys [wave]}]
   (let [handle-change #(re-frame/dispatch [::state/change-selected-word %])
         value (-> @(re-frame/subscribe [::state/selected-region]) :data (get "word") (or ""))
-
+        error @(re-frame/subscribe [::state/selected-word-error])
         remove-word #(re-frame/dispatch [::state/remove-selected-word wave])]
     [:div {:class-name "transcription-word"}
      [ui/input {:on-change  handle-change
                 :placeholder "Enter word"
-                :value value}]
+                :value value
+                :error error}]
      [ui/button {:on-click remove-word} "Remove"]]))
 
 (defn- transcription-editor

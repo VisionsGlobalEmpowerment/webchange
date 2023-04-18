@@ -192,16 +192,26 @@
   (fn [db]
     (selected-region db)))
 
+(re-frame/reg-sub
+  ::selected-word-error
+  :<- [path-to-db]
+  (fn [db]
+    (get db :selected-word-error)))
+
 (re-frame/reg-event-fx
   ::change-selected-word
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
-    (let [id (:selected-region db)
+    (let [prepared-value (s/trim value)
+          id (:selected-region db)
           region (-> db
                      (selected-region)
-                     (assoc-in [:data "word"] value))
-          regions (->> db :regions (remove #(= id (:id %))))]
-      {:db (assoc db :regions (conj regions region))})))
+                     (assoc-in [:data "word"] prepared-value))
+          regions (->> db :regions (remove #(= id (:id %))))
+          has-error (< 0 (s/index-of prepared-value " "))]
+      {:db (-> db
+               (assoc :regions (conj regions region))
+               (assoc :selected-word-error (when has-error "Please do not use spaces in words")))})))
 
 (re-frame/reg-event-fx
   ::remove-selected-word
