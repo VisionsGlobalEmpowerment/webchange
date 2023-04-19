@@ -76,10 +76,7 @@
           (not-found "not found"))))
     (GET "/" request
       :return (s/keys :req-un [::school-spec/schools])
-      (let [user-id (current-user request)]
-        (when-not (is-at-least-teacher? user-id)
-          (throw-unauthorized {:role :educator}))
-        (handle-list-schools request)))
+      (handle-list-schools request))
     (PUT "/:id" request
       :path-params [id :- ::school-spec/id]
       :return ::school-spec/new-school

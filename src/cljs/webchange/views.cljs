@@ -14,7 +14,8 @@
     [webchange.ui-framework.components.index :as ui]
     [webchange.utils.lazy-component :refer [lazy-component]]
     [webchange.sandbox.views :as sandbox]
-    [webchange.student.pages.sign-in.views :as student-sign-in]))
+    [webchange.student.pages.sign-in.views :as student-sign-in]
+    [webchange.student.pages.select-school.views :as select-school]))
 
 (def overall-views
   (merge book-library/views
@@ -46,7 +47,7 @@
             ;; sandbox
             :activity-sandbox [sandbox/activity {:scene-id (:scene-id route-params)}]
             ;; student dashboard
-            :student-login [student-sign-in/page {:school-id (:school-id route-params)}]
+            :student-login [select-school/page]
             :school-student-login [student-sign-in/page {:school-id (:school-id route-params)}]
 
             nil [:div]

@@ -39,10 +39,12 @@
 
 (defn- sign-in-form
   []
-  [:div {:class-name "sign-in-form"}
-   [:h1.header "Student Access"]
-   [current-code]
-   [num-pad]])
+  (let [change-school #(re-frame/dispatch [::state/change-school])]
+    [:div {:class-name "sign-in-form"}
+     [:h1.header "Student Access"]
+     [current-code]
+     [num-pad]
+     [:div {:on-click change-school} "change school"]]))
 
 (defn page
   [props]

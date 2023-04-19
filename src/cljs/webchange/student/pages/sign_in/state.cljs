@@ -4,7 +4,8 @@
     [re-frame.std-interceptors :as i]
     [webchange.interpreter.events :as ie]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.numbers :refer [try-parse-number]]))
+    [webchange.utils.numbers :refer [try-parse-number]]
+    [webchange.events :as events]))
 
 (def code-length 4)
 
@@ -120,7 +121,14 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-current-value []))}))
 
-(re-frame/reg-sub
-  ::user
-  (fn [db]
-    (get-in db [:user])))
+(defn- remove-school-id!
+  []
+  (let [local-storage (.-localStorage js/window)]
+    (.removeItem local-storage "saved-school-id")))
+
+(re-frame/reg-event-fx
+  ::change-school
+  [(i/path path-to-db)]
+  (fn [{:keys [_db]} [_]]
+    (remove-school-id!)
+    {:dispatch [::events/redirect :student-login]}))
