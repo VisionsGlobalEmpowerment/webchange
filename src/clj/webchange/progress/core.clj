@@ -60,13 +60,13 @@
   (let [student (db/get-student {:id student-id})
         class (db/get-class {:id (:class-id student)})
         course (db/get-course {:slug (:course-slug class)})
-        course-latest (db/get-latest-course-version {:course_id (:course-id class)})
+        course-data (course/get-course-data (:course-slug class))
         course-stats (db/get-user-course-stat {:user_id (:user-id student) :course_id (:course-id class)})
         activity-stats (db/get-user-activity-stats {:user_id (:user-id student) :course_id (:course-id class)})]
     {:student (-> student
                   class/with-user)
      :class class
-     :course (merge course-latest course)
+     :course (assoc course :data course-data)
      :course-stats course-stats
      :activity-stats activity-stats}))
 
