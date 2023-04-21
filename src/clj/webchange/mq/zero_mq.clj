@@ -20,8 +20,11 @@
     (zmq/with-new-context
       (let [vent (zmq/socket :push {:bind vent-url})]
         (while @active
-          (let [task (async/<! chan)]
-            (zmq/send-msg vent (str task) {:timeout 30000})))))))
+          (try 
+            (let [task (async/<! chan)]
+              (zmq/send-msg vent (str task) {:timeout 30000}))
+            (catch Exception e
+              (log/error e))))))))
 
 (defn sink-receive
   [queue-name on-receive-callback]
