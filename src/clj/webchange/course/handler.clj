@@ -363,6 +363,12 @@
   [{:keys [course-slug scene-slug]}]
   (str "/s/" (url-encode course-slug) "/" (url-encode scene-slug)))
 
+(defn activity-owner-or-admin!
+  [request activity-id]
+  (let [user-id (current-user request)]
+    (when-not (or (core/owner? user-id activity-id) (is-admin? user-id))
+      (throw-unauthorized {:role :educator}))))
+
 (defroutes course-pages-routes
   (GET "/courses/:course-slug/edit" [course-slug] (-> course-slug core/first-activity editor-url redirect))
   (GET "/courses/:course-slug/play" [course-slug] (-> course-slug core/first-activity sandbox-url redirect))
@@ -540,7 +546,7 @@
        :path-params [activity-id :- ::activity-spec/id]
        :body [data ::activity-spec/edit-activity]
        (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
+         (when-not (or (core/owner? user-id activity-id) (is-admin? user-id))
            (throw-unauthorized {:role :educator}))
          (-> (core/edit-activity activity-id data)
              response)))
@@ -576,8 +582,6 @@
         :path-params [activity-id :- ::activity-spec/id]
         :body [data ::activity-spec/duplicate]
         (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
           (-> (core/duplicate-activity activity-id data user-id)
               response)))
   (POST "/api/activities/:activity-id/version" request
@@ -585,7 +589,7 @@
         :path-params [activity-id :- ::activity-spec/id]
         :body [data ::activity-spec/activity-data]
         (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
+          (when-not (or (core/owner? user-id activity-id) (is-admin? user-id))
             (throw-unauthorized {:role :educator}))
           (-> (core/save-activity-version activity-id data user-id)
               response)))
@@ -593,8 +597,6 @@
         :coercion :spec
         :body [data ::book-spec/create-book]
         (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
           (-> (core/create-book data user-id)
               response)))
   (PUT "/api/activities/:activity-id/template-options" request
@@ -602,8 +604,7 @@
        :path-params [activity-id :- ::activity-spec/id]
        :body [data ::activity-spec/template-options]
        (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
+         (activity-owner-or-admin! request activity-id)
          (-> (core/apply-template-options activity-id data user-id)
              response)))
   (PUT "/api/activities/:activity-id/update-template" request
@@ -620,8 +621,7 @@
         :path-params [activity-id :- ::activity-spec/id]
         :body [data ::activity-spec/template-action]
         (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
+          (activity-owner-or-admin! request activity-id)
           (-> (core/apply-template-action activity-id data user-id)
               response)))
   (PUT "/api/activities/:activity-id/settings" request
@@ -629,7 +629,6 @@
        :path-params [activity-id :- ::activity-spec/id]
        :body [data ::activity-spec/update-settings]
        (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
+         (activity-owner-or-admin! request activity-id)
          (-> (core/update-activity-settings! activity-id data user-id)
              response))))

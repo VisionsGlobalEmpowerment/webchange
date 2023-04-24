@@ -882,9 +882,14 @@
                             :owner-id
                             (get-activity-user))]
     (assoc activity-info
-      :course-slug course-slug
-      :created-by-user created-by-user
-      :updated-by-user updated-by-user)))
+           :course-slug course-slug
+           :created-by-user created-by-user
+           :updated-by-user updated-by-user)))
+
+(defn- get-activity-info
+  [activity-id]
+  (-> (db/get-scene-by-id {:id activity-id})
+      ->activity-info))
 
 (defn edit-activity
   [activity-id data]
@@ -1114,3 +1119,8 @@
                      :description "Activity Settings"})
     {:data scene-data
      :info (get-activity activity-id)}))
+
+(defn owner?
+  [user-id activity-id]
+  (let [{owner-id :owner-id} (get-activity-info activity-id)]
+    (= user-id owner-id)))
