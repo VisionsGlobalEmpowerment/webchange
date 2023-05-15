@@ -1,11 +1,12 @@
 (ns webchange.events
   (:require
-   [re-frame.core :as re-frame]
-   [webchange.db :as db]
-   [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
-   [day8.re-frame.http-fx]
-   [ajax.core :refer [json-request-format json-response-format]]
-   [webchange.error-message.state :as error-message]))
+    [re-frame.core :as re-frame]
+    [webchange.db :as db]
+    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
+    [day8.re-frame.http-fx]
+    [ajax.core :refer [json-request-format json-response-format]]
+    [webchange.error-message.state :as error-message]
+    [webchange.state.warehouse :as warehouse] ))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -66,11 +67,7 @@
   ::init-current-user
   (fn [{:keys [db]} _]
     {:db         (assoc-in db [:loading :current-user] true)
-     :http-xhrio {:method          :get
-                  :uri             "/api/users/current"
-                  :format          (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success      [::init-current-user-success]}}))
+     :dispatch [::warehouse/load-current-user {:on-success [::init-current-user-success]}]}))
 
 (re-frame/reg-event-fx
   ::init-current-user-success

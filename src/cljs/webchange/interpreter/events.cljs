@@ -1,7 +1,6 @@
 (ns webchange.interpreter.events
   (:require
     [ajax.core :refer [json-request-format json-response-format]]
-    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
     [re-frame.core :as re-frame]
     [webchange.common.events :as ce]
     [webchange.common.svg-path.path-to-transitions :as path-utils]
@@ -13,8 +12,6 @@
     [webchange.interpreter.renderer.scene.full-screen :as full-screen]
     [webchange.interpreter.renderer.question.component :as question-component]
     [webchange.progress.tags :as tags]
-    [webchange.interpreter.utils :refer [add-scene-tag merge-scene-data]]
-    [webchange.interpreter.utils.find-exit :refer [find-exit-position find-path]]
     [webchange.interpreter.variables.events :as vars.events]
     [webchange.interpreter.variables.core :as vars.core]
     [webchange.student-dashboard.routes :as student-dashboard]
@@ -35,7 +32,6 @@
     [webchange.state.state-progress :as progress-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]
-    [webchange.interpreter.subs :as interpreter-subs]
     [webchange.utils.numbers :as numbers]
     [webchange.events :as events]))
 
@@ -279,60 +275,15 @@
     (sound/music-volume (/ value 100))))
 
 (re-frame/reg-fx
-  :effects-volume
-  (fn [value]
-    (sound/init)
-    (sound/effects-volume (/ value 100))))
+ :effects-volume
+ (fn [value]
+   (sound/init)
+   (sound/effects-volume (/ value 100))))
 
 (re-frame/reg-fx
- :load-course
- (fn [{:keys [course-id]}]
-   (i/load-course {:course-id course-id}
-                  (fn [course]
-                    (re-frame/dispatch [:complete-request :load-course])
-                    (re-frame/dispatch [::sw-status/set-current-course course-id])
-                    (re-frame/dispatch [::set-course-data course])
-                    (re-frame/dispatch [::load-progress {:course-id course-id}])
-                    (re-frame/dispatch [::load-lessons course-id])
-                    (re-frame/dispatch [::load-course-info course-id])))))
-
-(re-frame/reg-fx
- :load-course-data
- (fn [{:keys [course-id]}]
-   (i/load-course {:course-id course-id} #(re-frame/dispatch [::set-course-data %]))))
-
-(re-frame/reg-fx
-  :load-scene
-  (fn [{:keys [course-id scene-id]}]
-    (i/load-scene {:course-id course-id
-                   :scene-id  scene-id}
-                  (fn [scene]
-                    (re-frame/dispatch [::set-scene scene-id scene])
-                    (re-frame/dispatch [::store-scene scene-id scene])))))
-
-(re-frame/reg-fx
- :load-progress
- (fn [{:keys [course-id]}]
-   (i/load-progress course-id (fn [progress]
-                                (re-frame/dispatch [:complete-request :load-progress])
-                                (let [set-progress-callback [::progress-loaded course-id]]
-                                  (cond
-                                    progress (re-frame/dispatch [::set-progress-data progress set-progress-callback])
-                                    :else (re-frame/dispatch [::init-default-progress progress set-progress-callback])))))))
-
-(re-frame/reg-fx
-  :load-lessons
-  (fn [[course-id]]
-    (i/load-lessons {:course-id         course-id
-                     :cb                (fn [{:keys [items lesson-sets datasets]}]
-                                          (re-frame/dispatch [:complete-request :load-lessons])
-                                          (re-frame/dispatch [::set-course-lessons-data lesson-sets datasets items]))
-                     :on-asset-complete #(do (re-frame/dispatch [::set-dataset-loaded]))})))
-
-(re-frame/reg-fx
-  :transition
-  (fn [params]
-    (i/interpolate params)))
+ :transition
+ (fn [params]
+   (i/interpolate params)))
 
 (re-frame/reg-fx
   :switch-animation
@@ -1227,7 +1178,18 @@
                           (assoc :loaded-course-user-id user-id)
                           (assoc :current-course course-id)
                           (assoc-in [:loading :load-course] true))
-         :load-course {:course-id course-id}}))))
+         :dispatch [::warehouse/load-course course-id
+                    {:on-success [::load-course-success course-id]}]}))))
+
+(re-frame/reg-event-fx
+  ::load-course-success
+  (fn [{:keys [_db]} [_ course-id course]]
+    {:dispatch-n [[:complete-request :load-course]
+                  [::sw-status/set-current-course course-id]
+                  [::set-course-data course]
+                  [::load-progress {:course-id course-id}]
+                  [::load-lessons course-id]
+                  [::load-course-info course-id]]}))
 
 (re-frame/reg-event-fx
   ::load-scenes-with-skills
@@ -1256,23 +1218,32 @@
 
 (re-frame/reg-event-fx
   ::load-course-data
-  (fn-traced [{:keys [db]} [_ course-id]]
-    (if (not= course-id (:loaded-course db))
-      {:dispatch         [::load-scenes-with-skills course-id]
-       :load-course-data {:course-id course-id}
-       :load-lessons     [course-id]})))
+  (fn [{:keys [db]} [_ course-id]]
+    (when (not= course-id (:loaded-course db))
+      {:dispatch-n [[::load-scenes-with-skills course-id]
+                    [::warehouse/load-course course-id
+                     {:on-success [::load-course-data-success course-id]}]
+                    [::warehouse/load-lesson-sets {:course-slug course-id}
+                     {:on-success [::load-lessons-success course-id]}]]})))
 
 (re-frame/reg-event-fx
-  ::set-current-course
-  (fn [{:keys [db]} [_ course-name]]
-    {:db (assoc db :current-course course-name)}))
+  ::load-course-data-success
+  (fn [{:keys [_db]} [_ _course-id course]]
+    {:dispatch [::set-course-data course]}))
 
 (re-frame/reg-event-fx
   ::load-scene
   (fn [{:keys [db]} [_ scene-id]]
     (let [loaded (get-in db [:scene-loading-complete scene-id])]
-      (when (not loaded) {:load-scene {:course-id (:current-course db)
-                                       :scene-id  scene-id}}))))
+      (when (not loaded)
+        {:dispatch [::warehouse/load-activity-current-version {:activity-id scene-id}
+                    {:on-success [::load-scene-success scene-id]}]}))))
+
+(re-frame/reg-event-fx
+  ::load-scene-success
+  (fn [{:keys [_db]} [_ scene-id scene]]
+    {:dispatch-n [[::set-scene scene-id scene]
+                  [::store-scene scene-id scene]]}))
 
 (re-frame/reg-event-fx
   ::clear-current-scene
@@ -1404,15 +1375,33 @@
   ::load-progress
   (fn [{:keys [db]} [_ {:keys [course-id]}]]
     {:db            (assoc-in db [:loading :load-progress] true)
-     :load-progress {:course-id course-id}}))
+     :dispatch [::warehouse/load-progress-data {:course-slug course-id}
+                {:on-success [::load-progress-success course-id]}]}))
+
+(re-frame/reg-event-fx
+  ::load-progress-success
+  (fn [{:keys [_db]} [_ course-id {:keys [progress] :as response}]]
+    (let [set-progress-callback [::progress-loaded course-id]]
+      (js/console.log "load progress success" progress response)
+      {:dispatch-n [[:complete-request :load-progress]
+                    (if progress
+                      [::set-progress-data progress set-progress-callback]
+                      [::init-default-progress progress set-progress-callback])]})))
+
 
 (re-frame/reg-event-fx
   ::load-lessons
   (fn [{:keys [db]} [_ course-id]]
     {:db           (-> db
-                       (assoc-in [:loading :load-lessons] true)
-                       (assoc-in [:loading :load-lessons-assets] true))
-     :load-lessons [course-id]}))
+                       (assoc-in [:loading :load-lessons] true))
+     :dispatch [::warehouse/load-lesson-sets {:course-slug course-id}
+                {:on-success [::load-lessons-success course-id]}]}))
+
+(re-frame/reg-event-fx
+  ::load-lessons-success
+  (fn [{:keys [_db]} [_ _course-id {:keys [items lesson-sets datasets]}]]
+    {:dispatch-n [[:complete-request :load-lessons]
+                  [::set-course-lessons-data lesson-sets datasets items]]}))
 
 (defn- prepare-datasets-items [data]
   (into {} (map #(identity [(:id %) %]) data)))

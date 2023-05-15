@@ -1,12 +1,15 @@
 (ns webchange.state.warehouse
   (:require
-    [ajax.core :refer [json-request-format json-response-format]]
+    [ajax.core :refer [json-request-format json-response-format raw-response-format] :as ajax]
     [camel-snake-kebab.core :refer [->Camel_Snake_Case_String]]
     [clojure.string :as string]
     [re-frame.core :as re-frame]
+    [day8.re-frame.http-fx :as http-fx]
     [webchange.config :as config]
+    [webchange.capacitor :as capacitor]
     [webchange.error-message.state :as error-message]
-    [webchange.logger.index :as logger]))
+    [webchange.logger.index :as logger]
+    [webchange.state.warehouse-native :as warehouse-native]))
 
 (defn path-to-db
   [relative-path]
@@ -28,6 +31,12 @@
     {:dispatch (-> handler (concat args) (vec))}
     {}))
 
+(defn init!
+  []
+  (if (capacitor/native?)
+    (warehouse-native/init!)
+    (re-frame/reg-fx :cached-http-xhrio http-fx/http-effect)))
+
 (defn- create-request
   "Params:
    - {integer} [delay]: set response delay in ms"
@@ -38,14 +47,15 @@
     (logger/warn "Deprecated event" key ": " deprecated?))
   {:dispatch-n (cond-> [[::start-request key]]
                        (some? request-type) (conj [::set-sync-status {:key request-type :in-progress? true}]))
-   :http-xhrio (cond-> {:method          method
-                        :uri             uri
-                        :format          (json-request-format)
-                        :response-format (json-response-format {:keywords? true})
-                        :on-success      [::generic-on-success-handler props on-success]
-                        :on-failure      [::generic-failure-handler props on-failure suppress-api-error?]}
-                       (some? params) (assoc (if (= method :get) :url-params :params) params)
-                       (some? body) (assoc :body body))})
+   :cached-http-xhrio (cond-> {:key             key
+                               :method          method
+                               :uri             uri
+                               :format          (json-request-format)
+                               :response-format (json-response-format {:keywords? true})
+                               :on-success      [::generic-on-success-handler props on-success]
+                               :on-failure      [::generic-failure-handler props on-failure suppress-api-error?]}
+                              (some? params) (assoc (if (= method :get) :url-params :params) params)
+                              (some? body) (assoc :body body))})
 
 (re-frame/reg-event-fx
   ::generic-on-success-handler
@@ -333,6 +343,15 @@
     (create-request {:key    :save-progress-data
                      :method :post
                      :params progress-data
+                     :uri    (str "/api/courses/" course-slug "/current-progress")}
+                    handlers)))
+
+(re-frame/reg-event-fx
+  ::load-progress-data
+  (fn [{:keys [_]} [_ {:keys [course-slug]} handlers]]
+    {:pre [(string? course-slug)]}
+    (create-request {:key    :load-progress-data
+                     :method :get
                      :uri    (str "/api/courses/" course-slug "/current-progress")}
                     handlers)))
 
@@ -736,7 +755,7 @@
 (re-frame/reg-event-fx
   ::load-lesson-sets
   (fn [{:keys [_]} [_ {:keys [course-slug]} handlers]]
-    (create-request {:key    ::load-lesson-sets
+    (create-request {:key    :load-lesson-sets
                      :method :get
                      :uri    (str "/api/courses/" course-slug "/lesson-sets")}
                     handlers)))

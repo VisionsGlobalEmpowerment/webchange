@@ -1,0 +1,14 @@
+{
+    "appId": "org.bluebrickschool.app",
+    "appName": "Blue Brick School",
+    "webDir": "resources/public",
+    "bundledWebRuntime": false,
+    "plugins": {
+	"CapacitorHttp": {
+	    "enabled": true
+	},
+	"CapacitorCookies": {
+	    "enabled": true
+	}
+    }
+}

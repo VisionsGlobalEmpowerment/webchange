@@ -7,8 +7,8 @@
                          :lessons [{:name        "Lesson 1",
                                     :lesson      1,
                                     :comment     "Lesson 1 comment"
-                                    :activities  [{:activity "scene-1", :time-expected 300}
-                                                  {:activity      "scene-2", :time-expected 300,
+                                    :activities  [{:activity "scene-1", :time-expected 300 :scene-id 2}
+                                                  {:activity      "scene-2", :time-expected 300, :scene-id 3
                                                    :tags-by-score {:intermediate [0 75],
                                                                    :advanced     [75 101]}}],
                                     :lesson-sets {:concepts "ls1"}}]}
@@ -16,10 +16,10 @@
                          :level   2,
                          :lessons [{:name        "Lesson 2",
                                     :lesson      2,
-                                    :activities  [{:activity "scene-1", :time-expected 300, :only [:beginner]}
-                                                  {:activity "scene-2", :time-expected 300}],
+                                    :activities  [{:activity "scene-1", :time-expected 300, :only [:beginner] :scene-id 2}
+                                                  {:activity "scene-2", :time-expected 300 :scene-id 3}],
                                     :lesson-sets {:current-concept "ls2"}}
                                    {:name        "Assessment",
                                     :lesson      3,
-                                    :activities  [{:activity "scene-1", :time-expected 300}],
+                                    :activities  [{:activity "scene-1", :time-expected 300 :scene-id 2}],
                                     :lesson-sets {:assessment-1 "assessment1"}}]}]})

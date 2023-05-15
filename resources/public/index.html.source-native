@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset='utf-8'>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Blue Brick School</title>
+    <link rel="shortcut icon" href="/images/app/bluebrickschool_icon.png"/>
+    <link href="/fonts/luckiest_guy_regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-100.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-400.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-normal-900.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/roboto/latin-italic-900.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/lexend_deca_regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/lexend_deca_regular2.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/lexend_deca_regular3.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/Pacifico-Regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/AbrilFatface-Regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/Staatliches-Regular.woff2" rel="preload" as="font" crossorigin />
+    <link href="/fonts/tabschool/Tabschool.woff2" rel="preload" as="font" crossorigin />
+    <link href="/css/fonts.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="manifest" href="/manifest.json">
+    <script>
+        var global = global || window;
+        // Hide re-frame-10x panel by default. Open panel pressing Ctrl + H
+        localStorage.setItem("day8.re-frame-10x.show-panel","\"false\"")
+    </script>
+    <script src="/js/fix-wheel-event.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/js/compiled/app.js"></script>
+    <script src="/js/compiled/admin.js"></script>
+    <script src="/js/compiled/login.js"></script>
+    <script src="/js/compiled/parent.js"></script>
+    <script src="/js/compiled/teacher.js"></script>
+    <script src="/js/compiled/ui.js"></script>
+    <script>webchange.core.init(false);</script>
+  </body>
+</html>

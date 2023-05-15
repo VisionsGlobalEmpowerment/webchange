@@ -6,9 +6,10 @@
             [webchange.student-dashboard.routes :as student-dashboard-routes]
             [webchange.events :as events]
             [webchange.subs :as subs]
+            [webchange.capacitor :as capacitor]
             [webchange.interpreter.events :as ie]))
 
-(def routes ["/" {""                  :login
+(def routes ["/" {""                  (if (capacitor/native?) :student-login :login)
                   "student-login"     {[""]             :student-login
                                        ["/" :school-id] :school-student-login}
                   "s"                 {["/" [#"[\w-%]+" :scene-id]] :activity-sandbox}

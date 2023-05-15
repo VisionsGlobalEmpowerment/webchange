@@ -13,7 +13,6 @@
     [webchange.common.date-time :as dt]
     [webchange.common.files :as f]
     [webchange.common.hmac-sha256 :as sign]
-    [webchange.course.core :as course]
     [webchange.db.core :as db]
     [webchange.secondary.guid :as guid]))
 
@@ -577,7 +576,7 @@
            file-hash))
        update))
 
-(defn- asset->url
+(defn asset->url
   [asset]
   (cond
     (map? asset) (:url asset)
@@ -709,3 +708,6 @@
       (client/post url {:headers   {:api-key (:api-key env)}
                         :multipart [{:name "target-path" :content path}
                                     {:name "file" :content (io/file file-path)}]}))))
+
+
+

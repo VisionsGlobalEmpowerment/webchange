@@ -3,7 +3,6 @@
             [re-frame.core :as re-frame]
             [day8.re-frame.test :refer-macros [run-test-async wait-for]]
             [webchange.events :as events]
-            [webchange.interpreter.core :as ic]
             [webchange.interpreter.events :as ie]
             [webchange.fixtures :as fixtures]
             [webchange.editor-v2.course-table.state.data :as data-state]
@@ -12,15 +11,15 @@
             [webchange.editor-v2.course-table.state.edit-common :as common]
             [webchange.subs :as subs]
             [webchange.editor-v2.course-table.state.selection :as selection-state]
-            [webchange.state.warehouse :as warehouse]))
+            [webchange.state.warehouse :as warehouse]
+            [webchange.common.warehouse :refer [mock-warehouse]]))
 
 (use-fixtures :once
-              {:before (fn []
-                         (doto ic/http-buffer
-                           (swap! assoc (ic/course-url "table-course") (fixtures/get-course "table-course"))
-                           (swap! assoc (ic/scene-url "table-course" "scene-1") (fixtures/get-scene "table-course" "scene-1"))
-                           (swap! assoc (ic/scene-url "table-course" "scene-2") (fixtures/get-scene "table-course" "scene-2"))
-                           (swap! assoc (ic/lessons-url "table-course") (fixtures/get-lesson-sets "table-course"))))})
+  {:before (fn []
+             (mock-warehouse {"/api/courses/table-course" (fixtures/get-course "table-course")
+                              "/api/activities/2/current-version" (fixtures/get-scene 2)
+                              "/api/activities/3/current-version" (fixtures/get-scene 3)
+                              "/api/courses/table-course/lesson-sets" (fixtures/get-lesson-sets "table-course")}))})
 
 (use-fixtures :each
               {:before (fn []

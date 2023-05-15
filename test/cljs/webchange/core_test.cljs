@@ -4,16 +4,15 @@
             [re-frame.db]
             [day8.re-frame.test :as rf-test]
             [webchange.events :as events]
-            [webchange.interpreter.core :as ic]
             [webchange.interpreter.events :as ie]
-            [webchange.fixtures :as fixtures]))
+            [webchange.fixtures :as fixtures]
+            [webchange.common.warehouse :refer [mock-warehouse]]))
 
 (use-fixtures :once
   {:before (fn []
-             (doto ic/http-buffer
-               (swap! assoc (ic/course-url "test-course") (fixtures/get-course "test-course"))
-               (swap! assoc (ic/scene-url "test-course" "initial-scene") (fixtures/get-scene "test-course" "initial-scene"))
-               (swap! assoc (ic/progress-url "test-course") (fixtures/get-progress "test-course"))))})
+             (mock-warehouse {"/api/courses/test-course" (fixtures/get-course "test-course")
+                              "/api/activities/1/current-version" (fixtures/get-scene 1)
+                              "/api/courses/test-course/current-progress" (fixtures/get-progress "test-course")}))})
 
 (use-fixtures :each {:before (fn []
                                (re-frame/dispatch-sync [::events/initialize-db]))})
@@ -30,5 +29,5 @@
    (testing "load scene"
      (re-frame/dispatch [::ie/start-course "test-course"])
      (rf-test/wait-for [::ie/set-scene]
-                       (is (= fixtures/initial-scene (get-in @re-frame.db/app-db [:scenes "initial-scene"])))))))
+                       (is (= (fixtures/get-scene 1) (get-in @re-frame.db/app-db [:scenes 1])))))))
 

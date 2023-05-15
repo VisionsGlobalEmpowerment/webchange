@@ -1,141 +1,29 @@
 (ns webchange.interpreter.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
-    [re-frame.core :as re-frame]
-    [webchange.common.events :as ce]
-    [cljs-http.client :as http]
-    [cljs.core.async :refer [<!]]
     ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]
     [webchange.logger.index :as logger]
     [webchange.utils.scene-action-data :as scene-action-data]))
 
-(def assets (atom {}))
-
-(defn put-data
-  [data key]
-  (swap! assets assoc (name key) data))
-
-(defn get-data
-  [key]
-  (get @assets key))
-
-(defn has-data
-  [key]
-  (contains? @assets key))
-
-(defn create-tagged-key
-  [tag key]
-  (str tag "_" key))
-
-(defn new-blob
-  [arraybuffer]
-  (js/Blob. [arraybuffer]))
-
-(defn get-data-as-blob [key]
-  (-> key
-      get-data
-      new-blob))
-
-(defn wait-data-as-blob
-  [key callback]
-  (let [timeout 100
-        data (get-data key)]
-    (if-not (nil? data)
-      (callback (new-blob data))
-      (.setTimeout js/window #(wait-data-as-blob key callback) timeout))))
-
 (def host "/api")
-(def resources "")
 (def http-buffer (atom {}))
-
-(defn get-url [url]
-  (if (contains? @http-buffer url)
-    (let [response (get @http-buffer url)]
-      (swap! http-buffer dissoc url)
-      response)
-    (http/get url {:with-credentials? false})))
 
 (defn course-url
   [course-id]
   (str host "/courses/" course-id))
 
-(defn get-course
-  [course-id]
-  (let [url (course-url course-id)]
-    (get-url url)))
-
 (defn scene-url
   [_course-id scene-id]
   (str host "/activities/" scene-id "/current-version"))
-
-(defn get-scene
-  [course-id scene-id]
-  (let [url (scene-url course-id scene-id)]
-    (get-url url)))
 
 (defn progress-url
   [course-id]
   (str host "/courses/" course-id "/current-progress"))
 
-(defn get-progress
-  [course-id]
-  (let [url (progress-url course-id)]
-    (get-url url)))
-
 (defn lessons-url
   [course-id]
   (str host "/courses/" course-id "/lesson-sets"))
-
-(defn get-lessons
-  [course-id]
-  (let [url (lessons-url course-id)]
-    (get-url url)))
-
-(defn get-total-size
-  [assets]
-  (->> assets
-       (filter :url)
-       (map :size)
-       (reduce +)))
-
-(defn load-course
-  [{:keys [course-id]} cb]
-  (go (let [course-response (<! (get-course course-id))
-            course (:body course-response)]
-        (cb course))))
-
-(defn load-scene
-  [{:keys [course-id scene-id]} cb]
-  (go (let [scene-response (<! (get-scene course-id scene-id))
-            scene (:body scene-response)]
-        (cb scene scene-id))))
-
-(defn load-progress
-  [course-id cb]
-  (go (let [response (<! (get-progress course-id))
-            result (-> response :body :progress)]
-        (cb result))))
-
-(defn load-lessons
-  [{:keys [course-id cb on-asset-complete]}]
-  (go (let [response (<! (get-lessons course-id))
-            result (-> response :body)]
-        (on-asset-complete)
-        (cb result))))
-
-(defn get-data-as-url
-  [key]
-  (if-not (has-data key)
-    (do)
-    (let [object-url-key (create-tagged-key "object-url" key)]
-      (when-not (has-data object-url-key)
-        (-> key
-            get-data-as-blob
-            js/URL.createObjectURL
-            (put-data object-url-key)))
-      (get-data object-url-key))))
 
 (defn- length
   [p1 p2]

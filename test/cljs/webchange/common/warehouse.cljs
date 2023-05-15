@@ -3,9 +3,9 @@
 
 (defn mock-warehouse
   [requests]
-  (re-frame/clear-fx :http-xhrio)
+  (re-frame/clear-fx :cached-http-xhrio)
   (re-frame/reg-fx
-    :http-xhrio
-    (fn [{:keys [uri on-success on-failure]}]
-      (when-let [response (get requests uri)]
-        (re-frame/dispatch (conj on-success response))))))
+   :cached-http-xhrio
+   (fn [{:keys [uri on-success _on-failure]}]
+     (when-let [response (get requests uri)]
+       (re-frame/dispatch (conj on-success response))))))
