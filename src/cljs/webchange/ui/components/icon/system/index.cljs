@@ -51,6 +51,7 @@
     [webchange.ui.components.icon.system.icon-rewind-forward :as rewind-forward]
     [webchange.ui.components.icon.system.icon-search :as search]
     [webchange.ui.components.icon.system.icon-select :as select]
+    [webchange.ui.components.icon.system.icon-settings :as settings]
     [webchange.ui.components.icon.system.icon-statistics :as statistics]
     [webchange.ui.components.icon.system.icon-stop-recording :as stop-recording]
     [webchange.ui.components.icon.system.icon-template :as template]
@@ -116,6 +117,7 @@
                         "rewind-forward"  rewind-forward/data
                         "search"          search/data
                         "select"          select/data
+                        "settings"        settings/data
                         "statistics"      statistics/data
                         "stop"            stop-recording/data
                         "template"        template/data

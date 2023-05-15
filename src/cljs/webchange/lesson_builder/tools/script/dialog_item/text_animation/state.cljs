@@ -76,3 +76,4 @@
   (fn [_ [_ action-path]]
     {:dispatch [::confirm-state/show-confirm-window {:title      "Are you sure you want to delete this text animation action?"
                                                      :on-confirm [::stage-actions/remove-action {:action-path action-path}]}]}))
+

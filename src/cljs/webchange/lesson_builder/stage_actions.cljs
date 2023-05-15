@@ -94,6 +94,16 @@
                     [::script-state/set-selected-action nil]]})))
 
 (re-frame/reg-event-fx
+  ::update-empty-action
+  [(re-frame/inject-cofx :activity-data)]
+  (fn [{:keys [activity-data]} [_ {:keys [action-path data-patch]}]]
+    {:pre [(s/valid? ::spec/action-path action-path)
+           (s/valid? ::spec/data data-patch)]}
+    (let [update-path (concat [:actions] action-path action-utils/empty-action-path)
+          updated-activity-data (update-in activity-data update-path merge data-patch)]
+      {:dispatch [::state/set-activity-data updated-activity-data]})))
+
+(re-frame/reg-event-fx
   ::update-inner-action
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [action-path data-patch]}]]

@@ -4,6 +4,7 @@
     [webchange.lesson-builder.tools.background-image.views :refer [background-image]]
     [webchange.lesson-builder.tools.background-music.views :refer [background-music]]
     [webchange.lesson-builder.tools.character-add.views :refer [character-add]]
+    [webchange.lesson-builder.tools.dialog-item-properties.views :refer [dialog-item-properties]]
     [webchange.lesson-builder.tools.flipbook-add-page.views :as add-page-views]
     [webchange.lesson-builder.tools.flipbook-add-page.state :as add-page-state]
     [webchange.lesson-builder.tools.image-add.views :refer [image-add]]
@@ -50,4 +51,5 @@
    :template-options {:menu template-options}
    :voice-translate  {:menu    audio-manager
                       :toolbox audio-editor
-                      :focus   #{:menu :script :toolbox}}})
+                      :focus   #{:menu :script :toolbox}}
+   :dialog-item-prop {:menu dialog-item-properties}})
