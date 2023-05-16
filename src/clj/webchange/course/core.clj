@@ -860,17 +860,18 @@
   (-> (db/get-latest-scene-version {:scene_id activity-id})
       :data))
 
+(defn- get-activity-user
+  [user-id]
+  (-> (db/get-user {:id user-id})
+      (select-keys [:first-name :last-name])))
+
 (defn get-activity-versions
   [activity-id]
   (let [versions (db/get-scene-versions {:scene_id activity-id})]
     (->> versions
          (map #(dissoc % :data))
-         (map #(assoc % :created-at (-> % :created-at str))))))
-
-(defn- get-activity-user
-  [user-id]
-  (-> (db/get-user {:id user-id})
-      (select-keys [:first-name :last-name])))
+         (map #(assoc % :created-at (-> % :created-at str)))
+         (map #(assoc % :owner (-> % :owner-id get-activity-user))))))
 
 (defn get-activity
   [activity-id]

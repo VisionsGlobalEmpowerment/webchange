@@ -5,12 +5,13 @@
     [webchange.ui.index :as ui]))
 
 (defn- history-item
-  [{:keys [id current? date description time]}]
+  [{:keys [id current? date description time owner]}]
   (let [loading? @(re-frame/subscribe [::state/restore-loading? id])
         handle-click #(re-frame/dispatch [::state/restore-version id])]
     [:<>
      [:div.history-item--date date]
      [:div.history-item--time time]
+     [:div.history-item--fullname owner]
      [:div.history-item--description description]
      [:div.history-item--action
       (if current?

@@ -5,7 +5,8 @@
     [webchange.lesson-builder.layout.stage.state :as stage-state]
     [webchange.lesson-builder.state :as state]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.date :refer [date-str->locale-date date-str->time]]))
+    [webchange.utils.date :refer [date-str->locale-date date-str->time]]
+    [webchange.utils.name :refer [fullname]]))
 
 (def path-to-db :widget/activity-history)
 
@@ -48,11 +49,12 @@
     (->> versions
          (sort-by :created-at)
          (reverse)
-         (map-indexed (fn [idx {:keys [id created-at description]}]
+         (map-indexed (fn [idx {:keys [id created-at description owner]}]
                         {:id          id
                          :date        (date-str->locale-date created-at)
                          :time        (date-str->time created-at)
                          :description description
+                         :owner       (fullname owner)
                          :current?    (= idx 0)})))))
 
 (def restore-loading-key :restore-loading?)
