@@ -235,7 +235,7 @@
                                                            :action-property "id"}]}}
     :next                        {:type     "test-value",
                                   :value1   0
-                                  :fail     {:type "action" :id "next-page"},
+                                  :fail     {:type "action" :id "test-completed"},
                                   :success  {:type "action" :id "open-page"},
                                   :from-var [{:var-name "current-spread", :action-property "value2"}]}
     :prev                        {:type     "test-value",
@@ -249,31 +249,31 @@
                                          {:type "action" :id "stop-timeout"}
                                          {:type "action" :id "turn-next-page"}
                                          {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
-                                         {:type "action" :id "test-completed"}]}
+                                         {:type "action" :id "start-timeout"}]}
     :prev-page                   {:type "sequence-data"
                                   :data [{:type "remove-flows" :flow-tag "dialog"}
                                          {:type "action" :id "stop-timeout"}
                                          {:type "action" :id "turn-prev-page"}
                                          {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
-                                         {:type "action" :id "test-completed"}]}
+                                         {:type "action" :id "start-timeout"}]}
     :open-page                   {:type "sequence-data"
                                   :data [{:type "remove-flows" :flow-tag "dialog"}
                                          {:type "skip"}
                                          {:type "action" :id "stop-timeout"}
                                          {:type "action" :id "turn-open-page"}
                                          {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
-                                         {:type "action" :id "test-completed"}]}
+                                         {:type "action" :id "start-timeout"}]}
     :close-page                  {:type "sequence-data"
                                   :data [{:type "remove-flows" :flow-tag "dialog"}
                                          {:type "skip"}
                                          {:type "action" :id "stop-timeout"}
                                          {:type "action" :id "turn-close-page"}
                                          {:type "action" :from-var [{:template "spread-%", :var-name "current-spread", :action-property "id"}]}
-                                         {:type "action" :id "test-completed"}]}
+                                         {:type "action" :id "start-timeout"}]}
     :test-completed              {:type       "test-expression"
                                   :expression ["eq" ["dec" "@total-spreads"] "@current-spread"]
                                   :success    {:type "action" :id "finish-activity"}
-                                  :fail       {:type "action" :id "start-timeout"}}
+                                  :fail       {:type "action" :id "next-page"}}
     :turn-next-page              {:type "sequence-data"
                                   :data [{:type "action" :id "hide-navigation"}
                                          {:to       {:opacity 0, :duration 0.5}, :type "transition"
@@ -365,12 +365,9 @@
                                   :data [{:type       "test-expression"
                                           :expression ["eq" "@current-spread" 0]
                                           :success    {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}
-                                          :fail       {:type       "test-expression"
-                                                       :expression ["eq" ["dec" "@total-spreads"] "@current-spread"]
-                                                       :success    {:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
-                                                       :fail       {:type "sequence-data"
-                                                                    :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
-                                                                           {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}}}]}
+                                          :fail       {:type "sequence-data"
+                                                       :data [{:type "set-attribute" :attr-name "visible", :attr-value true :target "prev-button"}
+                                                              {:type "set-attribute" :attr-name "visible", :attr-value true :target "next-button"}]}}]}
 
     :start-scene                 {:type "sequence-data",
                                   :data [{:type "start-activity"},
