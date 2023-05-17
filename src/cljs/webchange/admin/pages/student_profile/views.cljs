@@ -11,7 +11,7 @@
 (defn- header
   []
   (let [{student-name :name} @(re-frame/subscribe [::state/student-data])
-        {:keys [started-at last-login activity-progress cumulative-time]} @(re-frame/subscribe [::state/course-statistics])]
+        {:keys [started-at last-login activity-progress books-read cumulative-time]} @(re-frame/subscribe [::state/course-statistics])]
     [page/header {:avatar ""
                   :title  student-name
                   :info   [{:key   "Program Start Date"
@@ -22,6 +22,10 @@
                             :icon  "students"}
                            {:key        "Activities Completed"
                             :value      (or activity-progress "")
+                            :icon       "games"
+                            :icon-color "blue-2"}
+                           {:key        "Books Read"
+                            :value      (or books-read "")
                             :icon       "games"
                             :icon-color "blue-2"}
                            {:key        "Total Played Time"

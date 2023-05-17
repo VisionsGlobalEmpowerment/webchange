@@ -1,6 +1,7 @@
 (ns webchange.progress.class-profile
   (:require [webchange.db.core :as db]
-            [webchange.events :as events]))
+            [webchange.events :as events]
+            [clojure.tools.logging :as log]))
 
 (events/reg
  ::start-date :course-started
@@ -30,6 +31,14 @@
        (let [current-progress (or (:activity-progress data) 0)]
          (when (> activity-progress current-progress)
            (db/save-course-stat! {:id id :data (assoc data :activity-progress activity-progress)})))))))
+
+(events/reg
+ ::books-read :activity-finished
+ (fn [{:keys [user-id course-id scene-id]}]
+   (let [{:keys [type]} (db/get-scene-by-id {:id scene-id})
+         {:keys [id data]} (db/get-user-course-stat {:user_id user-id :course_id course-id})]
+     (when (and (= "book" type) data)
+       (db/save-course-stat! {:id id :data (update data :books-read (fnil + 0) 1)})))))
 
 (events/reg
  ::cumulative-score :student-activity-score-changed

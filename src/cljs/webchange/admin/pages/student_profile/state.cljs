@@ -108,10 +108,11 @@
   ::course-statistics
   :<- [::student-progress]
   (fn [{:keys [course-stats]}]
-    (let [{:keys [activity-progress cumulative-time started-at last-login]} (:data course-stats)]
+    (let [{:keys [activity-progress books-read cumulative-time started-at last-login]} (:data course-stats)]
       {:started-at        (date-str->locale-date started-at "no data")
        :last-login        (date-str->locale-date last-login "no data")
        :activity-progress (or activity-progress "no data")
+       :books-read        (or books-read "no data")
        :cumulative-time   (or (ms->duration cumulative-time) "no data")})))
 
 (re-frame/reg-sub

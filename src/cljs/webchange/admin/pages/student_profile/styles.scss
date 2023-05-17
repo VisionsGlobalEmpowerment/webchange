@@ -3,6 +3,17 @@
         justify-content: flex-end;
     }
 
+    .widget--page--header-info {
+	justify-content: flex-end;
+	gap: 32px;
+
+	.widget--page--header-info-block {
+	    &:before {
+		left: -16px;
+	    }
+	}
+    }
+
     .course-name {
         @include bbs--icon-size(24px);
         @include bbs--noto-16-r;
