@@ -82,7 +82,33 @@
               :search-book-library "Nyaka ka gare ga Bokgobapuku"
               :skip                "Tshela"
               :wait                "Ka kgopelo, ema..."
-              :watch               "Bogela"}})
+              :watch               "Bogela"}
+   "tamil"   {:book-library        "நூலகம்"
+              :categories          {:animals            "விலங்குகள்"
+                                    :family-and-friends "குடும்பம் மற்றும் நண்பர்கள்" ;; <- non-breaking spaces
+                                    :science-stem       "அறிவியல்"
+                                    :sports             "விளையாட்டு"
+                                    :vehicles           "வாகனங்கள்"}
+              :continue            "தொடரவும்"
+              :error-general       "ஏதோ சிக்கல் ஏற்பட்டுள்ளது"
+              :exit                "வெளியேறு"
+              :favorite            "பிடித்த"
+              :favorite-books      "எனக்குப் பிடித்த புத்தகங்கள்"
+              :goodbye             "பார்க்கலாம். சென்று  வருகிறேன்"
+              :great-work          "மிகச் சிறப்பு!"
+              :home-page           "முகப்புப் பக்கம்"
+              :loading             "பதிவிறக்கம் செய்யப்படுகிறது"
+              :next                "அடுத்தது"
+              :no-books            "இங்கு புத்தகங்கள் இன்னும் வைக்கப்படவில்லை"
+              :play                "விளையாடு"
+              :read                {:read      "வாசி"
+                                    :to-me     "எனக்கு வாசித்துக் காட்டு"
+                                    :by-myself "நானே வாசிக்கிறேன்"}
+              :search              "தேடு"
+              :search-book-library "புத்தக நூலகத்தைத் தேடுங்கள்"
+              :skip                "அடுத்த பக்கத்திற்குச் செல்"
+              :wait                "தயவுசெய்து, காத்திருங்கள்…"
+              :watch               "பார்க்கவும்"}})
 
 (defn- translate
   [language key]
