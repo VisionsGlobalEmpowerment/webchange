@@ -936,6 +936,7 @@
                                                :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
+                                               :metadata   (-> source :metadata (dissoc :locked))
                                                :type       (:type source)})
         source-data (get-activity-current-version activity-id)]
     (db/save-scene! {:scene_id    scene-id
@@ -987,6 +988,7 @@
   [data owner-id]
   (let [created-at (jt/local-date-time)
         updated-at (jt/local-date-time)
+        template-id 24
         [{scene-id :id}] (db/create-activity! {:name       (:cover-title data)
                                                :lang       (:lang data)
                                                :image_src  (-> data :cover-image :src)
@@ -994,8 +996,9 @@
                                                :owner_id   owner-id
                                                :created_at created-at
                                                :updated_at updated-at
+                                               :metadata   {:template-id template-id}
                                                :type       "book"})
-        activity-data (templates/activity-from-template (assoc data :template-id 24))]
+        activity-data (templates/activity-from-template (assoc data :template-id template-id))]
     (db/save-scene! {:scene_id    scene-id
                      :data        activity-data
                      :owner_id    owner-id

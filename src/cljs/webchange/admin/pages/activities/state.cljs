@@ -53,7 +53,12 @@
             search-query)))
 
 (re-frame/reg-sub
-  ::activities
+  ::selected-group
+  :<- [path-to-db]
+  #(get % :selected-group))
+
+(re-frame/reg-sub
+  ::activities-list
   :<- [path-to-db]
   :<- [::selected-type]
   :<- [::show-my-global?]
@@ -72,6 +77,7 @@
                                               (= (:status %) "visible")
                                               (= (:owner-id %) current-user-id)))
                (-> search-string seq) (filter-by-search search-string)
+               :always (map #(assoc % :template-id (-> % :metadata :template-id)))
                :always (sort-by :name)))))
 
 (re-frame/reg-sub
@@ -81,6 +87,44 @@
     {:my      (-> db :my-activities count)
      :visible (-> db :visible-activities count)}))
 
+(re-frame/reg-sub
+  ::groups
+  :<- [path-to-db]
+  :<- [::activities-list]
+  (fn [[db activities-list]]
+    (let [templates (->> (:templates db)
+                         (map (juxt :id identity))
+                         (into {}))]
+      (->> activities-list
+           (group-by :template-id)
+           (map #(-> % second first))
+           (map #(assoc % :id (:template-id %)))
+           (map #(assoc % :name (get-in templates [(:id %) :name])))))))
+
+(re-frame/reg-sub
+  ::activities
+  :<- [path-to-db]
+  :<- [::activities-list]
+  :<- [::selected-group]
+  (fn [[db activities-list selected-group]]
+    (->> activities-list
+         (filter (fn [{:keys [template-id]}]
+                   (= template-id selected-group)))
+         (sort-by :updated-at))))
+
+(re-frame/reg-event-fx
+  ::select-group
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (-> db
+             (assoc :selected-group value))}))
+
+(re-frame/reg-event-fx
+  ::reset-group
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (-> db
+             (dissoc :selected-group))}))
 ;;
 
 (def default-language "english")
@@ -104,6 +148,8 @@
                     [::warehouse/load-my-activities
                      {:lang current-language}
                      {:on-success [::load-my-activities-success]}]
+                    [::warehouse/load-templates
+                     {:on-success [::load-templates-success]}]
                     [::warehouse/load-current-user
                      {:on-success [::load-account-success]}]]})))
 
@@ -113,6 +159,18 @@
   (fn [{:keys [db]} [_ data]]
     {:db (-> db
              (assoc :current-user data))}))
+
+(re-frame/reg-event-fx
+  ::load-templates-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ data]]
+    {:db (-> db
+             (assoc :templates data))}))
+
+(comment
+  (-> @re-frame.db/app-db
+      (get-in [path-to-db])
+      :templates))
 
 (defn- with-keywords
   [activities]

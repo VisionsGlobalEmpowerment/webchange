@@ -169,8 +169,8 @@ INSERT INTO scenes (course_id, name, slug) VALUES (:course_id, :name, :name) RET
 
 -- :name create-activity! :<!
 -- :doc create a new scene record
-INSERT INTO scenes (name, lang, image_src, status, owner_id, created_at, updated_at, type)
-VALUES (:name, :lang, :image_src, :status, :owner_id, :created_at, :updated_at, :type) RETURNING id
+INSERT INTO scenes (name, lang, image_src, status, owner_id, created_at, updated_at, metadata, type)
+VALUES (:name, :lang, :image_src, :status, :owner_id, :created_at, :updated_at, :metadata, :type) RETURNING id
 
 -- :name create-book! :<!
 -- :doc creates a new book

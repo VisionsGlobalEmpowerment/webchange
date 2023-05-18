@@ -23,14 +23,23 @@
       [ui/button {:icon     "edit"
                   :on-click handle-edit-click}]]]))
 
+(defn- back-item
+  [{:keys [text on-click]}]
+  [:div {:class-name "back-item"
+         :on-click   on-click}
+   [:div.data text]])
+
 (defn activities-list
-  [{:keys [data loading? on-activity-click on-edit-activity-click]}]
+  [{:keys [data loading? on-card-click on-edit-click on-back-click]}]
   [:div.widget--activities-list
    (if loading?
      [ui/loading-overlay]
      [:div.activities-list
+      (when (fn? on-back-click)
+        [back-item {:text "Back"
+                    :on-click on-back-click}])
       (for [{:keys [id] :as activity} data]
         ^{:key id}
         [activities-list-item (merge activity
-                                     {:on-click      on-activity-click
-                                      :on-edit-click on-edit-activity-click})])])])
+                                     {:on-click      on-card-click
+                                      :on-edit-click on-edit-click})])])])

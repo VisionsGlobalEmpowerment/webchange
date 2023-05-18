@@ -37,9 +37,7 @@
   []
   (let [show-my-global? @(re-frame/subscribe [::state/show-my-global?])
         handle-change #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])]
-    [ui/switch {:label      (if show-my-global?
-                              "Hide My Global Activities"
-                              "Show My Global Activities")
+    [ui/switch {:label      "Show My Global"
                 :checked?   show-my-global?
                 :on-change  handle-change
                 :color      "yellow-1"
@@ -55,14 +53,33 @@
                 :on-change  handle-select-language
                 :class-name "language-selector"}]))
 
+(defn- select-group
+  []
+  (let [groups @(re-frame/subscribe [::state/groups])
+        loading? @(re-frame/subscribe [::state/activities-loading?])
+        handle-card-click #(re-frame/dispatch [::state/select-group %])]
+    [activities-list {:data groups
+                      :loading? loading?
+                      :on-card-click handle-card-click}]))
+
+(defn- select-activity
+  []
+  (let [activities @(re-frame/subscribe [::state/activities])
+        loading? @(re-frame/subscribe [::state/activities-loading?])
+        handle-card-click #(re-frame/dispatch [::state/open-activity %])
+        handle-edit-click #(re-frame/dispatch [::state/edit-activity %])
+        handle-back-click #(re-frame/dispatch [::state/reset-group])]
+    [activities-list {:data activities
+                      :loading? loading?
+                      :on-back-click handle-back-click
+                      :on-card-click handle-card-click
+                      :on-edit-click handle-edit-click}]))
+
 (defn page
   [props]
   (re-frame/dispatch [::state/init props])
   (fn []
-    (let [activities @(re-frame/subscribe [::state/activities])
-          loading? @(re-frame/subscribe [::state/activities-loading?])
-          handle-card-click #(re-frame/dispatch [::state/open-activity %])
-          handle-edit-click #(re-frame/dispatch [::state/edit-activity %])]
+    (let [group-selected? @(re-frame/subscribe [::state/selected-group])]
       [page/single-page {:class-name "page--activities"
                          :search     [search-bar]
                          :header     {:title      "Activities"
@@ -71,7 +88,6 @@
                                       :controls   [[activity-type-selector]
                                                    [my-global-switcher]
                                                    [language-selector]]}}
-       [activities-list {:data                   activities
-                         :loading?               loading?
-                         :on-activity-click      handle-card-click
-                         :on-edit-activity-click handle-edit-click}]])))
+       (if group-selected?
+         [select-activity]
+         [select-group])])))
