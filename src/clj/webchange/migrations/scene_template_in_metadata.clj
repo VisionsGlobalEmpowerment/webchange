@@ -7,28 +7,25 @@
     [clojure.java.jdbc :as jdbc]
     [webchange.db.core :refer [*db*]]))
 
-(defn- get-scenes
-  []
-  (jdbc/query *db* ["SELECT s.id, s.metadata, sv.data FROM scenes s inner join scene_versions sv on s.id = sv.scene_id;"]))
+(defn- update-scenes
+  [update-fn]
+  (jdbc/query *db* ["SELECT s.id, s.metadata, sv.data FROM scenes s inner join scene_versions sv on s.id = sv.scene_id;"]
+              {:row-fn update-fn}))
 
 (defn- set-metadata
   [scene-id metadata]
   (jdbc/execute! *db* ["UPDATE scenes SET metadata = ? WHERE id = ?" metadata scene-id]))
 
+(defn- update-scene-metadata
+  [{:keys [id metadata data]}]
+  (let [metadata (assoc metadata :template-id (-> data :metadata :template-id))]
+    (set-metadata id metadata)))
+
 (defn migrate-up
   [_]
   (mount/start)
-  (doseq [{:keys [id metadata data]} (get-scenes)]
-    (let [metadata (assoc metadata :template-id (-> data :metadata :template-id))]
-      (set-metadata id metadata))))
+  (update-scenes update-scene-metadata))
 
 (defn migrate-down
   [_]
   (mount/start))
-
-(comment
-  (-> (get-scenes)
-      first
-      :data
-      :metadata
-      :template-id))
