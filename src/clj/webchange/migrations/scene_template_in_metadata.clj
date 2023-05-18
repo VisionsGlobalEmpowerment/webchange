@@ -9,16 +9,20 @@
 
 (defn- update-scenes
   [update-fn]
-  (jdbc/query *db* ["SELECT s.id, s.metadata, sv.data FROM scenes s inner join scene_versions sv on s.id = sv.scene_id;"]
-              {:row-fn update-fn}))
+  (jdbc/query *db* ["SELECT * FROM scenes"] {:row-fn update-fn}))
 
 (defn- set-metadata
   [scene-id metadata]
   (jdbc/execute! *db* ["UPDATE scenes SET metadata = ? WHERE id = ?" metadata scene-id]))
 
+(defn- latest-version
+  [scene-id]
+  (jdbc/query *db* ["SELECT * from scene_versions WHERE scene_id = ? ORDER BY created_at DESC LIMIT 1;" scene-id]))
+
 (defn- update-scene-metadata
-  [{:keys [id metadata data]}]
-  (let [metadata (assoc metadata :template-id (-> data :metadata :template-id))]
+  [{:keys [id metadata]}]
+  (let [data (-> (latest-version id) first (get :data))
+        metadata (assoc metadata :template-id (-> data :metadata :template-id))]
     (set-metadata id metadata)))
 
 (defn migrate-up
