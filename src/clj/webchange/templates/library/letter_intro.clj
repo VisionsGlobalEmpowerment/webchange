@@ -73,7 +73,7 @@
                         :stop-glow {:permanent-pulsation false}
                         :visible   {:visible true}
                         :hidden    {:visible false}},
-          :text        ""
+          :text        " "
           :transition  "letter-big"},
          :letter-small
          {:type        "text",
@@ -89,7 +89,7 @@
                         :stop-glow {:permanent-pulsation false}
                         :visible   {:visible true}
                         :hidden    {:visible false}},
-          :text        ""
+          :text        " "
           :transition  "letter-small"},
          :letter-path
          {:type         "animated-svg-path",
@@ -138,7 +138,7 @@
          :word
          {:type           "text"
           :transition     "word"
-          :text           ""
+          :text           " "
           :align          "center"
           :vertical-align "bottom"
           :font-size      80
