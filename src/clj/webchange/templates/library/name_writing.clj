@@ -5,7 +5,7 @@
     [webchange.templates.utils.dialog :as dialog]))
 
 (def m {:id          35
-        :name        "name writing"
+        :name        "Name Writing"
         :tags        ["letter formation" "sight words"]
         :description "name writing"})
 

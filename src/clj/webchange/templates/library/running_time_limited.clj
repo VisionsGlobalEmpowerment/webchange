@@ -56,7 +56,7 @@
                 :options available-scale}]}])
 
 (def m {:id          34
-        :name        "Running (time limited)"
+        :name        "Running"
         :tags        ["Independent Practice"]
         :description "Users move a character around a race track filled with answer images.  Before time runs out, users must steer the character to as many correct answer options as possible while avoiding incorrect answer images."
         :props       {:game-changer? true}

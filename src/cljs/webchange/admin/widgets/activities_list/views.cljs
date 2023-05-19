@@ -20,8 +20,9 @@
                           "yellow-1")}])
      [:div.data
       name
-      [ui/button {:icon     "edit"
-                  :on-click handle-edit-click}]]]))
+      (when (fn? on-edit-click)
+        [ui/button {:icon     "edit"
+                    :on-click handle-edit-click}])]]))
 
 (defn- back-item
   [{:keys [text on-click]}]

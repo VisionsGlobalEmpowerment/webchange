@@ -99,7 +99,8 @@
            (group-by :template-id)
            (map #(-> % second first))
            (map #(assoc % :id (:template-id %)))
-           (map #(assoc % :name (get-in templates [(:id %) :name])))))))
+           (map #(assoc % :name (get-in templates [(:id %) :name])))
+           (filter #(seq (:name %)))))))
 
 (re-frame/reg-sub
   ::activities
@@ -213,7 +214,9 @@
   ::select-type
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ type]]
-    {:db (assoc db :selected-type type)}))
+    {:db (-> db
+             (assoc :selected-type type)
+             (dissoc :selected-group))}))
 
 (re-frame/reg-event-fx
   ::set-show-global

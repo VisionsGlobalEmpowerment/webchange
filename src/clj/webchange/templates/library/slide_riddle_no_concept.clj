@@ -11,7 +11,7 @@
     :key "rounds"}])
 
 (def m {:id          38
-        :name        "Slide riddle (no concept)"
+        :name        "Slide riddle"
         :tags        ["listening comprehension" "rhyming"]
         :description "Slide riddle (no concept)"
         :actions     {:add-round {:title   "Add round",

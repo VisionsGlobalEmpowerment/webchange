@@ -13,7 +13,7 @@
     :placeholder "Choose"}])
 
 (def m {:id          43
-        :name        "cinema"
+        :name        "Cinema"
         :tags        ["Direct Instruction - Educational Video"]
         :description "Simple video"
         :options     {:chanting-video-src {:label "Video"

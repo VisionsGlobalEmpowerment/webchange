@@ -71,7 +71,7 @@
 
 (def metadata
   {:id          49
-   :name        "First Words Book V2"
+   :name        "First Words Book"
    :tags        ["Vocabulary"]
    :description "Simple book"
    :actions     {:edit        {:title   "Edit"

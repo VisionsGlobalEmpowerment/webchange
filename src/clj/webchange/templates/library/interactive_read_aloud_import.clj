@@ -22,7 +22,7 @@
     :label "Update Template"}])
 
 (def metadata {:id          45
-               :name        "Interactive Read Aloud (Import)"
+               :name        "Interactive Read Aloud"
                :tags        ["Direct Instruction - Animated Instructor"]
                :description "Model reading comprehension strategies with this activity. Begin with a mini-lesson, then reference a read aloud book of your choice while inserting explanations and pop-up questions throughout the lesson."
 
