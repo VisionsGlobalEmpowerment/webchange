@@ -1,7 +1,8 @@
 .edit-transcription-dialog {
     width: 90%;
     max-width: 90%;
-
+    position: relative;
+    
     .bbs--dialog--actions {
         display: flex;
 	align-items: center;
@@ -125,6 +126,36 @@
 	.text-component {
 	    textarea {
 		height: 200px;
+	    }
+	}
+    }
+
+    .transcription-context-menu {
+	position: absolute;
+	display: flex;
+	margin: 160px 0px 0px 110px;
+	padding: 0px;
+	z-index: 1000;
+
+	.transcription-context-menu-list {
+	    margin: 0px;
+	    padding: 0px;
+	
+	    background-color: white;
+	    border: solid 1px bbs--color(grey-4);
+
+	    .transcription-context-menu-list-item {
+		margin: 0px;
+		padding: 10px;		
+	    }
+	}
+
+	.bbs--list {
+	    gap: 0px;
+
+	    .bbs--list-item {
+		min-height: 40px;
+		border-radius: 0px;
 	    }
 	}
     }

@@ -312,6 +312,88 @@
                (assoc :script (regions->script regions))
                (assoc :reset-transcription-window-open? false))})))
 
+(re-frame/reg-sub
+  ::context-menu-state
+  :<- [path-to-db]
+  (fn [db]
+    (get db :context-menu-state {:open? false :in-progress false})))
+
+(re-frame/reg-event-fx
+  ::open-context-menu
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ wave e]]
+    (let [start-pos (call-method wave :handle-event e)
+          bounds (.. e -target getBoundingClientRect)
+          menu-x (-> e .-clientX (- (.-x bounds)))
+          menu-y (-> e .-clientY (- (.-y bounds)))]
+      {:db (assoc db
+                  :context-menu-state {:open? true :pos-x menu-x :pos-y menu-y}
+                  :context-menu-start-pos start-pos)})))
+
+(re-frame/reg-event-fx
+  ::close-context-menu
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (dissoc db :context-menu-state)}))
+
+(re-frame/reg-sub
+  ::insert-transcription-window-open?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :insert-transcription-window-open? false)))
+
+(re-frame/reg-event-fx
+  ::open-insert-transcription-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db
+                :insert-transcription-window-open? true
+                :insert-transcription-value nil)
+     :dispatch [::close-context-menu]}))
+
+(re-frame/reg-event-fx
+  ::close-insert-transcription-window
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (dissoc db :insert-transcription-window-open?)}))
+
+(re-frame/reg-event-fx
+  ::change-insert-transcription-value
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :insert-transcription-value value)}))
+
+(re-frame/reg-sub
+  ::insert-transcription-value
+  :<- [path-to-db]
+  (fn [db]
+    (get db :insert-transcription-value)))
+
+(re-frame/reg-event-fx
+  ::insert-transcription
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    (let [pos (:context-menu-start-pos db)
+          words (-> (get db :insert-transcription-value)
+                    (text->words))
+          original-regions (:regions db)
+          new-regions (->> words
+                           (reduce (fn [acc word]
+                                     (let [start (:start acc)
+                                           end (+ start 0.3)]
+                                       (-> acc
+                                           (update :regions conj {:start start
+                                                                  :end end
+                                                                  :data {"word" word}})
+                                           (assoc :start end))))
+                                   {:start pos
+                                    :regions []})
+                           :regions)]
+      {:db (-> db
+               (assoc :regions [])
+               (assoc :script (regions->script (concat original-regions new-regions)))
+               (assoc :insert-transcription-window-open? false))})))
+
 (comment
   (text->words "Katse ya Kimi
 Karse ya Kimi e dula diropeng tša Koko.  Prrrrrrrrr.
@@ -334,3 +416,4 @@ Kimi o lebelela dirope tša Koko.")
       (s/replace #"[_~.<>{}()!№%:,;#$%^&*+='’`\"/?'\\@]" " ")
       (s/replace #"[ ]+" " ")
       (s/split #"\s")))
+

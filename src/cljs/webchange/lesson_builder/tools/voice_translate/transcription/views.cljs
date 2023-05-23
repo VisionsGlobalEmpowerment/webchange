@@ -90,6 +90,12 @@
                 :error error}]
      [ui/button {:on-click remove-word} "Remove"]]))
 
+(defn- init-mouse-event
+  [{:keys [ref on-right-click]}]
+  (.addEventListener ref "contextmenu" (fn [event]
+                                         (.preventDefault event)
+                                         (on-right-click event))))
+
 (defn- transcription-editor
   []
   (let [audio-wave-control (atom nil)
@@ -116,7 +122,10 @@
       (fn [{:keys [action-path]}]
         (let [{:keys [in-progress]} @(re-frame/subscribe [::state/window-state])]
           [:div {:class-name (ui/get-class-name {"widget--transcription-editor" true})
-                 :ref #(when (some? %) (reset! ref %))
+                 :ref #(when (some? %)
+                         (reset! ref %)
+                         (init-mouse-event {:ref % :on-right-click (fn [e]
+                                                                     (re-frame/dispatch [::state/open-context-menu audio-wave-control e]))}))
                  :tab-index 0}
            [wave {:action-path action-path
                   :class-name  "audio-editor--wave"
@@ -155,6 +164,46 @@
                        :placeholder "Enter transcription text"
                        :class-name  "text-component"}]]])))
 
+(defn- insert-transcription-window
+  []
+  (let [open? @(re-frame/subscribe [::state/insert-transcription-window-open?])
+        close-window #(re-frame/dispatch [::state/close-insert-transcription-window])
+        handle-change #(re-frame/dispatch [::state/change-insert-transcription-value %])
+        value @(re-frame/subscribe [::state/insert-transcription-value])
+        insert-transcription #(re-frame/dispatch [::state/insert-transcription])]
+    (when open?
+      [ui/dialog {:title "Insert transcription text"
+                  :class-name "insert-transcription-dialog"
+                  :actions [:<>
+                            [ui/button {:color    "blue-1"
+                                        :on-click close-window}
+                             "Cancel"]
+                            [ui/button {:on-click insert-transcription}
+                             "Save"]]}
+       [:div {:class-name "transcription-text"}
+        [ui/text-area {:on-change  handle-change
+                       :value value
+                       :placeholder "Enter transcription text"
+                       :class-name  "text-component"}]]])))
+
+(defn- context-menu
+  []
+  (let [{:keys [open? pos-x pos-y]} @(re-frame/subscribe [::state/context-menu-state])
+        close-window #(re-frame/dispatch [::state/close-context-menu])
+        open-insert-transcription-window #(re-frame/dispatch [::state/open-insert-transcription-window])]
+    (when open?
+      [:div {:class-name "transcription-context-menu"
+             :style {:left (str pos-x "px") :top (str pos-y "px")}}
+       [ui/list {:class-name "transcription-context-menu-list"}
+        [ui/list-item {:class-name "transcription-context-menu-list-item"
+                       :name    "Insert transcription"
+                       :dense?  true
+                       :on-click open-insert-transcription-window}]
+        [ui/list-item {:class-name "transcription-context-menu-list-item"
+                       :name    "Cancel"
+                       :dense?  true
+                       :on-click close-window}]]])))
+
 (defn edit-transcription-window
   [{:keys [on-save]}]
   (let [{:keys [open?]} @(re-frame/subscribe [::state/window-state])
@@ -174,4 +223,6 @@
                             [ui/button {:on-click save-script}
                              "Save"]]}
        [transcription-editor]
-       [reset-transcription-window]])))
+       [reset-transcription-window]
+       [insert-transcription-window]
+       [context-menu]])))

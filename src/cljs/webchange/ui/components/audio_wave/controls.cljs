@@ -43,6 +43,10 @@
                           (remove #(= region-id (r/get-id %)))
                           (into []))))))
 
+(defn- handle-event
+  [{:keys [wave-surfer]} event]
+  (w/handle-event @wave-surfer event))
+
 (defn get-controls
   [instances]
   {:play            (partial play instances)
@@ -52,4 +56,5 @@
    :rewind-to-end   (partial rewind instances :end)
    :zoom-in         (partial zoom instances 1)
    :zoom-out        (partial zoom instances -1)
-   :remove-region   (partial remove-region instances)})
+   :remove-region   (partial remove-region instances)
+   :handle-event    (partial handle-event instances)})

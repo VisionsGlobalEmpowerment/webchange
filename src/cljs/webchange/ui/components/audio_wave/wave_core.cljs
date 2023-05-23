@@ -63,3 +63,7 @@
 (defn zoom
   [ws value]
   (.zoom ^js ws value))
+
+(defn handle-drawer-event
+  [drawer event]
+  (.handleEvent ^js drawer event))

@@ -43,6 +43,13 @@
   (-> (core/get-drawer ws)
       (core/recenter-drawer progress)))
 
+(defn handle-event
+  [ws event]
+  (let [duration (get-duration ws)]
+    (-> (core/get-drawer ws)
+        (core/handle-drawer-event event)
+        (* duration))))
+
 (defn scroll-to-time
   [ws time]
   (let [duration (get-duration ws)
