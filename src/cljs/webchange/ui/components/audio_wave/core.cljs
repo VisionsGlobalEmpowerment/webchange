@@ -67,7 +67,8 @@
   (remove-current-regions instances)
   (doseq [region regions-data]
     (add-region @wave-surfer region))
-  (scroll-to instances (first regions-data)))
+  (when (= 1 (count regions-data))
+    (scroll-to instances (first regions-data))))
 
 (defn handle-paused
   [on-pause]

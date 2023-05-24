@@ -62,5 +62,5 @@
          ^{:key @id}
          [action-audio-editor {:id          @id
                                :action-path selected-action}]
-         [transcription/edit-transcription-window {:on-save #(reset! id new-id)}]]
+         [transcription/edit-transcription-window {:on-save #(reset! id (get-uid))}]]
         [welcome-translate]))))
