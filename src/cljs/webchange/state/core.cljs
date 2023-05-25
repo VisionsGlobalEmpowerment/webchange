@@ -62,6 +62,22 @@
   (get-in db [:user :school-id]))
 
 (re-frame/reg-sub
-  ::current-course-lang
+  ::current-lang
   (fn [db]
-    (get-in db [:course :course-info :lang] "english")))
+    (let [course-lang (get-in db [:course :course-info :lang])
+          scene-id (current-scene-id db)
+          scene-lang (get-in db [:activities scene-id :lang])
+          default-lang "english"]
+      (or course-lang scene-lang default-lang))))
+
+(re-frame/reg-event-fx
+  ::set-activity-info
+  (fn [{:keys [db]} [_ {:keys [scene-id scene-info]}]]
+    {:db (assoc-in db [:activities scene-id] scene-info)}))
+
+(comment
+  @(re-frame/subscribe [::current-scene-id])
+  @(re-frame/subscribe [::current-lang])
+
+  (-> @re-frame.db/app-db
+      :activities))

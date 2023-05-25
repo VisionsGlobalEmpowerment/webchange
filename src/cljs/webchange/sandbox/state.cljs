@@ -16,7 +16,9 @@
              (assoc :scene-id scene-id))
      :dispatch-n [[::state-core/set-current-scene-id scene-id]
                   [::warehouse/load-activity-current-version {:activity-id scene-id}
-                   {:on-success [::load-scene-success]}]]}))
+                   {:on-success [::load-scene-success]}]
+                  [::warehouse/load-activity {:activity-id scene-id}
+                   {:on-success [::load-activity-success]}]]}))
 
 (re-frame/reg-event-fx
   ::load-scene-success
@@ -26,4 +28,12 @@
       {:db (assoc db :scene scene-data)
        :dispatch [::state-core/set-scene-data {:scene-id scene-id
                                                :scene-data scene-data}]})))
+
+(re-frame/reg-event-fx
+  ::load-activity-success
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ activity-info]]
+    (let [scene-id (:scene-id db)]
+      {:dispatch [::state-core/set-activity-info {:scene-id scene-id
+                                                  :scene-info activity-info}]})))
 

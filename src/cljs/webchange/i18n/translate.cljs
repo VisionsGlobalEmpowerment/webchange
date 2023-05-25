@@ -117,7 +117,7 @@
 (re-frame/reg-sub
   ::t
   (fn []
-    (re-frame/subscribe [::state/current-course-lang]))
+    (re-frame/subscribe [::state/current-lang]))
   (fn [language [_ key]]
     (if (map? key)
       (->> key
