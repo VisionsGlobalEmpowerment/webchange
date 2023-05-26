@@ -893,12 +893,14 @@
       ->activity-info))
 
 (defn edit-activity
-  [activity-id data]
-  (let [prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
+  [activity-id {:keys [metadata] :as data}]
+  (let [current-metadata (-> (db/get-scene-by-id {:id activity-id}) :metadata)
+        prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         updated-at (jt/local-date-time)]
     (db/edit-scene! (assoc prepared-data
                            :id activity-id
-                           :updated_at updated-at))
+                           :updated_at updated-at
+                           :metadata (merge current-metadata metadata)))
     {:id activity-id}))
 
 (defn archive-activity
