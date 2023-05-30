@@ -35,10 +35,10 @@
       (log/debug "Update local instance: has local-binary-path")
       (sh/sh "cp" local-binary-path (str local-binary-path "." (System/currentTimeMillis) ".bak"))
       (log/debug "Update local instance: backup created")
-      (with-open [latest-binary-in (get-latest-binary)
-                  local-binary-out (io/output-stream local-binary-path)]
-        (log/debug "Update local instance: copying...")
-        (io/copy latest-binary-in local-binary-out))
+      (let [latest-binary-in (get-latest-binary)]
+        (with-open [local-binary-out (io/output-stream local-binary-path)]
+          (log/debug "Update local instance: copying...")
+          (io/copy latest-binary-in local-binary-out)))
       (log/debug "About to restart service...")
       (stop-server))))
 
