@@ -11,7 +11,8 @@
      :activity      activity
      :unique-id     (:unique-id data)
      :scene-id      (:scene-id data)
-     :activity-name (:activity data)}))
+     :activity-name (:activity data)
+     :placeholder?  (:placeholder? data)}))
 
 (defn- indices
   [pred coll]
@@ -84,11 +85,12 @@
   [level-idx level]
   (map-indexed (fn [lesson-idx lesson] (flatten-lesson level-idx lesson-idx lesson)) (:lessons level)))
 
-(defn flatten-activities
+(defn flatten-active-activities
   [levels]
   (->> levels
        (map-indexed flatten-level)
-       flatten))
+       flatten
+       (remove #(-> % :scene-id nil?))))
 
 (defn- excluded-by-tags?
   [tags levels {:keys [level lesson activity]}]
@@ -96,6 +98,10 @@
     (and
      (:only workflow-action)
      (not (tags/has-one-from tags (:only workflow-action))))))
+
+(defn- placeholder?
+  [{:keys [placeholder?]}]
+  placeholder?)
 
 (defn next-for
   [levels {:keys [level lesson activity]}]
@@ -114,12 +120,15 @@
   - not finished yet
   - satisfies provided tags"
   [tags levels finished activity]
-  (let [activities (flatten-activities levels)]
+  (let [activities (flatten-active-activities levels)]
     (loop [next (next-for levels activity)
            cur activity]
       (cond
         (nil? next) cur
-        (or (finished? finished next activities)
-            (excluded-by-tags? tags levels next)) (recur (next-for levels next)
-                                                         next)
+        (finished? finished next activities) (recur (next-for levels next)
+                                                    next)
+        (or
+         (placeholder? next) 
+         (excluded-by-tags? tags levels next)) (recur (next-for levels next)
+                                                      cur)
         :else next))))

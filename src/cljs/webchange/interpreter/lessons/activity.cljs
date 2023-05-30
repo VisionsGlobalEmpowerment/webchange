@@ -71,7 +71,7 @@
   (assoc db :loaded-activity activity))
 
 (defn get-progress-next [db]
-  (let [activities (activity/flatten-activities (get-in db [:course-data :levels]))
+  (let [activities (activity/flatten-active-activities (get-in db [:course-data :levels]))
         finished-activities (filter #(finished? db % activities) activities)]
     (if (empty? finished-activities)
       (first activities)

@@ -38,7 +38,7 @@
   (let [{course-id :id} (db/get-course {:slug course-slug})
         activities-count (-> (course/get-course-data course-slug)
                              (get :levels)
-                             (activity/flatten-activities)
+                             (activity/flatten-active-activities)
                              (count))
         stats (->> (db/get-course-stats {:class_id class-id :course_id course-id})
                    (map class/with-user)

@@ -10,10 +10,14 @@
     [webchange.utils.drag-and-drop :refer [draggable]]
     [webchange.utils.numbers :refer [try-parse-int]]))
 
+(def target-types
+  {"level" #{"level"}
+   "lesson" #{"lesson"}
+   "activity" #{"activity" "activity-placeholder"}})
+
 (defn- drop-allowed?
   [dragged-data target-data]
-  (and (= (:type target-data)
-          (:type dragged-data))
+  (and ((get target-types (:type target-data)) (:type dragged-data))
        (not= target-data dragged-data)))
 
 (defn- parse-fields
@@ -31,37 +35,50 @@
                    :top :before
                    :bottom :after)]
     (case (:type dragged)
-      "level" (if (= (:level dragged) "add")
-                (re-frame/dispatch [::state/add-level {:target-level (:level target)
-                                                       :position     position}])
-                (re-frame/dispatch [::state/move-level {:source-level (:level dragged)
-                                                        :target-level (:level target)
-                                                        :position     position}]))
-      "lesson" (if (= (:lesson dragged) "add")
-                 (re-frame/dispatch [::state/add-lesson {:target-level  (:level target)
-                                                         :target-lesson (:lesson target)
-                                                         :position      position}])
-                 (re-frame/dispatch [::state/move-lesson {:source-level  (:level dragged)
-                                                          :source-lesson (:lesson dragged)
-                                                          :target-level  (:level target)
-                                                          :target-lesson (:lesson target)
-                                                          :position      position}]))
-      "activity" (if (and (contains? dragged :level)
-                          (contains? dragged :lesson))
-                   (re-frame/dispatch [::state/move-activity {:source-level    (:level dragged)
-                                                              :source-lesson   (:lesson dragged)
-                                                              :source-activity (:activity dragged)
-                                                              :target-level    (:level target)
-                                                              :target-lesson   (:lesson target)
-                                                              :target-activity (:activity target)
-                                                              :position        position}])
-                   (re-frame/dispatch [::state/add-activity
-                                       {:target-level    (:level target)
-                                        :target-lesson   (:lesson target)
-                                        :target-activity (:activity target)
-                                        :activity-slug   (:activity dragged)
-                                        :position        position}
-                                       {:scene-id (:id dragged)}]))
+      "level"
+      (if (= (:level dragged) "add")
+        (re-frame/dispatch [::state/add-level {:target-level (:level target)
+                                               :position     position}])
+        (re-frame/dispatch [::state/move-level {:source-level (:level dragged)
+                                                :target-level (:level target)
+                                                :position     position}]))
+      
+      "lesson"
+      (if (= (:lesson dragged) "add")
+        (re-frame/dispatch [::state/add-lesson {:target-level  (:level target)
+                                                :target-lesson (:lesson target)
+                                                :position      position}])
+        (re-frame/dispatch [::state/move-lesson {:source-level  (:level dragged)
+                                                 :source-lesson (:lesson dragged)
+                                                 :target-level  (:level target)
+                                                 :target-lesson (:lesson target)
+                                                 :position      position}]))
+      
+      "activity"
+      (if (and (contains? dragged :level)
+               (contains? dragged :lesson))
+        (re-frame/dispatch [::state/move-activity {:source-level    (:level dragged)
+                                                   :source-lesson   (:lesson dragged)
+                                                   :source-activity (:activity dragged)
+                                                   :target-level    (:level target)
+                                                   :target-lesson   (:lesson target)
+                                                   :target-activity (:activity target)
+                                                   :position        position}])
+        (re-frame/dispatch [::state/add-activity
+                            {:target-level    (:level target)
+                             :target-lesson   (:lesson target)
+                             :target-activity (:activity target)
+                             :activity-slug   (:activity dragged)
+                             :position        position}
+                            {:scene-id (:id dragged)}]))
+      
+      "activity-placeholder"
+      (re-frame/dispatch [::state/add-activity-placeholder
+                          {:target-level    (:level target)
+                           :target-lesson   (:lesson target)
+                           :target-activity (:activity target)
+                           :position        position}])
+      
       nil)))
 
 (defn- empty-list-placeholder
@@ -73,33 +90,55 @@
     (str "Drop new " (:type data) " here")]])
 
 (defn- activities-list-item
-  [{:keys [id idx name preview level-idx lesson-idx]}]
-  (let [handle-play-click #(re-frame/dispatch [::state/preview-activity id])
-        handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
-        handle-remove-click #(do (.stopPropagation %)
-                                 (handle-remove-activity))
-        locked? @(re-frame/subscribe [::state/locked?])]
-    (if locked?
-      [ui/list-item {:name       name
-                     :pre        [ui/image {:src        preview
-                                            :class-name "item-image"}]
-                     :class-name "activities-list-item"}]
-      [draggable {:data          {:type     "activity"
-                                  :level    level-idx
-                                  :lesson   lesson-idx
-                                  :activity idx}
-                  :drop-allowed? drop-allowed?
-                  :on-drop       handle-drop}
-       [ui/list-item {:name       name
-                      :pre        [ui/image {:src        preview
-                                             :class-name "item-image"}]
-                      :class-name "activities-list-item"
-                      :actions    [{:icon     "trash"
-                                    :title    "Remove"
-                                    :on-click handle-remove-click}
-                                   {:icon     "play"
-                                    :title    "Preview"
-                                    :on-click handle-play-click}]}]])))
+  [{:keys [id idx name preview level-idx lesson-idx placeholder? activity-name]}]
+  (r/with-let [edit-form-opened? (r/atom false)]
+    (let [handle-play-click #(re-frame/dispatch [::state/preview-activity id])
+          handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
+          handle-rename-activity #(re-frame/dispatch [::state/edit-placeholder-name level-idx lesson-idx idx %])
+          handle-remove-click #(do (.stopPropagation %)
+                                   (handle-remove-activity))
+          handle-rename-click #(do (.stopPropagation %)
+                                   (reset! edit-form-opened? true))
+          handle-save-click #(do (.stopPropagation %)
+                                 (reset! edit-form-opened? false)
+                                 (re-frame/dispatch [::state/save-course]))
+          locked? @(re-frame/subscribe [::state/locked?])]
+      (if locked?
+        [ui/list-item {:name       name
+                       :pre        [ui/image {:src        preview
+                                              :class-name "item-image"}]
+                       :class-name "activities-list-item"}]
+        [draggable {:data          {:type     "activity"
+                                    :level    level-idx
+                                    :lesson   lesson-idx
+                                    :activity idx}
+                    :drop-allowed? drop-allowed?
+                    :on-drop       handle-drop}
+         [ui/list-item {:name       (or name activity-name)
+                        :pre        [ui/image {:src        preview
+                                               :class-name "item-image"}]
+                        :class-name "activities-list-item"
+                        :controls   [:div
+                                     (when @edit-form-opened?
+                                       [ui/input {:value       activity-name
+                                                  :on-change   handle-rename-activity
+                                                  :class-name  "edit"}])]
+                        :actions    (cond
+                                      (and placeholder? @edit-form-opened?)
+                                      [{:icon     "check"
+                                        :title    "Save"
+                                        :on-click handle-save-click}]
+                                      placeholder?
+                                      [{:icon     "edit"
+                                        :title    "Rename"
+                                        :on-click handle-rename-click}]
+                                      :else
+                                      [{:icon     "trash"
+                                        :title    "Remove"
+                                        :on-click handle-remove-click}
+                                       {:icon     "play"
+                                        :title    "Preview"
+                                        :on-click handle-play-click}])}]]))))
 
 (defn- activities-list
   [{:keys [level-idx lesson-idx]}]
@@ -111,7 +150,7 @@
                                     {:level-idx  level-idx
                                      :lesson-idx lesson-idx})])
      (when (empty? activities)
-       [empty-list-placeholder {:data {:type     "activity"
+       [empty-list-placeholder {:data {:types     "activity"
                                        :level    level-idx
                                        :lesson   lesson-idx
                                        :activity 0}}])]))
@@ -288,6 +327,9 @@
                            :text "Add Lesson"
                            :data {:type   "lesson"
                                   :lesson "add"}}]
+       [actions-list-item {:icon "dnd"
+                           :text "Add Activity Placeholder"
+                           :data {:type   "activity-placeholder"}}]
        [actions-list-item {:icon     "games"
                            :text     "Add Activity"
                            :on-click handle-activities-click}]])))
@@ -305,11 +347,10 @@
 
 (defn- actions-list
   []
-  (let []
-    [:div.actions
-     [:ul.actions-list
-      [add-content-actions]
-      [duplicate-course]]]))
+  [:div.actions
+   [:ul.actions-list
+    [add-content-actions]
+    [duplicate-course]]])
 
 (defn- main-form
   [{:keys [course-slug]}]

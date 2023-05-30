@@ -174,6 +174,12 @@
                   activity-data)
            (get-item-index target-activity position))))
 
+(defn edit-placeholder
+  [course-data {:keys [level-idx lesson-idx activity-idx name]}]
+  (assoc-in course-data
+            [:levels (dec level-idx) :lessons (dec lesson-idx) :activities (dec activity-idx) :name]
+            name))
+
 (defn remove-activity
   [course-data level-idx lesson-idx activity-idx]
   {:pre [(level-idx? level-idx)

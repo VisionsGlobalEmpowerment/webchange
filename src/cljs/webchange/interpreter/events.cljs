@@ -1430,14 +1430,14 @@
       {:db (update db :lessons merge prepared)})))
 
 (re-frame/reg-event-db
-  ::set-dataset-loading-progress
-  (fn [db [_ value]]
-    (assoc db :dataset-loading-progress value)))
+ ::set-dataset-loading-progress
+ (fn [db [_ value]]
+   (assoc db :dataset-loading-progress value)))
 
 (re-frame/reg-event-db
-  ::set-dataset-loaded
-  (fn [db _]
-    (assoc-in db [:loading :load-lessons-assets] false)))
+ ::set-dataset-loaded
+ (fn [db _]
+   (assoc-in db [:loading :load-lessons-assets] false)))
 
 (re-frame/reg-event-fx
   ::set-course-lessons-data
@@ -1645,6 +1645,9 @@
   (fn [{:keys [db]} [_ _course-id]]
     (let [current-scene-id (or (:scene-id (progress-state/get-current-activity db))
                                (:scene-id (lessons-activity/get-progress-next db)))]
+      (js/console.log "progress loaded" current-scene-id
+                      (progress-state/get-current-activity db)
+                      (lessons-activity/get-progress-next db))
       {:dispatch-n (list [::load-settings]
                          [::set-current-scene current-scene-id])})))
 

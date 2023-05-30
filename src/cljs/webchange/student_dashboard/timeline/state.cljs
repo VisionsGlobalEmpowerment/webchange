@@ -34,7 +34,7 @@
   ::finished-activities
   (fn [db]
     (let [scenes (get-in db [:course-data :scene-list])
-          activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
+          activities (common-activity/flatten-active-activities (get-in db [:course-data :levels]))]
       (->> activities
            (filter #(lessons-activity/finished? db % activities))
            (map #(activity-letter db %))
@@ -52,7 +52,7 @@
 (re-frame/reg-sub
   ::new-activities
   (fn [db]
-    (let [activities (common-activity/flatten-activities (get-in db [:course-data :levels]))]
+    (let [activities (common-activity/flatten-active-activities (get-in db [:course-data :levels]))]
       (filter #(lessons-activity/new? db % activities) activities))))
 
 (defn get-next-activity

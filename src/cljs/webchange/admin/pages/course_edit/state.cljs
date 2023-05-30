@@ -100,11 +100,13 @@
                                          [id activity]))
                                   (into {}))]
       (->> (utils/get-activities-data course-data (dec level-idx) (dec lesson-idx))
-           (map-indexed (fn [idx {:keys [scene-id unique-id]}]
+           (map-indexed (fn [idx {:keys [scene-id unique-id placeholder? name]}]
                           (let [activity-index (inc idx)]
                             (->> (get activities-library scene-id)
                                  (merge {:id  unique-id
-                                         :idx activity-index})))))))))
+                                         :idx activity-index
+                                         :placeholder? placeholder?
+                                         :activity-name name})))))))))
 
 ;; Available Activities
 
@@ -374,6 +376,28 @@
                               (utils/add-activity props activity-data))]
       {:db       (set-course-data db new-course-data)
        :dispatch [::save-course]})))
+
+(re-frame/reg-event-fx
+  ::add-activity-placeholder
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ props]]
+    (let [activity-data {:placeholder? true
+                         :name ""}
+          new-course-data (-> (get-course-data db)
+                              (utils/add-activity props activity-data))]
+      {:db       (set-course-data db new-course-data)
+       :dispatch [::save-course]})))
+
+(re-frame/reg-event-fx
+  ::edit-placeholder-name
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ level-idx lesson-idx activity-idx activity-name]]
+    (let [new-course-data (-> (get-course-data db)
+                              (utils/edit-placeholder {:level-idx level-idx
+                                                       :lesson-idx lesson-idx
+                                                       :activity-idx activity-idx
+                                                       :name activity-name}))]
+      {:db       (set-course-data db new-course-data)})))
 
 (re-frame/reg-event-fx
   ::move-activity

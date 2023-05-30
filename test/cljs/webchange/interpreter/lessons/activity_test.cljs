@@ -5,7 +5,7 @@
     [webchange.sample-data :as sample-data]))
 
 (deftest flatten-activities
-  (let [flattened (activity/flatten-activities sample-data/levels)]
+  (let [flattened (activity/flatten-active-activities sample-data/levels)]
     (testing "should contain level lesson activity"
       (is (some? (-> flattened first :level)))
       (is (some? (-> flattened first :lesson)))
