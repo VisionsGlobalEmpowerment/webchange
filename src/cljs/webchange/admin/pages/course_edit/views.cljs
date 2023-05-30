@@ -129,7 +129,10 @@
                                         :title    "Save"
                                         :on-click handle-save-click}]
                                       placeholder?
-                                      [{:icon     "edit"
+                                      [{:icon     "trash"
+                                        :title    "Remove"
+                                        :on-click handle-remove-click}
+                                       {:icon     "edit"
                                         :title    "Rename"
                                         :on-click handle-rename-click}]
                                       :else
