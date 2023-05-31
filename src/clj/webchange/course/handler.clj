@@ -270,40 +270,49 @@
 
 (defroutes website-api-routes
   (context "/api/courses" []
-           :tags ["course"]
+    :tags ["course"]
                                         ;should go before general "/api/courses/:course-slug" to be accessible
-           (GET "/available" []
-                :return CoursesOrError
-                :summary "Returns all available courses"
-                (-> (fn [request] (-> (core/get-available-courses) response))
-                    sign/wrap-api-with-signature))
-           (GET "/by-website-user/:website-user-id" request
-                :path-params [website-user-id :- s/Int]
-                :return [Course]
-                :summary "Returns courses by website user id"
-                (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
-                    sign/wrap-api-with-signature))
-           (POST "/:course-slug/publish" request
-                 :path-params [course-slug :- s/Str]
-                 :return Course
-                 :summary "Send request for publish on review"
-                 (handle-publish-course course-slug request))
-           (POST "/:course-slug/archive" request
-                 :path-params [course-slug :- s/Str]
-                 :return Course
-                 :summary "Send request for archive"
-                 (handle-archive-course course-slug request))
-           (POST "/:course-id/review" request
-                 :path-params [course-id :- s/Int]
-                 :return Course
-                 :body [review-result ReviewResult]
-                 :summary "Send review result. Publish or decline. Or unpubish"
-                 (handle-review-course course-id review-result request))
-           (GET "/list/:type/:status" request
-                :path-params [type :- s/Str status :- s/Str]
-                :return CoursesOrError
-                :summary "Retuns a list of courses on review"
-                (handle-get-on-review-courses type status request))))
+    (GET "/available" []
+      :return CoursesOrError
+      :summary "Returns all available courses"
+      (-> (fn [request] (-> (core/get-available-courses) response))
+          sign/wrap-api-with-signature))
+    (GET "/by-website-user/:website-user-id" request
+      :path-params [website-user-id :- s/Int]
+      :return [Course]
+      :summary "Returns courses by website user id"
+      (-> (fn [request] (-> (core/get-courses-by-website-user website-user-id) response))
+          sign/wrap-api-with-signature))
+    (PUT "/:course-slug/toggle-visibility" request
+      :coercion :spec
+      :path-params [course-slug :- ::course-spec/slug]
+      :body [data ::course-spec/toggle-visibility]
+      (let [user-id (current-user request)]
+        (when-not (is-admin? user-id)
+          (throw-unauthorized {:role :educator}))
+        (-> (core/toggle-course-visibility course-slug data)
+            response)))
+    (POST "/:course-slug/publish" request
+      :path-params [course-slug :- s/Str]
+      :return Course
+      :summary "Send request for publish on review"
+      (handle-publish-course course-slug request))
+    (POST "/:course-slug/archive" request
+      :path-params [course-slug :- s/Str]
+      :return Course
+      :summary "Send request for archive"
+      (handle-archive-course course-slug request))
+    (POST "/:course-id/review" request
+      :path-params [course-id :- s/Int]
+      :return Course
+      :body [review-result ReviewResult]
+      :summary "Send review result. Publish or decline. Or unpubish"
+      (handle-review-course course-id review-result request))
+    (GET "/list/:type/:status" request
+      :path-params [type :- s/Str status :- s/Str]
+      :return CoursesOrError
+      :summary "Retuns a list of courses on review"
+      (handle-get-on-review-courses type status request))))
 
 (defroutes courses-api-routes
   (context "/api/courses" []

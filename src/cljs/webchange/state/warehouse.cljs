@@ -414,6 +414,15 @@
                     handlers)))
 
 (re-frame/reg-event-fx
+  ::toggle-course-visibility
+  (fn [{:keys [_]} [_ {:keys [course-slug visible]} handlers]]
+    (create-request {:key    :toggle-course-visibility
+                     :method :put
+                     :params {:visible visible}
+                     :uri    (str "/api/courses/" course-slug "/toggle-visibility")}
+                    handlers)))
+
+(re-frame/reg-event-fx
   ::save-course
   (fn [{:keys [_]} [_ {:keys [course-slug course-data]} handlers]]
     (create-request {:key    :save-course

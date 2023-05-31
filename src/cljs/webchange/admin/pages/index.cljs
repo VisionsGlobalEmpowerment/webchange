@@ -12,7 +12,6 @@
     [webchange.admin.pages.classes.views :as classes]
     [webchange.admin.pages.course-add.views :as course-add]
     [webchange.admin.pages.course-edit.views :as course-edit]
-    [webchange.admin.pages.course-view.views :as course-view]
     [webchange.admin.pages.courses.views :as courses]
     [webchange.admin.pages.create.views :as create]
     [webchange.admin.pages.create-activity.views :as create-activity]
@@ -53,7 +52,6 @@
             :classes            classes/page
             :course-add         course-add/page
             :course-edit        course-edit/page
-            :course-profile     course-view/page
             :courses            courses/page
             :create             create/page
             :create-activity    create-activity/page

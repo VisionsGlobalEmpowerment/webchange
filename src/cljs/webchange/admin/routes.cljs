@@ -57,7 +57,6 @@
                                                    :teacher-profile true}
                                   :school-courses true}
                :courses    {:add-course     true
-                            :course-profile true
                             :course-edit    true}
                :accounts   {:account-add    true
                             :account-edit   true

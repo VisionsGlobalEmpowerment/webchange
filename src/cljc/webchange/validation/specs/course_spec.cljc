@@ -4,6 +4,7 @@
     [webchange.validation.predicates :as p]))
 
 (s/def ::id int?)
+(s/def ::slug string?)
 (s/def ::course-id int?)
 (s/def ::courses-id (s/* ::course-id))
 (s/def ::class-id int?)
@@ -22,3 +23,4 @@
 (s/def ::create-course (s/keys :req-un [::name ::lang]))
 (s/def ::edit-course (s/keys :req-un [::name ::lang]))
 (s/def ::duplicate (s/keys :req-un [::lang]))
+(s/def ::toggle-visibility (s/keys :req-un [::visible]))

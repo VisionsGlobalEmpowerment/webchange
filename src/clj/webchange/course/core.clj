@@ -948,6 +948,15 @@
                      :description "Create"})
     {:id scene-id}))
 
+(defn toggle-course-visibility
+  [course-slug {:keys [visible]}]
+  (let [status (if visible "published" "draft")
+        {course-id :id} (db/get-course {:slug course-slug})]
+    (db/update-course-status! {:id     course-id
+                               :status status})
+    {:id     course-id
+     :status status}))
+
 (defn- duplicate-levels
   [levels scenes-map]
   (let [update-activity (fn [activity]
