@@ -52,9 +52,10 @@
           :width      100,
           :height     100,
           :transition "image",
-          :scale-x    1.3,
-          :scale-y    1.3,
+          :scale {:x 1.3,
+                  :y 1.3},
           :src        "",
+
           :states     {:visible       {:visible true}
                        :hidden        {:visible false}
                        :init-position {:x 1805, :y 502}}},
@@ -197,12 +198,7 @@
                                      :from-var  [{:var-name "current-concept", :var-property "letter-big", :action-property "attr-value"}],
                                      :attr-name "text"}
                                     {:id "hidden", :type "state", :target "word"}
-                                    {:id "init-position", :type "state", :target "image"}
-                                    {:type      "set-attribute",
-                                     :target    "image",
-                                     :from-var  [{:var-name "current-concept", :var-property "image-src", :action-property "attr-value"}],
-                                     :attr-name "src"}
-                                    ]},
+                                    {:id "init-position", :type "state", :target "image"}]},
 
          :glow-big                {:type "state" :target "letter-big" :id "glow"}
          :stop-glow-big           {:type "state" :target "letter-big" :id "stop-glow"}
@@ -250,9 +246,7 @@
                                           {:type "state", :id "visible", :target "letter-path"}
                                           {:type "parallel"
                                            :data [{:type "path-animation", :state "play", :target "letter-path"}
-                                                  {:type "action", :id "describe-writing"}]
-                                           }
-                                          ]}
+                                                  {:type "action", :id "describe-writing"}]}]}
          :redraw-letter           {:type "sequence-data"
                                    :data [{:type "set-attribute" :target "letter-path" :attr-name "stroke" :attr-value "#5c54ef"}
                                           {:type "path-animation", :state "play", :target "letter-path"}]}
@@ -382,6 +376,7 @@
   (-> t
       (assoc-in [:objects :word :text] word)
       (assoc-in [:objects :word :chunks] (word-chunks word letter))
+      (assoc-in [:objects :image :src] (:src image))
       (assoc-in [:actions :init-concept :var-value] {:letter letter
                                                      :letter-big (str/upper-case letter)
                                                      :image-src (:src image)})
