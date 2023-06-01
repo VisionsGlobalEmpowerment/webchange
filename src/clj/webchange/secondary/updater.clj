@@ -7,7 +7,6 @@
     [clojure.java.shell :as sh]
     [config.core :refer [env]]
     [clojure.tools.logging :as log]
-    [clojure.core.async :refer [<!] :as async]
     [mount.core :as mount]))
 
 (def restart-exit-code 42)
@@ -29,18 +28,23 @@
 
 (defn update-local-instance!
   []
-  (async/go
-    (log/debug "Update local instance")
-    (when-let [local-binary-path (env :local-binary-path)]
-      (log/debug "Update local instance: has local-binary-path")
-      (sh/sh "cp" local-binary-path (str local-binary-path "." (System/currentTimeMillis) ".bak"))
-      (log/debug "Update local instance: backup created")
-      (let [latest-binary-in (get-latest-binary)]
-        (with-open [local-binary-out (io/output-stream local-binary-path)]
-          (log/debug "Update local instance: copying...")
-          (io/copy latest-binary-in local-binary-out)))
-      (log/debug "About to restart service...")
-      (stop-server))))
+  (Thread.
+   (try 
+     (log/debug "Update local instance")
+     (when-let [local-binary-path (env :local-binary-path)]
+       (sh/sh "cp" local-binary-path (str local-binary-path "." (System/currentTimeMillis) ".bak"))
+       (log/debug "Update local instance: backup created")
+       (let [latest-binary-in (get-latest-binary)
+             download-path (str local-binary-path ".dwl")]
+         (with-open [local-binary-out (io/output-stream download-path)]
+           (log/debug "Update local instance: copying...")
+           (io/copy latest-binary-in local-binary-out))
+         (log/debug "Move binary")
+         (sh/sh "mv" download-path local-binary-path))
+       (log/debug "About to restart service...")
+       (stop-server))
+     (catch Exception e
+       (log/error "Error happend during update" e)))))
 
 (defn start-sync!
   [school-id]
