@@ -55,7 +55,14 @@
           :scale {:x 1.3,
                   :y 1.3},
           :src        "",
-
+          :editable? {:drag      false
+                      :select    true
+                      :show-in-tree? true
+                      :edit-form {:flip         true
+                                  :scale        true
+                                  :visible      true
+                                  :select-image true
+                                  :upload-image true}}
           :states     {:visible       {:visible true}
                        :hidden        {:visible false}
                        :init-position {:x 1805, :y 502}}},
