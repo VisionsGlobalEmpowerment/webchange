@@ -901,7 +901,7 @@
                            :id activity-id
                            :updated_at updated-at
                            :metadata (merge current-metadata metadata)))
-    {:id activity-id}))
+    (merge data {:id activity-id})))
 
 (defn archive-activity
   [activity-id _]
