@@ -7,12 +7,12 @@
     [webchange.db.core :as db]))
 
 (def error-invalid-credentials {:errors {:form "Invalid credentials"}})
+(def error-user-not-found {:errors {:form "User not found"}})
+(def error-email-not-confirmed {:errors {:form "Could not confirm your email address"}})
 
 (defn- credentials-valid?
   [user password]
-  (and
-   (:active user)
-   (hashers/check password (:password user))))
+  (hashers/check password (:password user)))
 
 (defn- user->teacher [{user-id :id :as user}]
   (let [{teacher-id :id school-id :school-id} (db/get-teacher-by-user {:user_id user-id})]
@@ -25,12 +25,13 @@
 
 (defn teacher-login!
   [{:keys [email password]}]
-  (if-let [user (db/find-user-by-email {:email email})]
-    (if (credentials-valid? user password)
-      (do (update-user-last-login user)
-          [true (-> user user->teacher accounts/visible-user)])
-      [false error-invalid-credentials])
-    [false error-invalid-credentials]))
+  (let [user (db/find-user-by-email {:email email})]
+    (cond
+      (nil? user) [false error-user-not-found]
+      (not (credentials-valid? user password)) [false error-invalid-credentials]
+      (not (:active user)) [false error-email-not-confirmed]
+      :else (do (update-user-last-login user)
+                [true (-> user user->teacher accounts/visible-user)]))))
 
 (defn student-login!
   [{:keys [school-id access-code]}]

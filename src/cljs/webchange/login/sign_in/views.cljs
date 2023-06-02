@@ -9,7 +9,8 @@
   (let [username @(re-frame/subscribe [::state/username])
         password @(re-frame/subscribe [::state/password])
         loading? @(re-frame/subscribe [::state/loading?])
-
+        errors @(re-frame/subscribe [::state/errors])
+        
         sign-in-as-type @(re-frame/subscribe [::state/sign-in-as-type (:type props)])
         handle-username-changed #(re-frame/dispatch [::state/set-username %])
         handle-password-changed #(re-frame/dispatch [::state/set-password %])
@@ -44,7 +45,9 @@
                      :name           "password"
                      :on-change      handle-password-changed
                      :disabled?      loading?
-                     :on-enter-press submit}]]
+                     :on-enter-press submit}]
+       (when errors
+         [ui/input-error (:form errors)])]
 
       [:div.forgot-password
        [:p "Forgot password?"]

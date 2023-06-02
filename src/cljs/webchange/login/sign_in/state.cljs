@@ -73,23 +73,35 @@
   (fn [{:keys [db]} [_ type]]
     (let [data (get-form-data db)]
       {:db       (set-loading db true)
-       :dispatch [::warehouse/login-with-credentials {:data data} {:on-success [::login-success type]
-                                                                   :on-failure [::login-failure]}]})))
+       :dispatch [::warehouse/login-with-credentials
+                  {:data data}
+                  {:suppress-api-error? true
+                   :on-success [::login-success type]
+                   :on-failure [::login-failure]}]})))
 
 (re-frame/reg-event-fx
   ::login-success
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ type]]
-    {:db                 (set-loading db false)
+    {:db                 (-> db
+                             (set-loading false)
+                             (dissoc :errors))
      :redirect-to-module (or type "educator")}))
 
 (re-frame/reg-event-fx
   ::login-failure
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    {:db (set-loading db false)}))
+  (fn [{:keys [db]} [_ result]]
+    {:db (-> db
+             (set-loading false)
+             (assoc :errors (get-in result [:response :errors])))}))
 
 (re-frame/reg-sub
   ::sign-in-as-type
   (fn [_ [_ type]]
     (or type "educator")))
+
+(re-frame/reg-sub
+  ::errors
+  :<- [path-to-db]
+  #(get % :errors nil))
