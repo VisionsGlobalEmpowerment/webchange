@@ -37,7 +37,9 @@
 
         form-editable? @(re-frame/subscribe [::state/form-editable?])
         handle-edit-info-click #(re-frame/dispatch [::state/toggle-form-editable])
-        handle-save #(re-frame/dispatch [::state/set-form-editable false])
+        handle-save #(do
+                       (re-frame/dispatch [::common-state/update-activity-data %])
+                       (re-frame/dispatch [::state/set-form-editable false]))
         handle-remove #(re-frame/dispatch [::state/open-activities-page])]
     [:div.activity-form
      [:div.header

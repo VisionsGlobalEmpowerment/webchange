@@ -107,7 +107,6 @@
   (fn [{:keys [db]} [_]]
     {:db (-> db (set-activity-loading false))}))
 
-
 ;; actions
 
 (def init-props-key :init-props)

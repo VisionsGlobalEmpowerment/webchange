@@ -128,7 +128,7 @@
 (re-frame/reg-event-fx
   ::save-success
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ success-handler {:keys [data]}]]
+  (fn [{:keys [db]} [_ success-handler data]]
     (let [prepared-data (-> data
                             (merge (:metadata data))
                             (dissoc :metadata))]
