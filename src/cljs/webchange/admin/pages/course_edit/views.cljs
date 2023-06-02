@@ -153,7 +153,7 @@
                                     {:level-idx  level-idx
                                      :lesson-idx lesson-idx})])
      (when (empty? activities)
-       [empty-list-placeholder {:data {:types     "activity"
+       [empty-list-placeholder {:data {:type     "activity"
                                        :level    level-idx
                                        :lesson   lesson-idx
                                        :activity 0}}])]))

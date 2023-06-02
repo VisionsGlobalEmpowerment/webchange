@@ -114,7 +114,7 @@
 (defn- handle-drag-end
   [event]
   (reset! hover-counter 0)
-  (let [target (.-target event)
+  (let [target (event->target event)
         all-items (.querySelectorAll js/document "[draggable]")]
     (utils/remove-class target "dragged")
     (.forEach all-items (fn [item]
