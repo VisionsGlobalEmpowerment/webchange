@@ -28,16 +28,19 @@
 
 (defn sink-receive
   [queue-name on-receive-callback]
-  (zmq/with-new-context
-    (let [sink (zmq/socket :pull {:bind (get-in queues [queue-name :sink-url])})]
-      (while @active
-        (try
-          (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
-            (when result
-              (log/debug "Sink receive with result")
-              (on-receive-callback (edn/read-string result))))
-          (catch Exception e
-            (log/error e)))))))
+  (while @active 
+    (try
+      (zmq/with-new-context
+        (let [sink (zmq/socket :pull {:bind (get-in queues [queue-name :sink-url])})]
+          (while @active
+            (let [result (-> (zmq/receive-msg sink {:stringify true :timeout 30000}) first)]
+              (when result
+                (log/debug "Sink receive with result")
+                (on-receive-callback (edn/read-string result)))))))
+      (catch org.zeromq.ZMQException e
+        (log/debug e))
+      (catch Exception e
+        (log/error e)))))
 
 (defn send
   [queue-name message]
