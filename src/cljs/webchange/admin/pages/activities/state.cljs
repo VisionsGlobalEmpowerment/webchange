@@ -111,7 +111,8 @@
     (->> activities-list
          (filter (fn [{:keys [template-id]}]
                    (= template-id selected-group)))
-         (sort-by :updated-at))))
+                                        ;       (sort-by :updated-at)
+         )))
 
 (re-frame/reg-event-fx
   ::select-group
