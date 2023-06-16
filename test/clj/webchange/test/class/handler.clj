@@ -49,7 +49,7 @@
 
 (deftest unassigned-students-can-be-retrieved
   (let [_ (f/student-created {:class-id nil})
-        students (-> (f/get-unassigned-students) :body slurp (json/read-str :key-fn keyword) :students)]
+        students (-> (f/get-unassigned-students f/default-school-id) :body slurp (json/read-str :key-fn keyword) :students)]
     (is (= 1 (count students)))))
 
 (deftest student-can-be-created
@@ -93,7 +93,7 @@
 (deftest student-become-unassigned-when-removed-from-class
   (let [{id :id} (f/student-created)
         _ (f/unassigned-student! id)
-        students (-> (f/get-unassigned-students) :body slurp (json/read-str :key-fn keyword) :students)]
+        students (-> (f/get-unassigned-students f/default-school-id) :body slurp (json/read-str :key-fn keyword) :students)]
     (is (= 1 (count students)))))
 
 (deftest student-can-be-deleted

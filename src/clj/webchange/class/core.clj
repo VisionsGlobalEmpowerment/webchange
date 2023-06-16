@@ -57,8 +57,9 @@
   (-> (db/get-students-by-school {:school_id school-id})
       prepare-students))
 
-(defn get-students-unassigned []
-  (let [students (-> (db/get-students-unassigned)
+(defn get-students-unassigned
+  [school-id]
+  (let [students (-> (db/get-students-unassigned {:school_id school-id})
                      prepare-students)]
     {:students students}))
 

@@ -2,11 +2,13 @@
   (:require [webchange.db.core :as db]
             [webchange.events :as e]
             [clojure.tools.logging :as log]
+            [compojure.api.exception :as ex]
             [camel-snake-kebab.core :refer [->snake_case_keyword]]))
 
-(defn get-current-school [] (db/get-first-school))
+(defn get-current-school []
+  (db/get-first-school))
 
-(defn create-school!
+(defn- do-create-school!
   [data]
   (let [prepared-data (-> (db/transform-keys-one-level ->snake_case_keyword data)
                           (update :about #(or % "")))
@@ -16,8 +18,26 @@
               (assoc :id id)
               (assoc :stats {}))]))
 
+(defn create-school!
+  [data]
+  (do-create-school! (assoc data :type "global")))
+
+(defn create-personal-school!
+  [data user-id]
+  (when (db/get-teacher-by-user {:user_id user-id})
+    (throw (ex-info "User already has personal school"
+                    {:type ::ex/request-validation
+                     :errors {:school "User already has personal school"}})))
+  (do-create-school! (assoc data :type "personal")))
+
 (defn get-school [id]
   (let [school (db/get-school {:id id})]
+    school))
+
+(defn get-school-by-class
+  [class-id]
+  (let [class (db/get-class {:id class-id})
+        school (db/get-school {:id (:school-id class)})]
     school))
 
 (defn get-schools []

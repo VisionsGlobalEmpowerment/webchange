@@ -32,6 +32,7 @@
     [webchange.admin.pages.teachers.views :as teachers]
     [webchange.admin.pages.teacher-add.views :as teacher-add]
     [webchange.admin.pages.teacher-transfer.views :as teacher-transfer]
+    [webchange.admin.pages.teacher-school.views :as teacher-school]
     [webchange.admin.pages.teacher-profile.views :as teacher-profile]
     [webchange.admin.pages.class-students.views :as class-students]
     [webchange.admin.pages.class-students-add.views :as class-students-add]
@@ -71,6 +72,7 @@
             :teacher-add        teacher-add/page
             :teacher-profile    teacher-profile/page
             :teacher-transfer   teacher-transfer/page
+            :teacher-school     teacher-school/page
             :teachers           teachers/page
             :update-status      update-status/page
             :404                not-found/page})

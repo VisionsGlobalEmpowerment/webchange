@@ -11,7 +11,7 @@
 (defn init-secondary!
   [config school-id email password]
   (let [
-        [{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default"})
+        [{school-id :id}] (db/create-school! {:id (Integer/parseInt school-id) :name "default" :type "global"})
         [{user-id :id}] (accounts/create-user-with-credentials! {:email email
                                                                  :password password
                                                                  :type "teacher"})

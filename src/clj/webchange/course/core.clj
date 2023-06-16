@@ -776,7 +776,15 @@
 (defn get-school-courses
   "Return list of courses assigned to school"
   [school-id user-id]
-  (db/get-courses-by-school {:school_id school-id}))
+  (let [school (db/get-school {:id school-id})
+        personal? #(= "personal" (:type %))]
+    (if (personal? school)
+      (let [published-courses (->> (db/get-available-courses)
+                                   (map #(dissoc % :updated-at)))
+            my-courses (db/find-courses {:type "course" :not_status "archived" :user_id user-id})]
+        (->> (concat published-courses my-courses)
+             (distinct)))
+      (db/get-courses-by-school {:school_id school-id}))))
 
 (defn assign-school-course
   [school-id {:keys [course-id]}]

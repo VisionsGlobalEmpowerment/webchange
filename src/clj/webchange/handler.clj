@@ -237,13 +237,14 @@
    accounts-routes
    course-routes
    accounts-pages-routes
-   asset-api-routes)
+   asset-api-routes
+   school-routes)
   pages-routes
   animation-routes
   auth-routes
   course-pages-routes
   
-  school-routes
+
   global-sync-routes
   local-sync-routes
   asset-maintainer-routes

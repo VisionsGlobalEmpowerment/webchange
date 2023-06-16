@@ -5,7 +5,8 @@
             [clojure.edn :as edn]
             [clojure.tools.logging :as log]
             [webchange.common.files :as files]
-            [webchange.common.audio-parser.converter :as converter]))
+            [webchange.common.audio-parser.converter :as converter])
+  (:import (org.kaldi KaldiRecognizer)))
 
 (defn download-file
   [file-path]
@@ -42,7 +43,7 @@
                                                                    :sample-rate    16000})
         input (io/input-stream local-file-path)
         recognizer-model (get @recognizer-models (or model "english"))
-        recognizer (org.kaldi.KaldiRecognizer. recognizer-model 16000.0)
+        recognizer (KaldiRecognizer. recognizer-model 16000.0)
         buf (byte-array 4096)
         _ (log/debug "Recognizing...")
         result (-> (loop [nbytes (.read input buf), result {:result [], :text ""}]

@@ -5,28 +5,35 @@
     [compojure.route :refer [not-found]]
     [ring.util.response :refer [response]]
     [webchange.school.core :as core]
+    [webchange.class.core :as class]
     [clojure.tools.logging :as log]
     [webchange.common.handler :refer [handle current-user]]
     [webchange.school.statistics :as stats]
     [webchange.validation.specs.school-spec :as school-spec]
-    [webchange.auth.roles :refer [is-admin? is-at-least-teacher?]]
+    [webchange.auth.roles :refer [is-admin? is-live-user?]]
     [clojure.spec.alpha :as s]))
 
-(defn handle-current-school [request]
+(defn handle-current-school [_request]
   (-> (core/get-current-school)
       response))
 
 (defn handle-create-school
   [data request]
   (let [user-id (current-user request)]
-    (when-not (is-admin? user-id)
-      (throw-unauthorized {:role :educator}))
-    (-> (core/create-school! data)
-        handle)))
+    (cond
+      (is-admin? user-id) (-> (core/create-school! data)
+                              handle)
+      (is-live-user? user-id) (let [[_ data :as result] (core/create-personal-school! data user-id)]
+                                (class/create-teacher! {:school-id (:id data)
+                                                        :user-id   user-id
+                                                        :type      "admin"
+                                                        :status    "active"})
+                                (handle result))
+      :else (throw-unauthorized {:role :educator}))))
 
 (defn handle-list-schools [request]
-    (-> (core/get-schools)
-        response))
+  (-> (core/get-schools)
+      response))
 
 (defn handle-update-school
   [id data request]

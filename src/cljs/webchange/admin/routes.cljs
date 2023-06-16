@@ -25,6 +25,7 @@
                                                                             "/transfer"                    :teacher-transfer
                                                                             ["/" [#"[\w-%]+" :teacher-id]] :teacher-profile}
                                                                "/courses"  {"" :school-courses}}}
+             "/teacher-school" :teacher-school
              "/courses"        {""                              :courses
                                 "/add"                          :course-add
                                 ["/" [#"[\w-%]+" :course-slug]] {""      :course-profile
@@ -65,7 +66,8 @@
                :library    {:activities {:activity-edit true}
                             :books      {:book-edit true}}
                :create     {:create-activity true
-                            :create-book     true}}})
+                            :create-book     true}
+               :teacher-school true}})
 
 (defn get-title
   ([params]

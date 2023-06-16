@@ -1,0 +1,1 @@
+ALTER TABLE ONLY schools DROP COLUMN type;

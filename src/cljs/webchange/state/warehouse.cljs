@@ -1204,10 +1204,10 @@
 
 (re-frame/reg-event-fx
   ::load-unassigned-students
-  (fn [{:keys [_]} [_ handlers]]
+  (fn [{:keys [_]} [_ {:keys [school-id]} handlers]]
     (create-request {:key    :load-unassigned-students
                      :method :get
-                     :uri    (str "/api/unassigned-students")}
+                     :uri    (str "/api/unassigned-students/" school-id)}
                     handlers)))
 
 (re-frame/reg-event-fx

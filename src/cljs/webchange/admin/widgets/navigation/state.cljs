@@ -20,6 +20,11 @@
           :icon  "school"
           :route {:page :schools}
           :visible-for ["admin" "bbs-admin"]}
+         {:id    :teacher-school
+          :text  "School Management"
+          :icon  "school"
+          :route {:page :teacher-school}
+          :visible-for ["live"]}
          {:id   :lesson-builder
           :text "Create"
           :icon "create"

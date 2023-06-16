@@ -95,6 +95,12 @@
   #(-> (get % :readonly false)))
 
 (re-frame/reg-sub
+  ::personal?
+  :<- [::school-data]
+  #(-> (get % :type)
+       (= "personal")))
+
+(re-frame/reg-sub
   ::school-stats
   :<- [path-to-db]
   #(get % :school-stats))

@@ -126,9 +126,10 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [class-id] :as props}]]
+  (fn [{:keys [db]} [_ {:keys [class-id school-id] :as props}]]
     {:db       (-> db
                    (assoc :class-id class-id)
+                   (assoc :school-id school-id)
                    (set-callbacks (select-keys props [:on-change :on-save]))
                    (reset-available-students)
                    (reset-selected-students))
@@ -138,10 +139,11 @@
   ::load-students
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {:db       (-> db
-                   (set-data-loading true))
-     :dispatch [::warehouse/load-unassigned-students
-                {:on-success [::load-students-success]}]}))
+    (let [school-id (:school-id db)]
+      {:db       (-> db
+                     (set-data-loading true))
+       :dispatch [::warehouse/load-unassigned-students {:school-id school-id}
+                  {:on-success [::load-students-success]}]})))
 
 (re-frame/reg-event-fx
   ::load-students-success

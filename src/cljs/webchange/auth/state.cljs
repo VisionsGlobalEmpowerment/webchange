@@ -45,3 +45,6 @@
   ::bbs-admin?
   :<- [::super-admin?]
   #(not %))
+
+(comment
+  @(re-frame/subscribe [::current-user]))

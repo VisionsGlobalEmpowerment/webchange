@@ -16,3 +16,8 @@
   [user-id]
   (let [{admin? :result} (db/user-has-type? {:id user-id :types ["admin"]})]
     admin?))
+
+(defn is-live-user?
+  [user-id]
+  (let [{result :result} (db/user-has-type? {:id user-id :types ["live"]})]
+    result))

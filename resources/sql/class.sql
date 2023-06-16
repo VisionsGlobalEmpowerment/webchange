@@ -1,8 +1,8 @@
 -- :name create-school! :<!
 -- :doc creates a new school record
 INSERT INTO schools
-(id, name)
-VALUES (:id, :name) RETURNING id
+(id, name, type)
+VALUES (:id, :name, :type) RETURNING id
 
 -- :name create-class! :<!
 -- :doc creates a new class record
@@ -78,7 +78,8 @@ AND archived = false
 -- :name get-students-unassigned :? :*
 -- :doc retrieve students without a class
 SELECT * from students
-WHERE class_id is null
+WHERE school_id = :school_id
+AND class_id is null
 
 -- :name get-student :? :1
 -- :doc retrieve students by id
@@ -116,6 +117,7 @@ WHERE id = :id
 -- :doc retrieve teacher by user id
 SELECT * from teachers
 WHERE user_id = :user_id
+AND archived = false
 
 -- :name teachers-by-school :? :*
 -- :doc retrieve teachers by school id
@@ -152,8 +154,8 @@ SELECT true as result from students WHERE school_id = :school_id AND access_code
 -- :name create-new-school! :<!
 -- :doc creates a new school record
 INSERT INTO schools
-(name, location, about)
-VALUES (:name, :location, :about) RETURNING id
+(name, location, about, type)
+VALUES (:name, :location, :about, :type) RETURNING id
 
 -- :name get-school :? :1
 -- :doc retrieve school record
@@ -168,7 +170,8 @@ WHERE school_id = :id
 -- :name get-schools :? :*
 -- :doc retrieve school records
 SELECT * from schools
-WHERE archived = false
+WHERE type = 'global'
+AND archived = false
 
 -- :name update-school! :! :n
 -- :doc updates an existing school record

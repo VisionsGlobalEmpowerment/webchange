@@ -218,7 +218,6 @@
                    (merge defaults)
                    (db/transform-keys-one-level ->snake_case_keyword))
          [{id :id}] (db/create-lesson-set! data)]
-     (assoc data :dataset-id (:dataset-id options))
      (->> (assoc data :id id)
           (db/transform-keys-one-level ->kebab-case-keyword)))))
 
@@ -226,7 +225,7 @@
   ([]
    (school-created {}))
   ([options]
-   (let [defaults {:id 1 :name "test-school"}
+   (let [defaults {:id 1 :name "test-school" :type "global"}
          data (->> options
                    (merge defaults)
                    (db/transform-keys-one-level ->snake_case_keyword))
@@ -651,8 +650,8 @@
     (handler/dev-handler request)))
 
 (defn get-unassigned-students
-  []
-  (let [url (str "/api/unassigned-students")
+  [school-id]
+  (let [url (str "/api/unassigned-students/" school-id)
         request (-> (mock/request :get url)
                     teacher-logged-in)]
     (handler/dev-handler request)))

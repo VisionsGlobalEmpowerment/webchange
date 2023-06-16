@@ -3,7 +3,8 @@
     [clojure.data.json :as json]
     [clojure.string :as str]
     [clojure.tools.logging :as log]
-    [config.core :refer [env]]))
+    [config.core :refer [env]])
+  (:import (org.kaldi KaldiRecognizer)))
 
 (defn- read-result
   [result]
@@ -23,7 +24,7 @@
 (defn recognize
   [input model]
   (let [recognizer-model (get @recognizer-models (or model "english"))
-        recognizer (org.kaldi.KaldiRecognizer. recognizer-model 16000.0)
+        recognizer (KaldiRecognizer. recognizer-model 16000.0)
         buf (byte-array 4096)]
     (log/debug "Recognizing...")
     (-> (loop [nbytes (.read input buf), result {:result [], :text ""}]

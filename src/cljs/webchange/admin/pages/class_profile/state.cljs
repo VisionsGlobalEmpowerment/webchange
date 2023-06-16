@@ -202,6 +202,12 @@
   #(get-in % [:school-data :readonly] false))
 
 (re-frame/reg-sub
+  ::personal?
+  :<- [path-to-db]
+  #(-> (get-in % [:school-data :type])
+       (= "personal")))
+
+(re-frame/reg-sub
   ::class-stats
   :<- [::class-data]
   #(get % :stats {}))

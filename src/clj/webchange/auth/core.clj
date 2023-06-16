@@ -49,13 +49,14 @@
 (defn get-current-user
   [user-id school-id]
   (if-let [user (db/get-user {:id user-id})]
-    [true {:id         user-id
-           :school-id  school-id
-           :first-name (:first-name user)
-           :last-name  (:last-name user)
-           :last-login (:last-login user)
-           :created-at (:created-at user)
-           :type       (:type user)}]
+    (let [school-id (or school-id (-> (db/get-teacher-by-user {:user_id user-id}) :school-id))]
+      [true {:id         user-id
+             :school-id  school-id
+             :first-name (:first-name user)
+             :last-name  (:last-name user)
+             :last-login (:last-login user)
+             :created-at (:created-at user)
+             :type       (:type user)}])
     [false error-invalid-credentials]))
 
 (defn- prepare-student-data

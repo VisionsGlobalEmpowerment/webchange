@@ -12,53 +12,112 @@
     [webchange.admin.widgets.page.counter.views :refer [counter]]
     [webchange.admin.widgets.page.views :as page]
     [webchange.ui.index :as ui]))
+(def add-button-props {:color      "blue-1"
+                       :chip       "plus"
+                       :chip-color "yellow-1"})
+
+(defn- readonly-counter
+  [students teachers class-course]
+  [counter {:data [{:text    "Teachers"
+                    :icon    "teachers"
+                    :counter teachers
+                    :actions [{:text     "Manage Teachers"
+                               :on-click  #(re-frame/dispatch [::state/open-teachers-list])}
+                              {:text     "Add Teacher"
+                               :disabled? true
+                               :on-click #(re-frame/dispatch [::state/open-add-teacher-form])}]}
+                   {:text    "Students"
+                    :icon    "students"
+                    :counter students
+                    :actions [{:text     "Manage Students"
+                               :on-click  #(re-frame/dispatch [::state/open-students-list])}
+                              {:text     "Add Student"
+                               :disabled? true
+                               :on-click #(re-frame/dispatch [::state/open-add-student-form])}]}
+                   {:text       "Students Activities"
+                    :icon       "games"
+                    :counter    students
+                    :background "blue-2"
+                    :actions    [{:text     "Students Activities"
+                                  :on-click #(re-frame/dispatch [::state/open-students-activities])}]}
+                   {:text       (:name class-course)
+                    :icon       "courses"
+                    :background "green-2"
+                    :actions    [{:text     "Manage Course"
+                                  :disabled? true
+                                  :on-click #(re-frame/dispatch [::state/open-assign-course-form])}]}]}])
+
+(defn- personal-counter
+  [students teachers class-course]
+  [counter {:data [{:text    "Teachers"
+                    :icon    "teachers"
+                    :counter teachers
+                    :actions [{:text     "Manage Teachers"
+                               :disabled? true
+                               :on-click  #(re-frame/dispatch [::state/open-teachers-list])}
+                              {:text     "Add Teacher"
+                               :disabled? true
+                               :on-click #(re-frame/dispatch [::state/open-add-teacher-form])}]}
+                   {:text    "Students"
+                    :icon    "students"
+                    :counter students
+                    :actions [{:text     "Manage Students"
+                               :on-click  #(re-frame/dispatch [::state/open-students-list])}
+                              (merge add-button-props
+                                     {:text     "Add Student"
+                                      :on-click #(re-frame/dispatch [::state/open-add-student-form])})]}
+                   {:text       "Students Activities"
+                    :icon       "games"
+                    :counter    students
+                    :background "blue-2"
+                    :actions    [{:text     "Students Activities"
+                                  :on-click #(re-frame/dispatch [::state/open-students-activities])}]}
+                   {:text       (:name class-course)
+                    :icon       "courses"
+                    :background "green-2"
+                    :actions [{:text     "Manage Course"
+                               :on-click #(re-frame/dispatch [::state/open-assign-course-form])}]}]}])
+
+(defn- default-counter
+  [students teachers class-course]
+  [counter {:data [{:text    "Teachers"
+                    :icon    "teachers"
+                    :counter teachers
+                    :actions [{:text     "Manage Teachers"
+                               :on-click  #(re-frame/dispatch [::state/open-teachers-list])}
+                              (merge add-button-props
+                                     {:text     "Add Teacher"
+                                      :on-click #(re-frame/dispatch [::state/open-add-teacher-form])})]}
+                   {:text    "Students"
+                    :icon    "students"
+                    :counter students
+                    :actions [{:text     "Manage Students"
+                               :on-click  #(re-frame/dispatch [::state/open-students-list])}
+                              (merge add-button-props
+                                     {:text     "Add Student"
+                                      :on-click #(re-frame/dispatch [::state/open-add-student-form])})]}
+                   {:text       "Students Activities"
+                    :icon       "games"
+                    :counter    students
+                    :background "blue-2"
+                    :actions    [{:text     "Students Activities"
+                                  :on-click #(re-frame/dispatch [::state/open-students-activities])}]}
+                   {:text       (:name class-course)
+                    :icon       "courses"
+                    :background "green-2"
+                    :actions    [{:text     "Manage Course"
+                                  :on-click #(re-frame/dispatch [::state/open-assign-course-form])}]}]}])
 
 (defn- class-counter
   []
   (let [{:keys [students teachers]} @(re-frame/subscribe [::state/class-stats])
-        courses @(re-frame/subscribe [::state/school-courses-number])
         class-course @(re-frame/subscribe [::state/class-course])
         readonly? @(re-frame/subscribe [::state/readonly?])
-        handle-add-student-click #(re-frame/dispatch [::state/open-add-student-form])
-        handle-manage-students-click #(re-frame/dispatch [::state/open-students-list])
-        handle-add-teacher-click #(re-frame/dispatch [::state/open-add-teacher-form])
-        handle-manage-teachers-click #(re-frame/dispatch [::state/open-teachers-list])
-        handle-manage-courses-click #(re-frame/dispatch [::state/open-assign-course-form])
-        handle-student-activities-click #(re-frame/dispatch [::state/open-students-activities])
-        add-button-props {:color      "blue-1"
-                          :chip       "plus"
-                          :chip-color "yellow-1"}]
-    [counter {:data [{:text    "Teachers"
-                      :icon    "teachers"
-                      :counter teachers
-                      :actions [{:text     "Manage Teachers"
-                                 :on-click handle-manage-teachers-click}
-                                (when-not readonly?
-                                  (merge add-button-props
-                                         {:text     "Add Teacher"
-                                          :on-click handle-add-teacher-click}))]}
-                     {:text    "Students"
-                      :icon    "students"
-                      :counter students
-                      :actions [{:text     "Manage Students"
-                                 :on-click handle-manage-students-click}
-                                (when-not readonly?
-                                  (merge add-button-props
-                                         {:text     "Add Student"
-                                          :on-click handle-add-student-click}))]}
-                     {:text       "Students Activities"
-                      :icon       "games"
-                      :counter    students
-                      :background "blue-2"
-                      :actions    [{:text     "Students Activities"
-                                    :on-click handle-student-activities-click}]}
-                     {:text       (:name class-course)
-                      :icon       "courses"
-                      :background "green-2"
-                      :counter    courses
-                      :actions    (when-not readonly?
-                                    [{:text     "Manage Courses"
-                                      :on-click handle-manage-courses-click}])}]}]))
+        personal? @(re-frame/subscribe [::state/personal?])]
+    (cond
+      readonly? [readonly-counter students teachers class-course]
+      personal? [personal-counter students teachers class-course]
+      :else [default-counter students teachers class-course])))
 
 (defn- statistics
   []
