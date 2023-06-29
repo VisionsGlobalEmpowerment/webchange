@@ -18,7 +18,11 @@
             width: 215px;
             height: 120px;
 
-            border: 1px solid bbs--color(blue-2);
+	    border: 1px solid bbs--color(blue-2);
+	    
+	    &.preview-assessment {
+		border: 3px solid bbs--color(yellow-2);
+	    }
         }
 
         .data {

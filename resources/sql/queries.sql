@@ -347,7 +347,7 @@ WHERE id = :id
 -- :name edit-scene! :! :n
 -- :doc updates an existing scene record
 UPDATE scenes
-SET name = :name, lang = :lang, metadata = :metadata
+SET name = :name, lang = :lang, metadata = :metadata, assessment = :assessment
 WHERE id = :id
 
 -- :name update-scene-status! :! :n

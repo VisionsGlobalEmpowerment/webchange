@@ -27,6 +27,16 @@
                 :type      "int"
                 :on-change on-change}]))
 
+(defn- assessments-switcher
+  []
+  (let [show-only-assessments? @(re-frame/subscribe [::state/show-only-assessments?])
+        handle-change #(re-frame/dispatch [::state/set-show-only-assessments (not show-only-assessments?)])]
+    [ui/switch {:label      "Only Assessments"
+                :checked?   show-only-assessments?
+                :on-change  handle-change
+                :color      "yellow-1"
+                :class-name "show-global-selector"}]))
+
 (defn- progress-list-item
   [{:keys [id access-code name progress]}]
   (let [handle-click #(re-frame/dispatch [::state/open-student-profile-page id])]
@@ -35,9 +45,12 @@
                    :description      access-code
                    :on-click         handle-click
                    :class-name--name "student-name"}
-     (for [{:keys [last-played score time-spent unique-id]} progress]
+     (for [{:keys [last-played score-value score time-spent unique-id]} progress]
        ^{:key unique-id}
-       [ui/complete-progress {:value   score
+       [ui/complete-progress {:value   score-value
+                              :started? (some? time-spent)
+                              :completed? (some? score)
+                              :score score
                               :caption last-played
                               :text    time-spent}])]))
 
@@ -88,11 +101,14 @@
                                                   :label   "Students"}]
                                       :info     [{:key   "Course Name"
                                                   :value (or course-name "")}]
-                                      :controls [[level-picker]
+                                      :controls [[assessments-switcher]
+                                                 [level-picker]
                                                  [lesson-picker]]
+                                      
                                       :actions  (when-not readonly?
                                                   [{:text     "Add Student"
                                                     :icon     "plus"
-                                                    :on-click handle-add-click}])}}
+                                                    :on-click handle-add-click}])
+                                      }}
        [activities-list]
        [progress-list]])))

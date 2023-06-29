@@ -83,6 +83,17 @@
       [ui/switch {:checked?  animations-on
                   :on-change #(re-frame/dispatch [::state/set-animations-on %])}]]]))
 
+(defn- assessment-settings
+  []
+  (let [is-assessment @(re-frame/subscribe [::state/is-assessment])]
+    [:div.settings-item
+     [:div.settings-item-header
+      "Assessment Settings"]
+     [:div.option-group
+      [ui/input-label "Assessment?"]
+      [ui/switch {:checked?  is-assessment
+                  :on-change #(re-frame/dispatch [::state/set-is-assessment %])}]]]))
+
 (defn- activity-settings-panel
   []
   (let [activity-name-value @(re-frame/subscribe [::state/activity-name])
@@ -207,7 +218,8 @@
         [activity-settings])
       [create-preview-image]
       [guide-settings]
-      [animations-settings]]
+      [animations-settings]
+      [assessment-settings]]
      [ui/button {:class-name "apply-button"
                  :shape      "rounded"
                  :loading?   saving?

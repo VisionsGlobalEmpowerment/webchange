@@ -37,8 +37,18 @@
   []
   (let [show-my-global? @(re-frame/subscribe [::state/show-my-global?])
         handle-change #(re-frame/dispatch [::state/set-show-global (not show-my-global?)])]
-    [ui/switch {:label      "Show My Global"
+    [ui/switch {:label      "My Global"
                 :checked?   show-my-global?
+                :on-change  handle-change
+                :color      "yellow-1"
+                :class-name "show-global-selector"}]))
+
+(defn- assessments-switcher
+  []
+  (let [show-only-assessments? @(re-frame/subscribe [::state/show-only-assessments?])
+        handle-change #(re-frame/dispatch [::state/set-show-only-assessments (not show-only-assessments?)])]
+    [ui/switch {:label      "Only Assessments"
+                :checked?   show-only-assessments?
                 :on-change  handle-change
                 :color      "yellow-1"
                 :class-name "show-global-selector"}]))
@@ -87,6 +97,7 @@
                                       :icon-color "blue-2"
                                       :controls   [[activity-type-selector]
                                                    [my-global-switcher]
+                                                   [assessments-switcher]
                                                    [language-selector]]}}
        (if group-selected?
          [select-activity]

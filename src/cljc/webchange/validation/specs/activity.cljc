@@ -46,4 +46,4 @@
 (s/def ::template-options map?)
 (s/def ::update-template (s/keys :req-un [::update]))
 (s/def ::template-action (s/keys :req-un [::common-action? ::action ::data]))
-(s/def ::update-settings (s/keys :req-un [::activity-settings ::preview ::guide-settings ::animation-settings]))
+(s/def ::update-settings (s/keys :req-un [::activity-settings ::preview ::guide-settings ::animation-settings ::assessment-settings]))

@@ -27,6 +27,7 @@
     (let [{:keys [name lang preview metadata]} activity-info
           guide-settings (get-in activity-data [:metadata :guide-settings])
           animation-settings (get-in activity-data [:metadata :animation-settings])
+          assessment-settings (get-in activity-data [:metadata :assessment-settings])
           flipbook? (flipbook-activity? activity-data)]
       {:db (-> db
                (assoc :panel :main-settings)
@@ -36,6 +37,7 @@
                                           :metadata metadata})
                (assoc :guide-settings guide-settings)
                (assoc :animation-settings animation-settings)
+               (assoc :assessment-settings assessment-settings)
                (assoc :flipbook? flipbook?))})))
 
 (re-frame/reg-sub
@@ -258,7 +260,8 @@
                 {:data {:preview            (:preview db)
                         :activity-settings  (:activity-settings db)
                         :guide-settings     (:guide-settings db)
-                        :animation-settings (:animation-settings db)}}
+                        :animation-settings (:animation-settings db)
+                        :assessment-settings (:assessment-settings db)}}
                 {:on-success [::apply-success]
                  :on-failure [::apply-failure]}]}))
 
@@ -312,6 +315,18 @@
   (fn [{:keys [db]} [_ value]]
     {:db (assoc-in db [:animation-settings :idle-animation-enabled?] value)}))
 
+
+(re-frame/reg-sub
+  ::is-assessment
+  :<- [path-to-db]
+  (fn [db]
+    (get-in db [:assessment-settings :is-assessment] false)))
+
+(re-frame/reg-event-fx
+  ::set-is-assessment
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc-in db [:assessment-settings :is-assessment] value)}))
 
 ;; Book preview
 

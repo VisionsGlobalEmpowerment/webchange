@@ -281,6 +281,10 @@
   [scene-data data]
   (update-animation-settings scene-data data))
 
+(defn- update-assessment-settings
+  [scene-data data]
+  (update-in scene-data [:metadata :assessment-settings] merge data))
+
 (defn update-guide-settings
   [scene-data guide-settings-patch]
   (-> scene-data
@@ -302,4 +306,5 @@
     :add-anchor (add-anchor scene-data)
     :remove-anchor (common-actions-utils/remove-anchor scene-data data)
     :set-animation-settings (set-animation-settings scene-data data)
-    :set-guide-settings (update-guide-settings scene-data data)))
+    :set-guide-settings (update-guide-settings scene-data data)
+    :set-assessment-settings (update-assessment-settings scene-data data)))

@@ -90,7 +90,7 @@
     (str "Drop new " (:type data) " here")]])
 
 (defn- activities-list-item
-  [{:keys [id idx name preview level-idx lesson-idx placeholder? activity-name]}]
+  [{:keys [id idx name preview assessment level-idx lesson-idx placeholder? activity-name]}]
   (r/with-let [edit-form-opened? (r/atom false)]
     (let [handle-play-click #(re-frame/dispatch [::state/preview-activity id])
           handle-remove-activity #(re-frame/dispatch [::state/remove-activity level-idx lesson-idx idx])
@@ -107,7 +107,8 @@
         [ui/list-item {:name       name
                        :pre        [ui/image {:src        preview
                                               :class-name "item-image"}]
-                       :class-name "activities-list-item"}]
+                       :class-name (ui/get-class-name {"activities-list-item" true
+                                                       "activities-list-item-assessment" assessment})}]
         [draggable {:data          {:type     "activity"
                                     :level    level-idx
                                     :lesson   lesson-idx
@@ -117,7 +118,8 @@
          [ui/list-item {:name       (or name activity-name)
                         :pre        [ui/image {:src        preview
                                                :class-name "item-image"}]
-                        :class-name "activities-list-item"
+                        :class-name (ui/get-class-name {"activities-list-item" true
+                                                        "activities-list-item-assessment" assessment})
                         :controls   [:div
                                      (when @edit-form-opened?
                                        [ui/input {:value       activity-name
@@ -302,6 +304,32 @@
         [pagination (merge pagination-state
                            {:on-click handle-page-button-click})])]]))
 
+(defn- available-assessments-list
+  []
+  (let [filter @(re-frame/subscribe [::state/available-activities-filter])
+        handle-filter-change #(re-frame/dispatch [::state/set-available-activities-filter %])
+        handle-back-click #(re-frame/dispatch [::state/open-course-info])
+        available-activities @(re-frame/subscribe [::state/paged-assessments])
+        pagination-state @(re-frame/subscribe [::state/pagination-state])
+        handle-page-button-click #(re-frame/dispatch [::state/set-current-page %])]
+    [page/side-bar {:title         "Add Assessment"
+                    :icon          "arrow-left"
+                    :icon-color    "blue-1"
+                    :on-icon-click handle-back-click}
+     [:div.available-activities
+      [ui/input {:value       filter
+                 :on-change   handle-filter-change
+                 :placeholder "search"
+                 :icon        "search"
+                 :class-name  "search"}]
+      [:div.available-activities-list
+       (for [{:keys [id] :as activity} available-activities]
+         ^{:key id}
+         [available-activities-list-item activity])]
+      (when (> (:total pagination-state) 1)
+        [pagination (merge pagination-state
+                           {:on-click handle-page-button-click})])]]))
+
 (defn- actions-list-item
   [{:keys [icon text data on-click]}]
   (if (some? data)
@@ -318,7 +346,8 @@
 (defn- add-content-actions
   []
   (let [course-locked? @(re-frame/subscribe [::state/locked?])
-        handle-activities-click #(re-frame/dispatch [::state/open-available-activities])]
+        handle-activities-click #(re-frame/dispatch [::state/open-available-activities])
+        handle-assessments-click #(re-frame/dispatch [::state/open-available-assessments])]
     (when-not course-locked?
       [:<>
        [ui/info "Drag over a level, lesson or activity to the left in the spot where you'd like to add."]
@@ -335,7 +364,10 @@
                            :data {:type   "activity-placeholder"}}]
        [actions-list-item {:icon     "games"
                            :text     "Add Activity"
-                           :on-click handle-activities-click}]])))
+                           :on-click handle-activities-click}]
+       [actions-list-item {:icon     "games"
+                           :text     "Add Assessment"
+                           :on-click handle-assessments-click}]])))
 
 (defn- duplicate-course
   []
@@ -385,6 +417,7 @@
   (let [content @(re-frame/subscribe [::state/side-bar-content])]
     (case content
       :available-activities [available-activities-list]
+      :available-assessments [available-assessments-list]
       [main-form props])))
 
 (defn- header

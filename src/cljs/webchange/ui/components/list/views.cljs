@@ -4,7 +4,6 @@
     [webchange.ui.components.avatar.views :refer [avatar]]
     [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.chip.views :refer [chip]]
-    [webchange.ui.components.complete-progress.views :refer [complete-progress]]
     [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- item-avatar

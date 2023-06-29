@@ -96,22 +96,27 @@
     (:data latest-version)))
 
 (defn- ->scene-list-item
-  [{:keys [id name image-src]}]
+  [{:keys [id name image-src assessment]}]
   {:id      id
    :name    name
-   :preview image-src})
+   :preview image-src
+   :assessment assessment})
+
+(defn- with-scene-list
+  [course course-id]
+  (let [scene-list (->> (db/scene-list {:course_id course-id})
+                        (map ->scene-list-item)
+                        (map (juxt :id identity))
+                        (into {}))]
+    (merge course {:scene-list scene-list})))
 
 (defn get-course-data
   [course-slug]
   (let [{course-id :id} (db/get-course {:slug course-slug})
         course (if (contains? hardcoded course-slug)
                  (scene/get-course course-slug)
-                 (get-course-latest-version course-slug))
-        scene-list (->> (db/scene-list {:course_id course-id})
-                        (map ->scene-list-item)
-                        (map (juxt :id identity))
-                        (into {}))]
-    (merge course {:scene-list scene-list})))
+                 (get-course-latest-version course-slug))]
+    (with-scene-list course course-id)))
 
 (defn- get-scene-skills
   [scene-id]
@@ -813,7 +818,9 @@
         latest-version (db/get-latest-course-version {:course_id course-id})]
     {:id   course-id
      :name course-name
-     :data (:data latest-version)}))
+     :data (-> latest-version
+               :data
+               (with-scene-list course-id))}))
 
 (defn- ->activity-info
   [{:keys [image-src] :as scene-data}]
@@ -902,13 +909,15 @@
 
 (defn edit-activity
   [activity-id {:keys [metadata] :as data}]
-  (let [current-metadata (-> (db/get-scene-by-id {:id activity-id}) :metadata)
+  (let [current-data (db/get-scene-by-id {:id activity-id})
+        current-metadata (-> current-data :metadata)
         prepared-data (db/transform-keys-one-level ->snake_case_keyword data)
         updated-at (jt/local-date-time)]
     (db/edit-scene! (assoc prepared-data
                            :id activity-id
                            :updated_at updated-at
-                           :metadata (merge current-metadata metadata)))
+                           :metadata (merge current-metadata metadata)
+                           :assessment (:assessment current-data)))
     (merge data {:id activity-id})))
 
 (defn archive-activity
@@ -1119,7 +1128,7 @@
      :data        activity}))
 
 (defn update-activity-settings!
-  [activity-id {:keys [activity-settings preview animation-settings guide-settings]} owner-id]
+  [activity-id {:keys [activity-settings preview animation-settings guide-settings assessment-settings]} owner-id]
   (let [created-at (jt/local-date-time)
         activity-info (db/get-scene-by-id {:id activity-id})
         scene-data (-> (get-activity-current-version activity-id)
@@ -1128,11 +1137,15 @@
                                                                  :data           animation-settings})
                        (templates/update-activity-from-template {:action         "set-guide-settings"
                                                                  :common-action? true
-                                                                 :data           guide-settings}))]
+                                                                 :data           guide-settings})
+                       (templates/update-activity-from-template {:action         "set-assessment-settings"
+                                                                 :common-action? true
+                                                                 :data           assessment-settings}))]
     (db/edit-scene! {:id       activity-id
                      :metadata (merge (:metadata activity-info) (:metadata activity-settings))
                      :name     (:name activity-settings)
-                     :lang     (:lang activity-settings)})
+                     :lang     (:lang activity-settings)
+                     :assessment (:is-assessment assessment-settings)})
     (db/update-scene-image! {:id        activity-id
                              :image_src preview})
     (db/save-scene! {:scene_id    activity-id

@@ -102,7 +102,8 @@
         try-again-dialog (str action-name "-tray-again-dialog")
         highlight-correct (str action-name "-highlight-correct")
         highlight-incorrect (str action-name "-highlight-incorrect")
-        highlight-default (str action-name "-highlight-default")]
+        highlight-default (str action-name "-highlight-default")
+        on-finish (str action-name "-finish-question")]
     {:actions {(keyword action-name)         {:type     "test-var-scalar"
                                               :var-name "check-button-enabled"
                                               :value    true
@@ -120,6 +121,7 @@
                                                                      {:type    "question-check"
                                                                       :id      question-id
                                                                       :answer  correct-answers
+                                                                      :finish  on-finish
                                                                       :success on-correct
                                                                       :fail    on-wrong}])
 
@@ -151,7 +153,10 @@
                (keyword on-correct)          {:type "sequence-data"
                                               :data [{:type "action" :id on-correct-sound}
                                                      {:type "action" :id on-correct-dialog}
-                                                     {:type "action" :id hide-question-name}
+                                                     {:type "action" :id on-finish}]}
+               
+               (keyword on-finish)           {:type "sequence-data"
+                                              :data [{:type "action" :id hide-question-name}
                                                      {:type "finish-flows" :tag question-id}]}
 
                (keyword on-correct-dialog)   {:type               "sequence-data"
@@ -231,25 +236,6 @@
 
                        {:type      "dialog"
                         :action-id (keyword try-again-dialog)}]}}))
-
-(defn- add-finish-dialog
-  [{:keys [action-name hide-question-name question-id]}]
-  (let [dialog-name (str action-name "-dialog")]
-    {:actions {(keyword action-name) {:type "sequence-data"
-                                      :data [{:type "empty" :duration 500}
-                                             {:type "action" :id dialog-name}
-                                             {:type "action" :id hide-question-name}
-                                             {:type "finish-flows" :tag question-id}]}
-               (keyword dialog-name) {:type               "sequence-data"
-                                      :data               [{:type "sequence-data"
-                                                            :data [{:type "empty" :duration 0}
-                                                                   {:type        "animation-sequence"
-                                                                    :phrase-text ""
-                                                                    :audio       nil}]}]
-                                      :phrase-description "Finish dialog"
-                                      :editor-type        "dialog"}}
-     :track   {:nodes [{:type      "dialog"
-                        :action-id (keyword dialog-name)}]}}))
 
 (defn- option-names->values
   [options]
@@ -398,7 +384,8 @@
                                                                                       {:type "show-guide"}
                                                                                       {:type     "set-variable" :var-name "tap-instructions-prev"
                                                                                        :from-var [{:var-name "tap-instructions-action", :action-property "var-value"}]}
-                                                                                      {:type "set-variable" :var-name "tap-instructions-action" :var-value task-dialog-name}]}
+                                                                                      {:type "set-variable" :var-name "tap-instructions-action" :var-value task-dialog-name}
+                                                                                      {:type "reset-question-attempt"}]}
                                                  (keyword hide-question-name) {:type "sequence-data"
                                                                                :data [{:type       "set-attribute"
                                                                                        :target     object-name

@@ -24,6 +24,12 @@
 ;; Activities Data
 
 (re-frame/reg-sub
+  ::show-only-assessments?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :show-only-assessments? false)))
+
+(re-frame/reg-sub
   ::show-my-global?
   :<- [path-to-db]
   (fn [db]
@@ -62,9 +68,10 @@
   :<- [path-to-db]
   :<- [::selected-type]
   :<- [::show-my-global?]
+  :<- [::show-only-assessments?]
   :<- [::search-string]
   :<- [::current-language]
-  (fn [[db selected-type show-my-global search-string current-language]]
+  (fn [[db selected-type show-my-global show-only-assessments search-string current-language]]
     (let [current-user-id (get-in db [:current-user :id])
           activities (if (= selected-type :visible)
                        (:visible-activities db)
@@ -76,6 +83,7 @@
                (not show-my-global) (remove #(and
                                               (= (:status %) "visible")
                                               (= (:owner-id %) current-user-id)))
+               show-only-assessments (filter #(:assessment %))
                (-> search-string seq) (filter-by-search search-string)
                :always (map #(assoc % :template-id (-> % :metadata :template-id)))
                :always (sort-by :name)))))
@@ -224,6 +232,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (assoc db :show-my-global? value)}))
+
+(re-frame/reg-event-fx
+  ::set-show-only-assessments
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-only-assessments? value)}))
 
 (re-frame/reg-event-fx
   ::open-activity

@@ -177,6 +177,17 @@
   :<- [::pagination-state]
   (fn [[available-activities pagination]]
     (->> available-activities
+         (remove #(:assessment %))
+         (drop (* page-size (dec (:current pagination))))
+         (take page-size))))
+
+(re-frame/reg-sub
+  ::paged-assessments
+  :<- [::available-activities]
+  :<- [::pagination-state]
+  (fn [[available-activities pagination]]
+    (->> available-activities
+         (filter #(:assessment %))
          (drop (* page-size (dec (:current pagination))))
          (take page-size))))
 
@@ -199,6 +210,12 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     {:db (set-side-bar-content db :available-activities)}))
+
+(re-frame/reg-event-fx
+  ::open-available-assessments
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (set-side-bar-content db :available-assessments)}))
 
 (re-frame/reg-sub
   ::side-bar-content
@@ -467,3 +484,6 @@
   (fn [{:keys [_]} [_ duplicated-course]]
     (let [course-slug (:slug duplicated-course)]
       {:dispatch [::routes/redirect :course-edit :course-slug course-slug]})))
+
+(comment
+  @(re-frame/subscribe [::activities-library]))

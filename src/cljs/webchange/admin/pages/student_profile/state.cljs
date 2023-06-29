@@ -151,7 +151,7 @@
   [activity-data activity-progress course]
   (let [{:keys [scene-id unique-id]} activity-data
         {:keys [name]} (get-in course [:data :scene-list (-> scene-id str keyword)])]
-    (merge (get activity-progress unique-id {:score 0})
+    (merge (get activity-progress unique-id {:score-value 0})
            {:name      name
             :unique-id unique-id})))
 
@@ -160,8 +160,10 @@
   :<- [::student-progress]
   :<- [::current-level]
   (fn [[{:keys [activity-stats course]} current-level-idx]]
-    (let [activity-progress (reduce (fn [result {:keys [unique-id]}]
-                                      (assoc result unique-id {:score 100}))
+    (let [activity-progress (reduce (fn [result {:keys [data unique-id]}]
+                                      (assoc result unique-id {:score-value 100
+                                                               :score (:score data)
+                                                               :time-spent (:time-spent data)}))
                                     {}
                                     activity-stats)
 
@@ -262,3 +264,8 @@
     (let [{:keys [on-edit-finished]} (:params db)]
       {:dispatch-n (cond-> [[::set-student-form-editable false]]
                            (some? on-edit-finished) (conj on-edit-finished))})))
+
+(comment
+  (-> @(re-frame/subscribe [::progress-data]))
+  (-> @(re-frame/subscribe [::student-progress])
+      :activity-stats))

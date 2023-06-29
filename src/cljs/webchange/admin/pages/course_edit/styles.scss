@@ -113,6 +113,10 @@
             overflow: hidden;
             margin-right: 35px;
         }
+
+	&.activities-list-item-assessment {
+	    border: 2px solid bbs--color(yellow-2);
+	}
     }
 
     .empty-list-placeholder {

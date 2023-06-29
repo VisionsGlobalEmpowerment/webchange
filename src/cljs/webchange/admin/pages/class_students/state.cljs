@@ -4,6 +4,7 @@
     [re-frame.std-interceptors :as i]
     [webchange.admin.routes :as routes]
     [webchange.state.warehouse :as warehouse]
+    [webchange.progress.activity :as activity]
     [webchange.utils.date :refer [date-str->locale-date ms->duration]]))
 
 (def path-to-db :page/class-students)
@@ -95,9 +96,10 @@
 
 (defn- progress->progress-data
   [{:keys [data unique-id]}]
-  (let [{:keys [last-played time-spent]} data]
+  (let [{:keys [last-played time-spent score]} data]
     {:last-played (date-str->locale-date last-played)
-     :score       100
+     :score-value 100
+     :score       score
      :time-spent  (ms->duration time-spent)
      :unique-id   unique-id}))
 
@@ -121,7 +123,7 @@
                                               :name        (user->user-name user)
                                               :progress    (->> activities-list
                                                                 (map (fn [unique-id]
-                                                                       [unique-id {:score     0
+                                                                       [unique-id {:score-value 0
                                                                                    :unique-id unique-id}]))
                                                                 (into {}))}]))
                              (into {}))
@@ -202,14 +204,18 @@
   :<- [::course-data]
   :<- [::current-level]
   :<- [::current-lesson]
-  (fn [[course current-level current-lesson]]
-    (-> course
-        :data
-        :levels
-        (get current-level)
-        :lessons
-        (get current-lesson)
-        :activities)))
+  :<- [::show-only-assessments?]
+  (fn [[course current-level current-lesson only-assessments?]]
+    (let [levels (-> course :data :levels)
+          all-activities (activity/flatten-active-activities levels)
+          with-assessment-data (fn [{:keys [scene-id] :as activity}]
+                                 (assoc activity :assessment (get-in course [:data :scene-list (-> scene-id str keyword) :assessment])))]
+      (if only-assessments?
+        (->> all-activities
+             (map with-assessment-data)
+             (filter #(:assessment %)))
+        (->> all-activities
+             (filter #(and (= current-level (:level %)) (= current-lesson (:lesson %)))))))))
 
 (re-frame/reg-event-fx
   ::open-student
@@ -234,3 +240,21 @@
   (fn [{:keys [db]} [_ student-id]]
     (let [school-id (:school-id db)]
       {:dispatch [::routes/redirect :student-profile :school-id school-id :student-id student-id]})))
+
+(re-frame/reg-sub
+  ::show-only-assessments?
+  :<- [path-to-db]
+  (fn [db]
+    (get db :show-only-assessments? false)))
+
+(re-frame/reg-event-fx
+  ::set-show-only-assessments
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-only-assessments? value)}))
+
+(comment
+  (-> @(re-frame/subscribe [::course-data])
+      :data
+      :scene-list)
+  (-> @(re-frame/subscribe [::students-progress])))

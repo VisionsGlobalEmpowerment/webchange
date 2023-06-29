@@ -6,6 +6,8 @@
     background-color: bbs--color(grey-5);
     border-radius: 6px;
 
+    color: bbs--color(white);
+
     .bbs--complete-progress--data {
         display: flex;
         align-items: center;
@@ -21,12 +23,7 @@
 
     .bbs--complete-progress--progress {
         @include bbs--noto-14-b;
-        color: bbs--color(white);
         padding-left: 10px;
-
-        &:after {
-            content: "%";
-        }
     }
 
     .bbs--complete-progress--value {
@@ -38,7 +35,6 @@
 
     .bbs--complete-progress--text-block {
         @include bbs--noto-12-b;
-        color: bbs--color(white);
 
         .bbs--complete-progress--caption {
             @include bbs--noto-11-r;
@@ -47,7 +43,6 @@
 
     .bbs--complete-progress--not-started {
         @include bbs--noto-12-r;
-        color: bbs--color(grey-2);
     }
 
     .bbs--complete-progress--complete-icon {
@@ -78,5 +73,21 @@
 
     &.bbs--complete-progress--value-empty .bbs--complete-progress--value {
         display: none;
+    }
+
+    &.bbs--complete-progress--value-empty {
+	color: bbs--color(grey-2);
+    }
+    
+    &.bbs--complete-progress--value-high {
+	color: bbs--color(grey-2);
+    }
+
+    &.bbs--complete-progress--value-mid {
+	color: bbs--color(grey-2);
+    }
+
+    &.bbs--complete-progress--value-low {
+	color: bbs--color(grey-2);
     }
 }

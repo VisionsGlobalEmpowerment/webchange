@@ -3,14 +3,15 @@
     [webchange.ui.index :as ui]))
 
 (defn- activities-list-item
-  [{:keys [id name preview on-click on-edit-click library-type]}]
+  [{:keys [id name preview assessment on-click on-edit-click library-type]}]
   (let [handle-card-click #(on-click id)
         handle-edit-click #(do (.stopPropagation %)
                                (on-edit-click id))]
     [:div {:class-name "activities-list-item"
            :on-click   handle-card-click}
      [ui/image {:src        preview
-                :class-name "preview"
+                :class-name (ui/get-class-name {"preview" true
+                                                "preview-assessment" assessment})
                 :lazy?      true}]
      (when library-type
        [ui/icon {:class-name "global-icon"

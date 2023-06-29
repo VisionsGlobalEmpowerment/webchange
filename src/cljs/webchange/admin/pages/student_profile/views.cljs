@@ -36,9 +36,12 @@
 (defn- progress-list-item
   [{:keys [name progress]}]
   [ui/list-item {:name name}
-   (for [{:keys [name score unique-id]} progress]
+   (for [{:keys [name score-value score time-spent unique-id]} progress]
      ^{:key unique-id}
-     [ui/complete-progress {:value   score
+     [ui/complete-progress {:value   score-value
+                            :started? (some? time-spent)
+                            :completed? (some? score)
+                            :score score
                             :caption name}])])
 
 (defn- progress-list

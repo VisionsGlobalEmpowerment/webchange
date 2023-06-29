@@ -39,7 +39,7 @@
 (e/reg-simple-executor :question-highlight ::execute-question-highlight)
 (e/reg-simple-executor :question-count-answers ::execute-question-count-answers)
 (e/reg-simple-executor :question-arrange ::execute-question-arrange)
-
+(e/reg-simple-executor :reset-question-attempt ::execute-reset-question-attempt)
 
 (re-frame/reg-event-fx
   ::execute-copy-current-user-to-variable
@@ -630,32 +630,61 @@
     {:dispatch (e/success-event action)}))
 
 (re-frame/reg-event-fx
+  ::execute-reset-question-attempt
+  [e/event-as-action e/with-vars]
+  (fn [{:keys [_db]} action]
+    (core/set-variable! :score-first-attempt true)
+    {:dispatch (e/success-event action)}))
+
+(re-frame/reg-event-fx
   ::execute-question-check
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [id answer] :as action}]
     (let [value1 (set (core/get-variable id))
-          value2 (set answer)]
-      (if (= value1 value2)
-        (e/cond-handler db action :success)
-        (e/cond-handler db action :fail)))))
+          value2 (set answer)
+          correct? (= value1 value2)
+          assessment? (-> (e/get-scene-data db)
+                          (get-in [:metadata :assessment-settings :is-assessment] false))
+          cond-action (cond
+                        assessment? :finish
+                        correct? :success
+                        :else :fail)]
+      (if correct?
+        (let [first-attempt? (core/get-variable :score-first-attempt)
+              counter-value (or (core/get-variable :score-correct) 0)]
+          (when first-attempt?
+            (core/set-variable! :score-correct (inc counter-value))
+            (core/set-variable! :score-first-attempt false)))
+        (let [first-attempt? (core/get-variable :score-first-attempt)
+              counter-value (or (core/get-variable :score-incorrect) 0)
+              counter-mistake (or (core/get-variable :score-mistake) 0)]
+          (when first-attempt?
+            (core/set-variable! :score-incorrect (inc counter-value))
+            (core/set-variable! :score-first-attempt false))
+          (core/set-variable! :score-mistake (inc counter-mistake))))
+      (e/cond-handler db action cond-action))))
 
 (re-frame/reg-event-fx
   ::execute-question-highlight
   [e/event-as-action e/with-vars]
   (fn [{:keys [db]} {:keys [id answer success fail] :as action}]
-    (let [current-value (set (core/get-variable id))
-          answer-value (set answer)
-          correct-values (clojure.set/intersection current-value answer-value)
-          incorrect-values (clojure.set/difference current-value answer-value)]
-      {:dispatch-n (concat (map (fn [correct-value]
-                                  [::e/execute-action (-> (e/get-action success db)
-                                                          (assoc :params {:value (option-value correct-value)}))])
-                                correct-values)
-                           (map (fn [incorrect-value]
-                                  [::e/execute-action (-> (e/get-action fail db)
-                                                          (assoc :params {:value (option-value incorrect-value)}))])
-                                incorrect-values)
-                           [(e/success-event action)])})))
+    (let [assessment? (-> (e/get-scene-data db)
+                          (get-in [:metadata :assessment-settings :is-assessment] false))]
+      (if assessment?
+        {:dispatch (e/success-event action)}
+        (let [current-value (set (core/get-variable id))
+              answer-value (set answer)
+              correct-values (clojure.set/intersection current-value answer-value)
+              incorrect-values (clojure.set/difference current-value answer-value)]
+          {:dispatch-n (concat (map (fn [correct-value]
+                                      [::e/execute-action (-> (e/get-action success db)
+                                                              (assoc :params {:value (option-value correct-value)}))])
+                                    correct-values)
+                               (map (fn [incorrect-value]
+                                      [::e/execute-action (-> (e/get-action fail db)
+                                                              (assoc :params {:value (option-value incorrect-value)}))])
+                                    incorrect-values)
+                               [(e/success-event action)])})))))
 
 (re-frame/reg-event-fx
   ::execute-question-count-answers
