@@ -353,21 +353,30 @@
     {:db (assoc db :uploading? false)}))
 
 (re-frame/reg-fx
-  :get-book-screenshot
-  (fn [{:keys [on-success on-failure]}]
-    (try
-      (let [cover-object (-> @collisions/objects (get "page-cover") :object)
-            shadow-object-name (decorations/crease-name 0)
-            shadow-object (-> @collisions/objects (get shadow-object-name) :object)
-            pages-object-name (decorations/right-pages-name 0)
-            pages-object (-> @collisions/objects (get pages-object-name) :object)]
-        (editor-state/hide-frames)
-        (utils/set-visibility shadow-object false)
-        (utils/set-visibility pages-object false)
-        (app/take-object-screenshot cover-object #(re-frame/dispatch (conj on-success %))))
-      (catch js/Error e
-        (when (some? on-failure)
-          (re-frame/dispatch (conj on-failure e)))))))
+ :get-book-screenshot
+ (fn [{:keys [on-success on-failure]}]
+   (try
+     (let [cover-object (-> @collisions/objects (get "page-cover") :object)
+           shadow-object-name (decorations/crease-name 0)
+           shadow-object (-> @collisions/objects (get shadow-object-name) :object)
+           pages-object-name (decorations/right-pages-name 0)
+           pages-object (-> @collisions/objects (get pages-object-name) :object)]
+       (editor-state/hide-frames)
+       (utils/set-visibility shadow-object false)
+       (utils/set-visibility pages-object false)
+       (app/take-object-screenshot cover-object #(re-frame/dispatch (conj on-success %))))
+     (catch js/Error e
+       (when (some? on-failure)
+         (re-frame/dispatch (conj on-failure e)))))))
+
+(re-frame/reg-event-fx
+  ::generate-translate-script
+  [(re-frame/inject-cofx :activity-info)]
+  (fn [{:keys [activity-info]} [_]]
+    (let [{:keys [id]} activity-info
+          link (str "/api/activities/" id "/generate-translate-script")]
+      (js/window.open link "_blank")
+      {})))
 
 (comment
   @(re-frame/subscribe [path-to-db]))

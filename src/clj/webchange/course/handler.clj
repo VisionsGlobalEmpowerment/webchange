@@ -4,8 +4,9 @@
     [clojure.string :as str]
     [clojure.tools.logging :as log]
     [compojure.api.sweet :refer [DELETE GET POST PUT api context defroutes swagger-routes]]
-    [ring.util.response :refer [redirect resource-response response]]
+    [ring.util.response :refer [redirect resource-response response header]]
     [ring.util.codec :refer [url-encode]]
+    [ring.util.io :refer [piped-input-stream]]
     [schema.core :as s]
     [webchange.assets.core :as assets]
     [webchange.auth.core :as auth]
@@ -15,6 +16,7 @@
     [webchange.common.hmac-sha256 :as sign]
     [webchange.course.core :as core]
     [webchange.course.skills :as skills]
+    [webchange.course.export :as export]
     [webchange.templates.core :as templates]
     [webchange.school.core :as school]
     [webchange.validation.specs.activity :as activity-spec]
@@ -643,4 +645,20 @@
     (let [user-id (current-user request)]
       (activity-owner-or-admin! request activity-id)
       (-> (core/update-activity-settings! activity-id data user-id)
-          response))))
+          response)))
+
+  (GET "/api/activities/:activity-id/generate-translate-script" request
+    :coercion :spec
+    :path-params [activity-id :- ::activity-spec/id]
+    (let [_user-id (current-user request)]
+      (activity-owner-or-admin! request activity-id)
+      (let [scene-info (core/get-activity activity-id)
+            scene-data (core/get-activity-current-version activity-id)
+            d (export/generate-translate-script scene-data scene-info)
+            is (piped-input-stream
+                (fn [output-stream]
+                  (.write d output-stream)
+                  output-stream))]
+        (-> (response is)
+            (header "Content-Type" "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            (header "Content-Disposition" (str "attachment; filename=\"" (:slug scene-info) ".docx\"")))))))

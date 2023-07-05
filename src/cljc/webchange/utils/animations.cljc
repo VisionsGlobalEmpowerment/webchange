@@ -1,5 +1,6 @@
 (ns webchange.utils.animations
   (:require
+    [clojure.string :as s]
     [webchange.utils.scene-data :as activity-data-utils]))
 
 (def action-animations {"go-to"   {:title               "Go to"
@@ -15,12 +16,17 @@
                                    :target-type                ["animation"]
                                    :target-required-animations ["take_item"]}})
 
+(defn ->display-name
+  [object-name]
+  (-> (or object-name "")
+      (s/replace "-" " ")
+      (s/capitalize)))
+
 (defn- object->display-name
   [activity-data object-name]
   (let [{:keys [scene-name]} (activity-data-utils/get-scene-object activity-data object-name)]
     (-> (or scene-name object-name)
-        (clojure.string/replace "-" " ")
-        (clojure.string/capitalize))))
+        (->display-name))))
 
 (defn action->display-name
   [{:keys [activity-data character target action]}]
@@ -37,4 +43,4 @@
 
 (defn emotion-animation?
   [animation-name]
-  (clojure.string/starts-with? animation-name "emotion_"))
+  (s/starts-with? animation-name "emotion_"))

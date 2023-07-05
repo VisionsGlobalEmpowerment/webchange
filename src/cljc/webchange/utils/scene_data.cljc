@@ -1,5 +1,6 @@
 (ns webchange.utils.scene-data
   (:require
+    [clojure.set :refer [difference]]
     [webchange.utils.list :refer [without-item]]
     [webchange.utils.log :refer [log]]
     [webchange.utils.scene-action-data :as action-data-utils]
@@ -487,3 +488,16 @@
     (if (some? current-music-src)
       (change-background-music scene-data current-music-src music-src)
       (add-background-music scene-data music-src))))
+
+(defn collect-untracked-actions
+  [activity-data]
+  (let [all-actions (->> (get-dialog-actions activity-data)
+                         (map clojure.core/name))
+        tracked-actions (->> (get-tracks activity-data)
+                             (map :nodes)
+                             (flatten)
+                             (filter #(= (:type %) "dialog"))
+                             (map :action-id))]
+    (->> (difference (set all-actions)
+                     (set tracked-actions))
+         (vec))))

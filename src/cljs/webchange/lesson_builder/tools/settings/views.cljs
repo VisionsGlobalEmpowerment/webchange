@@ -94,6 +94,16 @@
       [ui/switch {:checked?  is-assessment
                   :on-change #(re-frame/dispatch [::state/set-is-assessment %])}]]]))
 
+(defn- export-script
+  []
+  (let [generate-translate-script #(re-frame/dispatch [::state/generate-translate-script])]
+    [:div.settings-item
+     [:div.settings-item-header
+      "Export script"]
+     [:div.option-group
+      [ui/button {:on-click generate-translate-script}
+       "For Translation"]]]))
+
 (defn- activity-settings-panel
   []
   (let [activity-name-value @(re-frame/subscribe [::state/activity-name])
@@ -219,7 +229,8 @@
       [create-preview-image]
       [guide-settings]
       [animations-settings]
-      [assessment-settings]]
+      [assessment-settings]
+      [export-script]]
      [ui/button {:class-name "apply-button"
                  :shape      "rounded"
                  :loading?   saving?

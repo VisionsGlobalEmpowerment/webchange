@@ -50,19 +50,6 @@
 
 ;; dialogs
 
-(defn collect-untracked-actions
-  [activity-data]
-  (let [all-actions (->> (utils/get-dialog-actions activity-data)
-                         (map clojure.core/name))
-        tracked-actions (->> (utils/get-tracks activity-data)
-                             (map :nodes)
-                             (flatten)
-                             (filter #(= (:type %) "dialog"))
-                             (map :action-id))]
-    (->> (clojure.set/difference (set all-actions)
-                                 (set tracked-actions))
-         (vec))))
-
 (defn- sort-by-page-number
   [activity-data track-dialogs]
   (let [pages-data (flipbook-utils/get-pages-data activity-data)]
@@ -84,7 +71,7 @@
      (re-frame/subscribe [::state/flipbook?])])
   (fn [[current-track-idx activity-data flipbook?]]
     (let [current-track (utils/get-track-by-index activity-data current-track-idx)
-          untracked-actions (collect-untracked-actions activity-data)
+          untracked-actions (utils/collect-untracked-actions activity-data)
           track-dialogs (if (some? current-track)
                           (->> (:nodes current-track)
                                (filter (fn [{:keys [type]}]

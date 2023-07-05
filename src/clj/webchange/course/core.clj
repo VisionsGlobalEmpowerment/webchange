@@ -897,10 +897,12 @@
         updated-by-user (-> (db/get-latest-scene-version {:scene_id activity-id})
                             :owner-id
                             (get-activity-user))]
-    (assoc activity-info
-           :course-slug course-slug
-           :created-by-user created-by-user
-           :updated-by-user updated-by-user)))
+    (-> activity-info
+        (assoc 
+         :course-slug course-slug
+         :created-by-user created-by-user
+         :updated-by-user updated-by-user)
+        (update :slug #(or % (scene-slug (:name activity-info)))))))
 
 (defn- get-activity-info
   [activity-id]

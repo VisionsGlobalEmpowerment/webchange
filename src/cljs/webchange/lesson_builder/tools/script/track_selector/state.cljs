@@ -1,6 +1,5 @@
 (ns webchange.lesson-builder.tools.script.track-selector.state
   (:require
-    [clojure.set :refer [difference]]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.state :as state]
     [webchange.lesson-builder.tools.script.state :as script-state]
@@ -8,7 +7,7 @@
 
 (defn- available-tracks
   [activity-data]
-  (let [untracked-actions (script-state/collect-untracked-actions activity-data)]
+  (let [untracked-actions (utils/collect-untracked-actions activity-data)]
     (->> (cond-> (utils/get-tracks activity-data)
                  (seq untracked-actions) (conj {:title "Untracked"
                                                 :value nil}))

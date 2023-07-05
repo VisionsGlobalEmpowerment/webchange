@@ -58,7 +58,10 @@
                  [com.taoensso/tempura "1.2.1"]
                  [com.draines/postal "2.0.5"]
                  [hiccup "1.0.5"]
-                 [com.google.cloud/google-cloud-speech "4.2.0"]]
+                 [com.google.cloud/google-cloud-speech "4.2.0"]
+                 [org.apache.poi/poi "3.17"]
+                 [org.apache.poi/poi-ooxml "3.17"]
+                 [org.apache.poi/ooxml-schemas "1.3"]]
 
   :plugins [[lein-cooper "1.2.2"]
             [lein-environ "1.1.0"]
