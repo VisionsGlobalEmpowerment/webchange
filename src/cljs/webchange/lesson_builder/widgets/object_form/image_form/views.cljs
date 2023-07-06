@@ -14,7 +14,8 @@
 (defn- change-image-component
   [{:keys [on-change]}]
   (let [handle-change (fn [{:keys [url]}]
-                        (on-change {:src url}))]
+                        (when (fn? on-change)
+                          (on-change {:src url})))]
     [select-image {:hide-preview? true
                    :on-change     handle-change}]))
 
@@ -53,9 +54,11 @@
                                            :image-size false
                                            :visible    false})
 
-        handle-change #(when (fn? on-change)
-                         (on-change %)
-                         (add-asset {:url (:src %) :type "image" :size 1}))
+        handle-change (fn [image]
+                        (when (fn? on-change)
+                          (on-change image))
+                        (when (fn? add-asset)
+                          (add-asset {:url (:src image) :type "image" :size 1})))
         component-props (merge props
                                {:on-change handle-change})]
     [:div {:class-name (ui/get-class-name {"image-form" true
