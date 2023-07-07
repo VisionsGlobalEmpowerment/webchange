@@ -16,7 +16,8 @@
   []
   (-> "./docx/template.docx"
       (io/resource)
-      (io/input-stream)
+      (.openConnection)
+      (.getInputStream)
       (XWPFDocument.)))
 
 (defn- store-document
@@ -210,9 +211,7 @@
                             ["guide" "phrease 3" ""]])
     (store-document d "/tmp/test-document.docx"))
   
-  (docx/transform                     ;"/home/ikhaldeev/tmp/file.docx"
-   [{:type        :append-text
-     :replacement "Text paragraph."}])
+  (new-document)
 
   (let [f (CTVMerge$Factory/newInstance)]
     f)
