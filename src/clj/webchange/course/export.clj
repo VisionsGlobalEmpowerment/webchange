@@ -16,8 +16,7 @@
   []
   (-> "./docx/template.docx"
       (io/resource)
-      (.getPath)
-      (POIXMLDocument/openPackage)
+      (io/input-stream)
       (XWPFDocument.)))
 
 (defn- store-document
