@@ -14,7 +14,7 @@
 
 (defn- new-document
   []
-  (-> "./docx/template.docx"
+  (-> "docx/template.docx"
       (io/resource)
       (.openConnection)
       (.getInputStream)
