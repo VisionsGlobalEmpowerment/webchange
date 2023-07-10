@@ -108,15 +108,17 @@
       (apply-padding padding)))
 
 (defn create
-  [{:keys [image-name text-name value] :as option}
+  [{:keys [image-name text-name value option-type] :as option}
    {:keys [object-name x y width height question-id question-type correct-option? placeholders] :as props}
    data-names
    {:keys [highlight-correct-options?]
     :or   {highlight-correct-options? false}}]
   (let [image-option? (or (= question-type "multiple-choice-image")
                           (= question-type "thumbs-up-n-down")
-                          (= question-type "arrange-images"))
-        text-option? (= question-type "multiple-choice-text")
+                          (= question-type "arrange-images")
+                          (and (= question-type "multiple-choice-mix") (= option-type "image")))
+        text-option? (or (= question-type "multiple-choice-text")
+                         (and (= question-type "multiple-choice-mix") (= option-type "text")))
         mark-option? (= question-type "thumbs-up-n-down")
         sequence-option? (= question-type "arrange-images")
 

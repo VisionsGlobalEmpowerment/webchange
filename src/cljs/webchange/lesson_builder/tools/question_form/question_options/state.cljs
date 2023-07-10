@@ -9,6 +9,7 @@
 (def answers-number-key :answers-number)
 (def correct-answers-key :correct-answers)
 (def answers-sequence-key :answers-sequence)
+(def answers-types-key :answers-types)
 (def mark-options-key :mark-options)
 (def options-number-key :options-number)
 (def task-type-key :task-type)
@@ -42,6 +43,8 @@
       :value "multiple-choice-image"}
      {:text  "Multiple choice text"
       :value "multiple-choice-text"}
+     {:text  "Multiple choice mixed"
+      :value "multiple-choice-mix"}
      {:text  "Arrange Images"
       :value "arrange-images"}
      {:text  "Thumbs up & thumbs down"
@@ -76,7 +79,7 @@
   (fn [question-type]
     (let [task-types [{:text           "Text"
                        :value          "text"
-                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down" "arrange-images"]}
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "multiple-choice-mix" "thumbs-up-n-down" "arrange-images"]}
                       {:text           "Image"
                        :value          "image"
                        :question-types ["multiple-choice-text" "thumbs-up-n-down"]}
@@ -85,7 +88,7 @@
                        :question-types ["multiple-choice-text" "thumbs-up-n-down"]}
                       {:text           "Voice-over only"
                        :value          "voice-over"
-                       :question-types ["multiple-choice-image" "multiple-choice-text" "thumbs-up-n-down" "arrange-images"]}]]
+                       :question-types ["multiple-choice-image" "multiple-choice-text" "multiple-choice-mix" "thumbs-up-n-down" "arrange-images"]}]]
       (->> task-types
            (filter (fn [{:keys [question-types]}]
                      (some #{question-type} question-types)))
@@ -324,3 +327,43 @@
                         (assoc value-key {:value value
                                           :position idx}))]
       {:db (state/update-form-data db answers-sequence-key new-value)})))
+
+(re-frame/reg-sub
+  ::show-answer-types?
+  :<- [::question-type]
+  (fn [question-type]
+    (= question-type "multiple-choice-mix")))
+
+(re-frame/reg-sub
+  ::answers-types
+  :<- [::state/form-data]
+  :<- [::options-number]
+  (fn [[form-data options-number]]
+    (->> (range 1 (inc options-number))
+         (map (fn [number]
+                (let [value-key (-> (str "type-" number "-value") (keyword))
+                      value (get-in form-data [answers-types-key value-key])]
+                  {:idx number
+                   :value value}))))))
+
+(re-frame/reg-event-fx
+  ::set-answer-type
+  [(i/path state/path-to-db)]
+  (fn [{:keys [db]} [_ idx value]]
+    (let [value-key (-> (str "type-" idx "-value") (keyword))
+          new-value (-> (state/get-form-data db)
+                        (get answers-types-key {})
+                        (assoc value-key value))]
+      {:db (state/update-form-data db answers-types-key new-value)})))
+
+(re-frame/reg-sub
+  ::answers-type-options
+  (fn []
+    [{:text "Text"
+      :value "text"}
+     {:text "Image"
+      :value "image"}]))
+
+(comment
+  @(re-frame/subscribe [::state/form-data])
+  @(re-frame/subscribe [::answers-types]))

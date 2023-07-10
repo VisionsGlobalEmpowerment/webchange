@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.lesson-builder.components.check-list.views :refer [check-list]]
-    [webchange.lesson-builder.components.toolbox.views :refer [toolbox]]
     [webchange.lesson-builder.tools.question-form.question-options.state :as state]
     [webchange.ui.index :as ui]))
 
@@ -131,3 +130,20 @@
                       :options options
                       :on-change (partial handle-change idx)
                       :placeholder "Choose option"}])]])))
+
+(defn options-types
+  []
+  (let [answer-types @(re-frame/subscribe [::state/answers-types])
+        options @(re-frame/subscribe [::state/answers-type-options])
+        show? @(re-frame/subscribe [::state/show-answer-types?])
+        handle-change #(re-frame/dispatch [::state/set-answer-type %1 %2])]
+    (when show?
+      [control-group {:label "Answer types"}
+       [:div.correct-sequence
+        (for [{:keys [idx value]} answer-types]
+          ^{:key idx}
+          [ui/select {:value value
+                      :options options
+                      :on-change (partial handle-change idx)
+                      :placeholder "Choose option"}])]])))
+

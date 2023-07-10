@@ -2,6 +2,7 @@
   (:require
     [webchange.question.create-multiple-choice-image :as multiple-choice-image]
     [webchange.question.create-multiple-choice-text :as multiple-choice-text]
+    [webchange.question.create-multiple-choice-mix :as multiple-choice-mix]
     [webchange.question.create-arrange-images :as arrange-images]
     [webchange.question.create-thumbs-up-n-down :as thumbs-up-n-down]
     [webchange.question.get-question-data :refer [param-name->object-name]]
@@ -9,6 +10,7 @@
 
 (def question-types {"multiple-choice-image" multiple-choice-image/create
                      "multiple-choice-text"  multiple-choice-text/create
+                     "multiple-choice-mix"   multiple-choice-mix/create
                      "arrange-images"        arrange-images/create
                      "thumbs-up-n-down"      thumbs-up-n-down/create})
 

@@ -448,6 +448,14 @@
                                               (merge layout
                                                      {:options-items (get-options-layout--text options-container form-data)}))
                                nil)
+      "multiple-choice-mix" (case task-type
+                              "text" (let [{:keys [options-container] :as layout} (get-task-layout--text form-data layout-params)]
+                                       (merge layout
+                                              {:options-items (get-options-layout--image options-container form-data)}))
+                              "voice-over" (let [{:keys [options-container] :as layout} (get-task-layout--voice-over form-data layout-params)]
+                                             (merge layout
+                                                    {:options-items (get-options-layout--image options-container form-data)}))
+                              nil)
       "arrange-images" (case task-type
                          "text" (let [{:keys [options-container] :as layout} (get-task-layout--text form-data layout-params)]
                                   (merge layout
