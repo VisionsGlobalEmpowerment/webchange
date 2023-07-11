@@ -2,8 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    ;[webchange.lesson-builder.layout.state :as layout-state]
     [webchange.lesson-builder.stage-actions :as stage]
+    [webchange.lesson-builder.state :as lesson-builder-state]
     [webchange.utils.scene-data :refer [get-scene-background]]))
 
 (def path-to-db :lesson-builder/background-image)
@@ -150,7 +150,8 @@
   ::save
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_]]
-    {:dispatch [:layout/reset]}))
+    {:dispatch [::lesson-builder-state/save-activity
+                {:on-success [:layout/reset]}]}))
 
 (re-frame/reg-event-fx
   ::cancel
