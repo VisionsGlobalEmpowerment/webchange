@@ -13,14 +13,17 @@
                   :description "Teach with books, images, and animated characters"}
                  {:id 3
                   :name "Learning Game"
-                  :description "Build an e-learning or assessment game"}
+                  :description "Build an e-learning game"}
                  {:id 4
+                  :name "Learning Assessment"
+                  :description "Build an e-learning assessment"}
+                 {:id 5
                   :name "Recording Studio"
                   :description "Give learners a chance to practice speaking by recording themselves responding to a spoken prompt, image, or video. "}
-                 {:id 5
+                 {:id 6
                   :name "Video Viewer"
                   :description "Insert a teaching video"}
-                 {:id 6
+                 {:id 7
                   :name "Writing Studio"
                   :description "Help learners practice writing with tools and prompts"}])
 
@@ -85,20 +88,25 @@
        :preview "/upload/CWEYFHHOYBZGGUGP.png"
        :activity-ids {:english 590
                       :spanish 1291}}]
-   4 [{:name "Sing-Along!"
+   4 [{:name "Learning Assessment"
+       :preview "/upload/JMDFVYWWESOPPVRD.png"
+       :description "Model a conversation. Add questions to check for comprehension."
+       :activity-ids {:english 574
+                      :spanish 1473}}]
+   5 [{:name "Sing-Along!"
        :description "Record learners singing along to a music video."
        :activity-ids {:english 1735
-                      :spanish 13}} ;no source
+                      :spanish 13}}     ;no source
       {:name "Recording Studio"
        :description "Get learners talking with a prompt, image, or video!"
        :activity-ids {:english 1717
                       :spanish 14}}] ;no source
-   5 [{:name "Video Viewer"
+   6 [{:name "Video Viewer"
        :description "Play a short video."
        :preview "/upload/PYTRJJHHASSZMQKH.png"
        :activity-ids {:english 1896
                       :spanish 1922}}] ;concept
-   6 [{:name "Letter Tracing"
+   7 [{:name "Letter Tracing"
        :preview "/upload/YSOKFHVULRWQLTYK.png"
        :activity-ids {:english 1841
                       :spanish 1867}} ;concept
@@ -122,7 +130,7 @@
   ::init
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
-    {}))
+    {:db (dissoc db :selection-confirmed :selected-template :selected-category)}))
 
 (re-frame/reg-sub
   ::categories
@@ -230,7 +238,8 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_]]
     (let [lang (or (get-in db [:form :lang]) "english")
-          activity-id (get-in db [:selected-template :activity-ids (keyword lang)])
+          activity-id (or (get-in db [:selected-template :activity-ids (keyword lang)])
+                          (get-in db [:selected-template :activity-ids :english]))
           defaults {:lang lang}
           data (merge defaults
                       (get db :form))]
