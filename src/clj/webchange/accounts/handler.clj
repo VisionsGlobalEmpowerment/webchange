@@ -10,81 +10,82 @@
 
 (defroutes accounts-routes
   (GET "/api/accounts-by-type/:type" request
-       :coercion :spec
-       :path-params [type :- ::account-spec/type]
-       :query-params [{page :- int? 1}]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/accounts-by-type type page)
-             response)))
+    :coercion :spec
+    :path-params [type :- ::account-spec/type]
+    :query-params [{page :- int? 1}
+                   {q :- string? nil}]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/accounts-by-type type page q)
+          response)))
   (GET "/api/accounts/:id" request
-       :coercion :spec
-       :path-params [id :- ::account-spec/id]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/get-account id)
-             response)))
+    :coercion :spec
+    :path-params [id :- ::account-spec/id]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/get-account id)
+          response)))
   (DELETE "/api/accounts/:id" request
-          :coercion :spec
-          :path-params [id :- ::account-spec/id]
-          (let [user-id (current-user request)]
-            (when-not (is-admin? user-id)
-              (throw-unauthorized {:role :educator}))
-            (-> (core/delete-account id)
-                response)))
+    :coercion :spec
+    :path-params [id :- ::account-spec/id]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/delete-account id)
+          response)))
   (POST "/api/accounts" request
-        :coercion :spec
-        :body [data ::account-spec/create-account]
-        (let [user-id (current-user request)]
-          (when-not (is-admin? user-id)
-            (throw-unauthorized {:role :educator}))
-          (-> (core/create-account data)
-              response)))
+    :coercion :spec
+    :body [data ::account-spec/create-account]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/create-account data)
+          response)))
   (POST "/api/accounts/register" request
-        :coercion :spec
-        :body [data ::account-spec/register-account]
-        (-> (core/register-account data)
-            response))
+    :coercion :spec
+    :body [data ::account-spec/register-account]
+    (-> (core/register-account data)
+        response))
   (POST "/api/accounts/reset-password-by-email" request
-        :coercion :spec
-        :body [data ::account-spec/reset-password-for]
-        (-> (core/reset-password-for-email data)
-            response))
+    :coercion :spec
+    :body [data ::account-spec/reset-password-for]
+    (-> (core/reset-password-for-email data)
+        response))
   (POST "/api/accounts/reset-password/:code" request
-        :coercion :spec
-        :path-params [code :- string?]
-        :body [data ::account-spec/change-password]
-        (-> (core/reset-password-by-code code data)
-            response))
+    :coercion :spec
+    :path-params [code :- string?]
+    :body [data ::account-spec/change-password]
+    (-> (core/reset-password-by-code code data)
+        response))
   (PUT "/api/accounts/:id" request
-       :coercion :spec
-       :path-params [id :- ::account-spec/id]
-       :body [data ::account-spec/edit-account]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/edit-account id data)
-             response)))
+    :coercion :spec
+    :path-params [id :- ::account-spec/id]
+    :body [data ::account-spec/edit-account]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/edit-account id data)
+          response)))
   (PUT "/api/accounts/:id/password" request
-       :coercion :spec
-       :path-params [id :- ::account-spec/id]
-       :body [data ::account-spec/change-password]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/change-password id data)
-             response)))
+    :coercion :spec
+    :path-params [id :- ::account-spec/id]
+    :body [data ::account-spec/change-password]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/change-password id data)
+          response)))
   (PUT "/api/accounts/:id/status" request
-       :coercion :spec
-       :path-params [id :- ::account-spec/id]
-       :body [data ::account-spec/set-status]
-       (let [user-id (current-user request)]
-         (when-not (is-admin? user-id)
-           (throw-unauthorized {:role :educator}))
-         (-> (core/set-account-status id data)
-             response))))
+    :coercion :spec
+    :path-params [id :- ::account-spec/id]
+    :body [data ::account-spec/set-status]
+    (let [user-id (current-user request)]
+      (when-not (is-admin? user-id)
+        (throw-unauthorized {:role :educator}))
+      (-> (core/set-account-status id data)
+          response))))
 
 (defroutes accounts-pages-routes
   (GET "/accounts/confirm-email/:code" request

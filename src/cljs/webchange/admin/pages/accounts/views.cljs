@@ -3,7 +3,17 @@
     [re-frame.core :as re-frame]
     [webchange.admin.pages.accounts.state :as state]
     [webchange.admin.widgets.accounts-list.views :refer [accounts-list]]
-    [webchange.admin.widgets.page.views :as page]))
+    [webchange.admin.widgets.accounts-list.state :as accounts-list-state]
+    [webchange.admin.widgets.page.views :as page]
+    [webchange.admin.widgets.search.views :refer [search]]))
+
+(defn- search-bar
+  []
+  (let [value @(re-frame/subscribe [::accounts-list-state/search-string])
+        handle-change #(re-frame/dispatch [::accounts-list-state/set-search-string %])]
+    [search {:value      value
+             :on-change  handle-change
+             :class-name "activities-search-input"}]))
 
 (defn- content
   []
@@ -20,6 +30,7 @@
     (let [header @(re-frame/subscribe [::state/header])
           handle-add-click #(re-frame/dispatch [::state/add-account])]
       [page/single-page {:class-name "page--accounts-admins"
+                         :search     [search-bar]
                          :header     {:title      header
                                       :icon       "accounts"
                                       :icon-color "green-2"

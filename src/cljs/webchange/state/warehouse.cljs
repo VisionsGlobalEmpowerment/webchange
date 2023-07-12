@@ -270,10 +270,12 @@
 
 (re-frame/reg-event-fx
   ::load-accounts-by-type
-  (fn [{:keys [_]} [_ {:keys [type page]} handlers]]
+  (fn [{:keys [_]} [_ {:keys [type page query]} handlers]]
     (create-request {:key    :load-accounts-by-type
                      :method :get
-                     :params (when page {:page page})
+                     :params (cond-> {}
+                                     page (assoc :page page)
+                                     (seq query) (assoc :q query))
                      :uri    (str "/api/accounts-by-type/" type)}
                     handlers)))
 

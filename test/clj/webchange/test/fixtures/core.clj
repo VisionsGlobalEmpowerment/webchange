@@ -21,7 +21,8 @@
             [clj-http.client :as c]
             [clojure.data.json :as json]
             [ring.util.codec :refer [url-encode]]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [conman.core :as conman])
   (:import (org.eclipse.jetty.server HttpInputOverHTTP)))
 
 (def default-school-id 1)
@@ -62,8 +63,11 @@
 
 (defn init [f]
   (mount/start #'webchange.db.core/*db*)
-  #_(migrations/migrate ["migrate"] (select-keys env [:database-url]))
-  (f))
+  (if-let [test-url (env :test-database-url)]
+    (with-redefs [webchange.db.core/*db* (conman/connect! {:jdbc-url test-url})]
+      (f)
+      (conman/disconnect! *db*))
+    (f)))
 
 (def website-user-id 123)
 (def website-user {:id website-user-id :email "email@example.com" :first_name "First" :last_name "Last" :image "https://example.com/image.png"})
@@ -84,6 +88,18 @@
    (let [defaults website-user
          data (merge defaults options)]
      (auth/replace-user-from-website! data))))
+
+(defn live-user-created
+  ([] (live-user-created {}))
+  ([options]
+   (let [defaults {:first-name "Test" :last-name "Test" :email "test@example.com" :password "test" :type "live"}
+         data (merge defaults options)
+         email (:email data)
+         password (:password data)]
+     (if-let [user (db/find-user-by-email {:email email})]
+       (assoc user :password password)
+       (let [[{user-id :id}] (accounts/create-user-with-credentials! data)]
+         (assoc data :id user-id))))))
 
 (defn teacher-user-created
   ([] (teacher-user-created {}))
@@ -1060,6 +1076,16 @@
   [class-id]
   (let [url (str "/api/classes/" class-id "/teachers")
         request (-> (mock/request :get url)
+                    (mock/header :content-type "application/json")
+                    (mock/header :accept "application/json")
+                    admin-logged-in)]
+    (handler/dev-handler request)))
+
+(defn get-accounts-by-type
+  [type query]
+  (let [url (str "/api/accounts-by-type/" type)
+        request (-> (mock/request :get url)
+                    (mock/query-string {:q query})
                     (mock/header :content-type "application/json")
                     (mock/header :accept "application/json")
                     admin-logged-in)]

@@ -304,12 +304,14 @@ AND type IN (:v*:types);
 -- :doc retrieves all user record with given type
 SELECT * FROM users
 WHERE type IN (:v*:types)
+--~ (when (:q params) " and coalesce(first_name::text ,'') || ' ' || coalesce(last_name::text ,'') || ' ' || coalesce(email::text ,'') iLIKE :q")
 LIMIT :limit OFFSET :offset
 
 -- :name count-accounts-by-types :? :1
 -- :doc count records
 SELECT count(*) as result FROM users
 WHERE type IN (:v*:types)
+--~ (when (:q params) " and coalesce(first_name::text ,'') || ' ' || coalesce(last_name::text ,'') || ' ' || coalesce(email::text ,'') iLIKE :q")
 
 -- :name insert-course-scenes :! :n
 -- :doc Batch insert into course scenes

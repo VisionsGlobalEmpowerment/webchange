@@ -108,10 +108,12 @@
   ::load-accounts-page
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ page]]
-    (let [account-type (get-account-type db)]
+    (let [account-type (get-account-type db)
+          query (:search-string db)]
       {:db       (-> db (set-loading true))
        :dispatch [::warehouse/load-accounts-by-type {:type account-type
-                                                     :page page}
+                                                     :page page
+                                                     :query query}
                   {:on-success [::load-accounts-success]
                    :on-failure [::load-accounts-failure]}]})))
 
@@ -167,3 +169,30 @@
   [(i/path path-to-db)]
   (fn [{:keys [_]} [_ account-id]]
     {:dispatch [::routes/redirect :account-edit :account-id account-id]}))
+
+;; search string
+
+(def search-string-key :search-string)
+
+(defn- get-search-string
+  [db]
+  (get db search-string-key ""))
+
+(defn- set-search-string
+  [db value]
+  (assoc db search-string-key value))
+
+(re-frame/reg-sub
+  ::search-string
+  :<- [path-to-db]
+  get-search-string)
+
+(re-frame/reg-event-fx
+  ::set-search-string
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (set-search-string db value)
+     :dispatch [::load-accounts-page 1]}))
+
+(comment
+  @(re-frame/subscribe [::accounts]))

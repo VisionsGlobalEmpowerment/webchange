@@ -70,13 +70,14 @@
     [type]))
 
 (defn accounts-by-type
-  [requested-type page]
+  [requested-type page query]
   (let [limit 30
         offset (* limit (dec page))
         types (requested-type->account-types requested-type)
-        accounts (->> (db/accounts-by-types {:types types :limit limit :offset offset})
+        query (when query (str "%" query "%"))
+        accounts (->> (db/accounts-by-types {:types types :limit limit :offset offset :q query})
                       (map visible-account))
-        total (-> (db/count-accounts-by-types {:types types})
+        total (-> (db/count-accounts-by-types {:types types :q query})
                   :result)
         pages (-> total
                   (/ limit)
