@@ -109,11 +109,13 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ page]]
     (let [account-type (get-account-type db)
-          query (:search-string db)]
+          query (:search-string db)
+          only-active (get db :show-only-active true)]
       {:db       (-> db (set-loading true))
        :dispatch [::warehouse/load-accounts-by-type {:type account-type
                                                      :page page
-                                                     :query query}
+                                                     :query query
+                                                     :only-active only-active}
                   {:on-success [::load-accounts-success]
                    :on-failure [::load-accounts-failure]}]})))
 
@@ -192,6 +194,19 @@
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ value]]
     {:db (set-search-string db value)
+     :dispatch [::load-accounts-page 1]}))
+
+;; active filter switch
+(re-frame/reg-sub
+  ::show-only-active?
+  :<- [path-to-db]
+  #(get % :show-only-active true))
+
+(re-frame/reg-event-fx
+  ::set-show-only-active
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_ value]]
+    {:db (assoc db :show-only-active value)
      :dispatch [::load-accounts-page 1]}))
 
 (comment

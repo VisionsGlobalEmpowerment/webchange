@@ -32,6 +32,9 @@
                         :email "red.green@example.com"})
   (f/live-user-created {:last-name "Grey"
                         :email "black.green@example.com"})
+  (f/live-user-created {:last-name "Blue"
+                        :email "not-active@example.com"
+                        :active false})
   (testing "without query should return all users"
     (let [{:keys [accounts total]} (-> (f/get-accounts-by-type "live" nil) :body slurp (json/read-str :key-fn keyword))]
       (is (= 3 total))
@@ -46,4 +49,8 @@
     (let [q "green"
           {:keys [accounts total]} (-> (f/get-accounts-by-type "live" q) :body slurp (json/read-str :key-fn keyword))]
       (is (= 2 total))
-      (is (= 2 (count accounts))))))
+      (is (= 2 (count accounts)))))
+  (testing "query should return non-active accounts when only-active is false"
+    (let [{:keys [accounts total]} (-> (f/get-accounts-by-type "live" nil false) :body slurp (json/read-str :key-fn keyword))]
+      (is (= 4 total))
+      (is (= 4 (count accounts))))))

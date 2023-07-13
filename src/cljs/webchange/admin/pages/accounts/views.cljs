@@ -5,7 +5,8 @@
     [webchange.admin.widgets.accounts-list.views :refer [accounts-list]]
     [webchange.admin.widgets.accounts-list.state :as accounts-list-state]
     [webchange.admin.widgets.page.views :as page]
-    [webchange.admin.widgets.search.views :refer [search]]))
+    [webchange.admin.widgets.search.views :refer [search]]
+    [webchange.ui.index :as ui]))
 
 (defn- search-bar
   []
@@ -14,6 +15,16 @@
     [search {:value      value
              :on-change  handle-change
              :class-name "activities-search-input"}]))
+
+(defn- active-switcher
+  []
+  (let [show-only-active? @(re-frame/subscribe [::accounts-list-state/show-only-active?])
+        handle-change #(re-frame/dispatch [::accounts-list-state/set-show-only-active (not show-only-active?)])]
+    [ui/switch {:label      "Only Active"
+                :checked?   show-only-active?
+                :on-change  handle-change
+                :color      "yellow-1"
+                :class-name "show-global-selector"}]))
 
 (defn- content
   []
@@ -34,6 +45,7 @@
                          :header     {:title      header
                                       :icon       "accounts"
                                       :icon-color "green-2"
+                                      :controls [[active-switcher]]
                                       :actions    (when (= "admin" account-type)
                                                     [{:text     "Add New Admin"
                                                       :icon     "account-add"

@@ -1081,12 +1081,20 @@
                     admin-logged-in)]
     (handler/dev-handler request)))
 
+
 (defn get-accounts-by-type
-  [type query]
-  (let [url (str "/api/accounts-by-type/" type)
-        request (-> (mock/request :get url)
-                    (mock/query-string {:q query})
-                    (mock/header :content-type "application/json")
-                    (mock/header :accept "application/json")
-                    admin-logged-in)]
-    (handler/dev-handler request)))
+  ([type]
+   (get-accounts-by-type type nil))
+  ([type query]
+   (get-accounts-by-type type query nil))
+  ([type query only-active]
+   (let [url (str "/api/accounts-by-type/" type)
+         request (-> (mock/request :get url)
+                     (mock/query-string {:q query
+                                         :only-active (if (nil? only-active)
+                                                        true
+                                                        only-active)})
+                     (mock/header :content-type "application/json")
+                     (mock/header :accept "application/json")
+                     admin-logged-in)]
+     (handler/dev-handler request))))

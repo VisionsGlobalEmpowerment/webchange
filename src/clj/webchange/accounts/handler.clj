@@ -13,11 +13,12 @@
     :coercion :spec
     :path-params [type :- ::account-spec/type]
     :query-params [{page :- int? 1}
-                   {q :- string? nil}]
+                   {q :- string? nil}
+                   {only-active :- boolean? true}]
     (let [user-id (current-user request)]
       (when-not (is-admin? user-id)
         (throw-unauthorized {:role :educator}))
-      (-> (core/accounts-by-type type page q)
+      (-> (core/accounts-by-type type page q only-active)
           response)))
   (GET "/api/accounts/:id" request
     :coercion :spec

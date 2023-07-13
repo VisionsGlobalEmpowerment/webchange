@@ -305,6 +305,7 @@ AND type IN (:v*:types);
 SELECT * FROM users
 WHERE type IN (:v*:types)
 --~ (when (:q params) " and coalesce(first_name::text ,'') || ' ' || coalesce(last_name::text ,'') || ' ' || coalesce(email::text ,'') iLIKE :q")
+--~ (when (:only-active params) " and active = true")
 LIMIT :limit OFFSET :offset
 
 -- :name count-accounts-by-types :? :1
@@ -312,6 +313,7 @@ LIMIT :limit OFFSET :offset
 SELECT count(*) as result FROM users
 WHERE type IN (:v*:types)
 --~ (when (:q params) " and coalesce(first_name::text ,'') || ' ' || coalesce(last_name::text ,'') || ' ' || coalesce(email::text ,'') iLIKE :q")
+--~ (when (:only-active params) " and active = true")
 
 -- :name insert-course-scenes :! :n
 -- :doc Batch insert into course scenes
