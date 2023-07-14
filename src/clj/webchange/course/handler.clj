@@ -65,7 +65,7 @@
   [course-slug request]
   (let [user-id (current-user request)
         save (fn [data] (core/save-course! course-slug data user-id))]
-    (when-not (core/collaborator-by-course-slug? user-id course-slug)
+    (when-not (or (is-admin? user-id) (core/collaborator-by-course-slug? user-id course-slug))
       (throw-unauthorized {:role :educator}))
     (-> request
         :body
