@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.db :as db]
-    [day8.re-frame.tracing :refer-macros [fn-traced defn-traced]]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]
     [day8.re-frame.http-fx]
     [ajax.core :refer [json-request-format json-response-format]]
     [webchange.error-message.state :as error-message]
@@ -14,37 +14,9 @@
    db/default-db))
 
 (re-frame/reg-event-db
-  ::change-viewport
-  (fn [db [_ value]]
-    (assoc db :viewport value)))
-
-(re-frame/reg-event-db
-  ::set-loading-progress
-  (fn [db [_ scene-id value]]
-    (assoc-in db [:scene-loading-progress scene-id] value)))
-
-(re-frame/reg-event-db
-  ::set-scene-loaded
-  (fn [db [_ scene-id value]]
-    (assoc-in db [:scene-loading-complete scene-id] value)))
-
-(re-frame/reg-event-fx
-  ::login
-  (fn [{:keys [db]} [_ credentials]] ;; credentials = {:email ... :password ...}
-     {:db         (assoc-in db [:loading :login] true)
-     :http-xhrio {:method          :post
-                  :uri             "/api/users/login"
-                  :params          {:user credentials}                      ;; {:user {:email ... :password ...}}
-                  :format          (json-request-format)                    ;; make sure it's json
-                  :response-format (json-response-format {:keywords? true}) ;; json response and all keys to keywords
-                  :on-success      [::login-success]                        ;; trigger login-success
-                  :on-failure      [:api-request-error :login]}}))          ;; trigger api-request-error with :login
-
-(re-frame/reg-event-fx
-  ::login-success
-  (fn [{:keys [db]} [_ {user :user}]]
-             {:db (update-in db [:user] merge user)
-              :dispatch-n (list [:complete-request :login])}))
+ ::change-viewport
+ (fn [db [_ value]]
+   (assoc db :viewport value)))
 
 (re-frame/reg-event-fx
   ::init-current-school
@@ -102,12 +74,12 @@
 
 (re-frame/reg-event-fx
   ::redirect
-  (fn-traced [{:keys [db]} [_ & args]]
+  (fn-traced [{:keys [_db]} [_ & args]]
              {:redirect args}))
 
 (re-frame/reg-event-fx
   ::location
-  (fn-traced [{:keys [db]} [_ & args]]
+  (fn-traced [{:keys [_db]} [_ & args]]
              {:location args}))
 
 (re-frame/reg-fx
@@ -116,3 +88,13 @@
     (let [[callback & params] (if (sequential? data) data [data])]
       (when (fn? callback)
         (apply callback params)))))
+
+(re-frame/reg-event-fx
+  :start-loading-data
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :data-loading true)}))
+
+(re-frame/reg-event-fx
+  :complete-loading-data
+  (fn [{:keys [db]} [_]]
+    {:db (assoc db :data-loading false)}))

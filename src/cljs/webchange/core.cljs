@@ -42,8 +42,8 @@
   [student-page]
                                         ;(sw/setup (and service-worker-enabled config/use-cache) "/service-worker.js")
   (routes/start!)
-  (warehouse/init!)
   (re-frame/dispatch-sync [::events/initialize-db])
+  (warehouse/init!)
   (re-frame/dispatch [::events/init-current-school])
   (re-frame/dispatch [::events/init-current-user])
   (init-viewport)

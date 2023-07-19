@@ -17,7 +17,8 @@
   (-> (js/fetch "/responses.edn")
       (.then #(.text %))
       (.then #(edn/read-string %))
-      (.then #(reset! loaded-data %))))
+      (.then #(reset! loaded-data %))
+      (.then #(re-frame/dispatch [:complete-loading-data]))))
 
 (comment
   (load-data!)
@@ -86,5 +87,6 @@
 
 (defn init!
   []
+  (re-frame/dispatch [:start-loading-data])
   (load-data!)
   (re-frame/reg-fx :cached-http-xhrio cached-http-effect))

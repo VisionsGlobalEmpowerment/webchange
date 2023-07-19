@@ -2,7 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.student.pages.sign-in.state :as state]
-    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
+    [webchange.ui.index :as ui]
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]
+    [webchange.subs :as subs]))
 
 (defn- current-code-item
   [{:keys [value]}]
@@ -39,12 +41,15 @@
 
 (defn- sign-in-form
   []
-  (let [change-school #(re-frame/dispatch [::state/change-school])]
-    [:div {:class-name "sign-in-form"}
-     [:h1.header "Student Access"]
-     [current-code]
-     [num-pad]
-     [:div {:on-click change-school} "change school"]]))
+  (let [change-school #(re-frame/dispatch [::state/change-school])
+        loading? @(re-frame/subscribe [::subs/data-loading?])]
+    (if loading?
+      [ui/loading-overlay]
+      [:div {:class-name "sign-in-form"}
+       [:h1.header "Student Access"]
+       [current-code]
+       [num-pad]
+       [:div {:on-click change-school} "change school"]])))
 
 (defn page
   [props]

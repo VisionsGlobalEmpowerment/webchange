@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.student.pages.select-school.state :as state]
-    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
+    [webchange.ui.index :as ui]
+    [webchange.subs :as subs]))
 
 (defn- select-school-form
   []
@@ -20,5 +21,8 @@
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    [:div {:class-name "student--select-school-page"}
-     [select-school-form]]))
+    (let [loading? @(re-frame/subscribe [::subs/data-loading?])]
+      (if loading?
+        [ui/loading-overlay]
+        [:div {:class-name "student--select-school-page"}
+         [select-school-form]]))))

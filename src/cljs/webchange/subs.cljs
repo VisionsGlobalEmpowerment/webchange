@@ -304,3 +304,8 @@
   ::school-id
   (fn [db]
     (:school-id db)))
+
+(re-frame/reg-sub
+  ::data-loading?
+  (fn [db]
+    (:data-loading db)))
