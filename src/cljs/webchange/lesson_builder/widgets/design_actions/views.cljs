@@ -6,11 +6,13 @@
 
     [webchange.lesson-builder.tools.effects-add.views :as effects-add-views]
     [webchange.lesson-builder.widgets.activity-actions.views :as activity-actions-views]
-    [webchange.lesson-builder.tools.question-options.views :as question-options-views]))
+    [webchange.lesson-builder.tools.question-options.views :as question-options-views]
+    [webchange.lesson-builder.tools.select-view.views :as select-view-views]))
 
 (def content-components {:activity-actions activity-actions-views/activity-actions
                          :effects-add      effects-add-views/effects-add
-                         :question-options question-options-views/question-options})
+                         :question-options question-options-views/question-options
+                         :select-view      select-view-views/select-view})
 
 (defn- action-item
   [{:keys [id content icon text] :as props}]

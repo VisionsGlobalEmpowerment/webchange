@@ -7,14 +7,15 @@
 
 (re-frame/reg-event-fx
   ::init
-  (fn [{:keys [db]} [_]]
+  (fn [{:keys [db]} [_ {:keys [views]}]]
     (let [objects (get-in db (path-to-db [:objects]) (atom {}))
           groups (get-in db (path-to-db [:groups]) (atom {}))]
       (reset! objects {})
       (reset! groups {})
       {:db (-> db
                (assoc-in (path-to-db [:objects]) objects)
-               (assoc-in (path-to-db [:groups]) groups))})))
+               (assoc-in (path-to-db [:groups]) groups)
+               (assoc-in (path-to-db [:views]) views))})))
 
 (re-frame/reg-sub
   ::rendering?
@@ -26,16 +27,21 @@
   (fn [{:keys [db]} [_ value]]
     {:db (assoc-in db (path-to-db [:rendering?]) value)}))
 
+(re-frame/reg-event-fx
+  ::set-scene-layered-objects
+  (fn [{:keys [db]} [_ object-names]]
+    {:db (assoc-in db (path-to-db [:scene-layered-objects]) object-names)}))
+
 (re-frame/reg-fx
-  :add-scene-object
-  (fn [{:keys [objects groups object-wrapper]}]
-    (let [object-name (:name object-wrapper)
-          group-name (:group-name object-wrapper)]
-      (when (contains? @objects object-name)
-        (-> (str "Object with name " object-name " already exists.") js/Error. throw))
-      (swap! objects assoc object-name object-wrapper)
-      (when-not (nil? group-name)
-        (swap! groups update group-name conj object-name)))))
+ :add-scene-object
+ (fn [{:keys [objects groups object-wrapper]}]
+   (let [object-name (:name object-wrapper)
+         group-name (:group-name object-wrapper)]
+     (when (contains? @objects object-name)
+       (-> (str "Object with name " object-name " already exists.") js/Error. throw))
+     (swap! objects assoc object-name object-wrapper)
+     (when-not (nil? group-name)
+       (swap! groups update group-name conj object-name)))))
 
 (re-frame/reg-fx
   :remove-scene-object
@@ -114,7 +120,8 @@
    {:action :set-combined-skin :params [:skin-names]}
    {:action :set-enable :params [:enable?]}
    {:action :set-speed :params [:speed]}
-   {:action :set-chunks :params [:chunks]}])
+   {:action :set-chunks :params [:chunks]}
+   {:action :set-anim :params [:anim]}])
 
 (defn- get-action-params
   [{:keys [params accompany-params]
@@ -375,6 +382,12 @@
  (fn [[{:keys [update-chunks]} params]]
    (update-chunks {:params params})))
 
+(defn set-anim
+  [[object-wrapper {:keys [anim]} _db]]
+  (let [track 0
+        loop true]
+    (w/set-animation object-wrapper track anim loop :update-pose true)))
+
 (defn- generic-handler
   [[object-wrapper props _]]
   (doseq [[method params] props]
@@ -384,7 +397,8 @@
 
 ; Methods which can be used as function, not re-frame effect
 (def fixed-methods {:generic-handler generic-handler
-                    :set-visibility  set-visibility})
+                    :set-visibility  set-visibility
+                    :set-anim set-anim})
 
 (defn- change-scene-object
   [{:keys [db]} [_ object-name actions]]
@@ -403,3 +417,18 @@
 (re-frame/reg-event-fx
   ::change-scene-object
   change-scene-object)
+
+
+(re-frame/reg-event-fx
+  ::set-scene-view
+  (fn [{:keys [db]} [_ view-id]]
+    (let [object-names (get-in db (path-to-db [:scene-layered-objects]))
+          object-wrappers (->> object-names
+                               (map #(get-object-name db %)))
+          view (-> db
+                   (get-in (path-to-db [:views]))
+                   (get view-id))]
+      (doseq [wrapper object-wrappers]
+        (set-visibility [wrapper {:visible false}]))
+      (doseq [[object-key object-patch] (:objects view)]
+        (set-scene-object-state db object-key object-patch)))))

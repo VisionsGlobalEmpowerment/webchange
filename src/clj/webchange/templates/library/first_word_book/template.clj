@@ -1,6 +1,5 @@
 (ns webchange.templates.library.first-word-book.template
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.core :as core]
     [webchange.templates.library.first-word-book.add-spread :refer [create-spread edit-spread add-spread spread-idx->dialog-name]]
     [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-spread remove-last-spread]]
@@ -87,6 +86,18 @@
   {:assets        [{:url "/raw/img/library/book/background.jpg", :size 10, :type "image"}
                    {:url "/raw/img/library/book/background2.jpg", :size 10, :type "image"}
                    {:url "/raw/img/ui/back_button_01.png", :size 1, :type "image"}],
+   :views {:spread-0 {:name "Front Cover"
+                      :objects {:book {:anim "close_idle"
+                                       :visible true}
+                                :background {:src "/raw/img/library/book/background2.jpg"
+                                             :visible true}
+                                :spread-0 {:visible true}}}
+           :spread-1 {:name "Spread 1"
+                      :objects {:book {:anim "idle"
+                                       :visible true}
+                                :background {:src "/raw/img/library/book/background.jpg"
+                                             :visible true}
+                                :spread-1 {:visible true}}}}
    :objects
    {:background
     {:type   "background",
@@ -109,7 +120,8 @@
      :start       true},
     :spread-0               {:type     "group" :opacity 1
                              :children ["spread-0-title-letters" "spread-0-title-text"]}
-    :spread-1               {:type     "group" :opacity 0
+    :spread-1               {:type     "group" :opacity 1
+                             :visible  false
                              :children ["spread-1-title-letters" "spread-1-title-text"]}
     :spread-0-title-letters {:type           "text",
                              :x              929,
@@ -184,6 +196,7 @@
                              :metadata       {:display-name "First page text"
                                               :page-idx     1
                                               :text-idx     1}
+                             :word-wrap      true
                              :editable?      {:select true}}
     :left-page-click-area   {:type    "transparent"
                              :x       220
@@ -494,7 +507,7 @@
     (update-in activity-data [:metadata :saved-props :template-options :spreads] concat [(assoc spread :id current-spread-idx)])))
 
 (defn- remove-spread-from-saved-props
-  [template-options spread]
+  [template-options]
   (update template-options :spreads drop-last))
 
 (defn create

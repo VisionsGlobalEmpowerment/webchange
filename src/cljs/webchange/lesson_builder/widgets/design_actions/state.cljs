@@ -4,7 +4,8 @@
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.layout.menu.state :as menu]
     [webchange.lesson-builder.state :as state]
-    [webchange.lesson-builder.tools.template-options.state :as template-options]))
+    [webchange.lesson-builder.tools.template-options.state :as template-options]
+    [webchange.lesson-builder.tools.select-view.state :as select-view]))
 
 (def path-to-db :lesson-builder/design-actions)
 
@@ -17,14 +18,21 @@
   ::actions
   :<- [::state/activity-data]
   (fn [activity-data]
-    (let [has-template-options? (-> (template-options/get-template-options activity-data)
-                                    (empty?)
-                                    (not))]
+    (let [has-template-options? (-> activity-data
+                                    (template-options/get-template-options)
+                                    (seq))
+          has-views?  (-> activity-data
+                          (select-view/get-views)
+                          (seq))]
       (cond-> []
               has-template-options? (conj {:id        :template-options
                                            :text      "Template Options"
                                            :icon      "template"
                                            :menu-item :template-options})
+              has-views? (conj {:id      :select-view
+                                :text    "Views"
+                                :icon    "build"
+                                :content :select-view})
               :always (concat [{:id      :activity-actions
                                 :text    "Build"
                                 :icon    "build"

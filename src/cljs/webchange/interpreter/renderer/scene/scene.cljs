@@ -73,7 +73,7 @@
 
       :component-did-mount
       (fn [this]
-        (re-frame/dispatch [::state/init])
+        (re-frame/dispatch [::state/init (-> (r/props this) :activity-data)])
         (re-frame/dispatch [::state/set-rendering-state true])
 
         (let [{:keys [mode on-ready trigger stage-id viewport objects metadata]} (r/props this)
@@ -101,6 +101,7 @@
           (create-component (question/create {:parent   (get-stage)
                                               :viewport viewport}))
 
+          (re-frame/dispatch [::state/set-scene-layered-objects (map :object-name objects)])
           (re-frame/dispatch [::state/set-rendering-state false])
           (when (fn? on-ready) (on-ready))))
 

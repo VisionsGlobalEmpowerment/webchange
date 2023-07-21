@@ -1,7 +1,6 @@
 (ns webchange.templates.library.first-word-book.add-spread
   (:require
     [clojure.string :as str]
-    [clojure.tools.logging :as log]
     [webchange.templates.library.first-word-book.timeout :as timeout]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.templates.utils.common :as common]))
@@ -226,6 +225,18 @@
              (spread-idx->dialog-name spread-idx :left)
              (spread-idx->dialog-name spread-idx :right)]})
 
+(defn- add-view
+  [activity-data spread-idx]
+  (let [spread-name (spread-idx->spread-name spread-idx)
+        view-data {:name (str "Spread " spread-idx)
+                   :objects {:book {:anim "idle"
+                                    :visible true}
+                             :background {:src "/raw/img/library/book/background2.jpg"
+                                          :visible true}
+                             (keyword spread-name) {:visible true}}}]
+    (-> activity-data
+        (assoc-in [:views (keyword spread-name)] view-data))))
+
 (defn create-spread
   [activity-data {id :id :as args}]
   (-> activity-data
@@ -234,7 +245,8 @@
       (add-dialogs id args)
       (add-texts id args)
       (add-images id args)
-      (add-effects id args)))
+      (add-effects id args)
+      (add-view id)))
 
 (defn edit-spread
   [activity-data {id :id :as args}]

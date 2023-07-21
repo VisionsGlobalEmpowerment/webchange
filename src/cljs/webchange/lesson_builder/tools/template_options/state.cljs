@@ -15,7 +15,7 @@
   (fn [db]
     (get db path-to-db)))
 
-(defn- get-template-options
+(defn get-template-options
   [activity-data]
   (->> activity-data
        :metadata

@@ -302,7 +302,11 @@
           scene-data
           actions-names))
 
-; Triggers
+(defn remove-view
+  [scene-data view-name]
+  (let [view (if (keyword? view-name) view-name (keyword view-name))]
+    (update scene-data :views dissoc view)))
+                                        ; Triggers
 
 (def background-music-trigger-name :music)
 

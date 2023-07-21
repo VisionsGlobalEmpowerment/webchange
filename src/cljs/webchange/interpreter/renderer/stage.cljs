@@ -145,7 +145,8 @@
                      :viewport viewport
                      :on-ready on-ready
                      :trigger  trigger
-                     :started? (:started? scene-data)}])
+                     :started? (:started? scene-data)
+                     :activity-data (:activity-data scene-data)}])
            (when show-loader-screen?
              [overlay-wrapper {:viewport viewport}
               [loader-screen {:on-start-click on-start-click

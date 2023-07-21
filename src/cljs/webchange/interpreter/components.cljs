@@ -56,7 +56,8 @@
            :objects   (get-scene-objects-data scene-id (:scene-objects scene-data))
            :resources (get-activity-resources scene-id scene-data)
            :metadata  (:metadata scene-data)
-           :started?  (scene-started? scene-id)}))
+           :started?  (scene-started? scene-id)
+           :activity-data scene-data}))
 
 (defn start-scene
   []

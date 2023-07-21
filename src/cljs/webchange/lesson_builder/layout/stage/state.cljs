@@ -28,7 +28,8 @@
     {:scene-id  (:id activity-info)
      :objects   (get-scene-objects activity-data)
      :resources (get-activity-resources activity-data)
-     :metadata  (:metadata activity-data)}))
+     :metadata  (:metadata activity-data)
+     :activity-data activity-data}))
 
 (re-frame/reg-sub
   ::stage-key

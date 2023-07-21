@@ -38,10 +38,10 @@
                                                (swap! state update :props merge {:skin-name :skin-name})
                                                (utils/set-skin (:animation @state) skin-name))
                      :set-combined-skin
-                                             (fn [skin-names]
-                                               (swap! state update :props dissoc :skin-name)
-                                               (swap! state update :props merge {:skin-names skin-names})
-                                               (utils/reset-skeleton container state))
+                     (fn [skin-names]
+                       (swap! state update :props dissoc :skin-name)
+                       (swap! state update :props merge {:skin-names skin-names})
+                       (utils/reset-skeleton container state))
                      :set-skeleton           (fn [{:keys [name skin skin-names]}]
                                                (swap! state update :props merge {:name name})
                                                (if (some? skin-names)
@@ -55,9 +55,12 @@
                                                (utils/add-animation (:animation @state) animation-name {:track-index track
                                                                                                         :delay       delay
                                                                                                         :loop?       loop?}))
-                     :set-animation          (fn [track animation-name loop?]
+                     :set-animation          (fn [track animation-name loop? & {:keys [update-pose]}]
                                                (utils/set-animation (:animation @state) animation-name {:track-index track
-                                                                                                        :loop?       loop?}))
+                                                                                                        :loop?       loop?})
+
+                                               (when update-pose
+                                                 (utils/update-pose (:animation @state))))
                      :remove-animation       (fn [track mix-duration]
                                                (utils/set-empty-animation (:animation @state) {:track-index  track
                                                                                                :mix-duration mix-duration}))
@@ -73,11 +76,11 @@
                      :reset-idle-animation   (fn [] (utils-idle/reset-idle-animation state char-state))
                      :play-animation-once    (fn [track animation-name callback]
                                                (subscriptions/subscribe-to-animation-once
-                                                 subscriptions animation-name "complete"
-                                                 (fn []
-                                                   (utils/set-empty-animation (:animation @state) {:track-index  track
-                                                                                                   :mix-duration 5})
-                                                   (when (fn? callback)
-                                                     (callback))))
+                                                subscriptions animation-name "complete"
+                                                (fn []
+                                                  (utils/set-empty-animation (:animation @state) {:track-index  track
+                                                                                                  :mix-duration 5})
+                                                  (when (fn? callback)
+                                                    (callback))))
                                                (utils/set-animation (:animation @state) animation-name {:track-index track
                                                                                                         :loop?       false}))})))

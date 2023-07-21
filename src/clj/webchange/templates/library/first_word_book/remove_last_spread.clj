@@ -1,8 +1,7 @@
 (ns webchange.templates.library.first-word-book.remove-last-spread
   (:require
-    [clojure.tools.logging :as log]
     [webchange.templates.library.first-word-book.add-spread :refer [get-spread-info]]
-    [webchange.utils.scene-data :refer [remove-actions remove-object remove-scene-object]]))
+    [webchange.utils.scene-data :refer [remove-actions remove-object remove-scene-object remove-view]]))
 
 (defn remove-spread
   [activity-data id]
@@ -10,7 +9,8 @@
     (-> activity-data
         (remove-object object {:remove-children? true})
         (remove-scene-object object)
-        (remove-actions actions))))
+        (remove-actions actions)
+        (remove-view object))))
 
 (defn remove-last-spread
   [activity-data]
@@ -21,4 +21,5 @@
         (update-in [:metadata :last-spread-idx] dec)
         (remove-object object {:remove-children? true})
         (remove-scene-object object)
-        (remove-actions actions))))
+        (remove-actions actions)
+        (remove-view object))))

@@ -242,3 +242,9 @@
                       ;; Update pose:
                       (.updateWorldTransform (get-skeleton spine-animation))
                       (.update spine-animation 0)))}))
+
+(defn update-pose
+  [spine-object]
+  (js/console.log "update pose")
+  (.updateWorldTransform (get-skeleton spine-object))
+  (.update spine-object 0))
