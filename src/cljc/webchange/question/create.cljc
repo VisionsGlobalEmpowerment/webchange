@@ -95,6 +95,7 @@
 (defn- add-check-correct-answer
   [{:keys [action-name correct-answers hide-question-name question-id option-voice-over-name]} form-data data-names]
   (let [submit (str action-name "-submit")
+        on-submit-sound (str action-name "-submit-answer-sound")
         on-correct (str action-name "-correct-answer")
         on-correct-dialog (str action-name "-correct-answer-dialog")
         on-correct-sound (str action-name "-correct-answer-sound")
@@ -112,7 +113,8 @@
                                               :success  submit}
                (keyword submit)              {:type "sequence-data"
                                               :data (cond-> [{:type "action"
-                                                              :id   (get-in data-names [:check-button :actions :set-submitted])}]
+                                                              :id   (get-in data-names [:check-button :actions :set-submitted])}
+                                                             {:type "action" :id on-submit-sound}]
 
                                                             (-> form-data utils/has-correct-answer?)
                                                             (concat [{:type    "question-highlight"
@@ -179,6 +181,15 @@
                                               :phrase-description "Correct answer sound effect"
                                               :editor-type        "dialog"}
 
+               (keyword on-submit-sound)    {:type               "sequence-data"
+                                             :data               [{:type "sequence-data"
+                                                                   :data [{:type "empty" :duration 0}
+                                                                          {:type        "animation-sequence"
+                                                                           :phrase-text ""
+                                                                           :audio       nil}]}]
+                                             :phrase-description "Submit answer sound effect"
+                                             :editor-type        "dialog"}
+
                (keyword on-wrong)            {:type "sequence-data",
                                               :data [{:type "action" :id on-wrong-sound}
                                                      {:type "action" :id (get-in data-names [:check-button :actions :set-default])}
@@ -227,6 +238,8 @@
                                               :phrase-description "Try again"
                                               :editor-type        "dialog"}}
      :track   {:nodes [{:type      "dialog"
+                        :action-id (keyword on-submit-sound)}
+                       {:type      "dialog"
                         :action-id (keyword on-correct-sound)}
                        {:type      "dialog"
                         :action-id (keyword on-wrong-sound)}
