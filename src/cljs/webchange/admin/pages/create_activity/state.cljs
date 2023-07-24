@@ -90,7 +90,7 @@
                       :spanish 1291}}]
    4 [{:name "Learning Assessment"
        :preview "/upload/JMDFVYWWESOPPVRD.png"
-       :description "Model a conversation. Add questions to check for comprehension."
+       :description "Check learning and understanding with assessment questions."
        :activity-ids {:english 574
                       :spanish 1473}}]
    5 [{:name "Sing-Along!"
