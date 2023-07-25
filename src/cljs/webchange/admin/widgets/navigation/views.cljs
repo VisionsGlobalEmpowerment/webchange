@@ -3,9 +3,7 @@
     [re-frame.core :as re-frame]
     [webchange.admin.routes :as routes]
     [webchange.admin.widgets.navigation.state :as state]
-    [webchange.ui.index :as ui]
-    [webchange.ui-framework.components.index :as c]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]
+    [webchange.ui.index :as ui :refer [get-class-name]]
     [webchange.utils.map :refer [map->list]]))
 
 (declare children-list)
@@ -26,8 +24,8 @@
      [:div.text text]
      (when-not (empty? children)
        [:<>
-        [c/icon {:icon       "chevron-right"
-                 :class-name "icon"}]
+        [ui/icon {:icon       "chevron-right"
+                  :class-name "icon"}]
         [children-list {:items children}]])]))
 
 (defn- children-list

@@ -2,9 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.book-library.components.button.views :refer [button]]
-    [webchange.book-library.layout.icons.index :refer [icons]]
     [webchange.book-library.layout.side-menu.state :as state]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- back-button
   []

@@ -2,7 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.admin.widgets.layout.auth.state :as state]
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.ui.index :as ui]))
 
 (defn auth
   []
@@ -17,6 +17,6 @@
        [:span {:class-name "logout"
                :on-click   handle-logout}
         "Log Out"]
-       [c/avatar]
+       [ui/avatar]
        [:div.user-data
         [:div.name user-name]]])))

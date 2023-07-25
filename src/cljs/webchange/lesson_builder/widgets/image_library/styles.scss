@@ -31,7 +31,7 @@
         margin-right: 10px;
 	margin-bottom: 10px;
         flex-direction: row;
-        @include icon-color($color-blue-1);
+        @include bbs--icon-color($color-blue-1);
         @include bbs--icon-size(24px);
 
         .bbs--input-wrapper--header {

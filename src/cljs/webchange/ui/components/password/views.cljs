@@ -1,9 +1,8 @@
 (ns webchange.ui.components.password.views
   (:require
     [reagent.core :as r]
-    [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.input.views :refer [input]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn password
   [{:keys [class-name disabled?] :as props}]

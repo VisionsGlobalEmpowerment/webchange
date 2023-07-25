@@ -2,11 +2,10 @@
   (:require
     [reagent.core :as r]
     [webchange.ui.components.date.utils :as utils]
-    [webchange.ui.components.button.views :refer [button]]
     [webchange.ui.components.input.views :refer [input]]
     [webchange.ui.components.input-error.views :refer [input-error]]
     [webchange.ui.components.input-label.views :refer [input-label]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn date
   [{:keys [class-name disabled? error id label max min on-change required? value] :as props}]

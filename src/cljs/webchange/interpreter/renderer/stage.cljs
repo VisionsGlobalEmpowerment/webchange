@@ -12,7 +12,7 @@
     [webchange.interpreter.renderer.state.overlays :as overlays]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
     [webchange.interpreter.variables.core :as vars.core]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- init-scene
   [{:keys [scene-id resources]} current-scene-id loading reset-resources?]

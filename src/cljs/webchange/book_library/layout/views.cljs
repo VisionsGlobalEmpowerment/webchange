@@ -2,11 +2,10 @@
   (:require
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.book-library.layout.icons.index :refer [icons]]
     [webchange.book-library.layout.side-menu.views :refer [side-menu]]
     [webchange.page-title.views :refer [page-title]]
     [webchange.i18n.translate :as i18n]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- toolbar
   [{:keys [title toolbar-control]}]

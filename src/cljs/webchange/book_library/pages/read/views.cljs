@@ -9,7 +9,7 @@
     [webchange.i18n.translate :as i18n]
     [webchange.interpreter.components :refer [interpreter]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- book
   []

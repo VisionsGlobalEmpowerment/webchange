@@ -1,7 +1,7 @@
 (ns webchange.book-library.components.button.views
   (:require
     [webchange.book-library.layout.icons.index :refer [icons]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn button
   [{:keys [active? button-class-name icon on-click title]}]

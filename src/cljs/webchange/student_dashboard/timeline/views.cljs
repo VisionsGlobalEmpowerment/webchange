@@ -5,7 +5,7 @@
     [webchange.student-dashboard.timeline.state :as state]
     [webchange.student-dashboard.timeline.finish-button.views :refer [finish-button]]
     [webchange.student-dashboard.timeline.play-button.views :refer [play-button]]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn- dashed-connector-svg
   []

@@ -1,7 +1,7 @@
 (ns webchange.student-dashboard.header.views
   (:require
     [reagent.core :as r]
-    [webchange.ui-framework.components.utils :refer [get-class-name]]))
+    [webchange.ui.utils.get-class-name :refer [get-class-name]]))
 
 (defn header
   [{:keys [class-name]}]

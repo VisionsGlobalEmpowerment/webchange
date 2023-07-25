@@ -1,8 +1,8 @@
 @import "../fonts";
+@import "../colors";
 @import "../etc/normalize";
 @import "../etc/editor-v2";
 
-@import "../../components/styles";
 @import "../../../styles";
 
 #app {
@@ -15,8 +15,7 @@
     background: #fff;
 
     .main-app {
-        @import "../../components/theme";
-    }
+     }
 }
 
 #app > div {
