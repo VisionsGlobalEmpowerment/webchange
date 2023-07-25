@@ -1,10 +1,31 @@
 (ns webchange.lesson-builder.tools.script.dialog.utils
   (:require
     [clojure.set :refer [difference]]
-    [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]
-    [webchange.editor-v2.dialog.utils.dialog-action :refer [get-empty-action get-inner-action skip-effects guide-effects]]
+    [webchange.utils.get-phrases-sequence :refer [get-phrases-sequence]]
     [webchange.utils.scene-action-validator :refer [validate-action]]
-    [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]))
+    [webchange.utils.scene-data :refer [get-dialog-actions get-scene-object get-tracks]]
+    [webchange.utils.scene-action-data :as action-utils]))
+
+(def guide-effects {:hide-guide {:text  "Hide guide"
+                                 :value "hide-guide"}
+                    :show-guide {:text  "Show guide"
+                                 :value "show-guide"}
+                    :highlight-guide {:text "Highlight guide"
+                                      :value "highlight-guide"}})
+
+(def skip-effects {:start-skip-region {:text  "Start skip"
+                                       :value "start-skip-region"}
+                   :end-skip-region   {:text  "End skip"
+                                       :value "end-skip-region"}})
+
+
+(defn get-empty-action
+  [action]
+  (get-in action action-utils/empty-action-path))
+
+(defn get-inner-action
+  [action]
+  (get-in action action-utils/inner-action-path))
 
 (defn- get-action-type
   [{:keys [action-data available-effects-ids]}]

@@ -1,13 +1,11 @@
 (ns webchange.core
   (:require
-    [cljsjs.material-ui]
     [reagent.core :as reagent]
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [webchange.views :as views]
     [webchange.config :as config]
     [webchange.routes :as routes]
-    [webchange.ui-deprecated.theme :refer [with-mui-theme]]
     [webchange.utils.browser-history :as history]
     [webchange.state.warehouse :as warehouse]))
 
@@ -19,9 +17,8 @@
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
   (reagent/render
-    [with-mui-theme {:type "light"}
-     [views/main-panel]]
-    (.getElementById js/document "app")))
+   [views/main-panel]
+   (.getElementById js/document "app")))
 
 (defn- handle-history-back
   []

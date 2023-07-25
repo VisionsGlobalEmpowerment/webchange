@@ -28,7 +28,7 @@
     [webchange.resources.manager :as resources-manager]
     [webchange.interpreter.renderer.scene.components.text.chunks :as tc]
     [webchange.interpreter.renderer.scene.app :as app]
-    [webchange.editor-v2.assets.events :as assets-events]
+    [webchange.state.state-assets :as assets-events]
     [webchange.state.state-progress :as progress-state]
     [webchange.state.warehouse :as warehouse]
     [webchange.logger.index :as logger]

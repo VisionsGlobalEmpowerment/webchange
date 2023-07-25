@@ -4,7 +4,6 @@
     [reagent.core :as r]
     [webchange.admin.widgets.password-reset.state :as state]
     [webchange.validation.specs.account :as account-spec]
-    [webchange.ui-framework.components.index :as c]
     [webchange.ui.index :as ui]))
 
 (def model {:password {:label "Password"
@@ -15,24 +14,24 @@
 (defn reset-password-form
   []
   (r/create-class
-    {:display-name "Reset Password Form"
+   {:display-name "Reset Password Form"
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [account-id class-name on-save on-cancel]}]
-       (let [saving? @(re-frame/subscribe [::state/data-saving?])
-             errors @(re-frame/subscribe [::state/custom-errors])
-             handle-save #(re-frame/dispatch [::state/change-password account-id % {:on-success on-save}])]
-         [:div {:class-name (c/get-class-name {"widget--change-password" true
+    :reagent-render
+    (fn [{:keys [account-id class-name on-save on-cancel]}]
+      (let [saving? @(re-frame/subscribe [::state/data-saving?])
+            errors @(re-frame/subscribe [::state/custom-errors])
+            handle-save #(re-frame/dispatch [::state/change-password account-id % {:on-success on-save}])]
+        [:div {:class-name (ui/get-class-name {"widget--change-password" true
                                                class-name                (some? class-name)})}
-          [ui/form {:form-id   (-> (str "change-password")
-                                   (keyword))
-                    :model     model
-                    :errors    errors
-                    :spec      ::account-spec/change-password
-                    :on-save   handle-save
-                    :on-cancel on-cancel
-                    :saving?   saving?}]]))}))
+         [ui/form {:form-id   (-> (str "change-password")
+                                  (keyword))
+                   :model     model
+                   :errors    errors
+                   :spec      ::account-spec/change-password
+                   :on-save   handle-save
+                   :on-cancel on-cancel
+                   :saving?   saving?}]]))}))

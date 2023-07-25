@@ -4,7 +4,6 @@
     [reagent.core :as r]
     [webchange.admin.widgets.teacher-form.state :as state]
     [webchange.validation.specs.teacher :as teacher-spec]
-    [webchange.ui-framework.components.index :as c]
     [webchange.ui.index :refer [get-class-name] :as ui]))
 
 (def add-teacher-model {:first-name       {:label "First Name"
@@ -43,30 +42,30 @@
 (defn add-teacher-form
   []
   (r/create-class
-    {:display-name "Add Teacher Form"
+   {:display-name "Add Teacher Form"
 
-     :component-did-mount
-     (fn [this]
-       (re-frame/dispatch [::state/init-add-form (r/props this)]))
+    :component-did-mount
+    (fn [this]
+      (re-frame/dispatch [::state/init-add-form (r/props this)]))
 
-     :component-will-unmount
-     (fn [this]
-       (re-frame/dispatch [::state/reset-form (r/props this)]))
+    :component-will-unmount
+    (fn [this]
+      (re-frame/dispatch [::state/reset-form (r/props this)]))
 
-     :reagent-render
-     (fn [{:keys [class-name on-save]}]
-       (let [saving? @(re-frame/subscribe [::state/data-saving?])
-             errors @(re-frame/subscribe [::state/custom-errors])
-             handle-save #(re-frame/dispatch [::state/create-teacher % {:on-success on-save}])]
-         [:div {:class-name (c/get-class-name {"widget--teacher-form" true
-                                               class-name             (some? class-name)})}
-          [ui/form {:form-id (-> (str "add-teacher")
-                                 (keyword))
-                    :model   add-teacher-model
-                    :errors  errors
-                    :spec    ::teacher-spec/create-teacher
-                    :on-save handle-save
-                    :saving? saving?}]]))}))
+    :reagent-render
+    (fn [{:keys [class-name on-save]}]
+      (let [saving? @(re-frame/subscribe [::state/data-saving?])
+            errors @(re-frame/subscribe [::state/custom-errors])
+            handle-save #(re-frame/dispatch [::state/create-teacher % {:on-success on-save}])]
+        [:div {:class-name (get-class-name {"widget--teacher-form" true
+                                            class-name             (some? class-name)})}
+         [ui/form {:form-id (-> (str "add-teacher")
+                                (keyword))
+                   :model   add-teacher-model
+                   :errors  errors
+                   :spec    ::teacher-spec/create-teacher
+                   :on-save handle-save
+                   :saving? saving?}]]))}))
 
 (defn- remove-window
   [{:keys [teacher-id]}]

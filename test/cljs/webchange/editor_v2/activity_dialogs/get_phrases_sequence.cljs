@@ -4,7 +4,7 @@
     [utils.compare-maps :refer [print-maps-comparison]]
     [webchange.editor-v2.activity-dialogs.stub-case-1-concept-data :refer [concept-data]]
     [webchange.editor-v2.activity-dialogs.stub-scene-data :refer [scene-data]]
-    [webchange.editor-v2.activity-dialogs.form.utils.get-phrases-sequence :refer [get-phrases-sequence]]))
+    [webchange.utils.get-phrases-sequence :refer [get-phrases-sequence]]))
 
 (defn- compare-results!
   [actual-result expected-result]

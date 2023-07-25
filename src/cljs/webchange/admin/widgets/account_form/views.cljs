@@ -1,10 +1,8 @@
 (ns webchange.admin.widgets.account-form.views
   (:require
-    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
     [webchange.admin.widgets.account-form.state :as state]
-    [webchange.ui-framework.components.index :as c]
     [webchange.ui.index :as ui]
     [webchange.validation.specs.account :as account-spec]))
 
@@ -83,8 +81,8 @@
       (let [saving? @(re-frame/subscribe [::state/data-saving?])
             errors @(re-frame/subscribe [::state/custom-errors])
             handle-save #(re-frame/dispatch [::state/create-account % {:on-success on-save}])]
-        [:div {:class-name (c/get-class-name {"widget--account-form" true
-                                              class-name             (some? class-name)})}
+        [:div {:class-name (ui/get-class-name {"widget--account-form" true
+                                               class-name             (some? class-name)})}
          [:h3.account-details-header "Account Details"]
          [ui/form {:form-id (-> (str "add-account")
                                 (keyword))
@@ -130,8 +128,8 @@
             handle-save #(re-frame/dispatch [::state/edit-account account-id % {:on-success on-save}])
             handle-enable-edit #(re-frame/dispatch [::state/enable-edit])
             edit-disabled? @(re-frame/subscribe [::state/edit-disabled?])]
-        [:div {:class-name (c/get-class-name {"widget--account-form" true
-                                              class-name             (some? class-name)})}
+        [:div {:class-name (ui/get-class-name {"widget--account-form" true
+                                               class-name             (some? class-name)})}
          [:h3.account-details-header "Account Settings"
           (when edit-disabled?
             [ui/button {:icon "edit"

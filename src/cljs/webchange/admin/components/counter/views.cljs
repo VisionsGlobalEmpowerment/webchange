@@ -1,6 +1,6 @@
 (ns webchange.admin.components.counter.views
   (:require
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (defn- counter-item-action
   [{:keys [color icon title on-click]

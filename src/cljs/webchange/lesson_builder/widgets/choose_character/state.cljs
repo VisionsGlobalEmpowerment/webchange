@@ -3,7 +3,7 @@
     [clojure.string :as str]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.editor-v2.components.character-form.data :as data]))
+    [webchange.lesson-builder.widgets.choose-character.data :as data]))
 
 (def path-to-db :widget/choose-character)
 

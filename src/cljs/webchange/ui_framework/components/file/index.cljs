@@ -3,10 +3,9 @@
     [clojure.string :refer [join]]
     [re-frame.core :as re-frame]
     [reagent.core :as r]
-    [webchange.editor-v2.assets.events :as assets-events]
+    [webchange.state.state-assets :as assets-events]
     [webchange.ui-framework.components.button.index :as button]
     [webchange.ui-framework.components.icon.index :as icon]
-    [cljs-react-material-ui.reagent :as ui]
     [webchange.ui-framework.components.input.index :as input]
     [webchange.ui-framework.components.utils :refer [get-class-name]]))
 

@@ -1,14 +1,11 @@
 (ns webchange.interpreter.renderer.scene.modes.editor-frame
   (:require
     [re-frame.core :as re-frame]
-    [webchange.editor.events :as edit-scene]
     [webchange.interpreter.pixi :refer [Container Graphics Rectangle Sprite WHITE Text]]
     [webchange.interpreter.renderer.state.editor :as editor]
     [webchange.interpreter.renderer.scene.components.dragging :refer [enable-drag!]]
     [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.logger.index :as logger]
-    [webchange.state.state-flipbook :as state-flipbook]
-    [webchange.subs :as subs]))
+    [webchange.logger.index :as logger]))
 
 (def frame-width 5)
 (def frame-padding 10)

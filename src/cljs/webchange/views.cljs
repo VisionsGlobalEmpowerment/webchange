@@ -1,6 +1,5 @@
 (ns webchange.views
   (:require
-    [cljs-react-material-ui.reagent :as mui]
     [re-frame.core :as re-frame]
     ["react" :as react]
     [reagent.core :as r]
@@ -11,7 +10,7 @@
     [webchange.error-pages.page-404 :refer [page-404]]
     [webchange.error-message.views :refer [error-message]]
     [webchange.interpreter.renderer.scene.modes.modes :as modes]
-    [webchange.ui-framework.components.index :as ui]
+    [webchange.ui.index :as ui]
     [webchange.utils.lazy-component :refer [lazy-component]]
     [webchange.sandbox.views :as sandbox]
     [webchange.student.pages.sign-in.views :as student-sign-in]
@@ -58,6 +57,5 @@
         school-id @(re-frame/subscribe [::subs/school-id])
         route-params (update route-params :school-id #(or % school-id))]
     [:div {:class-name (when-not (module-route? handler) "main-app")}
-     [mui/css-baseline]
      [panels handler route-params url]
      [error-message]]))

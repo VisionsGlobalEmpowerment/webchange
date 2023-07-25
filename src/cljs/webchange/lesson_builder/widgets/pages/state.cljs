@@ -2,8 +2,7 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.state-flipbook :as state]
-    [webchange.state.state-flipbook :as state-flipbook]))
+    [webchange.lesson-builder.state-flipbook :as state]))
 
 (def path-to-db :lesson-builder/pages)
 

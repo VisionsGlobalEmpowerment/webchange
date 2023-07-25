@@ -30,3 +30,4 @@ package-lock.json
 /.clj-kondo
 **/node_modules/
 /.shadow-cljs
+.dir-locals.el

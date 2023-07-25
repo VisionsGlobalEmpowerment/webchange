@@ -18,6 +18,12 @@
   (fn [{:keys [db]} [_]]
     {:db (assoc-in db (path-to-db [:current-error]) nil)}))
 
+(re-frame/reg-event-fx
+  ::schedule-reset
+  (fn [{:keys [_]} [_]]
+    {:dispatch-later [{:ms 7000
+                       :dispatch [::reset]}]}))
+
 (re-frame/reg-sub
   ::error-message
   (fn [db]

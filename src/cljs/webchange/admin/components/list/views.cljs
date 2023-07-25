@@ -64,8 +64,8 @@
   [{:keys [class-name]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div {:class-name (c/get-class-name {"content-right" true
-                                                   class-name      (some? class-name)})}])))
+       (into [:div {:class-name (ui/get-class-name {"content-right" true
+                                                    class-name      (some? class-name)})}])))
 
 (defn list-item
   [{:keys [on-click class-name ref html-attrs] :as props}]
@@ -80,9 +80,9 @@
    - actions
    - class-name
    "
-  (into [:div (cond-> {:class-name (c/get-class-name {"list-item"  true
-                                                      "with-hover" (fn? on-click)
-                                                      class-name   (some? class-name)})}
+  (into [:div (cond-> {:class-name (ui/get-class-name {"list-item"  true
+                                                       "with-hover" (fn? on-click)
+                                                       class-name   (some? class-name)})}
                       (fn? on-click) (assoc :on-click on-click)
                       (some? html-attrs) (merge html-attrs)
                       (some? ref) (assoc :ref ref))]
@@ -98,5 +98,5 @@
   [{:keys [class-name]}]
   (->> (r/current-component)
        (r/children)
-       (into [:div {:class-name (c/get-class-name (merge {"component--list" true
-                                                          class-name        (some? class-name)}))}])))
+       (into [:div {:class-name (ui/get-class-name (merge {"component--list" true
+                                                           class-name        (some? class-name)}))}])))

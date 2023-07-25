@@ -24,8 +24,6 @@
                  [ring/ring-json "0.5.0"]
                  [cljsjs/react "16.6.0-0"]
                  [cljsjs/react-dom "16.6.0-0"]
-                 [org.clojars.melodylane/cljs-react-material-ui "1.4.0-0.1" :exclusions [cljsjs/material-ui]]
-                 [cljsjs/material-ui "3.9.3-0"]
                  [reanimated "0.6.1"]
                  [cljs-http "0.1.45"]
                  [clj-http "3.12.4"]

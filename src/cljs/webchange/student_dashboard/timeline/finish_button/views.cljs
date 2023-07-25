@@ -1,6 +1,6 @@
 (ns webchange.student-dashboard.timeline.finish-button.views
   (:require
-    [webchange.ui-framework.components.index :as ui]))
+    [webchange.ui.index :as ui]))
 
 (def img-src {"english" "/images/student_dashboard/good_work_eng.png"
               "spanish" "/images/student_dashboard/good_work_spa.png"})

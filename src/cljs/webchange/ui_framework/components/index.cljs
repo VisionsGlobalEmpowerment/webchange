@@ -23,7 +23,6 @@
     [webchange.ui-framework.components.menu.index :as menu]
     [webchange.ui-framework.components.message.index :as message]
     [webchange.ui-framework.components.password.index :as password]
-    [webchange.ui-framework.components.range-input.index :as range-input]
     [webchange.ui-framework.components.select.index :as select]
     [webchange.ui-framework.components.select-image.index :as select-image]
     [webchange.ui-framework.components.switcher.index :as switcher]

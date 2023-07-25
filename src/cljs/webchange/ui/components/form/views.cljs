@@ -15,7 +15,7 @@
     [webchange.ui.components.select.views :refer [select]]
     [webchange.ui.components.switch.views :refer [switch]]
     [webchange.ui.components.text-area.views :refer [text-area]]
-    [webchange.ui-framework.components.index :as c]))
+    [webchange.ui.utils.get-class-name :as gcn]))
 
 (defn- ->spec-data
   [spec]
@@ -138,8 +138,8 @@
 
 (defn- group-control
   [{:keys [form-id disabled? spec class-name fields]}]
-  [:div {:class-name (c/get-class-name {"form--group-control" true
-                                        class-name            (some? class-name)})}
+  [:div {:class-name (gcn/get-class-name {"form--group-control" true
+                                          class-name            (some? class-name)})}
    (for [[field-name field-options] fields]
      ^{:key field-name}
      [form-control {:id        field-name
@@ -150,7 +150,7 @@
 
 (defn- label-control
   [{:keys [class-name label]}]
-  [:div {:class-name (c/get-class-name {class-name (some? class-name)})}
+  [:div {:class-name (gcn/get-class-name {class-name (some? class-name)})}
    [input-label label]])
 
 (defn- switch-control
@@ -230,8 +230,8 @@
                  errors    {}
                  loading?  false
                  saving?   false}}]
-      [:div {:class-name (c/get-class-name {"component--form" true
-                                            class-name        (some? class-name)})}
+      [:div {:class-name (gcn/get-class-name {"component--form" true
+                                              class-name        (some? class-name)})}
        [:div.controls
         (for [[field-name field-options] model]
           ^{:key field-name}
