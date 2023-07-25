@@ -10,7 +10,6 @@
             [webchange.editor-v2.creation-progress.validate-action-test]
             [webchange.editor-v2.audio-analyzer.audio-analyzer-test]
             [webchange.editor-v2.scene-diagram.scene-parser.action-children-test]
-            [webchange.editor-v2.scene-diagram.scene-parser.scene-parser-test]
             [webchange.editor-v2.translator.translator-form.audio-assets.utils.test]
             [webchange.error-message-test]
             [webchange.interpreter.events-test]
