@@ -1,16 +1,15 @@
 (ns webchange.admin.widgets.accounts-list.views
   (:require
     [re-frame.core :as re-frame]
-    [reagent.core :as r]
     [webchange.admin.components.pagination.views :as p]
     [webchange.admin.widgets.accounts-list.state :as state]
     [webchange.ui.index :as ui]))
 
 (defn- list-item
-  [{:keys [active? email id last-login name loading?] :as props}]
-  (let [account-type @(re-frame/subscribe [::state/account-type])
-        handle-click #(re-frame/dispatch [::state/view-account id])
-        handle-edit-click #(re-frame/dispatch [::state/edit-account id])
+  [{:keys [active? email id last-login name loading?]}]
+  (let [handle-click #(re-frame/dispatch [::state/view-account id])
+        handle-edit-click #(do (.stopPropagation %)
+                               (re-frame/dispatch [::state/edit-account id]))
         handle-active-click #(re-frame/dispatch [::state/toggle-active id (not active?)])
         determinate? (boolean? active?)]
     [ui/list-item {:avatar   nil
@@ -20,18 +19,17 @@
                               {:key   "Last Login"
                                :value last-login}]
                    :on-click handle-click
-                   :controls (when (= "admin" account-type)
-                               [ui/switch {:label          (cond
-                                                             loading? "Saving.."
-                                                             (not determinate?) "..."
-                                                             active? "Active"
-                                                             :else "Inactive")
+                   :controls [ui/switch {:label          (cond
+                                                           loading? "Saving.."
+                                                           (not determinate?) "..."
+                                                           active? "Active"
+                                                           :else "Inactive")
 
-                                           :checked?       active?
-                                           :indeterminate? (not determinate?)
-                                           :disabled?      loading?
-                                           :on-change      handle-active-click
-                                           :class-name     "active-switch"}])
+                                         :checked?       active?
+                                         :indeterminate? (not determinate?)
+                                         :disabled?      loading?
+                                         :on-change      handle-active-click
+                                         :class-name     "active-switch"}]
                    :actions  [{:icon     "edit"
                                :title    "Edit account"
                                :on-click handle-edit-click}]}]))

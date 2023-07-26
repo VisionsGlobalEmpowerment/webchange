@@ -74,7 +74,8 @@
 (defn- item-controls
   [{:keys [controls]}]
   (when-not (empty? controls)
-    [:div {:class-name "bbs--list-item--controls"}
+    [:div {:class-name "bbs--list-item--controls"
+           :on-click #(.stopPropagation %)}
      controls]))
 
 (defn- item-action
