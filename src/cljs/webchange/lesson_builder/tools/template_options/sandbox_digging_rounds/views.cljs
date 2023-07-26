@@ -23,18 +23,17 @@
      [:<>
       [select-image {:label "Object 1"
                      :value (:src image1-value)
-                     :on-change #(re-frame/dispatch [::set-field (image-key round-idx 1) {:src (:url %)}])}]
+                     :on-change #(re-frame/dispatch [::state/set-field (image-key round-idx 1) {:src (:url %)}])}]
       [select-image {:label "Object 2"
                      :value (:src image2-value)
-                     :on-change #(re-frame/dispatch [::set-field (image-key round-idx 2) {:src (:url %)}])}]
+                     :on-change #(re-frame/dispatch [::state/set-field (image-key round-idx 2) {:src (:url %)}])}]
       [select-image {:label "Object 3"
                      :value (:src image3-value)
-                     :on-change #(re-frame/dispatch [::set-field (image-key round-idx 3) {:src (:url %)}])}]]]))
+                     :on-change #(re-frame/dispatch [::state/set-field (image-key round-idx 3) {:src (:url %)}])}]]]))
 
 (defn field
-  [props]
-  (re-frame/dispatch [::state/init props])
-  (fn [props]
+  [_props]
+  (fn [_props]
     [:div.sandbox-digging-rounds
      [:h3.sandbox-digging-rounds-header "Rounds"]
      (for [round-idx [1 2]]
