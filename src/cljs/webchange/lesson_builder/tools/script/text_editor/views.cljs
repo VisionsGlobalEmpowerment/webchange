@@ -83,7 +83,7 @@
              value)]))})))
 
 (defn text-editor
-  [{:keys [class-name on-change type value has-issue?]
+  [{:keys [class-name on-change type value issue-text]
     :or   {type :character}}]
   [:div {:class-name (ui/get-class-name {"component--text-editor" true
                                          class-name               (some? class-name)})}
@@ -92,9 +92,10 @@
                             :character "character"
                             :text-animation "dialogue")
               :class-name "text-editor--icon"}]
-    (when has-issue?
+    (when issue-text
       [ui/icon {:icon       "info"
                 :color      "yellow-1"
+                :title issue-text
                 :class-name "text-editor--icon-warning"}])]
    [text-control {:value       value
                   :on-change   on-change

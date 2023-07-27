@@ -24,6 +24,10 @@
                         {:id          uid
                          :action-path (-> (concat dialog-action-path [:data idx]))})))))
 
+(comment
+  (let [action-path [:dialog-intro]]
+    @(re-frame/subscribe [::dialog-items action-path])))
+
 (re-frame/reg-sub
   ::user-interactions-blocked?
   :<- [::state/activity-data]

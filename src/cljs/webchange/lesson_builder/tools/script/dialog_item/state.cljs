@@ -12,6 +12,10 @@
   (fn [activity-data [_ action-path]]
     (utils/get-action activity-data action-path)))
 
+(comment
+  (let [action-path [:dialog-intro :data 2]]
+    @(re-frame/subscribe [::action-data action-path])))
+
 (re-frame/reg-sub
   ::action-selected?
   :<- [::script-state/selected-action]

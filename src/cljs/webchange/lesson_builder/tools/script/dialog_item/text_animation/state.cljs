@@ -50,25 +50,35 @@
                     [::state-renderer/set-scene-object-state (keyword target) {:text text}]]})))
 
 (re-frame/reg-sub
-  ::has-issue?
+  ::issue-text
   (fn [[_ action-path]]
     [(re-frame/subscribe [::lesson-builder/activity-data])
      (re-frame/subscribe [::state/action-data action-path])])
   (fn [[activity-data action-data]]
-    (let [{:keys [target] :as inner-action-data} (action-utils/get-inner-action action-data)
+    (let [{:keys [target duration] :as inner-action-data} (action-utils/get-inner-action action-data)
           text-chunks (-> (activity-utils/get-scene-object activity-data target)
                           (get :chunks))
           action-chunks-numbers (->> inner-action-data
                                      :data
-                                     (map :chunk))]
-      (->> (range 0 (count text-chunks))
-           (map (fn [idx]
-                  (->> action-chunks-numbers
-                       (some #{idx})
-                       (boolean))))
-           (reduce #(and %1 %2))
-           (not)))))
+                                     (map :chunk))
+          issues-in-chunks? (->> (range 0 (count text-chunks))
+                                 (map (fn [idx]
+                                        (->> action-chunks-numbers
+                                             (some #{idx})
+                                             (boolean))))
+                                 (reduce #(and %1 %2))
+                                 (not))
+          issues-in-audio? (>= 0 duration)]
+      (when (or issues-in-chunks? issues-in-audio?)
+        (str
+         (when issues-in-chunks?
+           "Check text assignment. ")
+         (when issues-in-audio?
+           "Check audio assignment. "))))))
 
+(comment
+  (let [action-path [:dialog-intro :data ]]
+    @(re-frame/subscribe [::issue-text action-path])))
 ;; remove
 
 (re-frame/reg-event-fx
