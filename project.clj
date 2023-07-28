@@ -1,7 +1,5 @@
 (defproject webchange "0.1.0-SNAPSHOT"
-  :resource-paths ["native/vosk" "resources/"]
   :dependencies [[org.clojure/clojure "1.10.3"]
-                 [org.clojure/clojurescript "1.10.891"]
                  [org.clojure/java.jdbc "0.7.8"]
                  [org.clojure/test.check "0.9.0"]
                  [org.clojure/tools.logging "0.4.1"]
@@ -9,10 +7,6 @@
                  [ch.qos.logback/logback-classic "1.2.3"]
                  [ch.qos.logback/logback-core "1.2.3"]
                  [clojure.java-time "0.3.2"]
-                 [reagent "0.8.1"]
-                 [re-frame "1.2.0"]
-                 [day8.re-frame/test "0.1.5"]
-                 [day8.re-frame/http-fx "0.1.6"]
                  [compojure "1.6.1"]
                  [metosin/spec-tools "0.10.1"]
                  [metosin/compojure-api "2.0.0-alpha31"]
@@ -22,30 +16,19 @@
                  [ring "1.8.0"]
                  [ring/ring-core "1.8.0"]
                  [ring/ring-json "0.5.0"]
-                 [cljsjs/react "16.6.0-0"]
-                 [cljsjs/react-dom "16.6.0-0"]
                  [reanimated "0.6.1"]
-                 [cljs-http "0.1.45"]
                  [clj-http "3.12.4"]
                  [org.apache.httpcomponents/httpcore "4.4.14"]
-                 [tupelo "0.9.185"]
-                 [environ "1.1.0"]
                  [luminus-migrations "0.6.3"]
                  [org.postgresql/postgresql "42.2.5"]
-                 [cljs-ajax "0.8.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
                  [cheshire "5.10.0"]
                  [conman "0.8.3"]
                  [mount "0.1.15"]
                  [camel-snake-kebab "0.4.1"]
-                 [bidi "2.1.5"]
-                 [kibu/pushy "0.3.8"]
                  [net.mikera/imagez "0.12.0"]
-                 [cljsjs/enzyme "3.8.0"]
-                 [cljs-idxdb "0.1.0"]
                  [phrase "0.3-alpha4"]
-                 [funcool/promesa "5.0.0"]
                  [clj-http "3.10.1"]
                  [clj-http-fake "1.0.3"]
                  [ring/ring-codec "1.1.2"]
@@ -61,14 +44,12 @@
                  [org.apache.poi/poi-ooxml "3.17"]
                  [org.apache.poi/ooxml-schemas "1.3"]]
 
-  :plugins [[lein-cooper "1.2.2"]
-            [lein-environ "1.1.0"]
-            [lein-sass "0.5.0"]
-            [migratus-lein "0.7.0"]]
+  :plugins [[migratus-lein "0.7.0"]]
 
   :prep-tasks ["javac" "compile"]
   :jvm-opts ["-Xmx2g" "-Djava.library.path=native/vosk/"]
   :java-source-paths ["native/vosk/"]
+  :resource-paths ["native/vosk/" "resources/"]
 
   :min-lein-version "2.5.3"
 
@@ -85,31 +66,43 @@
              :init-script   "init.sql"
              :db            ~(get (System/getenv) "DATABASE_URL")}
 
-  :sass {:src              "src/cljs/webchange/ui_framework/styles/index"
-         :output-directory "resources/public/css"
-         :command          :sass
-         :source-maps      false}
-
-  :cooper {"styles" ["lein" "sass" "auto"]
-           "cljs"   ["shadow-cljs" "watch" "app"]
-           "clj"    ["lein" "run"]}
-
-  :aliases {"dev"       ["cooper"]
-            "resources" ["run" "-m" "webchange.resources.generate-resources-list"]}
-
   :profiles
   {:dev
    {:dependencies [[binaryage/devtools "0.9.10"]
                    [ring/ring-mock "0.3.2"]
                    [mockery "0.1.4"]
-                   [thheller/shadow-cljs "2.16.6"]
-                   [day8.re-frame/tracing "0.6.2"]
-                   [day8.re-frame/re-frame-10x "0.4.3"]]
-    :main         webchange.server-dev
+                   [thheller/shadow-cljs "2.25.2"]
+                   [org.clojure/clojurescript "1.11.60"]]
+    :main webchange.server-dev
     :repl-options {:init-ns webchange.user
                    :nrepl-middleware
                    [shadow.cljs.devtools.server.nrepl/middleware]}
-    :source-paths ["env/dev/clj" "src/cljs" "src/libs"]}
+    :source-paths ["env/dev/clj"]}
+   :cljs
+   {:source-paths ["src/cljs" "src/cljc" "src/libs"]
+    :dependencies [[thheller/shadow-cljs "2.25.2"]
+                   [org.clojure/clojurescript "1.11.60"]
+                   [reagent "0.8.1"]
+                   [re-frame "1.2.0"]
+                   [day8.re-frame/test "0.1.5"]
+                   [day8.re-frame/http-fx "0.1.6"]
+                   [day8.re-frame/tracing "0.6.2"]
+                   [day8.re-frame/re-frame-10x "1.6.0"]
+                   [reanimated "0.6.1"]
+                   [cljs-http "0.1.45"]
+                   [cljs-ajax "0.8.0"]
+                   [camel-snake-kebab "0.4.1"]
+                   [bidi "2.1.5"]
+                   [kibu/pushy "0.3.8"]
+                   [cljsjs/enzyme "3.8.0"]
+                   [cljs-idxdb "0.1.0"]
+                   [phrase "0.3-alpha4"]
+                   [funcool/promesa "5.0.0"]
+                   [com.taoensso/tempura "1.2.1"]]}
+   :cljs-test
+   {:source-paths ["test/cljs" "test/cljc"]
+    :dependencies [[day8.re-frame/tracing "0.6.2"]
+                   [day8.re-frame/re-frame-10x "0.4.3"]]}
    :prod    {}
    :uberjar {:source-paths       ["env/prod/clj"]
              :auto-clean         false
