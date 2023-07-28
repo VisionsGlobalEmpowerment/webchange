@@ -21,7 +21,6 @@
     [webchange.assets.handler :refer [asset-maintainer-routes asset-routes asset-api-routes]]
     [webchange.auth.handler :refer [auth-routes]]
     [webchange.auth.roles :as roles]
-    [webchange.auth.website :as website]
     [webchange.accounts.handler :refer [accounts-routes accounts-pages-routes]]
     [webchange.book-library.handler :refer [book-library-api-routes]]
     [webchange.class.handler :refer [class-routes]]

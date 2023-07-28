@@ -1,20 +1,14 @@
 (ns webchange.test.secondary.assets
   (:require [clojure.test :refer :all]
             [webchange.test.fixtures.core :as f]
-            [webchange.handler :as handler]
-            [webchange.db.core :refer [*db*] :as db]
-            [webchange.common.date-time :as dt]
             [webchange.test.fixtures.resources :as resources]
-            [mount.core :as mount]
             [mockery.core :as mockery]
             [clojure.data.json :as json]
             [clojure.java.io :as io]
             [webchange.common.files :as files]
             [webchange.secondary.core :as core]
             [webchange.assets.core :as assets]
-            [clojure.tools.logging :as log])
-  (:use clj-http.fake)
-  )
+            [clj-http.fake :refer [with-global-fake-routes-in-isolation]]))
 
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)
