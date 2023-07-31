@@ -98,10 +98,10 @@
    {:source-paths ["src/cljs" "src/cljc" "src/libs"]
     :dependencies [[thheller/shadow-cljs "2.25.2"]
                    [org.clojure/clojurescript "1.11.60"]
-                   [reagent "0.8.1"]
-                   [re-frame "1.2.0"]
-                   [day8.re-frame/http-fx "0.1.6"] ;;requests to backend
-                   [cljs-ajax "0.8.0"] ;;request and response formats for cljs-http
+                   [reagent "1.2.0"]
+                   [re-frame "1.3.0"]
+                   [day8.re-frame/http-fx "0.2.4"] ;;requests to backend
+                   [cljs-ajax "0.8.4"] ;;request and response formats for cljs-http
                    [cljs-http "0.1.45"] ;;load audio TODO: refactor to cljs-ajax
                    [camel-snake-kebab "0.4.1"] ;;trnasform keys for react components
                    [bidi "2.1.5"] ;; routes
@@ -116,7 +116,7 @@
    {:source-paths ["test/cljs" "test/cljc"]
     :dependencies [[org.clojure/test.check "0.9.0"]
                    [day8.re-frame/tracing "0.6.2"]
-                   [day8.re-frame/re-frame-10x "0.4.3"]
+                   [day8.re-frame/re-frame-10x "1.8.1"]
                    [day8.re-frame/test "0.1.5"]]}
    :prod    {}
    :uberjar {:source-paths       ["env/prod/clj"]

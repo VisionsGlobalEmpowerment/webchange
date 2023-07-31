@@ -1,6 +1,6 @@
 (ns webchange.core
   (:require
-    [reagent.core :as reagent]
+    [reagent.dom :as r]
     [re-frame.core :as re-frame]
     [webchange.events :as events]
     [webchange.views :as views]
@@ -16,7 +16,7 @@
 
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!)
-  (reagent/render
+  (r/render
    [views/main-panel]
    (.getElementById js/document "app")))
 
