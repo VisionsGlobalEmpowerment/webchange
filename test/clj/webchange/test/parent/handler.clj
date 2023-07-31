@@ -1,16 +1,7 @@
 (ns webchange.test.parent.handler
   (:require [clojure.test :refer :all]
-            [ring.mock.request :as mock]
             [webchange.test.fixtures.core :as f]
-            [clojure.data.json :as json]
-            [mockery.core :as mockery]
-            [clojure.tools.logging :as log]
-            [webchange.auth.website :as website]
-            [webchange.test.course.core :as core]
-            [webchange.course.core :as course]
-            [webchange.db.core :refer [*db*] :as db]
-            [config.core :refer [env]]
-            [ring.swagger.json-schema :as js]))
+            [clojure.data.json :as json]))
 
 (use-fixtures :once f/init)
 (use-fixtures :each f/clear-db-fixture f/with-default-school)

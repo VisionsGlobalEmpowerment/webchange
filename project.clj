@@ -1,5 +1,6 @@
 (defproject webchange "0.1.0"
   :dependencies [[org.clojure/clojure "1.11.1"]
+                 [org.clojure/data.json "2.4.0"] ;;read json files
                  
                  ;;logging
                  [org.clojure/tools.logging "0.4.1"]
@@ -82,10 +83,10 @@
 
   :profiles
   {:dev
-   {:dependencies [[binaryage/devtools "0.9.10"]
-                   [ring/ring-mock "0.3.2"]
-                   [clj-http-fake "1.0.3"]
-                   [mockery "0.1.4"]
+   {:dependencies [[binaryage/devtools "0.9.10"] ;;presentation of ClojureScript values in DevTools
+                   [ring/ring-mock "0.3.2"] ;;mock ring requests in tests
+                   [clj-http-fake "1.0.3"] ;;mock clj-http requests in tests
+                   [mockery "0.1.4"] ;;mock 
                    [thheller/shadow-cljs "2.25.2"]
                    [org.clojure/clojurescript "1.11.60"]]
     :main webchange.server-dev
@@ -99,16 +100,17 @@
                    [org.clojure/clojurescript "1.11.60"]
                    [reagent "0.8.1"]
                    [re-frame "1.2.0"]
-                   [day8.re-frame/http-fx "0.1.6"]
-                   [cljs-http "0.1.45"]
-                   [cljs-ajax "0.8.0"]
-                   [camel-snake-kebab "0.4.1"]
-                   [bidi "2.1.5"]
-                   [kibu/pushy "0.3.8"]
-                   [cljs-idxdb "0.1.0"]
-                   [phrase "0.3-alpha4"]
-                   [funcool/promesa "5.0.0"]
+                   [day8.re-frame/http-fx "0.1.6"] ;;requests to backend
+                   [cljs-ajax "0.8.0"] ;;request and response formats for cljs-http
+                   [cljs-http "0.1.45"] ;;load audio TODO: refactor to cljs-ajax
+                   [camel-snake-kebab "0.4.1"] ;;trnasform keys for react components
+                   [bidi "2.1.5"] ;; routes
+                   [kibu/pushy "0.3.8"] ;;html5 history
+                   [phrase "0.3-alpha4"] ;;human readable validation messages
                    [com.taoensso/tempura "1.2.1"] ;;i18n translation for text
+
+                   [cljs-idxdb "0.1.0"] ;;ServiceWorker db, TODO: remove service worker
+                   [funcool/promesa "5.0.0"] ;;promises in ServiceWorker, TODO: remove service worker
                    ]}
    :cljs-test
    {:source-paths ["test/cljs" "test/cljc"]
