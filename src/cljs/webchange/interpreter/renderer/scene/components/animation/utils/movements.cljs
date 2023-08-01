@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.animation.utils.movements
   (:require
-    ["gsap/umd/TweenMax" :refer [TweenMax]]
+    ["gsap/dist/gsap" :refer [gsap]]
     [webchange.interpreter.renderer.scene.components.animation.utils :as utils]
     [webchange.interpreter.renderer.scene.components.animation.utils.state :as state-utils]
     [webchange.interpreter.renderer.scene.components.utils :as common-utils]
@@ -89,7 +89,7 @@
 
 (defn- interpolate
   [{:keys [from to duration on-progress on-end ease]
-    :or   {ease "Linear.easeNone"}}]
+    :or   {ease "none"}}]
   (let [container (clj->js from)
         handle-progress (fn []
                           (->> (keys from)
@@ -99,10 +99,10 @@
         params (cond-> {:ease ease}
                        (fn? on-progress) (assoc :onUpdate handle-progress)
                        (fn? on-end) (assoc :onComplete handle-end))]
-    (TweenMax.to container
-                 duration
-                 (-> (merge to params)
-                     (clj->js)))))
+    (gsap.to container
+             duration
+             (-> (merge to params)
+                 (clj->js)))))
 
 (defn- set-character-direction
   [character-wrapper from to]

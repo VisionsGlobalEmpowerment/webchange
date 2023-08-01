@@ -1,10 +1,13 @@
 (ns webchange.interpreter.core
   (:require
-    ["gsap/umd/TweenMax" :refer [TweenMax SlowMo]]
+    ["gsap/dist/gsap" :refer [gsap]]
+    ["gsap/dist/EasePack" :refer [SlowMo]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
-    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name chunk-animated-variable]]
+    [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]
     [webchange.logger.index :as logger]
     [webchange.utils.scene-action-data :as scene-action-data]))
+
+(gsap.registerPlugin SlowMo)
 
 (def host "/api")
 (def http-buffer (atom {}))
@@ -158,7 +161,7 @@
                                                 (this-as t (.kill t))))))
                      (:yoyo params) (merge {:yoyo   true
                                             :repeat (or (:repeat params) -1)}))
-        tween (TweenMax.to container duration (clj->js vars))]
+        tween (gsap.to container duration (clj->js vars))]
     (register-transition! id #(.kill tween))
     (when kill-after
       (js/setTimeout #(kill-transition! id) kill-after))))

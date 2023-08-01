@@ -3,7 +3,7 @@
     "@capacitor/filesystem": "^5.0.2",
     "@cljs-oss/module-deps": "^1.1.1",
     "create-react-class": "^15.7.0",
-    "gsap": "^2.1.2",
+    "gsap": "^3.12.2",
     "pixi-spine": "^2.1.14",
     "pixi.js": "^5.3.10",
     "react": "^17.0.2",

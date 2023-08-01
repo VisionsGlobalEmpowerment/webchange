@@ -1,6 +1,6 @@
 (ns webchange.interpreter.renderer.scene.components.flipbook.state-flip-actions
   (:require
-    ["gsap/umd/TweenMax" :refer [TweenMax]]
+    ["gsap/dist/gsap" :refer [gsap]]
     [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Graphics]]
     [webchange.interpreter.renderer.scene.components.utils :as components-utils]
@@ -16,7 +16,7 @@
                                                                   (select-keys (keys from))))))
                          (assoc :onComplete (fn [] (on-end)))
                          (clj->js))]
-    (TweenMax.to container duration tween-params)))
+    (gsap.to container duration tween-params)))
 
 (defn- create-mask
   [{:keys [x y width height]
