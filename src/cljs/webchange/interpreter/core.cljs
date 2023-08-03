@@ -2,12 +2,13 @@
   (:require
     ["gsap/dist/gsap" :refer [gsap]]
     ["gsap/dist/EasePack" :refer [SlowMo]]
+    ["gsap/dist/MotionPathPlugin" :refer [MotionPathPlugin]]
     [webchange.interpreter.renderer.scene.components.wrapper-interface :as w]
     [webchange.interpreter.renderer.scene.components.text.chunks :refer [chunk-transition-name]]
     [webchange.logger.index :as logger]
     [webchange.utils.scene-action-data :as scene-action-data]))
 
-(gsap.registerPlugin SlowMo)
+(gsap.registerPlugin SlowMo MotionPathPlugin)
 
 (def host "/api")
 (def http-buffer (atom {}))
@@ -40,11 +41,11 @@
        (apply +)))
 
 (defn transition-duration
-  [component {:keys [x y bezier]} {:keys [duration speed]}]
+  [component {:keys [x y motionPath]} {:keys [duration speed]}]
   (let [position (w/get-position component)
         cx (:x position)
         cy (:y position)
-        bezier-values (or (:values bezier) bezier)]
+        bezier-values (or (:path motionPath) motionPath)]
     (cond
       (> duration 0) duration
       (> speed 0) (if (some? bezier-values)
@@ -83,8 +84,8 @@
 
 (defn- get-tween-object-params
   [object params]
-  (let [params-to-animate (if (contains? params :bezier)
-                            (get-in params [:bezier 0])
+  (let [params-to-animate (if (contains? params :motionPath)
+                            (or (get-in params [:motionPath :path 0]) (get-in params [:motionPath 0]))
                             params)
         params-handled-manually [:x :y :brightness :rotation :opacity]
         rest-params (->> (keys params-to-animate)
@@ -130,11 +131,21 @@
       (when (some #{param} (w/get-wrapped-props object))
         (w/set-prop object param (get params param))))))
 
+(defn- bezier->motion-path
+  [{{:keys [values type] :as path} :bezier :as to}]
+  (let [motion-path (cond-> {}
+                            (empty? values) (assoc :path path)
+                            (seq type) (assoc :type type)
+                            (seq values) (assoc :path values))]
+    (-> to
+        (dissoc :bezier)
+        (assoc :motionPath motion-path))))
+
 ;; ToDo: Test :loop param
 ;; ToDo: Test :skippable param
 ;; ToDo: Implement :ease param
 (defn interpolate
-  [{:keys [id component to from params on-ended skippable kill-after] :as props}]
+  [{:keys [id component to from params on-ended kill-after] :as props}]
   (logger/trace-folded "interpolate" props)
   (when from
     (set-tween-object-params component from))
@@ -144,7 +155,8 @@
                    (contains? to :offset-x) (assoc :x (+ (:offset-x to) (:x position)))
                    (contains? to :offset-y) (assoc :y (+ (:offset-y to) (:y position)))
                    (:init-position to) (merge (w/get-init-position component))
-                   (:init-position to) (dissoc :init-position))
+                   (:init-position to) (dissoc :init-position)
+                   (:bezier to) (bezier->motion-path))
 
         container (get-tween-object-params component to)
         duration (transition-duration component to params)

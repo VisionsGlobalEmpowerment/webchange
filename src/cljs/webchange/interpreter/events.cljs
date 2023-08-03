@@ -286,10 +286,10 @@
    (i/interpolate params)))
 
 (re-frame/reg-fx
-  :switch-animation
-  (fn [{:keys [state id track] :or {track 0} :as action}]
-    (let [loop (if (contains? action :loop) (:loop action) true)]
-      (w/set-animation state track id loop))))
+ :switch-animation
+ (fn [{:keys [state id track] :or {track 0} :as action}]
+   (let [loop (if (contains? action :loop) (:loop action) true)]
+     (w/execute-method state :set-animation track id loop))))
 
 (re-frame/reg-fx
   :add-animation

@@ -70,11 +70,11 @@
         [(->precision {:x x :y y1})])
       ("C")
       (let [[x1 y1 x2 y2 x3 y3] coordinates]
-        [{:bezier {:type "cubic"
-                   :values [(->precision {:x x :y y})
-                            (->precision {:x x1 :y y1})
-                            (->precision {:x x2 :y y2})
-                            (->precision {:x x3 :y y3})]}}])
+        [{:motionPath {:type "cubic"
+                       :path [(->precision {:x x :y y})
+                              (->precision {:x x1 :y y1})
+                              (->precision {:x x2 :y y2})
+                              (->precision {:x x3 :y y3})]}}])
       ("S")
       (let [[x2 y2 x3 y3] coordinates
             prev-path-type (first prev-path)]
@@ -82,22 +82,21 @@
           (let [[x01 y01 x02 y02] (take-last 4 prev-path)
                 x1 (- (* 2 x02) x01)
                 y1 (- (* 2 y02) y01)]
-            [{:bezier {:type "cubic"
-                       :values [(->precision {:x x :y y})
-                                (->precision {:x x1 :y y1})
+            [{:motionPath {:type "cubic"
+                           :path [(->precision {:x x :y y})
+                                  (->precision {:x x1 :y y1})
+                                  (->precision {:x x2 :y y2})
+                                  (->precision {:x x3 :y y3})]}}])
+          [{:motionPath {:type "cubic"
+                         :path [(->precision {:x x :y y})
                                 (->precision {:x x2 :y y2})
-                                (->precision {:x x3 :y y3})]}}])
-          [{:bezier {:type "cubic"
-                     :values [(->precision {:x x :y y})
-                              (->precision {:x x2 :y y2})
-                              (->precision {:x x2 :y y2})
-                              (->precision {:x x3 :y y3})]}}]))
+                                (->precision {:x x2 :y y2})
+                                (->precision {:x x3 :y y3})]}}]))
       ("Q")
       (let [[x1 y1 x2 y2] coordinates]
-        [{:bezier {:type "quadratic"
-                   :values [(->precision {:x x :y y})
-                            (->precision {:x x1 :y y1})
-                            (->precision {:x x2 :y y2})]}}])
+        [{:motionPath [(->precision {:x x :y y})
+                       (->precision {:x x1 :y y1})
+                       (->precision {:x x2 :y y2})]}])
       ("T")
       (let [[x2 y2] coordinates
             prev-path-type (first prev-path)]
@@ -105,10 +104,9 @@
           (let [[x01 y01 x02 y02] (take-last 4 prev-path)
                 x1 (- (* 2 x02) x01)
                 y1 (- (* 2 y02) y01)]
-            [{:bezier {:type "quadratic"
-                       :values [(->precision {:x x :y y})
-                                (->precision {:x x1 :y y1})
-                                (->precision {:x x2 :y y2})]}}])
+            [{:motionPath [(->precision {:x x :y y})
+                           (->precision {:x x1 :y y1})
+                           (->precision {:x x2 :y y2})]}])
           [(->precision {:x x2 :y y2})]))
       ("A")
       (let [[rx ry x-axis-rotation large-arc-flag sweep-flag current-x current-y] coordinates
@@ -124,9 +122,9 @@
             curves (->> params (arcToBezier) (js->clj))]
         (map
          (fn [{x1 "x1" y1 "y1" x2 "x2" y2 "y2" x3 "x" y3 "y"}]
-           {:bezier [(->precision {:x x1 :y y1})
-                     (->precision {:x x2 :y y2})
-                     (->precision {:x x3 :y y3})]})
+           {:motionPath [(->precision {:x x1 :y y1})
+                         (->precision {:x x2 :y y2})
+                         (->precision {:x x3 :y y3})]})
          curves))
       (throw (js/Error. (str "Unknown path type: " path-type))))))
 
@@ -145,16 +143,16 @@
 
 (defn- transition->path
   [transition]
-  (let [thru-bezier? (and (some? (:bezier transition))
-                          (empty? (-> transition :bezier :type)))
-        c-curve? (or (= "cubic" (-> transition :bezier :type))
-                     (and thru-bezier? (= 3 (-> transition :bezier count))))
-        q-curve? (or (= "quadratic" (-> transition :bezier :type))
-                     (and thru-bezier? (= 2 (-> transition :bezier count))))
+  (let [thru-bezier? (and (some? (:motionPath transition))
+                          (empty? (-> transition :motionPath :type)))
+        c-curve? (or (= "cubic" (-> transition :motionPath :type))
+                     (and thru-bezier? (= 3 (-> transition :motionPath count))))
+        q-curve? (or (= "quadratic" (-> transition :motionPath :type))
+                     (and thru-bezier? (= 2 (-> transition :motionPath count))))
         
-        flat-curve #(let [bezier-values (if (-> % :bezier :values)
-                                          (-> % :bezier :values rest)
-                                          (:bezier %))]
+        flat-curve #(let [bezier-values (if (-> % :motionPath :path)
+                                          (-> % :motionPath :path rest)
+                                          (:motionPath %))]
                       (flatten (map (fn [{:keys [x y]}] [x y]) bezier-values)))]
     (cond
       c-curve? (concat ["C"] (flat-curve transition))
