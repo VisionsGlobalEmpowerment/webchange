@@ -29,44 +29,42 @@
     (is (= (get-transition {:x 10 :y 20} nil ["H" 50]) [{:x 50 :y 20}]))
     (is (= (get-transition {:x 10 :y 20} nil ["V" 50]) [{:x 10 :y 50}]))
     (is (= (get-transition {:x 10 :y 20} nil ["C" 30 40 50 40 60 30])
-           [{:bezier {:type "cubic",
-                      :values [{:x 10, :y 20}
-                               {:x 30, :y 40}
-                               {:x 50, :y 40}
-                               {:x 60, :y 30}]}}]))
+           [{:motionPath {:type "cubic",
+                          :path [{:x 10, :y 20}
+                                 {:x 30, :y 40}
+                                 {:x 50, :y 40}
+                                 {:x 60, :y 30}]}}]))
     (is (= (get-transition {:x 10 :y 20} nil ["Q" 30 40 50 40])
-           [{:bezier {:type "quadratic",
-                      :values [{:x 10, :y 20} {:x 30, :y 40} {:x 50, :y 40}]}}]))
+           [{:motionPath [{:x 10, :y 20} {:x 30, :y 40} {:x 50, :y 40}]}]))
     (is (= (get-transition {:x 95 :y 80} ["C" 40 10 65 10 95 80] ["S" 150 150 180 80])
-           [{:bezier {:type "cubic",
-                      :values [{:x 95, :y 80}
-                               {:x 125, :y 150}
-                               {:x 150, :y 150}
-                               {:x 180, :y 80}]}}]))
+           [{:motionPath {:type "cubic",
+                          :path [{:x 95, :y 80}
+                                 {:x 125, :y 150}
+                                 {:x 150, :y 150}
+                                 {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 40 :y 10} ["M" 40 10] ["S" 150 150 180 80])
-           [{:bezier {:type "cubic",
-                      :values [{:x 40, :y 10}
-                               {:x 150, :y 150}
-                               {:x 150, :y 150}
-                               {:x 180, :y 80}]}}]))
+           [{:motionPath {:type "cubic",
+                          :path [{:x 40, :y 10}
+                                 {:x 150, :y 150}
+                                 {:x 150, :y 150}
+                                 {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 40 :y 10} ["S" 65 10 95 80] ["S" 150 150 180 80])
-           [{:bezier {:type "cubic",
-                      :values [{:x 40, :y 10}
-                               {:x 125, :y 150}
-                               {:x 150, :y 150}
-                               {:x 180, :y 80}]}}]))
+           [{:motionPath {:type "cubic",
+                          :path [{:x 40, :y 10}
+                                 {:x 125, :y 150}
+                                 {:x 150, :y 150}
+                                 {:x 180, :y 80}]}}]))
     (is (= (get-transition {:x 95 :y 80} ["Q" 40 10 65 10] ["T" 150 150])
-           [{:bezier {:type "quadratic",
-                      :values [{:x 95, :y 80} {:x 90, :y 10} {:x 150, :y 150}]}}]))
+           [{:motionPath [{:x 95, :y 80} {:x 90, :y 10} {:x 150, :y 150}]}]))
     (is (= (get-transition {:x 40 :y 10} ["M" 40 10] ["T" 150 150])
            [{:x 150 :y 150}]))
     (is (= (get-transition {:x 40 :y 10} ["T" 150 150] ["T" 150 150])
            [{:x 150 :y 150}]))                              ; <- not really correct but let it be
     (is (= (get-transition {:x 80 :y 25} nil ["A" 40 40 0 1 0 80 75])
-           [{:bezier [{:x 69.3845832715486, :y 11.741348755731238} {:x 51.553475440960696, :y 6.632281187803727} {:x 35.52736115395997, :y 12.257453718120182}]}
-            {:bezier [{:x 19.501246866959256, :y 17.882626248436637} {:x 8.77501000800801, :y 33.015333234477765} {:x 8.77501000800801, :y 49.99999999999999}]}
-            {:bezier [{:x 8.77501000800801, :y 66.98466676552222} {:x 19.50124686695925, :y 82.11737375156335} {:x 35.52736115395997, :y 87.74254628187981}]}
-            {:bezier [{:x 51.55347544096068, :y 93.36771881219627} {:x 69.38458327154859, :y 88.25865124426878} {:x 80, :y 75.00000000000001}]}]))))
+           [{:motionPath [{:x 69.3845832715486, :y 11.741348755731238} {:x 51.553475440960696, :y 6.632281187803727} {:x 35.52736115395997, :y 12.257453718120182}]}
+            {:motionPath [{:x 19.501246866959256, :y 17.882626248436637} {:x 8.77501000800801, :y 33.015333234477765} {:x 8.77501000800801, :y 49.99999999999999}]}
+            {:motionPath [{:x 8.77501000800801, :y 66.98466676552222} {:x 19.50124686695925, :y 82.11737375156335} {:x 35.52736115395997, :y 87.74254628187981}]}
+            {:motionPath [{:x 51.55347544096068, :y 93.36771881219627} {:x 69.38458327154859, :y 88.25865124426878} {:x 80, :y 75.00000000000001}]}]))))
 
 (deftest test-get-transitions
   (let [get-transitions #'ptt/get-transitions]
@@ -81,51 +79,48 @@
             [["M" 80 25] ["C" 30 40 50 40 60 30]]
             {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier {:type "cubic",
-                      :values [{:x 80, :y 25}
-                               {:x 30, :y 40}
-                               {:x 50, :y 40}
-                               {:x 60, :y 30}]}
+            {:motionPath {:type "cubic",
+                          :path [{:x 80, :y 25}
+                                 {:x 30, :y 40}
+                                 {:x 50, :y 40}
+                                 {:x 60, :y 30}]}
              :duration 100}]))
     (is (= (get-transitions
             [["M" 80 25] ["Q" 30 40 50 40]]
             {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier {:type "quadratic",
-                      :values [{:x 80, :y 25} {:x 30, :y 40} {:x 50, :y 40}]}
+            {:motionPath [{:x 80, :y 25} {:x 30, :y 40} {:x 50, :y 40}]
              :duration 100}]))
     (is (= (get-transitions
             [["M" 80 25] ["C" 40 10 65 10 95 80] ["S" 150 150 180 80]]
             {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier {:type "cubic",
-                      :values [{:x 80, :y 25}
-                               {:x 40, :y 10}
-                               {:x 65, :y 10}
-                               {:x 95, :y 80}]}
+            {:motionPath {:type "cubic",
+                          :path [{:x 80, :y 25}
+                                 {:x 40, :y 10}
+                                 {:x 65, :y 10}
+                                 {:x 95, :y 80}]}
              :duration 100}
-            {:bezier {:type "cubic",
-                      :values [{:x 95, :y 80}
-                               {:x 125, :y 150}
-                               {:x 150, :y 150}
-                               {:x 180, :y 80}]}
+            {:motionPath {:type "cubic",
+                          :path [{:x 95, :y 80}
+                                 {:x 125, :y 150}
+                                 {:x 150, :y 150}
+                                 {:x 180, :y 80}]}
              :duration 100}]))
     (is (= (get-transitions
             [["M" 80 25] ["Q" 40 10 65 10] ["T" 180 80]]
             {:duration 100})
            [{:x 80 :y 25 :duration 100}
-            {:bezier {:type "quadratic",
-                      :values [{:x 80, :y 25} {:x 40, :y 10} {:x 65, :y 10}]}
+            {:motionPath [{:x 80, :y 25} {:x 40, :y 10} {:x 65, :y 10}]
              :duration 100}
-            {:bezier {:type "quadratic",
-                      :values [{:x 65, :y 10} {:x 90, :y 10} {:x 180, :y 80}]}
+            {:motionPath [{:x 65, :y 10} {:x 90, :y 10} {:x 180, :y 80}]
              :duration 100}]))))
 
 (deftest test-transition->path
   (let [transition->path #'ptt/transition->path]
     (is (= (transition->path {:x 260 :y 150}) ["L" 260 150]))
-    (is (= (transition->path {:bezier [{:x 20 :y 20} {:x 40 :y 20} {:x 50 :y 10}]}) ["C" 20 20 40 20 50 10]))
-    (is (= (transition->path {:bezier [{:x 20 :y 20} {:x 40 :y 20}]}) ["Q" 20 20 40 20]))))
+    (is (= (transition->path {:motionPath [{:x 20 :y 20} {:x 40 :y 20} {:x 50 :y 10}]}) ["C" 20 20 40 20 50 10]))
+    (is (= (transition->path {:motionPath [{:x 20 :y 20} {:x 40 :y 20}]}) ["Q" 20 20 40 20]))))
 
 (deftest test-get-transitions-durations
   (let [get-transitions-durations #'ptt/get-transitions-durations]
@@ -150,21 +145,21 @@
                 :duration 5})
               (map round-duration-to-ms))
          (->> [{:x 1165, :y 635, :duration 0.983425}
-               {:bezier   [{:x 1143.769166, :y 608.482697}
-                           {:x 1108.106950, :y 598.264562}
-                           {:x 1076.054722, :y 609.514907}],
+               {:motionPath   [{:x 1143.769166, :y 608.482697}
+                               {:x 1108.106950, :y 598.264562}
+                               {:x 1076.054722, :y 609.514907}],
                 :duration 0.578813}
-               {:bezier   [{:x 1044.002493, :y 620.765252}
-                           {:x 1022.550020, :y 651.030666}
-                           {:x 1022.550020, :y 685}],
+               {:motionPath   [{:x 1044.002493, :y 620.765252}
+                               {:x 1022.550020, :y 651.030666}
+                               {:x 1022.550020, :y 685}],
                 :duration 0.578812}
-               {:bezier   [{:x 1022.550020, :y 718.969333}
-                           {:x 1044.002493, :y 749.234747}
-                           {:x 1076.054722, :y 760.485092}],
+               {:motionPath   [{:x 1022.550020, :y 718.969333}
+                               {:x 1044.002493, :y 749.234747}
+                               {:x 1076.054722, :y 760.485092}],
                 :duration 0.578812}
-               {:bezier   [{:x 1108.106950, :y 771.735437}
-                           {:x 1143.769166, :y 761.517302}
-                           {:x 1165, :y 735}],
+               {:motionPath   [{:x 1108.106950, :y 771.735437}
+                               {:x 1143.769166, :y 761.517302}
+                               {:x 1165, :y 735}],
                 :duration 0.578813}
                {:x 1165, :y 605, :duration 0.762661}
                {:x 1165, :y 765, :duration 0.938660}]
