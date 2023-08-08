@@ -16,8 +16,8 @@
     "@capacitor/assets": "^2.0.4",
     "@capacitor/cli": "^5.0.2",
     "@capacitor/core": "^5.0.2",
-    "karma": "^3.1.4",
-    "karma-chrome-launcher": "^2.2.0",
+    "karma": "^6.4.2",
+    "karma-chrome-launcher": "^3.2.0",
     "karma-cljs-test": "^0.1.0",
     "karma-firefox-launcher": "^2.1.2",
     "shadow-cljs": "^2.25.2"
