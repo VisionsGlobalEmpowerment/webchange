@@ -1,5 +1,6 @@
 (ns webchange.lesson-builder.tools.template-options.views
   (:require
+    [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.template-options.state :as state]
     [webchange.lesson-builder.tools.template-options.first-words-book-spreads.views :as first-words-book-spreads]
@@ -27,7 +28,7 @@
 
 (defn- string-field
   [{:keys [label key placeholder]}]
-  (let [default-value @(re-frame/subscribe [::state/saved-field-value key])]
+  (let [default-value @(re-frame/subscribe [::state/field-value key])]
     [ui/input {:label         label
                :placeholder   placeholder
                :default-value default-value
@@ -110,4 +111,7 @@
   []
   (re-frame/dispatch [::state/init])
   (fn []
-    [template-options-widget]))
+    (r/with-let []
+      [template-options-widget]
+      (finally
+        (re-frame/dispatch [::state/reset-stage])))))

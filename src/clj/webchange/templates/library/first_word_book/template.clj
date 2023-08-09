@@ -1,11 +1,32 @@
 (ns webchange.templates.library.first-word-book.template
   (:require
+    [clojure.spec.alpha :as s]
     [webchange.templates.core :as core]
-    [webchange.templates.library.first-word-book.add-spread :refer [create-spread edit-spread add-spread spread-idx->dialog-name]]
+    [webchange.templates.library.first-word-book.add-spread :refer [create-spread
+                                                                    edit-spread
+                                                                    add-spread
+                                                                    spread-idx->spread-name
+                                                                    spread-idx->dialog-name
+                                                                    spread-idx->text-name
+                                                                    spread-idx->image-name]]
     [webchange.templates.library.first-word-book.remove-last-spread :refer [remove-spread remove-last-spread]]
     [webchange.templates.library.first-word-book.timeout :as timeout]
     [webchange.templates.utils.dialog :as dialog]
     [webchange.utils.text :as text-utils]))
+
+(s/def ::letters string?)
+(s/def ::title string?)
+(s/def ::subtitle string?)
+(s/def ::delete-last-spread boolean?)
+
+(s/def ::spread (s/keys :req-un [:spread/text-left :spread/text-right
+                                 :spread/image-left :spread/image-right]
+                        :opt-un [:spread/letter-left :spread/letter-right]))
+(s/def ::spreads (s/* ::spread))
+
+(s/def :template-options/first-word-book
+  (s/keys :req-un [::letters ::title ::subtitle ::spreads]
+          :opt-un [ ::delete-last-spread]))
 
 (def create-options
   [{:key         :letters
@@ -494,12 +515,34 @@
         (add-spreads spreads-to-add)
         (assoc-in [:actions :set-total-spreads-number :var-value] (+ title-spreads-number new-spreads-number)))))
 
-(defn- apply-template-options
+(defn- saved-props
+  [{:keys [spreads]}]
+  (let [n (count spreads)
+        spreads (->> (range 2 (+ 2 n))
+                     (mapv (fn [idx] {:id idx
+                                      :view (spread-idx->spread-name idx)
+                                      :text-left {:linked-object (spread-idx->text-name idx :left)
+                                                  :linked-attribute "text"}
+                                      :text-right {:linked-object (spread-idx->text-name idx :right)
+                                                   :linked-attribute "text"}
+                                      :image-left {:src {:linked-object (spread-idx->image-name idx :left)
+                                                         :linked-attribute "src"}}
+                                      :image-right {:src {:linked-object (spread-idx->image-name idx :right)
+                                                          :linked-attribute "src"}}
+                                      :letter-left (get-in spreads [(- idx 2) :letter-left])
+                                      :letter-right (get-in spreads [(- idx 2) :letter-right])})))]
+    {:letters {:linked-object "spread-0-title-letters" :linked-attribute "text"}
+     :title {:linked-object "spread-0-title-text" :linked-attribute "text"}
+     :subtitle {:linked-object "spread-1-title-text" :linked-attribute "text"}
+     :spreads spreads}))
+
+(defn apply-template-options
   [activity-data args]
+  {:pre [(s/valid? :template-options/first-word-book args)]}
   (-> activity-data
       (set-data args)
       (process-spreads args)
-      (assoc-in [:metadata :saved-props :template-options] args)))
+      (assoc-in [:metadata :saved-props :template-options] (saved-props args))))
 
 (defn- add-spread-to-saved-props
   [activity-data spread]

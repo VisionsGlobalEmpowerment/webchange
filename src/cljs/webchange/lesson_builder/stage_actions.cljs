@@ -177,7 +177,7 @@
   [(re-frame/inject-cofx :activity-data)]
   (fn [{:keys [activity-data]} [_ {:keys [asset-url]}]]
     {:pre [(s/valid? ::spec/url asset-url)]}
-    (let [updated-activity-data (update activity-data :assets list-utils/remove-by-predicate #(= (:url %) asset-url) merge)]
+    (let [updated-activity-data (update activity-data :assets list-utils/remove-by-predicate #(= (:url %) asset-url))]
       {:dispatch [::state/set-activity-data updated-activity-data]})))
 
 
@@ -318,3 +318,11 @@
   (fn [{:keys [_]} [_ on-failure]]
     {:dispatch-n (cond-> []
                          (some? on-failure) (conj on-failure))}))
+
+;; Undo/Redo
+
+(re-frame/reg-event-fx
+  ::undo
+  (fn [{:keys [_db]} [_]]
+    {:dispatch-n [[::state/undo]
+                  [::stage-state/reset]]}))

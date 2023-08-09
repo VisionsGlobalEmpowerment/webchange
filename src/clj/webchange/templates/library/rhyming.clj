@@ -489,10 +489,12 @@
         (common/add-scene-object scene-objects)
         (common/update-unique-suffix)
         (update-in [:actions :init-total-balls-number :var-value] inc)
-        (update-in [:metadata :saved-props :template-options :balls] concat [(assoc args
-                                                                               :object ball-group-name
-                                                                               :object-img-name ball-img-name
-                                                                               :object-text-name ball-text-name)]))))
+        (update-in [:metadata :saved-props :template-options :balls] concat [{:side side
+                                                                              :text {:linked-object ball-text-name :linked-attribute "text"}
+                                                                              :img {:src {:linked-object ball-img-name :linked-attribute "src"}}
+                                                                              :object ball-group-name
+                                                                              :object-img-name ball-img-name
+                                                                              :object-text-name ball-text-name}]))))
 
 (defn- move-side-balls-to-remove-gaps
   [old-data side]
@@ -514,7 +516,7 @@
 (defn- mark-ball-deleted
   [balls ball-to-mark-object]
   (map (fn [{:keys [object] :as ball}]
-         (if (= object ball-to-mark-object)
+         (if (= (name object) (name ball-to-mark-object))
            (assoc ball :deleted true)
            ball))
        balls))
@@ -554,15 +556,11 @@
           (update-in [:metadata :saved-props :template-options :balls] mark-ball-deleted (name ball-group-name))))))
 
 (defn- edit-ball-action
-  [activity-data {:keys [object side img text]}]
+  [activity-data {:keys [object img text]}]
   (let [[_ _ suffix] (str/split object #"-")
 
-        ball-dialog-name (ball-dialog suffix)
-        ball-name (ball suffix)
-        ball-group-name (ball-group suffix)
         ball-img-name (ball-img suffix)
-        ball-text-name (ball-text suffix)
-        side (get-in activity-data [:objects ball-group-name :actions :drag-end :params :side])]
+        ball-text-name (ball-text suffix)]
     (-> activity-data
         (assoc-in [:objects ball-img-name :src] (:src img))
         (assoc-in [:objects ball-text-name :text] text))))

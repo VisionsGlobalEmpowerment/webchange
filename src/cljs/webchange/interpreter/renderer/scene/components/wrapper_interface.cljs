@@ -15,64 +15,55 @@
         (logger/error e)))
     (logger/error (str "[Wrapper Interface] Failed to execute <" method-name "> method: wrapper is nil"))))
 
-(defn execute-method [wrapper method & params] (execute wrapper method params))
+(defn execute-method [target method & params]
+  (let [targets (if (sequential? target) target [target])]
+    (doseq [wrapper targets]
+      (execute wrapper method params))))
 
 (defn add-animation [wrapper & params] (execute wrapper :add-animation params))
-(defn add-filter [wrapper & params] (execute wrapper :add-filter params))
 (defn get-data [wrapper & params] (execute wrapper :get-data params))
 (defn get-filter-value [wrapper & params] (execute wrapper :get-filter-value params))
 (defn get-opacity [wrapper & params] (execute wrapper :get-opacity params))
 (defn get-position [wrapper & params] (execute wrapper :get-position params))
 (defn get-init-position [wrapper & params] (execute wrapper :get-init-position params))
 (defn get-rotation [wrapper & params] (execute wrapper :get-rotation params))
-(defn play [wrapper & params] (execute wrapper :play-video params))
 (defn remove-animation [wrapper & params] (execute wrapper :remove-animation params))
-(defn set-animation [wrapper & params] (execute wrapper :set-animation params))
 (defn set-data [wrapper & params] (execute wrapper :set-data params))
 (defn set-filter-value [wrapper & params] (execute wrapper :set-filter-value params))
 (defn set-opacity [wrapper & params] (execute wrapper :set-opacity params))
-(defn set-align [wrapper & params] (execute wrapper :set-align params))
-(defn set-image-size [wrapper & params] (execute wrapper :set-image-size params))
+
+
 (defn set-position [wrapper & params] (execute wrapper :set-position params))
 (defn set-rotation [wrapper & params] (execute wrapper :set-rotation params))
 (defn set-scale [wrapper & params] (execute wrapper :set-scale params))
 (defn get-scale [wrapper & params] (execute wrapper :get-scale params))
-(defn set-dashed [wrapper & params] (execute wrapper :set-dashed params))
-(defn set-show-lines [wrapper & params] (execute wrapper :set-show-lines params))
+
+
 (defn set-skin [wrapper & params] (execute wrapper :set-skin params))
-(defn set-combined-skin [wrapper & params] (execute wrapper :set-combined-skin params))
-(defn set-skeleton [wrapper & params] (execute wrapper :set-skeleton params))
+
+
 (defn set-slot [wrapper & params] (execute wrapper :set-slot params))
 (defn set-src [wrapper & params] (execute wrapper :set-src params))
 (defn reset-video [wrapper & params] (execute wrapper :reset-video params))
-(defn set-highlight [wrapper & params] (execute wrapper :set-highlight params))
-(defn set-permanent-pulsation [wrapper & params] (execute wrapper :set-permanent-pulsation params))
-(defn set-alpha-pulsation [wrapper & params] (execute wrapper :set-alpha-pulsation params))
-(defn set-draggable [wrapper & params] (execute wrapper :set-draggable params))
+
+
+
+
 (defn set-parent [wrapper & params] (execute wrapper :set-parent params))
-(defn set-text [wrapper & params] (execute wrapper :set-text params))
+
 (defn clear-area [wrapper & params] (execute wrapper :clear params))
-(defn set-font-size [wrapper & params] (execute wrapper :set-font-size params))
-(defn set-font-family [wrapper & params] (execute wrapper :set-font-family params))
-(defn set-value [wrapper & params] (execute wrapper :set-value params))
+
+
+
 (defn set-visibility [wrapper & params] (execute wrapper :set-visibility params))
 (defn start-animation [wrapper & params] (execute wrapper :start-animation params))
 (defn set-filter [wrapper & params] (execute wrapper :set-filter params))
 (defn stop [wrapper & params] (execute wrapper :stop params))
 (defn set-tool [wrapper & params] (execute wrapper :set-tool params))
-(defn set-color [wrapper & params] (execute wrapper :set-color params))
 (defn set-interactive [wrapper & params] (execute wrapper :set-interactive params))
 (defn set-fill [wrapper & params] (execute wrapper :set-fill params))
 (defn get-fill [wrapper & params] (execute wrapper :get-fill params))
-(defn set-border-color [wrapper & params] (execute wrapper :set-border-color params))
-(defn set-path [wrapper & params] (execute wrapper :set-path params))
-(defn set-stroke [wrapper & params] (execute wrapper :set-stroke params))
-(defn animated-svg-path-start [wrapper & params] (execute wrapper :animated-svg-path-start params))
-(defn animated-svg-path-stop [wrapper & params] (execute wrapper :animated-svg-path-stop params))
-(defn animated-svg-path-reset [wrapper & params] (execute wrapper :animated-svg-path-reset params))
 (defn set-traffic-light [wrapper & params] (execute wrapper :set-traffic-light params))
-(defn set-enable [wrapper & params] (execute wrapper :set-enable params))
-(defn set-speed [wrapper & params] (execute wrapper :set-speed params))
 
 (defn get-wrapped-props [wrapper & params] (execute wrapper :get-wrapped-props params))
 (defn get-prop [wrapper & params] (execute wrapper :get-prop params))

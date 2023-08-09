@@ -31,8 +31,8 @@
       (set-scene-interactive db false)
       {:dispatch-n (list [::hide-navigation-menu]
                          [::scene/change-scene-object :settings-overlay [[:set-visibility {:visible true}]]]
-                         [::scene/change-scene-object :music-slider [[:set-value music-volume]]]
-                         [::scene/change-scene-object :effects-slider [[:set-value effects-volume]]])})))
+                         [::scene/change-scene-object :music-slider [[:set-value {:value music-volume}]]]
+                         [::scene/change-scene-object :effects-slider [[:set-value {:value effects-volume}]]])})))
 
 (re-frame/reg-event-fx
   ::hide-settings

@@ -14,6 +14,6 @@
                    :set-fill   (fn [color]
                                  (swap! state assoc :fill color)
                                  (utils/re-draw canvas-ctx texture @state))
-                   :set-stroke (fn [{:keys [stroke]}]
+                   :set-stroke (fn [stroke]
                                  (swap! state assoc :stroke stroke)
                                  (utils/re-draw canvas-ctx texture @state))}))

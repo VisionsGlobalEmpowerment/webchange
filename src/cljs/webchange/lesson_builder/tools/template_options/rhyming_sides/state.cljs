@@ -3,7 +3,7 @@
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.lesson-builder.layout.menu.state :as menu]
-    [webchange.lesson-builder.tools.template-options.state :refer [path-to-db]]))
+    [webchange.lesson-builder.tools.template-options.state :refer [render-prop path-to-db]]))
 
 (re-frame/reg-event-fx
   ::init
@@ -49,6 +49,7 @@
            (filter #(= (:side %) side-name))))))
 
 (comment
+  @(re-frame/subscribe [::answers])
   (concat [{:side 1}
            {:side 2}]
           [{:side 3}])
@@ -83,11 +84,17 @@
   ::set-answer-word
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx value]]
-    {:db (assoc-in db [:form :balls idx :text] value)}))
+    (let [saved-props (:saved-props db)
+          render-prop-event (render-prop saved-props [:balls idx :text] value)]
+      (merge {:db (assoc-in db [:form :balls idx :text] value)}
+             render-prop-event))))
 
 (re-frame/reg-event-fx
   ::set-answer-img
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx value]]
-    {:db (assoc-in db [:form :balls idx :img] value)}))
+    (let [saved-props (:saved-props db)
+          render-prop-event (render-prop saved-props [:balls idx :img] value)]
+      (merge {:db (assoc-in db [:form :balls idx :img] value)}
+             render-prop-event))))
 

@@ -12,7 +12,7 @@
    (cond-> (str "spread-" spread-idx)
            (some? side) (str "-" (clojure.core/name side)))))
 
-(defn- spread-idx->spread-name
+(defn spread-idx->spread-name
   [spread-idx]
   (spread-idx->spread-prefix spread-idx))
 
@@ -49,7 +49,7 @@
   (-> (spread-idx->spread-prefix spread-idx side)
       (str "-text")))
 
-(defn- spread-idx->image-name
+(defn spread-idx->image-name
   [spread-idx side]
   (-> (spread-idx->spread-prefix spread-idx side)
       (str "-image")))

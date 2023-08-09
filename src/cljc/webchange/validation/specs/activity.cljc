@@ -37,7 +37,14 @@
 (s/def :activity-data/actions some?)
 (s/def :activity-data/triggers some?)
 (s/def :activity-data/metadata some?)
-(s/def ::activity-data (s/keys :req-un [:activity-data/assets :activity-data/objects :activity-data/scene-objects :activity-data/actions :activity-data/triggers :activity-data/metadata]))
+(s/def :activity-data/views some?)
+(s/def ::activity-data (s/keys :req-un [:activity-data/assets
+                                        :activity-data/objects
+                                        :activity-data/scene-objects
+                                        :activity-data/actions
+                                        :activity-data/triggers
+                                        :activity-data/metadata]
+                               :opt-un [:activity-data/views]))
 
 (s/def ::archive-activity (s/keys :req-un [::archive]))
 (s/def ::toggle-visibility (s/keys :req-un [::visible]))

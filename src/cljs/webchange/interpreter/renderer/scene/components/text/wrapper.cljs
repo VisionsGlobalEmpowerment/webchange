@@ -69,7 +69,8 @@
 
                                               (emit text-object "textChanged"))
                    :update-chunks           (fn [{:keys [callback params]}]
-                                              (update-chunks! state (get params :chunks []))
+                                              (when (:container @state)
+                                                (update-chunks! state (get params :chunks [])))
                                               (when (fn? callback)
                                                 (callback)))
                    :set-highlight           (fn [highlight]

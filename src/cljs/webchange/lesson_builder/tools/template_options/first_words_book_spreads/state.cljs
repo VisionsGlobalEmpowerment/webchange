@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.lesson-builder.tools.template-options.state :refer [path-to-db] :as template-options-state]))
+    [webchange.lesson-builder.tools.template-options.state :refer [path-to-db render-prop] :as template-options-state]
+    [webchange.interpreter.renderer.state.scene :as state-renderer]))
 
 (re-frame/reg-event-fx
   ::init
@@ -44,15 +45,17 @@
   ::spread-data
   :<- [::template-options-state/field-value "spreads"]
   (fn [spreads [_ idx]]
-    (if (< idx (count spreads))
+    (when (< idx (count spreads))
       (get spreads idx))))
 
 (re-frame/reg-event-fx
   ::change-spread-data
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ spread-idx key value]]
-    {:db (-> db
-             (assoc-in [:form :spreads spread-idx key] value))}))
+    (let [saved-props (:saved-props db)
+          render-prop-event (render-prop saved-props [:spreads spread-idx key] value)]
+      (merge {:db (assoc-in db [:form :spreads spread-idx key] value)}
+             render-prop-event))))
 
 (re-frame/reg-event-fx
   ::delete-last-spread
@@ -76,4 +79,6 @@
   ::toggle-spread-state
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ idx key]]
-    {:db (update-in db [:spread-state idx key] not)}))
+    (let [view-id (get-in db [:form :spreads idx :view])]
+      {:db (update-in db [:spread-state idx key] not)
+       :dispatch [::state-renderer/set-scene-view (keyword view-id)]})))

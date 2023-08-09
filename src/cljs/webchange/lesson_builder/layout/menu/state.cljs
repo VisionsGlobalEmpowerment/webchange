@@ -2,7 +2,9 @@
   (:require
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
-    [webchange.utils.uid :refer [get-uid]]))
+    [webchange.utils.uid :refer [get-uid]]
+    [webchange.lesson-builder.stage-actions :as stage-actions]
+    [webchange.lesson-builder.state :as state]))
 
 (def path-to-db :lesson-builder/menu)
 
@@ -104,4 +106,14 @@
   (fn [{:keys [db]} [_]]
     (let [{:keys [on-back]} (get-current-handlers db)]
       (cond-> {:db (-> db (pop-history))}
-              (-> on-back empty? not) (assoc :dispatch-n on-back)))))
+              (seq on-back) (assoc :dispatch-n on-back)))))
+
+(re-frame/reg-sub
+  ::undo-active?
+  (fn [db]
+    (state/undo-available? db)))
+
+(re-frame/reg-event-fx
+  ::undo
+  (fn [{:keys [_db]} [_]]
+    {:dispatch [::stage-actions/undo]}))

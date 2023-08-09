@@ -1,5 +1,6 @@
 (ns webchange.lesson-builder.state
   (:require
+    [clojure.data :as d]
     [re-frame.core :as re-frame]
     [re-frame.std-interceptors :as i]
     [webchange.utils.flipbook :refer [flipbook-activity?]]
@@ -16,6 +17,79 @@
   (fn [db]
     (get db path-to-db)))
 
+(def activity-data-key :activity-data)
+
+;; undo/redo history
+
+(defn- push-undo
+  [db activity-data]
+  (-> db
+      (update :undo-history conj activity-data)))
+
+(defn- peek-undo
+  [db]
+  (-> db :undo-history first))
+
+(defn- pop-undo
+  [db]
+  (-> db
+      (update :undo-history rest)))
+
+(defn- push-redo
+  [db activity-data]
+  (-> db
+      (update :redo-history conj activity-data)))
+
+(defn- peek-redo
+  [db]
+  (-> db :redo-history first))
+
+(defn- pop-redo
+  [db]
+  (-> db
+      (update :redo-history rest)))
+
+(defn- reset-redo
+  [db]
+  (assoc db :redo-history '()))
+
+(defn- undo
+  [db]
+  (-> db
+      (assoc :has-activity-data-changes? true)
+      (push-redo (get db activity-data-key))
+      (assoc activity-data-key (peek-undo db))
+      (pop-undo)))
+
+(defn- redo
+  [db]
+  (-> db
+      (assoc :has-activity-data-changes? true)
+      (push-undo (get db activity-data-key))
+      (assoc activity-data-key (peek-redo db))
+      (pop-redo)))
+
+(defn undo-available?
+  [db]
+  (->> (get-in db [path-to-db :undo-history])
+       (remove nil?)
+       (seq)))
+
+(defn- diff-for-undo
+  [db]
+  (let [current-data (-> (get db activity-data-key) :objects)
+        next-data (-> (peek-undo db) :objects)]
+    (d/diff current-data next-data)))
+
+(comment
+  (let [db (get @re-frame.db/app-db path-to-db)
+        current-data (-> (get db activity-data-key) :objects)
+        next-data (-> (peek-undo db) :objects)]
+    (d/diff current-data next-data)
+
+    )
+  (-> @re-frame.db/app-db
+      (diff-for-undo)))
 ;; activity data
 
 (def activity-loading-key :activity-loading?)
@@ -29,8 +103,6 @@
   :<- [path-to-db]
   #(get % activity-loading-key true))
 
-(def activity-data-key :activity-data)
-
 (defn get-activity-data
   ([db]
    (get db activity-data-key))
@@ -41,6 +113,8 @@
   [db value]
   (set-before-leave!)
   (-> db
+      (push-undo (get db activity-data-key))
+      (reset-redo)
       (assoc activity-data-key value)
       (assoc :has-activity-data-changes? true)))
 
@@ -48,6 +122,8 @@
   [db value]
   (reset-before-leave!)
   (-> db
+      (push-undo (get db activity-data-key))
+      (reset-redo)
       (assoc activity-data-key value)
       (assoc :has-activity-data-changes? false)))
 
@@ -471,3 +547,9 @@
   (fn [{:keys [db]} [_ on-failure response]]
     (cond-> {:db (set-activity-saving db false)}
             (some? on-failure) (assoc :dispatch (conj on-failure response)))))
+
+(re-frame/reg-event-fx
+  ::undo
+  [(i/path path-to-db)]
+  (fn [{:keys [db]} [_]]
+    {:db (undo db)}))

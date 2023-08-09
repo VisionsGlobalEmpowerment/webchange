@@ -52,8 +52,6 @@
                                  (utils/get-rotation main-display-object))
             :set-rotation      (fn [value]
                                  (utils/set-rotation main-display-object value))
-            :add-filter        (fn [filter-data]
-                                 (filters/apply-filters main-display-object [filter-data]))
             :get-filter-value  (fn [filter-name]
                                  (filters/get-filter-value main-display-object filter-name))
             :set-filter-value  (fn [filter-name value]

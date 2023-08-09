@@ -1,6 +1,5 @@
 (ns webchange.lesson-builder.tools.template-options.first-words-book-spreads.views
   (:require
-    [reagent.core :as r]
     [re-frame.core :as re-frame]
     [webchange.lesson-builder.tools.template-options.first-words-book-spreads.state :as state]
     [webchange.lesson-builder.widgets.select-image.views :refer [select-image]]
@@ -60,7 +59,7 @@
 (defn field
   [props]
   (re-frame/dispatch [::state/init props])
-  (fn [props]
+  (fn [_props]
     (let [spreads @(re-frame/subscribe [::state/spreads-number])
           add-spread #(re-frame/dispatch [::state/add-spread])]
       [:div.first-words-book-spreads
