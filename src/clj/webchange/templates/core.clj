@@ -33,7 +33,6 @@
 (defn activity-from-template
   [{id :template-id :as data}]
   (let [{:keys [template metadata]} (get-in @templates [id])]
-    (log/debug "Create activity" id data)
     (-> (template data)
         (assoc-in [:metadata :template-id] id)
         (assoc-in [:metadata :template-version] (:version metadata))

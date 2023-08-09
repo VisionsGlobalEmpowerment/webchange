@@ -18,9 +18,15 @@
            (try
              (core/update-activity-template! (:id scene) user-id)
              (print ".")
-             (catch Exception e (str "caught exception: " (.getMessage e))))
+             (catch java.lang.AssertionError e
+               (println)
+               (println (str "Failed to update template " (:id scene) ". Assertion error: " (.getMessage e))))
+             (catch Exception e
+               (println)
+               (println (str "Failed to update template " (:id scene) ". Caught exception: " (.getMessage e)))))
            (print "x"))
-         (flush)))))
+         (flush)))
+     (println)))
   (println "Done!"))
 
 (defn search-scenes-for
