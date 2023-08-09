@@ -25,8 +25,8 @@
 (s/def ::spreads (s/* ::spread))
 
 (s/def :template-options/first-word-book
-  (s/keys :req-un [::letters ::title ::subtitle ::spreads]
-          :opt-un [ ::delete-last-spread]))
+  (s/keys :req-un [::letters ::title ::subtitle]
+          :opt-un [::delete-last-spread ::spreads]))
 
 (def create-options
   [{:key         :letters
