@@ -11,7 +11,8 @@
     [webchange.utils.flipbook :as flipbook-utils]
     [webchange.lesson-builder.state-flipbook-screenshot :as flipbook-screenshot]
     [webchange.lesson-builder.widgets.confirm.state :as confirm]
-    [webchange.utils.scene-data :as scene-data]))
+    [webchange.utils.scene-data :as scene-data]
+    [webchange.lesson-builder.initializer :as initializer]))
 
 (def path-to-db :lesson-builder/object-form)
 
@@ -19,6 +20,9 @@
   path-to-db
   (fn [db]
     (get db path-to-db)))
+
+(initializer/on-init path-to-db
+                     #(re-frame/dispatch [::init-clean]))
 
 (defn- secondary-object-names
   [objects main-object-name]
@@ -32,6 +36,12 @@
   (select-keys (:objects activity-data) (-> activity-data
                                             :objects
                                             (secondary-object-names main-object-name))))
+
+(re-frame/reg-event-fx
+  ::init-clean
+  [(i/path path-to-db)]
+  (fn [_ _]
+    {:db {}}))
 
 (re-frame/reg-event-fx
   ::init-object
@@ -210,7 +220,12 @@
    (i/path path-to-db)]
   (fn [{:keys [db activity-data]} [_ object-name]]
     (let [objects (get-in db [:targets object-name :objects])
-          has-changes? (-> activity-data :objects (#(select-keys % (keys objects))) (not= objects))]
+          has-changes? (and (seq objects)
+                            (-> activity-data :objects (select-keys (keys objects)) (not= objects)))]
+      (js/console.log :confirm-close
+                      (get-in db [:targets object-name :objects])
+                      (-> activity-data :objects (#(select-keys % (keys objects))))
+                      objects)
       (if has-changes?
         {:dispatch [::confirm/show-confirm-window {:message "Do you want to apply or discard changes?"
                                                    :title "You have changed the form"

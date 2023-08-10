@@ -83,12 +83,10 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_]]
-    (let [history (get-history db)]
-      (cond-> {}
-              (empty? history) (assoc :db (-> db
-                                              (reset-history)
-                                              (push-history :default)))))))
+  (fn [{:keys [_db]} [_]]
+    {:db (-> {}
+             (reset-history)
+             (push-history :default))}))
 
 (re-frame/reg-event-fx
   ::open-component

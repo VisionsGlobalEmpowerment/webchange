@@ -1,7 +1,8 @@
 (ns webchange.lesson-builder.widgets.confirm.state
   (:require
     [re-frame.core :as re-frame]
-    [re-frame.std-interceptors :as i]))
+    [re-frame.std-interceptors :as i]
+    [webchange.lesson-builder.initializer :as initializer]))
 
 (def path-to-db :lesson-builder/confirm)
 
@@ -10,6 +11,8 @@
   (fn [db]
     (get db path-to-db)))
 
+(initializer/on-init path-to-db
+                     #(re-frame/dispatch [::close-confirm-window]))
 ;; confirm window
 
 (def confirm-window-key :confirm-window)
@@ -80,3 +83,6 @@
     (let [{:keys [on-confirm]} (get-message-window db)]
       (cond-> {:db (assoc db message-window-key {:open? false})}
               (some? on-confirm) (assoc :dispatch on-confirm)))))
+
+(comment
+  @(re-frame/subscribe [path-to-db]))

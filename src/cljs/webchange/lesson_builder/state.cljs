@@ -8,7 +8,8 @@
     [webchange.utils.scene-data :refer [update-action]]
     [webchange.utils.uid :refer [get-uid]]
     [webchange.state.warehouse :as warehouse]
-    [webchange.utils.module-router :refer [set-before-leave! reset-before-leave!]]))
+    [webchange.utils.module-router :refer [set-before-leave! reset-before-leave!]]
+    [webchange.lesson-builder.initializer :as initializer]))
 
 (def path-to-db :lesson-builder/index)
 
@@ -258,8 +259,9 @@
 (re-frame/reg-event-fx
   ::init
   [(i/path path-to-db)]
-  (fn [{:keys [db]} [_ {:keys [activity-id]}]]
-    {:db         (-> db
+  (fn [{:keys [_db]} [_ {:keys [activity-id]}]]
+    (initializer/init)
+    {:db         (-> {}
                      (set-activity-loading true)
                      (set-activity-info-loading true))
      :dispatch-n [[::warehouse/load-activity-current-version
