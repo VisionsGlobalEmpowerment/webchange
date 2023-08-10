@@ -112,6 +112,8 @@
       (fn [this]
         (let [{:keys [reset-resources? scene-data]} (r/props this)]
           (init-scene scene-data current-scene-id loading reset-resources?)))
+      :should-component-update
+      (fn [] false)
       :reagent-render
       (fn [{:keys [id mode on-ready trigger on-ready-to-start on-start-click scene-data force-show-scene? current-page] :as props}]
         (let [viewport (-> (element->viewport @container)
@@ -131,7 +133,9 @@
                      (fn? on-ready-to-start))
             (on-ready-to-start))
           (reset! prev-viewport viewport)
-          [:div {:ref        #(when % (reset! container (.-parentNode %)))
+          [:div {:ref        #(when %
+                                (reset! container (.-parentNode %))
+                                (handle-resize))
                  :class-name (get-class-name {"stage-container"                  true
                                               (str "current-page-" current-page) (some? current-page)})
                  :style      {:width    "100%"
