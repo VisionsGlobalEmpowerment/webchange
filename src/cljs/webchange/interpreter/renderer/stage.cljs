@@ -112,8 +112,6 @@
       (fn [this]
         (let [{:keys [reset-resources? scene-data]} (r/props this)]
           (init-scene scene-data current-scene-id loading reset-resources?)))
-      :should-component-update
-      (fn [] false)
       :reagent-render
       (fn [{:keys [id mode on-ready trigger on-ready-to-start on-start-click scene-data force-show-scene? current-page] :as props}]
         (let [viewport (-> (element->viewport @container)

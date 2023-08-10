@@ -123,7 +123,6 @@
 
 (defn set-scene-object-state
   [db object-name state]
-  (js/console.log :set-scene-object-state object-name state)
   (let [filtered-state (filter-extra-props state [:revert :start :target :volume])
         [execute-actions not-handled-params] (loop [actions-to-execute []
                                                     [{:keys [action to-generic?] :as available-action} & rest-available-actions] available-actions
