@@ -14,6 +14,8 @@
   [{:keys [x y]} [path-type & coordinates]]
   (concat [(upper-case path-type)]
           (case path-type
+            ("M")
+            coordinates
             ("m" "l" "t" "c" "q" "s")
             (->> coordinates
                  (partition 2)

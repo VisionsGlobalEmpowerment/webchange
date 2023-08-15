@@ -30,7 +30,8 @@
             (let [elapsed (- (.getTime (js/Date.)) start-time)]
               (if (< elapsed (:duration @state))
                 (draw-frame elapsed state)
-                (do (remove-ticker (:ticker @state))
+                (do (draw-frame elapsed state)
+                    (remove-ticker (:ticker @state))
                     (on-end)))))]
     (swap! state assoc :ticker f)
     (add-ticker f)))

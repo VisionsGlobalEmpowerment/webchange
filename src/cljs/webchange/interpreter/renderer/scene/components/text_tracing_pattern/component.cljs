@@ -1,17 +1,18 @@
 (ns webchange.interpreter.renderer.scene.components.text-tracing-pattern.component
   (:require
+    [clojure.string :as str]
     [re-frame.core :as re-frame]
     [webchange.interpreter.pixi :refer [Container]]
-    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
-    [webchange.interpreter.renderer.scene.components.utils :as utils]
-    [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
-    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.utils :refer [set-enable!]]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.component :as a]
     [webchange.interpreter.renderer.scene.components.animated-svg-path.tracing :as tracing]
     [webchange.interpreter.renderer.scene.components.image.component :as i]
-    [webchange.interpreter.renderer.scene.components.svg-path :refer [get-svg-path]]
-    [webchange.interpreter.renderer.state.scene :as state]
+    [webchange.interpreter.renderer.scene.components.svg-path :refer [text->svg-letters]]
+    [webchange.interpreter.renderer.scene.components.svg-path.component :as s]
+    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.utils :refer [set-enable!]]
+    [webchange.interpreter.renderer.scene.components.text-tracing-pattern.wrapper :refer [wrap]]
+    [webchange.interpreter.renderer.scene.components.utils :as utils]
     [webchange.interpreter.renderer.scene.filters.filters :refer [apply-filters]]
+    [webchange.interpreter.renderer.state.scene :as state]
     [webchange.logger.index :as logger]))
 
 (def default-props {:x                        {:default 0}
@@ -113,15 +114,15 @@
                    (vec (repeat repeat-text spacing)))
         text (if repeat-text (apply str (repeat repeat-text text)) text)
         spacings (or (seq spacings) (-> text count (repeat inner-spacing) vec))
-        length (count text)
+        svg-letters (text->svg-letters text {:trace? false})
+        length (count svg-letters)
         widths (accumulate
                 (map-indexed (fn [index letter]
                                (->> letter
-                                    get-svg-path
                                     get-path-width
                                     (+ (nth spacings index))
                                     (* letter-scale)))
-                             text))
+                             svg-letters))
         total (- (last widths) (* letter-scale (last spacings)))
         to-offset "FfiíU"
         positions (->> (range length)
@@ -130,15 +131,14 @@
                                :y topline-y
                                :dash-offset (if (some #{(nth text pos)} to-offset) 4 0)
                                :index pos})))
-        letters (->> text
-                     (map #(get-svg-path % {:trace? false}))
+        letters (->> svg-letters
                      (map #(path->letter letter-scale % dashed))
                      (map merge positions))]
     (doall
      (for [letter letters]
        (let [component (s/create (assoc letter
-                                   :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
-                                   :parent group))]
+                                        :object-name (keyword (str "text-tracing-pattern-" (:index letter)))
+                                        :parent group))]
          (re-frame/dispatch [::state/register-object component]))))))
 
 (defn- activate-next-letter
@@ -163,34 +163,33 @@
                    (vec (flatten (repeat repeat-text [20 spacing])))
                    (vec (repeat repeat-text spacing)))
         text (if repeat-text (apply str (repeat repeat-text text)) text)
-        length (count text)
+        svg-letters (text->svg-letters text {:trace? true})
+        length (count svg-letters)
         widths (accumulate
-                 (map-indexed (fn [index letter]
-                                (->> letter
-                                     get-svg-path
-                                     get-path-width
-                                     (+ (nth spacings index))
-                                     (* letter-scale)))
-                              text))
+                (map-indexed (fn [index letter]
+                               (->> letter
+                                    get-path-width
+                                    (+ (nth spacings index))
+                                    (* letter-scale)))
+                             svg-letters))
         total (- (last widths) (* letter-scale (last spacings)))
         positions (->> (range length)
                        (map (fn [pos]
                               {:x (int (+ (nth widths pos) (or x-offset (/ (- width total) 2))))
                                :y topline-y})))
 
-        letters (->> text
-                     (map #(get-svg-path % {:trace? true}))
+        letters (->> svg-letters
                      (map #(path->animated-letter letter-scale %))
                      (map merge positions))]
     (doall
-      (for [letter letters]
-        (let [animated-svg-path (a/create (assoc letter
-                                            :active false
-                                            :on-finish #(activate-next-letter state props)
-                                            :object-name (str "text-tracing-pattern-animated-" (:x letter))
-                                            :parent group))]
-          (swap! state update :letters conj animated-svg-path)
-          (swap! state update :all-letters conj animated-svg-path))))
+     (for [letter letters]
+       (let [animated-svg-path (a/create (assoc letter
+                                                :active false
+                                                :on-finish #(activate-next-letter state props)
+                                                :object-name (str "text-tracing-pattern-animated-" (:x letter))
+                                                :parent group))]
+         (swap! state update :letters conj animated-svg-path)
+         (swap! state update :all-letters conj animated-svg-path))))
 
     (reset! tracing/hint {:arrow (i/create {:type "image"
                                             :x -100
@@ -210,7 +209,7 @@
                                           :origin {:type "center-center"}
                                           :object-name "text-tracing-pattern-dot"
                                           :parent group})})
-      (activate-next-letter state)))
+    (activate-next-letter state)))
 
 (defn- padding-scale
   [length scale-by-height width]
@@ -225,7 +224,8 @@
 (defn- get-scale
   [{:keys [text repeat-text width height]}]
   (let [text (if repeat-text (apply str (repeat repeat-text text)) text)
-        length (count text)
+        svg-letters (text->svg-letters text {:trace? false})
+        length (count svg-letters)
         scale-by-height (-> height (- (* 2 line-height)) (/ base-height))
         base-total-width (- (* length base-width) (* (dec length) safe-padding 2))
         scale-by-width (/ width base-total-width)]
@@ -252,7 +252,7 @@
         midline-y (-> topline-y (+ (* midline-offset letter-scale)))
         baseline-y (-> topline-y (+ (* baseline-offset letter-scale)))
         text-offset-y (* letter-offset-y letter-scale)
-        has-text? (not (clojure.string/blank? text))]
+        has-text? (not (str/blank? text))]
     (swap! state assoc :letters [])
     (swap! state assoc :all-letters [])
     (reset-group! group)
