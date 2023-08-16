@@ -1,7 +1,8 @@
 (ns webchange.interpreter.renderer.scene.components.svg-path
   (:require
     [clojure.string :as s]
-    [webchange.renderer.letters-path :refer [alphabet-path
+    [webchange.renderer.letters-path :refer [letters-path
+                                             alphabet-path
                                              alphabet-traceable-path]]))
 
 (defn- right-from
@@ -92,12 +93,24 @@
   (let [letters (->> (keys combining-fns) (into #{}))]
     (some letters x)))
 
+(defn- get-letter-svg
+  [letter]
+  (let [shape (move-path-left (get-in letters-path [letter :shape]))
+        trace (move-path-left (get-in letters-path [letter :trace]))]
+    {:shape shape
+     :trace trace
+     :bbox (get-bbox shape)}))
+
 (defn- get-combining-svg
-  [source path]
+  [path]
   (let [[letter combining] path
-        letter-svg (move-path-left (get source letter))
-        comb-fn (get combining-fns combining)]
-    (comb-fn letter-svg (get-bbox letter-svg))))
+        letter-svg (get-letter-svg letter)
+        comb-fn (get combining-fns combining)
+        shape (comb-fn (:shape letter-svg) (:bbox letter-svg))
+        trace (comb-fn (:trace letter-svg) (:bbox letter-svg))]
+    {:shape shape
+     :trace trace
+     :bbox (get-bbox shape)}))
 
 (defn get-svg-path
   ([path]
@@ -107,11 +120,22 @@
          with-combining? (fn [[_ x]] (combining? x))]
      (cond
        (contains? source path) (move-path-left (get source path))
-       (with-combining? path) (get-combining-svg source path)
+       (with-combining? path) (if trace?
+                                (-> (get-combining-svg path) :trace)
+                                (-> (get-combining-svg path) :shape))
        :else path))))
 
+(defn- letter->svg
+  [letter]
+  (let [with-combining? (fn [[_ x]] (combining? x))]
+    (cond
+      (contains? letters-path letter) (get-letter-svg letter)
+      (with-combining? letter) (get-combining-svg letter)
+      :else {:shape ""
+             :trace ""})))
+
 (defn text->svg-letters
-  [text {:keys [trace?] :or {trace? false}}]
+  [text]
   (->> text
        (reduce (fn [a l] (if (combining? l)
                            (let [prev (last a)
@@ -120,11 +144,11 @@
                              (conj new-a (str prev l)))
                            (conj a l)))
                [])
-       (mapv #(get-svg-path % {:trace? trace?}))))
+       (mapv letter->svg)))
 
 (comment
-  (text->svg-letters "நாய்க்" {:trace? true})
-  (text->svg-letters "னூ" {:trace? true})
+  (text->svg-letters "நாய்க்")
+  (text->svg-letters "னூ")
   (get-svg-path "க்" {:trace? true})
 
 
