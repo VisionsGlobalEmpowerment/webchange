@@ -1,7 +1,6 @@
 (ns webchange.utils.letters
   (:require
-    [webchange.renderer.letters-path :refer [letters-path]]
-    [webchange.utils.concepts :as concepts]))
+    [webchange.renderer.letters-path :refer [letters-path]]))
 
 " How draw a letter:
 
@@ -32,21 +31,12 @@
   (-> (clojure.string/lower-case letter)
       (= letter)))
 
-(def upper-case-letter? (complement lower-case-letter?))
-
 (defn get-lower-case-letters
   "Get all lowercase letters defined in `webchange.renderer.letters-path`"
   []
   (->> letters-path
        (map first)
        (filter lower-case-letter?)))
-
-(defn get-upper-case-letters
-  "Get all capital letters defined in `webchange.renderer.letters-path`"
-  []
-  (->> letters-path
-       (map first)
-       (filter upper-case-letter?)))
 
 (defn get-letters-path
   "Map letters into svg letters path"
@@ -105,19 +95,3 @@
           (v right-small)
           (v right-big)]
          (clojure.string/join " "))))
-
-(comment
-  "Update dataset items letter path"
-
-  (def course-slug "spanish")
-
-  (doseq [letter (-> (get-lower-case-letters)
-                     (sort))]
-    (let [svg-path (get-in letters-path [letter :trace])
-          {:keys [id] :as dataset-item} (-> (concepts/get-dataset-items course-slug)
-                                            (concepts/find-dataset-by-data #(= letter (:letter %))))]
-      (when (and (some? svg-path)
-                 (some? dataset-item))
-        (let [[ok?] (concepts/update-dataset-item-data id {:letter-path          svg-path
-                                                           :letter-tutorial-path svg-path})]
-          (print letter ": id" id "-" (if ok? "ok" "fail") "\n"))))))

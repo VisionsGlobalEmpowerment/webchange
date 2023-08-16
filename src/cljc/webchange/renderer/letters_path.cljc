@@ -1,5 +1,4 @@
-(ns webchange.renderer.letters-path
-  (:require [clojure.string :as s]))
+(ns webchange.renderer.letters-path)
 
 (def letters-path
   {"A"  {:shape "M 62 190 l 57 -150 q 6 -10 13 0 l 56 151 m -108 -47 l 90 0"
