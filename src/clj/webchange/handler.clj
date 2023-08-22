@@ -162,7 +162,8 @@
   ;; Technical
   (GET "/test-ui" [] (public-route))
 
-  (files "/upload/" {:root (env :upload-dir)})
+  (files "/upload/" {:root (str (env :public-dir) "/upload")})
+  (files "/raw/" {:root (str (env :public-dir) "/raw")})
   (resources "/"))
 
 (defroutes animation-routes

@@ -1,22 +1,28 @@
-version: "3.3"
 services:
-  db:
+  postgres:
     image: postgres
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./webchange/dump-secondary.sql:/docker-entrypoint-initdb.d/dump-secondary.sql
+      - ../dump.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
-      - "55433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: "webchange"
       POSTGRES_PASSWORD: "webchange"
       POSTGRES_DB: "webchange"
   web:
-    build: .
+    build:
+      context: ../.
+      dockerfile: ./docker/Dockerfile
+      no_cache: true
+    volumes:
+      - ../.:/app
+      - ~/.m2:/root/.m2
     ports:
       - "3000:3000"
+      - "45555:45555"
     environment:
-      - "DB_PASSWORD=${DB_PASSWORD}"
       - "DB_HOST=postgres"
     depends_on:
-      - db
+      - postgres
+      
