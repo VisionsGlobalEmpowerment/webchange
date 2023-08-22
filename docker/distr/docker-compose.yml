@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./dump-secondary.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "webchange"
+      POSTGRES_PASSWORD: "webchange"
+      POSTGRES_DB: "webchange"
+  web:
+    build: .
+    command: sh -c "java -jar /app/webchange.jar"
+    restart: always
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      CONFIG: "/app/config.edn"
+    depends_on:
+      - postgres
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: always
