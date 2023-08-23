@@ -38,11 +38,15 @@
        :description "Model a conversation. Add questions to check for comprehension."
        :activity-ids {:english 574
                       :spanish 1473}}
-      {:name "Interactive Read Aloud "
+      {:name "Interactive Read Aloud"
        :description "Show a read aloud book. Add 'Teacher Talk' to support learners and questions to check for comprehension."
        :preview "/upload/YGYOFJOSCVQIVFLY.png"
        :activity-ids {:english 834
                       :spanish 913}}
+      {:name "Empty Interactive Read Aloud"
+       :description "Show a read aloud book. Add 'Teacher Talk' to support learners and questions to check for comprehension."
+       :preview "/upload/YGYOFJOSCVQIVFLY.png"
+       :activity-ids {:english 2615}}
       {:name "Letter Introduction"
        :description "Introduce the alphabet, one letter at a time."
        :preview "/upload/JCUMLEIECSBEOQSL.png"
