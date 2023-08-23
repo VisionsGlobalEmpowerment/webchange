@@ -144,6 +144,7 @@
                              (conj new-a (str prev l)))
                            (conj a l)))
                [])
+       (remove s/blank?)
        (mapv letter->svg)))
 
 (comment
