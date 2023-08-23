@@ -15,6 +15,7 @@
           select-book #(re-frame/dispatch [::state/select-book %])]
       [:div.select-book
        [ui/select {:label label
+                   :type "int"
                    :value book-value
                    :required? true
                    :disabled? loading?

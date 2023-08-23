@@ -308,6 +308,19 @@
         (update-in [:actions :dialog-main] remove-empty-parallel)
         (update-in [:actions :dialog-main :data] concat with-effects))))
 
+(defn- move-book-to-top
+  [activity-data]
+  (let [book-background-layer ["book-background"]
+        book-layer ["book" "page-numbers"]
+        scene-objects (as-> activity-data a
+                            (get a :scene-objects)
+                            (remove (fn [item] (= book-layer item)) a)
+                            (remove (fn [item] (= book-background-layer item)) a)
+                            (concat a [book-background-layer] [book-layer])
+                            (into [] a))]
+    (-> activity-data
+        (assoc :scene-objects scene-objects))))
+
 (defn- template-options
   [activity-data {book-id :book-id}]
   (let [current-book-id (get-in activity-data [:metadata :saved-props :template-options :book-id])]
@@ -315,6 +328,7 @@
         (remove-old-book current-book-id)
         (import-book book-id)
         (rebuild-dialog book-id)
+        (move-book-to-top)
         (assoc-in [:metadata :saved-props :template-options :book-id] book-id))))
 
 (defn- update-template
