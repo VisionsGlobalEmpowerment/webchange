@@ -35,7 +35,7 @@
   {"்" (fn [path {:keys [x width]}]
         (str path " M " (/ (+ 20 x width) 2) " 80 l 0 0.1"))
    "ா" (fn [path bbox]
-         (let [comb "M 0 191 191 v -82 h 77 m -32 0 v 84"]
+         (let [comb "M 0 191 v -82 h 77 m -32 0 v 84"]
            (right-from comb path bbox)))
    "ி" (fn [path _] path)
    "ூ" (fn [path _] path)
@@ -49,7 +49,7 @@
            (left-from comb path {:width 120})))
    "ை" (fn [path _]
          (let [comb "M 7 161 c 21 -23 47 -11 45 10 c -3 35 -49 28 -45 -10 c 0 -68 111 -68 111 5 c 0 38 -39 38 -39 0 c 1 -55 83 -76 76 -3 c -1 19 -2 22 -5 32"]
-           (left-from comb path {:width 120})))
+           (left-from comb path {:width 155})))
    "ொ" (fn [path bbox]
          (let [left "M 49 191 c -24 -15 -20 -48 11 -48 c 30 0 32 49 0 49 c -85 -1 -65 -130 1 -130 c 62 0 56 36 56 130"
                rigth "M 0 191 191 v -82 h 77 m -32 0 v 84"]
@@ -150,6 +150,8 @@
 (comment
   (text->svg-letters "நாய்க்")
   (text->svg-letters "னூ")
+  (text->svg-letters "நாய் ")
+  (text->svg-letters "இலை")
   (get-svg-path "க்" {:trace? true})
 
 
