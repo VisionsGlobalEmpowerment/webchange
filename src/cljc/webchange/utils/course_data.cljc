@@ -211,3 +211,27 @@
                                            :target-activity activity-position
                                            :position        position}
                   moved-activity)))
+
+(defn get-activity
+  [course-data {:keys [target-level target-lesson target-activity]}]
+  {:pre [(level-idx? target-level)
+         (lesson-idx? target-lesson)
+         (activity-idx? target-activity)]}
+  (get-in course-data [:levels (dec target-level) :lessons (dec target-lesson) :activities (dec target-activity)]))
+
+(defn replace-activity
+  ([course-data params]
+   (add-activity course-data params {}))
+  ([course-data {:keys [activity-slug target-level target-lesson target-activity position]} activity-data]
+   {:pre [(activity-slug? activity-slug)
+          (level-idx? target-level)
+          (lesson-idx? target-lesson)
+          (activity-idx? target-activity)
+          (position? position)]}
+   (let [activities (-> (get-in course-data [:levels (dec target-level) :lessons (dec target-lesson) :activities])
+                        (l/remove-at-position (dec target-activity))
+                        (l/insert-at-position (merge {:activity  activity-slug
+                                                      :unique-id (next-uid course-data)}
+                                                     activity-data)
+                                              (dec target-activity)))]
+     (assoc-in course-data [:levels (dec target-level) :lessons (dec target-lesson) :activities] activities))))

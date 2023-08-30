@@ -30,36 +30,46 @@
                      (when (some? ref)
                        (reset! el ref)))]
     (r/create-class
-      {:display-name "bbs--image"
+     {:display-name "bbs--image"
 
-       :component-did-mount
-       (fn [this]
-         (let [{:keys [src lazy? state]} (r/props this)
-               load #(load-image src handle-load handle-error)]
-           (when (nil? state)
-             (if lazy?
-               (observer/observe @el id load)
-               (load)))))
+      :component-did-mount
+      (fn [this]
+        (let [{:keys [src lazy? state]} (r/props this)
+              load #(load-image src handle-load handle-error)]
+          (when (nil? state)
+            (if lazy?
+              (observer/observe @el id load)
+              (load)))))
 
-       :component-will-unmount
-       (fn []
-         (observer/un-observe id))
+      :component-did-update
+      (fn [this]
+        (let [{:keys [src lazy? state]} (r/props this)
+              load #(load-image src handle-load handle-error)]
+          (when (or (and (nil? state) (= @status :error))
+                    (and (empty? src) (= @status :loaded)))
+            (if lazy?
+              (observer/observe @el id load)
+              (load)))))
+      
+      :component-will-unmount
+      (fn []
+        (observer/un-observe id))
 
-       :reagent-render
-       (fn [{:keys [class-name data on-click src title]}]
-         (->> (r/current-component)
-              (r/children)
-              (into [:div (cond-> {:id         id
-                                   :class-name (get-class-name {"bbs--image" true
-                                                                class-name   (some? class-name)})
-                                   :title      src
-                                   :ref        handle-ref
-                                   :on-click   on-click}
-                                  (some? title) (assoc :title title))
-                     (case @status
-                       :loading [:div.loading
-                                 [circular-progress]]
-                       :loaded [:img (cond-> {:src src}
-                                             (some? data) (merge (get-data-attributes data)))]
-                       :error [:div.not-loaded
-                               [system-icon {:icon "image-broken"}]])])))})))
+      :reagent-render
+      (fn [{:keys [class-name data on-click src title]}]
+        (->> (r/current-component)
+             (r/children)
+             (into [:div (cond-> {:id         id
+                                  :class-name (get-class-name {"bbs--image" true
+                                                               class-name   (some? class-name)})
+                                  :title      src
+                                  :ref        handle-ref
+                                  :on-click   on-click}
+                                 (some? title) (assoc :title title))
+                    (case @status
+                      :loading [:div.loading
+                                [circular-progress]]
+                      :loaded [:img (cond-> {:src src}
+                                            (some? data) (merge (get-data-attributes data)))]
+                      :error [:div.not-loaded
+                              [system-icon {:icon "image-broken"}]])])))})))

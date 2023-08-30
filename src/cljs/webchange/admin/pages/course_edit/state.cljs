@@ -389,8 +389,14 @@
   ::add-activity
   [(i/path path-to-db)]
   (fn [{:keys [db]} [_ props activity-data]]
-    (let [new-course-data (-> (get-course-data db)
-                              (utils/add-activity props activity-data))]
+    (let [replace? (-> (get-course-data db)
+                       (utils/get-activity props)
+                       (get :placeholder? false))
+          new-course-data (if replace?
+                            (-> (get-course-data db)
+                                (utils/replace-activity props activity-data))
+                            (-> (get-course-data db)
+                                (utils/add-activity props activity-data)))]
       {:db       (set-course-data db new-course-data)
        :dispatch [::save-course]})))
 

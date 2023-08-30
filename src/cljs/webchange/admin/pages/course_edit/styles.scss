@@ -89,6 +89,14 @@
                 }
             }
         }
+
+	&.draggable-placeholder {
+	    & > * {
+		&:after {
+		    border-top: unset;
+		}
+            }
+	}
     }
 
     .list-item {

@@ -113,6 +113,7 @@
                                     :level    level-idx
                                     :lesson   lesson-idx
                                     :activity idx}
+                    :class-name (ui/get-class-name {"draggable-placeholder" placeholder?})
                     :drop-allowed? drop-allowed?
                     :on-drop       handle-drop}
          [ui/list-item {:name       (or name activity-name)
