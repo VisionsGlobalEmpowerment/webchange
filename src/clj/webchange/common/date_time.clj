@@ -10,10 +10,12 @@
       (log/warn e))))
 
 (defn date2str [date]
-  (jt/format "yyyy-MM-dd" date))
+  (when date
+    (jt/format "yyyy-MM-dd" date)))
 
 (defn str2date [date]
-  (jt/local-date "yyyy-MM-dd"  date))
+  (when (seq date)
+    (jt/local-date "yyyy-MM-dd"  date)))
 
 (defn iso-str2date-time [date]
   (try
