@@ -19,6 +19,10 @@ RUN cp ./lein /usr/local/bin/lein
 RUN chmod a+x /usr/local/bin/lein
 RUN lein
 
+curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+chmod +x install
+./install
+
 WORKDIR /app
 
 CMD lein with-profile +cljs,+cljs-test repl :headless :host "0.0.0.0" :port 45555

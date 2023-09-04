@@ -9,4 +9,8 @@ RUN dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN apt-get -y install curl wget gzip nginx openjdk-17-jre postgresql-client
 
+curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install
+chmod +x install
+./install
+
 WORKDIR /app
