@@ -205,7 +205,7 @@
   (let [length (count svg-letters)
         scale-by-height (-> height (- (* 2 line-height)) (/ base-height))
         base-width (->> svg-letters (map :bbox) (map :width) (reduce +))
-        base-total-width (- base-width (* (dec length) safe-padding 2))
+        base-total-width (+ base-width (* (dec length) safe-padding 2))
         scale-by-width (/ width base-total-width)]
     (if (> scale-by-width scale-by-height)
       {:type    :by-height
