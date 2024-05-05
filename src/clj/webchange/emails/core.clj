@@ -13,7 +13,7 @@
     (db/insert-code! {:code code :created_at created-at :metadata metadata})
     (.toString code)))
 
-(def from-email "info@bluebrickschool.org")
+(def from-email "info@host.bluebrickschool.org")
 
 (defn- send-email!
   [email subject html]
