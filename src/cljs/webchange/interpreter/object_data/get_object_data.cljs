@@ -2,11 +2,12 @@
   (:require
     [re-frame.core :as re-frame]
     [webchange.interpreter.events-register :as ier]
-    [webchange.subs :as subs]
     [webchange.interpreter.object-data.group-params :refer [with-group-params]]
     [webchange.interpreter.object-data.object-filters :refer [with-filter-params]]
     [webchange.interpreter.renderer.scene.components.animation.animation-params :refer [animations-params]]
-    [webchange.interpreter.renderer.scene.components.flipbook.decorations :as flipbook-decorations]))
+    [webchange.interpreter.renderer.scene.components.flipbook.decorations :as flipbook-decorations]
+    [webchange.logger.index :as logger]
+    [webchange.subs :as subs]))
 
 (defn- prepare-anim-object-params
   "Overwrite animation properties. Set default skin if no skin provided."
@@ -187,7 +188,9 @@
                        :question (-> object
                                      (assoc :object-name (keyword name))
                                      (filter-extra-props []))
-                       (-> (str "Object with type " type " can not be parsed (" name ")") (js/Error.) (throw)))]
+                       (do
+                         (logger/error (str "Object with type " type " can not be parsed (" name ")"))
+                         {}))]
      (-> object-data
          (filter-extra-props [:actions :states :scene-name :transition :filter-transition])))))
 

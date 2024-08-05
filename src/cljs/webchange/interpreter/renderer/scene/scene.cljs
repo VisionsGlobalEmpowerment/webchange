@@ -109,7 +109,8 @@
       (fn []
         (remove-all-tickers)
         (collisions/reset-ticker)
-        (.destroy @scene-container (clj->js {:children true}))
+        (when @scene-container
+          (.destroy @scene-container (clj->js {:children true})))
         (-> (get-renderer)
             (unregister-handler "resize" handle-renderer-resize)))
 
