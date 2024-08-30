@@ -310,7 +310,7 @@
                                 :id   "timeout-timer"}
          :timeout-timer        {:type     "set-interval"
                                 :id       "timeout-timer"
-                                :interval 25000
+                                :interval 35000
                                 :action   "timeout"}
          :timeout              {:type       "action"
                                 :unique-tag "instructions"
