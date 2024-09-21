@@ -498,15 +498,16 @@
   (let [prev-spreads-number (-> activity-data
                                 (get-in [:metadata :saved-props :template-options :spreads])
                                 (count))
+        prev-spreads-last-id (inc prev-spreads-number) ;;prev idx + 2 starting from 0
         new-spreads-number (count spreads)
+        new-spreads-last-id (inc new-spreads-number)
         title-spreads-number 2
         spreads-to-delete (concat (if delete-last-spread
-                                    [prev-spreads-number]
+                                    [prev-spreads-last-id]
                                     [])
-                                  (range new-spreads-number prev-spreads-number))
+                                  (range (inc new-spreads-last-id) prev-spreads-last-id))
         spreads-to-edit (->> spreads
-                             (take prev-spreads-number)
-                             (drop-last (if delete-last-spread 1 0)))
+                             (take prev-spreads-number))
         spreads-to-add (->> spreads
                             (drop (count spreads-to-edit)))]
     (-> activity-data
