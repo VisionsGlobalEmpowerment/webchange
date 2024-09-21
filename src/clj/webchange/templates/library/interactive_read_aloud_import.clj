@@ -308,6 +308,11 @@
         (update-in [:actions :dialog-main] remove-empty-parallel)
         (update-in [:actions :dialog-main :data] concat with-effects))))
 
+(defn- remove-object-from-layer [item-to-remove layer]
+  (->> layer
+       (remove (fn [item] (= item item-to-remove)))
+       (into [])))
+
 (defn- move-book-to-top
   [activity-data]
   (let [book-background-layer ["book-background"]
@@ -316,6 +321,9 @@
                             (get a :scene-objects)
                             (remove (fn [item] (= book-layer item)) a)
                             (remove (fn [item] (= book-background-layer item)) a)
+                            ;;this is a workaround to fix a bug. probably should be removed after first update templates
+                            (map (fn [layer] (remove-object-from-layer "book" layer)) a)
+                            (map (fn [layer] (remove-object-from-layer "page-numbers" layer)) a)
                             (concat a [book-background-layer] [book-layer])
                             (into [] a))]
     (-> activity-data
